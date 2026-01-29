@@ -1,0 +1,1963 @@
+@import "../styles/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+
+/* ===== Manage Page Styles ===== */
+
+/* Manage page link styling - prevent purple visited links */
+.manage-link,
+.manage-link:visited,
+.manage-link:hover,
+.manage-link:active {
+  color: #666666 !important;
+  text-decoration: none !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+/* HeroUI Accordion Overrides for Manage Page */
+.manage-accordion [data-slot="heading"] h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+}
+
+.manage-accordion hr {
+  margin: 0 !important;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+}
+
+.manage-accordion hr[role="separator"],
+.manage-accordion hr.shrink-0.bg-divider {
+  display: none !important;
+}
+
+.manage-accordion [data-slot="trigger"] {
+  padding: 0.875rem 1.125rem !important;
+  border-radius: 0.5rem !important;
+}
+
+.manage-accordion [data-slot="content"] {
+  padding: 0.875rem 1.125rem !important;
+}
+
+.manage-accordion [data-slot="content"] > div {
+  gap: 0.75rem !important;
+}
+
+.manage-accordion [data-slot="base"] {
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+}
+
+.manage-accordion [data-open="true"] [data-slot="trigger"],
+.manage-accordion [aria-expanded="true"] [data-slot="trigger"] {
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.manage-accordion [data-open="true"] [data-slot="content"],
+.manage-accordion [aria-expanded="true"] [data-slot="content"] {
+  border-radius: 0 0 0.5rem 0.5rem !important;
+}
+
+.manage-accordion [data-slot="indicator"] {
+  color: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.manage-accordion [data-slot="indicator"] svg {
+  color: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: transform 0.2s ease !important;
+  /* Closed: point down */
+  transform: rotate(270deg) !important;
+}
+
+.manage-accordion [data-open="true"] [data-slot="indicator"] svg,
+.manage-accordion [aria-expanded="true"] [data-slot="indicator"] svg {
+  /* Open: point up */
+  transform: rotate(90deg) !important;
+}
+
+/* Navbar corner bracket hover effect */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::before,
+.nav-link::after {
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  content: "";
+  transition: all 0.35s ease;
+  opacity: 0;
+}
+
+.nav-link::before {
+  left: 0;
+  top: 0;
+  content: "";
+  border-top: 3px solid #992020;
+  border-left: 3px solid #992020;
+  transform: translate(-50%, -50%);
+}
+
+.nav-link::after {
+  right: 0;
+  bottom: 0;
+  content: "";
+  border-bottom: 3px solid #992020;
+  border-right: 3px solid #992020;
+  transform: translate(50%, 50%);
+}
+
+.nav-link:hover::before,
+.nav-link:hover::after {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
+/* Dropdown item corner bracket hover effect */
+.dropdown-item {
+  position: relative;
+}
+
+.dropdown-item::before,
+.dropdown-item::after {
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  content: "";
+  transition: all 0.35s ease;
+  opacity: 0;
+  z-index: 10;
+}
+
+.dropdown-item::before {
+  left: 0;
+  top: 0;
+  content: "";
+  border-top: 3px solid #992020;
+  border-left: 3px solid #992020;
+  transform: translate(-50%, -50%);
+}
+
+.dropdown-item::after {
+  right: 0;
+  bottom: 0;
+  content: "";
+  border-bottom: 3px solid #992020;
+  border-right: 3px solid #992020;
+  transform: translate(50%, 50%);
+}
+
+.dropdown-item:hover::before,
+.dropdown-item:hover::after {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
+.move-navbar {
+  transform: translateY(10px);
+  transition: transform 0.3s ease;
+}
+@media (max-width: 600px) {
+    .move-navbar {
+        margin-right: 30px;
+    }
+}
+
+body {
+  font-family: var(--font-sans);
+  color: rgb(var(--color-white));
+}
+
+/* Partner Footer Styles */
+.partner-footer {
+  text-align: center;
+  background-color: white;
+  border-top: 1px solid #e5e7eb;
+}
+
+.footer-icon {
+  height: 4em !important;
+  width: auto !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+
+@media (max-width: 692px) {
+  .footer-icon {
+    height: 2.5em !important;
+  }
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Hero Header Text Outline Effect */
+.hero-title-outline {
+  text-shadow: 
+    2px 2px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    0 0 8px rgba(0,0,0,0.5);
+}
+
+/* Ensure buttons don't adopt a forced black color from any resets */
+@layer base {
+  button,
+  [type="button"],
+  [type="submit"],
+  [role="button"] {
+    color: inherit;
+  }
+}
+
+/* Presentations page - Upload button hover invert */
+.presentation-upload-btn {
+  color: #900 !important;
+}
+.presentation-upload-btn:hover {
+  background-color: #900 !important;
+  border-color: #900 !important;
+  color: #ffffff !important;
+}
+
+/* Reset heading default margins; control spacing with utility classes */
+@layer base {
+  h3 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+  h4 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+}
+
+/* Dropdown menu styling */
+[data-slot="base"] {
+  background-color: white !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+[role="menu"] {
+  background-color: white !important;
+  padding: 0 !important;
+}
+
+[role="menu"] a,
+[role="menuitem"] a {
+  text-decoration: none !important;
+  color: black !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+[role="menuitem"] {
+  color: black !important;
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+[role="menu"] [data-hover="true"],
+[role="menuitem"][data-hover="true"] {
+  background-color: transparent !important;
+}
+
+/* Remove outline from dropdown trigger button */
+button[data-slot="trigger"],
+button[data-slot="trigger"]:focus,
+button[data-slot="trigger"]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Staff Member Styles */
+.staff-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.headshot-container {
+  height: 275px;
+  width: 275px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-cropper {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+  border: solid 3px rgba(0,0,0,0.1);
+  transition: all 0.5s ease-in-out;
+  display: block;
+  text-decoration: none;
+}
+
+.image-cropper:hover {
+  width: 275px;
+  height: 275px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.7);
+  border: solid 3px rgba(0,0,0,0.5);
+}
+
+a.image-cropper {
+  cursor: pointer;
+}
+
+.staff-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Services Solutions Section */
+.soltop {
+  font-size: 28px;
+}
+
+hr.rounded {
+  border-top: 8px solid #bbb;
+  border-radius: 5px;
+}
+
+/* Services Grid - Force 3 columns on desktop */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 0;
+}
+
+@media (min-width: 768px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+}
+
+/* Parallax Background */
+.parallax-background {
+  background-attachment: fixed;
+  background-position: center;
+}
+
+/* Form Title */
+.formtitle {
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+/* Form Control Styles */
+.form-control {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #555555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #909090;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(68, 218, 130, 0.6);
+}
+
+textarea.form-control {
+  height: auto;
+}
+
+/* Homepage Button */
+.homepageButton {
+  background-color: #9E1B32;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 500px;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  transition: all 0.5s ease-in-out;
+}
+
+.homepageButton:hover {
+  font-size: 24px;
+}
+
+/* Box Shadow Effect */
+.boxshadowEffect {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+  transition: all 0.5s ease-in-out;
+  border: solid 3px rgba(0,0,0,0.1);
+}
+
+.boxshadowEffect:hover {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.7);
+  border: solid 3px rgba(0,0,0,0.5);
+  transition: all 0.5s ease-in-out;
+}
+
+/* Box Shadow Effect - No Hover */
+.boxshadowEffect-NoHover {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.7);
+}
+
+/* Service Details Row */
+.serviceDetailsRow {
+  border-bottom: 1px solid black;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.serviceDetailsRow + .serviceDetailsRow {
+  margin-top: 0 !important;
+}
+
+/* Service Details Icons */
+.service-details-icons {
+  width: 20%;
+  padding-top: 3%;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 672px) {
+  .service-details-icons {
+    width: 55%;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .serviceDetailsRow p,
+  .serviceDetailsRow h1 {
+    padding: 24px;
+  }
+}
+
+/* HeroUI Accordion Custom Styling - Override default white backgrounds */
+.serviceDetailsRow {
+  background-color: inherit !important;
+}
+
+.serviceDetailsRow [data-slot="base"] {
+  background-color: inherit !important;
+  border: none !important;
+  border-bottom: 1px solid black !important;
+}
+
+.serviceDetailsRow [data-slot="trigger"],
+.serviceDetailsRow [data-slot="content"],
+.serviceDetailsRow [data-slot="heading"],
+.serviceDetailsRow [data-slot="titleWrapper"] {
+  background-color: inherit !important;
+  color: white !important;
+}
+
+/* Ensure all accordion child elements inherit background */
+.serviceDetailsRow [data-slot="content"] > * {
+  background-color: transparent !important;
+}
+
+/* Service-specific background colors */
+.service-qualityLoc [data-slot="base"],
+.service-qualityLoc {
+  background-color: #022e69 !important;
+}
+
+.service-leanLoc [data-slot="base"],
+.service-leanLoc {
+  background-color: #3d3d3d !important;
+}
+
+.service-industry_toolsLoc [data-slot="base"],
+.service-industry_toolsLoc {
+  background-color: #9E1B32 !important;
+}
+
+.service-technologyLoc [data-slot="base"],
+.service-technologyLoc {
+  background-color: #f6c80d !important;
+}
+
+.service-designLoc [data-slot="base"],
+.service-designLoc {
+  background-color: #9E1B32 !important;
+}
+
+.service-leadershipLoc [data-slot="base"],
+.service-leadershipLoc {
+  background-color: #022e69 !important;
+}
+
+/* Statistics Counter Responsive Layout */
+.stats-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding-top: 60px;
+}
+
+.stat-value {
+  font-size: 50px;
+  margin-bottom: 25px;
+}
+
+.stat-icon {
+  width: 70px;
+  height: 70px;
+}
+
+.stat-label {
+  font-size: 13px;
+  letter-spacing: 5px;
+  margin-bottom: 0;
+}
+
+.stats-since {
+  position: absolute;
+  bottom: 8px;
+  right: 20px;
+}
+
+@media (max-width: 640px) {
+  .stats-container {
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 1.5rem;
+  }
+  
+  .stat-value {
+    font-size: 50px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-icon {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .stat-label {
+    font-size: 14px;
+    letter-spacing: 5px;
+    margin-bottom: 0.5em;
+  }
+  
+  .stats-since {
+    position: static;
+    text-align: center;
+    width: 100%;
+    margin-top: 1rem;
+    font-size: 16px;
+  }
+}
+
+/* About Section Mobile Layout */
+@media (max-width: 640px) {
+  .about-row {
+    flex-direction: column;
+    margin: 0;
+  }
+  
+  .about-image-col {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  
+  .about-image {
+    width: 90% !important;
+  }
+  
+  .about-text-col {
+    width: 100%;
+    padding-right: 1rem !important;
+  }
+  
+  .about-btn-row {
+    display: block;
+  }
+  
+  .about-btn-spacer {
+    display: none;
+  }
+  
+  .about-btn-container {
+    width: 100%;
+  }
+  
+  .about-btn {
+    width: 90% !important;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .about-btn:hover {
+    font-size: 24px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.7);
+    border-color: rgba(0,0,0,0.5);
+  }
+  
+  .about-annual-link {
+    flex-direction: column;
+  }
+  
+  .about-annual-icon {
+    width: 100px !important;
+    height: 100px !important;
+    margin-right: 0 !important;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Service Cards Mobile */
+  .service-cards-grid {
+    grid-template-columns: 1fr !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+  
+  .success-stories-btn {
+    width: 90% !important;
+  }
+  
+  /* Carousel Mobile - Intro variant */
+  .carousel-intro {
+    height: 120px !important;
+    background-color: transparent !important;
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+  }
+  
+  .carousel-intro .carousel-slide-bg {
+    display: none !important;
+  }
+  
+  .carousel-intro .carousel-slide-image {
+    object-fit: cover !important;
+  }
+  
+  .carousel-intro .carousel-prev-btn {
+    left: 0 !important;
+    width: 40px !important;
+  }
+  
+  .carousel-intro .carousel-next-btn {
+    right: 0 !important;
+    width: 40px !important;
+  }
+  
+  .carousel-intro .carousel-indicators {
+    bottom: 5px !important;
+  }
+  
+  /* Carousel Mobile - Stories variant */
+  .carousel-stories {
+    height: 400px !important;
+  }
+  
+  .carousel-stories .stories-content {
+    padding: 10px !important;
+  }
+  
+  .carousel-stories .stories-inner {
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    padding-top: 10px !important;
+  }
+  
+  .carousel-stories .stories-logos {
+    width: 100% !important;
+    height: auto !important;
+    padding: 10px 0 !important;
+  }
+  
+  .carousel-stories .stories-logo-container {
+    height: 100px !important;
+    width: 60% !important;
+  }
+  
+  .carousel-stories .stories-text {
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  .carousel-stories .stories-text-inner {
+    padding: 5px 15px !important;
+    padding-right: 15px !important;
+  }
+  
+  .carousel-stories .stories-body {
+    font-size: 0.75em !important;
+    text-align: center !important;
+    line-height: 1.3 !important;
+  }
+  
+  .carousel-stories .stories-attribution {
+    font-size: 0.75em !important;
+    float: none !important;
+    display: block !important;
+    text-align: center !important;
+    margin-top: 10px !important;
+  }
+  
+  .carousel-stories .carousel-prev-btn {
+    left: 0 !important;
+    width: 30px !important;
+  }
+  
+  .carousel-stories .carousel-next-btn {
+    right: 0 !important;
+    width: 30px !important;
+  }
+  
+  .carousel-stories .carousel-indicators {
+    bottom: 10px !important;
+  }
+  
+  /* Footer Mobile */
+  .footer-container {
+    padding-left: 1em !important;
+    padding-right: 1em !important;
+  }
+  
+  .footer-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2rem !important;
+  }
+  
+  .footer-col-left,
+  .footer-col-middle,
+  .footer-col-right {
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  .contactForm .form-field {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5em !important;
+  }
+  
+  .contactForm .form-label {
+    min-width: unset !important;
+  }
+  
+  .contactForm .form-input,
+  .contactForm .form-textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .contactForm .form-submit-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  
+  .contactForm .form-submit-spacer {
+    display: none !important;
+  }
+  
+  .contactForm .form-submit-container {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+  
+  .staff-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+  
+  /* Partner Footer Mobile */
+  .partner-logos {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 10px !important;
+    justify-items: center !important;
+    align-items: center !important;
+    padding: 0 10px !important;
+  }
+  
+  .partner-logos .partner-link:last-child {
+    grid-column: 2 !important;
+  }
+  
+  .partner-logos .footer-icon {
+    max-width: 100px !important;
+    height: auto !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+  
+  .partner-footer {
+    padding: 10px 0 !important;
+  }
+  
+  .partner-footer br {
+    display: none !important;
+  }
+  
+  /* Staff & Board Mobile */
+  .staff-section,
+  .board-section {
+    padding: 2em 1em !important;
+  }
+  
+  .staff-row,
+  .board-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    gap: 2em !important;
+    width: 100% !important;
+  }
+  
+  .staff-member {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  
+  .staff-member h3,
+  .staff-member h4,
+  .staff-member a h4 {
+    text-align: center !important;
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  
+  /* History Section Mobile */
+  .history-section {
+    padding: 1em 0 !important;
+  }
+  
+  .history-text {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    font-size: 1.1em !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Advisory Board Section Mobile */
+  .advisory-section {
+    padding: 2em 0 !important;
+  }
+  
+  .advisory-container {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .advisory-text-col {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding: 0 20px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+  }
+  
+  .advisory-text-col h1 {
+    text-align: center !important;
+    width: 100% !important;
+    margin: 0 auto 0.5em auto !important;
+    padding: 0 !important;
+  }
+  
+  .advisory-text-col hr {
+    margin: 0 auto 1.5em auto !important;
+  }
+  
+  .advisory-text-col p {
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .advisory-image-col {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding: 0 20px !important;
+    margin: 1.5em auto 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+  }
+  
+  .advisory-image {
+    margin: 0 auto !important;
+    max-width: 100% !important;
+    display: block !important;
+    width: 100% !important;
+  }
+}
+
+/* Internships Mobile Banner - Hide on desktop, show on mobile */
+.internships-mobile-banner-wrapper {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  /* GLOBAL: Prevent horizontal overflow on internships page */
+  body:has(#studentSide),
+  html:has(#studentSide) {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+  
+  /* Make the banner fixed below the navbar so it doesn't scroll with the page */
+  .internships-mobile-banner-wrapper {
+    display: block !important;
+    position: fixed !important;
+    top: 100px !important; /* Below navbar which is 100px */
+    left: 0 !important;
+    width: 100% !important;
+    height: 200px !important;
+    max-height: 200px !important;
+    z-index: 1000 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Target the HeadingIntroBanner's root div */
+  .internships-mobile-banner-wrapper > div {
+    overflow: hidden !important;
+    position: relative !important;
+    height: 200px !important;
+    max-height: 200px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* MOBILE: Stack student/company sides vertically */
+  
+  /* Student side - TOP HALF (below navbar + banner) */
+  #studentSide {
+    position: fixed !important;
+    top: 300px !important; /* 100px navbar + 200px banner */
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: calc(50vh - 150px) !important;
+  }
+  
+  /* Company side - BOTTOM HALF */
+  #companySide {
+    position: fixed !important;
+    top: calc(50vh + 150px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: calc(50vh - 150px) !important;
+  }
+  
+  /* === WHEN STUDENT SIDE IS EXPANDED === */
+  /* Make the page scrollable and stack content */
+  .relative.h-screen.w-full:has(#studentInfo) {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-top: 300px !important; /* 100px navbar + 200px banner */
+    padding-bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    gap: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Student side becomes relative and full content height */
+  #studentSide:has(#studentInfo) {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: auto !important;
+    min-height: auto !important;
+    order: 1 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Remove any spacing from studentSide children */
+  #studentSide:has(#studentInfo) > * {
+    margin-top: 0 !important;
+  }
+  
+  /* Company side flows below student content - same height as original */
+  .relative.h-screen.w-full:has(#studentInfo) #companySide {
+    position: relative !important;
+    top: auto !important;
+    height: calc(50vh - 150px) !important;
+    min-height: calc(50vh - 150px) !important;
+    order: 2 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* === WHEN COMPANY SIDE IS EXPANDED === */
+  /* Make the page scrollable and stack content */
+  .relative.h-screen.w-full:has(#companyInfo) {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-top: 300px !important; /* 100px navbar + 200px banner */
+    padding-bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    gap: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Company side comes FIRST when expanded */
+  #companySide:has(#companyInfo) {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: auto !important;
+    min-height: auto !important;
+    order: 1 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Student side goes below when company expands */
+  .relative.h-screen.w-full:has(#companyInfo) #studentSide {
+    position: relative !important;
+    top: auto !important;
+    height: calc(50vh - 150px) !important;
+    min-height: calc(50vh - 150px) !important;
+    order: 2 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Remove any spacing from companySide children */
+  #companySide:has(#companyInfo) > * {
+    margin-top: 0 !important;
+  }
+  
+  /* Remove top padding from expanded banner - override pt-28 class */
+  #studentInfo > div[class*="pt-"],
+  #companyInfo > div[class*="pt-"],
+  #studentInfo > div:first-child,
+  #companyInfo > div:first-child {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+    min-height: auto !important;
+    margin: 0 !important;
+  }
+  
+  /* Also ensure studentInfo/companyInfo itself has no spacing */
+  #studentInfo,
+  #companyInfo {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Ensure studentSide/companySide has no extra space when expanded */
+  #studentSide:has(#studentInfo),
+  #companySide:has(#companyInfo) {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Force all children to have no top margin */
+  #studentSide:has(#studentInfo) > *,
+  #companySide:has(#companyInfo) > * {
+    margin-top: 0 !important;
+  }
+  
+  /* Target the flex container inside the banner */
+  #studentInfo > div:first-child.flex,
+  #companyInfo > div:first-child.flex {
+    padding-top: 2rem !important;
+  }
+  
+  /* Company side flows below student content - same height as original */
+  .relative.h-screen.w-full:has(#studentInfo) #companySide {
+    position: relative !important;
+    top: auto !important;
+    height: calc(50vh - 150px) !important;
+    min-height: calc(50vh - 150px) !important;
+    order: 2 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Force all expanded content to respect viewport width */
+  #studentInfo,
+  #companyInfo {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  #studentInfo > *,
+  #companyInfo > * {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* CENTER THE COLLAPSED CONTENT */
+  .internship-collapsed-header {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Center the header containers */
+  #studentHeader,
+  #companyHeader {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+  
+  /* Make text smaller and centered */
+  #studentHeader h4,
+  #companyHeader h4 {
+    font-size: 1.5em !important;
+    text-align: center !important;
+  }
+  
+  #studentHeader h3,
+  #companyHeader h3 {
+    font-size: 1.8em !important;
+    text-align: center !important;
+  }
+  
+  /* Center the buttons with more spacing from text */
+  #studentButton,
+  #companyButton {
+    max-width: 200px !important;
+    width: 80% !important;
+    margin: 1.5em auto 0 auto !important;
+  }
+  
+  /* ===== EXPANDED CONTENT MOBILE STYLES ===== */
+  
+  /* Hide background image in expanded banner on mobile */
+  #studentInfo > div:first-child > img,
+  #companyInfo > div:first-child > img {
+    display: none !important;
+  }
+  
+  /* Make the expanded banner smaller on mobile */
+  #studentInfo > div:first-child,
+  #companyInfo > div:first-child {
+    min-height: 30vh !important;
+    padding-top: 2rem !important;
+  }
+  
+  /* Make banner text smaller on mobile */
+  #studentInfo > div:first-child h4,
+  #companyInfo > div:first-child h4 {
+    font-size: 1.5em !important;
+  }
+  
+  #studentInfo > div:first-child h3,
+  #companyInfo > div:first-child h3 {
+    font-size: 2em !important;
+  }
+  
+  /* Stack the two-column grid into single column */
+  #studentInfo .grid-cols-2,
+  #companyInfo .grid-cols-2 {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2rem !important;
+    padding: 15px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Full width for each section - center everything */
+  #studentInfo .grid-cols-2 > div,
+  #companyInfo .grid-cols-2 > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Center and size the section headings */
+  #studentInfo h2,
+  #companyInfo h2 {
+    font-size: 1.5em !important;
+    text-align: center !important;
+    padding: 0 10px !important;
+    width: 100% !important;
+  }
+  
+  /* HR lines */
+  #studentInfo hr,
+  #companyInfo hr {
+    width: 50% !important;
+    margin: 1rem auto !important;
+  }
+  
+  /* Body text styling - OVERRIDE inline paddingLeft: 50px */
+  #studentInfo p,
+  #companyInfo p {
+    font-size: 1em !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+  
+  /* Apply Now button - constrain width for mobile */
+  #applyNow {
+    width: 90% !important;
+    max-width: 90% !important;
+    min-width: auto !important;
+    display: block !important;
+    margin: 1rem auto !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Center the button container */
+  #studentInfo .text-center,
+  #companyInfo .text-center {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+  
+  /* College logos image - centered */
+  #studentInfo .grid-cols-2 img,
+  #companyInfo .grid-cols-2 img {
+    width: 90% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    display: block !important;
+  }
+  
+  /* Center the flex container for logos */
+  #studentInfo .flex.justify-center,
+  #companyInfo .flex.justify-center {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+  
+  /* The white content container */
+  #studentInfo > .w-full.bg-white,
+  #companyInfo > .w-full.bg-white {
+    padding: 20px 10px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+  
+  /* Force mx-auto containers to be centered and constrained */
+  #studentInfo .mx-auto,
+  #companyInfo .mx-auto {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* ===== 14 DEGREES SECTION - Stack vertically ===== */
+  #studentInfo .mx-auto.flex.w-full.max-w-6xl,
+  #companyInfo .mx-auto.flex.w-full.max-w-6xl {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0 !important;
+  }
+  
+  /* Hide spacer divs and make content divs full width */
+  #studentInfo .mx-auto.flex.w-full.max-w-6xl > div,
+  #companyInfo .mx-auto.flex.w-full.max-w-6xl > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 15px !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Hide the empty spacer divs (8.33% and 16.67% with no content) */
+  #studentInfo .mx-auto.flex.w-full.max-w-6xl > div:empty,
+  #companyInfo .mx-auto.flex.w-full.max-w-6xl > div:empty {
+    display: none !important;
+  }
+  
+  /* Also hide spacers that only have whitespace - target by inline width style */
+  #studentInfo .mx-auto.flex.w-full.max-w-6xl > div[style*="8.333"],
+  #companyInfo .mx-auto.flex.w-full.max-w-6xl > div[style*="8.333"],
+  #studentInfo .mx-auto.flex.w-full.max-w-6xl > div[style*="16.666"]:not(:has(h1)),
+  #companyInfo .mx-auto.flex.w-full.max-w-6xl > div[style*="16.666"]:not(:has(h1)) {
+    display: none !important;
+  }
+  
+  /* "We have 14" heading - wider and centered */
+  #studentInfo .mx-auto.flex.w-full.max-w-6xl > div:has(h1),
+  #companyInfo .mx-auto.flex.w-full.max-w-6xl > div:has(h1) {
+    width: 100% !important;
+    padding: 0 20px !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  #studentInfo .mx-auto.flex h1,
+  #companyInfo .mx-auto.flex h1 {
+    text-align: center !important;
+    font-size: 1.8em !important;
+    white-space: normal !important;
+    line-height: 1.3 !important;
+  }
+  
+  /* Hide <br> tags - spaces added in JSX */
+  #studentInfo .mx-auto.flex h1 br,
+  #companyInfo .mx-auto.flex h1 br {
+    display: none !important;
+  }
+  
+  /* Make lists continuous - no gap between them */
+  #studentInfo .mx-auto.flex.w-full.max-w-6xl > div:has(ul),
+  #companyInfo .mx-auto.flex.w-full.max-w-6xl > div:has(ul) {
+    padding: 0 30px !important;
+    margin: 0 !important;
+  }
+  
+  #studentInfo .mx-auto.flex ul,
+  #companyInfo .mx-auto.flex ul {
+    font-size: 16px !important;
+    padding-left: 1.5rem !important;
+    text-align: left !important;
+    margin: 0 !important;
+  }
+  
+  #studentInfo .mx-auto.flex ul li,
+  #companyInfo .mx-auto.flex ul li {
+    margin-bottom: 0.3rem !important;
+  }
+  
+  /* ===== TESTIMONIAL SECTION - Stack vertically ===== */
+  /* Hide decorative quote marks on mobile */
+  #studentInfo .w-full.text-center.relative > div:first-child,
+  #companyInfo .w-full.text-center.relative > div:first-child {
+    display: none !important;
+  }
+  
+  /* Center heading */
+  #studentInfo .w-full.text-center.relative h2,
+  #companyInfo .w-full.text-center.relative h2 {
+    font-size: 1.2em !important;
+    text-align: center !important;
+  }
+  
+  /* Quote text - remove excessive padding */
+  #studentInfo .w-full.text-center.relative p,
+  #companyInfo .w-full.text-center.relative p {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    font-size: 1em !important;
+    text-align: center !important;
+  }
+  
+  /* Attribution - don't float right */
+  #studentInfo .w-full.text-center.relative p span,
+  #companyInfo .w-full.text-center.relative p span {
+    float: none !important;
+    display: block !important;
+    text-align: center !important;
+    margin-top: 1rem !important;
+  }
+}
+
+/* ===== SERVICES PAGE MOBILE STYLES ===== */
+@media (max-width: 640px) {
+  /* Global - prevent overflow */
+  .services-page {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+  
+  .services-page > div {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* 1. PROVIDING THE RIGHT SOLUTIONS - center and fit */
+  .services-page > div:nth-child(2) > div {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .services-page > div:nth-child(2) > div > div {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: unset !important;
+    padding: 1em 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  .services-page > div:nth-child(2) h1 {
+    text-align: center !important;
+    font-size: 1.8em !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+  
+  .services-page > div:nth-child(2) p {
+    text-align: center !important;
+    padding: 0 !important;
+    font-size: 1em !important;
+    max-width: 100% !important;
+  }
+  
+  .services-page > div:nth-child(2) img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* 2. SEE OUR SOLUTIONS BELOW - center */
+  .services-page > div:nth-child(3) h1 {
+    text-align: center !important;
+    font-size: 1.5em !important;
+  }
+  
+  /* Services grid - single column */
+  .services-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
+  
+  /* Disable service links on mobile */
+  .services-grid a {
+    pointer-events: none !important;
+    cursor: default !important;
+  }
+  
+  /* LOOKING TO HIRE section - center */
+  .services-page > div:nth-child(5) > div {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 0 !important;
+  }
+  
+  .services-page > div:nth-child(5) > div > div {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    min-width: unset !important;
+    text-align: center !important;
+    padding: 1em 0 !important;
+  }
+  
+  /* NEED HELP section - center */
+  .services-page > div:nth-child(6) h2 {
+    text-align: center !important;
+    font-size: 1.5em !important;
+    padding: 0 !important;
+  }
+  
+  /* 3. HOW CAN WE HELP YOU form - fit screen */
+  .services-page .parallax-background {
+    padding: 2em 15px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+  
+  .services-page .parallax-background > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  .services-page .parallax-background > div > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .services-page .parallax-background form {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  
+  .services-page .parallax-background form > div {
+    padding: 0.75em 0 !important;
+    flex-direction: column !important;
+    gap: 0.75em !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  
+  .services-page .parallax-background form > div > div {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  .services-page .parallax-background input,
+  .services-page .parallax-background textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0.5em 0 !important;
+  }
+  
+  .services-page .parallax-background .formtitle {
+    font-size: 1.3em !important;
+  }
+  
+  .services-page .parallax-background hr {
+    width: 50% !important;
+  }
+}
+
+/* ===== SUCCESS STORIES PAGE STYLES ===== */
+/* Desktop - horizontal padding */
+.success-story-row {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media (max-width: 640px) {
+  /* Container - center and fit screen */
+  .success-story-row {
+    margin: 0 !important;
+    padding: 1.5em 15px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Inner flex container - stack vertically */
+  .success-story-row > div.w-full {
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 !important;
+    justify-content: flex-start !important;
+  }
+  
+  /* All columns - full width, no flex-shrink */
+  .success-story-row > div.w-full > div {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Image column - centered */
+  .success-story-row > div.w-full > div:first-child {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 1em !important;
+  }
+  
+  .success-story-row > div.w-full > div:first-child img {
+    width: 60% !important;
+    max-width: 180px !important;
+  }
+  
+  /* Text column - all text centered */
+  .success-story-row > div.w-full > div:last-child {
+    text-align: center !important;
+  }
+  
+  .success-story-row > div.w-full > div:last-child p {
+    font-size: 1.1em !important;
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* Button container */
+  .success-story-row > div.w-full > div:last-child > div {
+    text-align: center !important;
+    width: 100% !important;
+    margin-top: 1em !important;
+  }
+  
+  /* Button link */
+  .success-story-row > div.w-full > div:last-child > div > a {
+    display: inline-block !important;
+  }
+  
+  /* Button - bigger */
+  .success-story-button {
+    width: auto !important;
+    min-width: 200px !important;
+    padding: 14px 30px !important;
+    font-size: 1.1em !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* ===== LOCATIONS PAGE MOBILE STYLES ===== */
+@media (max-width: 640px) {
+  .locations-section {
+    padding: 1em !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* Stack vertically */
+  .locations-container {
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Red info box - on top */
+  .locations-info {
+    width: 100% !important;
+    order: 1 !important;
+    padding: 0 !important;
+    margin-bottom: 1em !important;
+  }
+  
+  .locations-info > div {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  .locations-info h3 {
+    font-size: 1.2em !important;
+  }
+  
+  .locations-info h4 {
+    font-size: 1em !important;
+  }
+  
+  /* Map - in middle */
+  .locations-map {
+    width: 100% !important;
+    order: 2 !important;
+    height: 300px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+  
+  .locations-map iframe {
+    width: 100% !important;
+    height: 300px !important;
+    transform: scale(1.5) translateX(-15%) !important;
+    transform-origin: center center !important;
+  }
+  
+  /* Legend - at bottom, centered */
+  .locations-legend {
+    position: static !important;
+    left: unset !important;
+    top: unset !important;
+    transform: none !important;
+    order: 3 !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-top: 1em !important;
+  }
+  
+  .locations-legend span {
+    font-size: 1.2em !important;
+  }
+}
+
+/* ===== NEWSLETTERS PAGE MOBILE STYLES ===== */
+@media (max-width: 640px) {
+  /* Stack title above button */
+  .newsletter-row .flex-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1em !important;
+  }
+  
+  .newsletter-row .flex-row p {
+    text-align: center !important;
+  }
+  
+  .newsletter-row .flex-row .flex.justify-end {
+    justify-content: center !important;
+  }
+  
+  /* Constant Contact form - bigger inputs */
+  .ctct-inline-form input,
+  .ctct-inline-form input[type="email"],
+  .ctct-inline-form input[type="text"],
+  [data-form-id] input,
+  [data-form-id] input[type="email"],
+  [data-form-id] input[type="text"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 50px !important;
+    padding: 15px !important;
+    font-size: 16px !important;
+    box-sizing: border-box !important;
+  }
+  
+  .ctct-inline-form textarea,
+  [data-form-id] textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 50px !important;
+    padding: 15px !important;
+    font-size: 16px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ===== NAVBAR MOBILE STYLES ===== */
+/* Hamburger - hidden on desktop */
+.navbar-hamburger {
+  display: none;
+}
+
+/* Mobile menu - hidden on desktop */
+.navbar-mobile-menu {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  /* Hide desktop nav items */
+  .navbar-desktop-menu {
+    display: none !important;
+  }
+  
+  .navbar-desktop-login {
+    display: none !important;
+  }
+  
+  /* Show hamburger button */
+  .navbar-hamburger {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 5px !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    padding: 5px !important;
+    margin-left: auto !important;
+    z-index: 1050 !important;
+  }
+  
+  .hamburger-line {
+    display: block !important;
+    width: 25px !important;
+    height: 3px !important;
+    background-color: white !important;
+    border-radius: 2px !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .hamburger-line.open:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px) !important;
+  }
+  
+  .hamburger-line.open:nth-child(2) {
+    opacity: 0 !important;
+  }
+  
+  .hamburger-line.open:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px) !important;
+  }
+  
+  /* Mobile menu */
+  .navbar-mobile-menu {
+    display: block !important;
+    position: fixed !important;
+    top: 100px !important;
+    left: 0 !important;
+    right: 0 !important;
+    background-color: #3d3d3d !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    transition: max-height 0.3s ease !important;
+    z-index: 1040 !important;
+  }
+  
+  .navbar-mobile-menu.open {
+    max-height: calc(100vh - 100px) !important;
+    overflow-y: auto !important;
+  }
+  
+  .mobile-nav-list {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 1em 0 !important;
+  }
+  
+  .mobile-nav-list li {
+    border-bottom: 1px solid #555 !important;
+  }
+  
+  .mobile-nav-list li:last-child {
+    border-bottom: none !important;
+  }
+  
+  .mobile-nav-list li a,
+  .mobile-nav-list li .mobile-dropdown-trigger {
+    display: block !important;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 1em 1.5em !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    width: 100% !important;
+    text-align: left !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+  }
+  
+  .mobile-nav-list li a:hover,
+  .mobile-nav-list li .mobile-dropdown-trigger:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .mobile-dropdown-trigger {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  
+  .mobile-dropdown-trigger svg {
+    margin-left: auto !important;
+  }
+}
+
+/* ===== LOGIN PAGE MOBILE STYLES ===== */
+@media (max-width: 640px) {
+  .login-content {
+    flex-direction: column !important;
+  }
+  
+  .login-form-column,
+  .login-recovery-column {
+    width: 100% !important;
+  }
+  
+  .login-form-column {
+    margin-bottom: 2rem !important;
+  }
+  
+  .login-recovery-column p {
+    text-align: center !important;
+  }
+}
+
