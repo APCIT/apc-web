@@ -38,7 +38,7 @@ export default function Navbar() {
     }
   };
 
-  const handleSectionClick = (e: React.MouseEvent | any, href: string, sectionId: string) => {
+  const handleSectionClick = (e: React.MouseEvent<HTMLElement>, href: string, sectionId: string) => {
     if (e && typeof e.preventDefault === 'function') {
       e.preventDefault();
     }
@@ -159,14 +159,14 @@ export default function Navbar() {
                 </DropdownItem>
                 <DropdownItem 
                   key="staff"
-                  onClick={(e) => handleSectionClick(e, "/Home/About#StaffSectionLoc", "StaffSectionLoc")}
+                  onClick={(e) => handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#StaffSectionLoc", "StaffSectionLoc")}
                   style={{fontSize: '18px', lineHeight: '50px', fontWeight: '400', cursor: 'pointer'}}
                 >
                   Staff Directory
                 </DropdownItem>
                 <DropdownItem 
                   key="board"
-                  onClick={(e) => handleSectionClick(e, "/Home/About#BoardSectionLoc", "BoardSectionLoc")}
+                  onClick={(e) => handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#BoardSectionLoc", "BoardSectionLoc")}
                   style={{fontSize: '18px', lineHeight: '50px', fontWeight: '400', cursor: 'pointer'}}
                 >
                   Board Directory
@@ -310,14 +310,14 @@ export default function Navbar() {
                   </DropdownItem>
                   <DropdownItem 
                     key="staff-mobile"
-                    onClick={(e) => { handleSectionClick(e, "/Home/About#StaffSectionLoc", "StaffSectionLoc"); closeMobileMenu(); }}
+                    onClick={(e) => { handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#StaffSectionLoc", "StaffSectionLoc"); closeMobileMenu(); }}
                     style={{fontSize: '16px', lineHeight: '40px', fontWeight: '400', cursor: 'pointer'}}
                   >
                     Staff Directory
                   </DropdownItem>
                   <DropdownItem 
                     key="board-mobile"
-                    onClick={(e) => { handleSectionClick(e, "/Home/About#BoardSectionLoc", "BoardSectionLoc"); closeMobileMenu(); }}
+                    onClick={(e) => { handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#BoardSectionLoc", "BoardSectionLoc"); closeMobileMenu(); }}
                     style={{fontSize: '16px', lineHeight: '40px', fontWeight: '400', cursor: 'pointer'}}
                   >
                     Board Directory

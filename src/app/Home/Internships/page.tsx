@@ -80,7 +80,7 @@ export default function InternshipsPage() {
           <div className="absolute left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 text-center px-4" style={{ top: '40%', width: '100%' }}>
             <div id="studentHeader" className="flex flex-col items-center text-center gap-8 w-full">
               <h4 className="text-white text-[3.0em] italic font-normal leading-tight mb-2">
-                I'm a student
+                {`I'm a student`}
               </h4>
 
               <h3
@@ -139,7 +139,7 @@ export default function InternshipsPage() {
                 style={{ objectPosition: 'center' }}
               />
               <div className="relative mx-auto px-6">
-                <h4 className="text-white text-[3.0em] italic font-normal leading-none m-0">I'm a student</h4>
+                <h4 className="text-white text-[3.0em] italic font-normal leading-none m-0">{`I'm a student`}</h4>
                 <div className="h-2" />
                 <h3 className="text-white text-[4.0em] font-semibold leading-none m-0 tracking-tight">
                   <span className="block whitespace-nowrap">LOOKING FOR</span>
@@ -281,9 +281,7 @@ export default function InternshipsPage() {
               {/* Quote Text */}
               <div>
                 <p style={{ paddingLeft: '150px', paddingRight: '150px', fontSize: '1.5em', color: 'white', lineHeight: '1.3' }}>
-                  "As a summer intern at Toyota Motor Manufacturing with the Alabama Productivity Center, I was able to gain a better understanding
-                  of the career field that I was preparing for. My experience at Toyota also connected me with great people who have played a big role
-                  in the start of my career."
+                  {`"As a summer intern at Toyota Motor Manufacturing with the Alabama Productivity Center, I was able to gain a better understanding of the career field that I was preparing for. My experience at Toyota also connected me with great people who have played a big role in the start of my career."`}
                   <br />
                   <br />
                   <span style={{ float: 'right' }}> - Hayden D. Bevil, PC, PPM Specialist</span>
@@ -330,7 +328,7 @@ export default function InternshipsPage() {
           <div className="absolute left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 text-center px-4" style={{ top: '40%', width: '100%' }}>
             <div id="companyHeader" className="flex flex-col items-center text-center gap-8 w-full">
               <h4 className="text-white text-[3.0em] italic font-normal leading-tight mb-2">
-                I'm a company
+                {`I'm a company`}
               </h4>
 
               <h3
@@ -379,7 +377,7 @@ export default function InternshipsPage() {
                 style={{ objectPosition: 'center' }}
               />
               <div className="relative mx-auto px-6">
-                <h4 className="text-white text-[3.0em] italic font-normal leading-none m-0">I'm a company</h4>
+                <h4 className="text-white text-[3.0em] italic font-normal leading-none m-0">{`I'm a company`}</h4>
                 <div className="h-2" />
                 <h3 className="text-white text-[4.0em] font-semibold leading-none m-0 tracking-tight">
                   <span className="block">LOOKING TO</span>
@@ -517,8 +515,7 @@ export default function InternshipsPage() {
               {/* Quote Text */}
               <div>
                 <p style={{ paddingLeft: '200px', paddingRight: '200px', fontSize: '1.5em', color: 'white' }}>
-                  "The Alabama Productivity Center Internship Program provided a level of support that would be expected from many professional services. The interns were able to come in,
-                  take ownership of Key projects and follow through without holding their hand every step of the way. Their work resulted in significant cost savings and cost avoidance."
+                  {`"The Alabama Productivity Center Internship Program provided a level of support that would be expected from many professional services. The interns were able to come in, take ownership of Key projects and follow through without holding their hand every step of the way. Their work resulted in significant cost savings and cost avoidance."`}
                   <br />
                   <br />
                   <span style={{ float: 'right' }}> - Gray Shipley and Lloyd Cooper of Movi Medical</span>

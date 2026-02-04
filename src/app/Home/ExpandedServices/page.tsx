@@ -44,7 +44,7 @@ export default function ExpandedServicesPage() {
             <u>Quality Management System (QMS)</u>
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, textAlign: 'left' }}>
-            A formalized system that define an organization's processes, procedures, and responsibilities for achieving quality policies and objectives. The Alabama Productivity Center (APC) assists organizations who have existing QMS's or those looking to implement a system in conformance to ISO 9001, IATF 16949, AS9100, ISO 13485 and others. Our services include second party audits, training, implementation of systems, and coaching.
+            {`A formalized system that define an organization's processes, procedures, and responsibilities for achieving quality policies and objectives. The Alabama Productivity Center (APC) assists organizations who have existing QMS's or those looking to implement a system in conformance to ISO 9001, IATF 16949, AS9100, ISO 13485 and others. Our services include second party audits, training, implementation of systems, and coaching.`}
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, textAlign: 'left' }}>
             <u>Industry Expertise</u>
@@ -127,7 +127,7 @@ export default function ExpandedServicesPage() {
             <u>Value Stream Mapping</u>
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, marginLeft: 0, marginRight: 0, textAlign: 'left' }}>
-            Learn to identify where the value streams are in your operations, map them "from door-to-door" and realize the wastes that exist in the current processes. Armed with now being able to "see" the wastes, learn the process of constructing a future state of these value streams and instituting an implementation plan of achieving that future state, resulting in a successful value stream map, a tool to direct lean improvements.
+            {`Learn to identify where the value streams are in your operations, map them "from door-to-door" and realize the wastes that exist in the current processes. Armed with now being able to "see" the wastes, learn the process of constructing a future state of these value streams and instituting an implementation plan of achieving that future state, resulting in a successful value stream map, a tool to direct lean improvements.`}
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, marginLeft: 0, marginRight: 0, textAlign: 'left' }}>
             <u>Kaizen Events</u>
@@ -145,7 +145,7 @@ export default function ExpandedServicesPage() {
             <u>Problem Solving</u>
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, marginLeft: 0, marginRight: 0, textAlign: 'left' }}>
-            Using exercises and a group "hands on" simulation, learn the A3 approach to communicate the problem and the teamwork involved in solving the problem, including root cause techniques.
+            {`Using exercises and a group "hands on" simulation, learn the A3 approach to communicate the problem and the teamwork involved in solving the problem, including root cause techniques.`}
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, marginLeft: 0, marginRight: 0, textAlign: 'left' }}>
             <u>Lean Leadership</u>
@@ -224,7 +224,7 @@ export default function ExpandedServicesPage() {
             <u>Marketing</u>
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, marginLeft: 0, marginRight: 0, textAlign: 'left' }}>
-            Rebranding? Need new logos, handouts, reports and more? We work directly with you to find exactly what fits your needs in all aspects of marketing materials. Not sure where to start? Let's brainstorm together! You can never go wrong with a free consultation.
+            {`Rebranding? Need new logos, handouts, reports and more? We work directly with you to find exactly what fits your needs in all aspects of marketing materials. Not sure where to start? Let's brainstorm together! You can never go wrong with a free consultation.`}
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, marginLeft: 0, marginRight: 0, textAlign: 'left' }}>
             <u>Data Analysis</u>
@@ -259,7 +259,7 @@ export default function ExpandedServicesPage() {
             <u>CAD</u>
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, marginLeft: 0, marginRight: 0, textAlign: 'left' }}>
-            Do you need CAD support? We can help with training or if you don't have in-house drafters, let APC be your design department.
+            {`Do you need CAD support? We can help with training or if you don't have in-house drafters, let APC be your design department.`}
           </p>
           <p style={{ fontSize: '1.25em', color: 'white', lineHeight: '1.4', marginBottom: '0.6em', marginTop: 0, marginLeft: 0, marginRight: 0, textAlign: 'left' }}>
             <u>3D Printing</u>
