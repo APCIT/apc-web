@@ -2,8 +2,11 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { LOGIN_API } from '@/lib/api';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -28,11 +31,18 @@ export default function LoginPage() {
     }
 
     setIsLoading(true);
-    
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setErrors({ general: 'Login functionality coming soon!' });
-    } catch (error) {
+      const result = await LOGIN_API({ username, password, rememberMe });
+
+      if (!result.ok) {
+        setErrors({ general: result.error });
+        return;
+      }
+
+      router.push('/');
+      router.refresh();
+    } catch {
       setErrors({ general: 'An error occurred. Please try again.' });
     } finally {
       setIsLoading(false);

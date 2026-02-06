@@ -1,14 +1,294 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlserver"
+}
+
+model MigrationHistory {
+  MigrationId    String @db.NVarChar(150)
+  ContextKey     String @db.NVarChar(300)
+  Model          Bytes
+  ProductVersion String @db.NVarChar(32)
+
+  @@id([MigrationId, ContextKey], map: "PK_dbo.__MigrationHistory")
+  @@map("__MigrationHistory")
+}
+
+model Applicants {
+  Id                  Int      @id(map: "PK_dbo.Applicants") @default(autoincrement())
+  FirstName           String?  @db.NVarChar(Max)
+  LastName            String?  @db.NVarChar(Max)
+  Email               String?  @db.NVarChar(Max)
+  Major               String?  @db.NVarChar(Max)
+  Minor               String?  @db.NVarChar(Max)
+  Level               String?  @db.NVarChar(Max)
+  GradDate            DateTime @db.DateTime
+  ResumeId            String?  @db.NVarChar(Max)
+  Semester            String?  @db.NVarChar(Max)
+  Comment             String?  @db.NVarChar(Max)
+  School              String?  @db.NVarChar(Max)
+  DateApplied         DateTime @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__Applicant__DateA__6E01572D") @db.DateTime
+  ForeignLanguage     String?  @db.NVarChar(Max)
+  ContactName         String?  @db.NVarChar(Max)
+  ContactRelationship String?  @db.NVarChar(Max)
+  ContactPhone        String?  @db.NVarChar(Max)
+  Street              String?  @db.NVarChar(Max)
+  City                String?  @db.NVarChar(Max)
+  Zip                 String?  @db.NVarChar(Max)
+  Apt                 String?  @db.NVarChar(Max)
+  State               String?  @db.NVarChar(Max)
+  Phone               String?  @db.NVarChar(Max)
+  Birmingham          Boolean  @default(false, map: "DF__Applicant__Birmi__3E1D39E1")
+  Mobile              Boolean  @default(false, map: "DF__Applicant__Mobil__40058253")
+  Montgomery          Boolean  @default(false, map: "DF__Applicant__Montg__40F9A68C")
+  Tuscaloosa          Boolean  @default(false, map: "DF__Applicant__Tusca__41EDCAC5")
+  Huntsville          Boolean  @default(false, map: "DF__Applicant__Hunts__42E1EEFE")
+  InterviewStatus     Boolean  @default(false, map: "DF__Applicant__Inter__43D61337")
+  Dob                 DateTime @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__Applicants__Dob__4D5F7D71") @db.DateTime
+  CallBack            Boolean  @default(false, map: "DF__Applicant__CallB__73852659")
+  CallBackDate        DateTime @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__Applicant__CallB__74794A92") @db.DateTime
+  Skills              String?  @default("", map: "DF__Applicant__Skill__3FD07829") @db.NVarChar(Max)
+  PrevIntern          Boolean  @default(false, map: "DF__Applicant__PrevI__52E34C9D")
+  Note                String?  @db.NVarChar(Max)
+  Preference          String?  @db.NVarChar(Max)
+  BlueSprings         Boolean  @default(false, map: "DF__Applicant__BlueS__6B79F03D")
+  HearAboutUs         String?  @db.NVarChar(Max)
+  AnnistonGadsden     Boolean  @default(false, map: "DF_Applicants_AnnistonGadsden")
+  Dothan              Boolean  @default(false, map: "DF_Applicants_Dothan")
+}
+
+model Archives {
+  Id         String   @id(map: "PK_dbo.Archives") @db.NVarChar(128)
+  Name       String?  @db.NVarChar(Max)
+  UploadDate DateTime @db.DateTime
+  Uploader   String?  @db.NVarChar(Max)
+}
+
+model AspNetRoles {
+  Id              String            @id(map: "PK_dbo.AspNetRoles") @db.NVarChar(128)
+  Name            String            @unique(map: "RoleNameIndex") @db.NVarChar(256)
+  AspNetUserRoles AspNetUserRoles[]
+}
+
+model AspNetUserClaims {
+  Id          Int         @id(map: "PK_dbo.AspNetUserClaims") @default(autoincrement())
+  UserId      String      @db.NVarChar(128)
+  ClaimType   String?     @db.NVarChar(Max)
+  ClaimValue  String?     @db.NVarChar(Max)
+  AspNetUsers AspNetUsers @relation(fields: [UserId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId")
+
+  @@index([UserId], map: "IX_UserId")
+}
+
+model AspNetUserLogins {
+  LoginProvider String      @db.NVarChar(128)
+  ProviderKey   String      @db.NVarChar(128)
+  UserId        String      @db.NVarChar(128)
+  AspNetUsers   AspNetUsers @relation(fields: [UserId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId")
+
+  @@id([LoginProvider, ProviderKey, UserId], map: "PK_dbo.AspNetUserLogins")
+  @@index([UserId], map: "IX_UserId")
+}
+
+model AspNetUserRoles {
+  UserId      String      @db.NVarChar(128)
+  RoleId      String      @db.NVarChar(128)
+  AspNetRoles AspNetRoles @relation(fields: [RoleId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId")
+  AspNetUsers AspNetUsers @relation(fields: [UserId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId")
+
+  @@id([UserId, RoleId], map: "PK_dbo.AspNetUserRoles")
+  @@index([RoleId], map: "IX_RoleId")
+  @@index([UserId], map: "IX_UserId")
+}
+
+model AspNetUsers {
+  Id                   String             @id(map: "PK_dbo.AspNetUsers") @db.NVarChar(128)
+  FirstName            String?            @db.NVarChar(Max)
+  LastName             String?            @db.NVarChar(Max)
+  Email                String?            @db.NVarChar(256)
+  EmailConfirmed       Boolean
+  PasswordHash         String?            @db.NVarChar(Max)
+  SecurityStamp        String?            @db.NVarChar(Max)
+  PhoneNumber          String?            @db.NVarChar(Max)
+  PhoneNumberConfirmed Boolean
+  TwoFactorEnabled     Boolean
+  LockoutEndDateUtc    DateTime?          @db.DateTime
+  LockoutEnabled       Boolean
+  AccessFailedCount    Int
+  UserName             String             @unique(map: "UserNameIndex") @db.NVarChar(256)
+  CompanyId            Int
+  AspNetUserClaims     AspNetUserClaims[]
+  AspNetUserLogins     AspNetUserLogins[]
+  AspNetUserRoles      AspNetUserRoles[]
+  Companies            Companies          @relation(fields: [CompanyId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_dbo.AspNetUsers_dbo.Companies_CompanyId")
+  Interns              Interns?
+
+  @@index([CompanyId], map: "IX_CompanyId")
+}
+
+model ClassRegs {
+  Id          Int      @id(map: "PK_dbo.ClassRegs") @default(autoincrement())
+  DateApplied DateTime @db.DateTime
+  Class       String?  @db.NVarChar(Max)
+  FirstName   String?  @db.NVarChar(Max)
+  LastName    String?  @db.NVarChar(Max)
+  Email       String?  @db.NVarChar(Max)
+  Phone       String?  @db.NVarChar(Max)
+  Company     String?  @db.NVarChar(Max)
+  JobTitle    String?  @db.NVarChar(Max)
+}
+
+model Companies {
+  Id           Int           @id(map: "PK_dbo.Companies") @default(autoincrement())
+  Name         String?       @db.NVarChar(Max)
+  Abbreviation String?       @db.NVarChar(Max)
+  County       String?       @db.NVarChar(Max)
+  AspNetUsers  AspNetUsers[]
+  Services     Services[]
+}
+
+model Interns {
+  Id                  String          @id(map: "PK_dbo.Interns") @db.NVarChar(128)
+  CWID                String?         @db.NVarChar(Max)
+  Major               String?         @db.NVarChar(Max)
+  Minor               String?         @db.NVarChar(Max)
+  Level               String?         @db.NVarChar(Max)
+  GradDate            DateTime        @db.DateTime
+  ResumeId            String?         @db.NVarChar(Max)
+  ContactName         String?         @default("", map: "DF__Interns__Contact__5AEE82B9") @db.NVarChar(Max)
+  ContactRelationship String?         @default("", map: "DF__Interns__Contact__5BE2A6F2") @db.NVarChar(Max)
+  ContactPhone        String?         @default("", map: "DF__Interns__Contact__5CD6CB2B") @db.NVarChar(Max)
+  School              String?         @db.NVarChar(Max)
+  MentorName          String?         @db.NVarChar(Max)
+  MentorPhone         String?         @db.NVarChar(Max)
+  MentorEmail         String?         @db.NVarChar(Max)
+  Street              String?         @db.NVarChar(Max)
+  City                String?         @db.NVarChar(Max)
+  Zip                 String?         @db.NVarChar(Max)
+  Apt                 String?         @db.NVarChar(Max)
+  Wage                Float           @default(0, map: "DF__Interns__Wage__17F790F9")
+  Semester            DateTime        @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__Interns__Semeste__18EBB532") @db.DateTime
+  State               String?         @db.NVarChar(Max)
+  Phone               String?         @db.NVarChar(Max)
+  Dob                 DateTime        @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__Interns__Dob__4E53A1AA") @db.DateTime
+  HoursThisWeek       Float           @default(0, map: "DF__Interns__HoursTh__607251E5")
+  TStreet             String?         @db.NVarChar(Max)
+  TCity               String?         @db.NVarChar(Max)
+  TState              String?         @db.NVarChar(Max)
+  TZip                String?         @db.NVarChar(Max)
+  TApt                String?         @db.NVarChar(Max)
+  ImpactCalcId        String?         @db.NVarChar(Max)
+  MidSemReportId      String?         @db.NVarChar(Max)
+  PresentationId      String?         @db.NVarChar(Max)
+  Note                String?         @db.NVarChar(Max)
+  MentorTitle         String?         @db.NVarChar(Max)
+  Department          String?         @db.NVarChar(Max)
+  Hometown            String?         @db.NVarChar(Max)
+  HearAboutUs         String?         @db.NVarChar(Max)
+  AspNetUsers         AspNetUsers     @relation(fields: [Id], references: [Id], onUpdate: NoAction, map: "FK_dbo.Interns_dbo.AspNetUsers_Id")
+  Timelogs            Timelogs[]
+  WorkSchedules       WorkSchedules[]
+
+  @@index([Id], map: "IX_Id")
+}
+
+model PastInterns {
+  CWID           String?        @db.NVarChar(Max)
+  FirstName      String?        @db.NVarChar(Max)
+  LastName       String?        @db.NVarChar(Max)
+  Major          String?        @db.NVarChar(Max)
+  Semester       DateTime       @db.DateTime
+  Company        String?        @db.NVarChar(Max)
+  School         String?        @db.NVarChar(Max)
+  Wage           Float
+  Id             Int            @id(map: "PK_dbo.PastInterns") @default(autoincrement())
+  HrsWorked      Float          @default(0, map: "DF__PastInter__HrsWo__282DF8C2")
+  MentorName     String?        @db.NVarChar(Max)
+  MentorPhone    String?        @db.NVarChar(Max)
+  MentorEmail    String?        @db.NVarChar(Max)
+  ImpactCalcId   String?        @db.NVarChar(Max)
+  MidSemReportId String?        @db.NVarChar(Max)
+  PresentationId String?        @db.NVarChar(Max)
+  Note           String?        @db.NVarChar(Max)
+  Street         String?        @db.NVarChar(Max)
+  City           String?        @db.NVarChar(Max)
+  State          String?        @db.NVarChar(Max)
+  Zip            String?        @db.NVarChar(Max)
+  Apt            String?        @db.NVarChar(Max)
+  GradDate       DateTime       @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__PastInter__GradD__7908F585") @db.DateTime
+  Phone          String?        @db.NVarChar(Max)
+  Email          String?        @db.NVarChar(Max)
+  MentorTitle    String?        @db.NVarChar(Max)
+  Level          String?        @db.NVarChar(Max)
+  Minor          String?        @db.NVarChar(Max)
+  Hometown       String?        @db.NVarChar(Max)
+  HearAboutUs    String?        @db.NVarChar(Max)
+  PastTimelogs   PastTimelogs[]
+}
+
+model Presentations {
+  Id         String   @id(map: "PK_dbo.Presentations") @db.NVarChar(128)
+  Name       String?  @db.NVarChar(Max)
+  Semester   DateTime @db.DateTime
+  UploadDate DateTime @db.DateTime
+  Uploader   String?  @db.NVarChar(Max)
+  Company    String?  @db.NVarChar(Max)
+}
+
+model Services {
+  Id                     Int        @id(map: "PK_dbo.Services") @default(autoincrement())
+  Company_Id             Int?
+  TypeOfService          String?    @db.NVarChar(Max)
+  County                 String?    @db.NVarChar(Max)
+  StaffMember            String?    @db.NVarChar(Max)
+  StartDate              DateTime   @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__Projects__StartD__324172E1") @db.DateTime
+  EndDate                DateTime   @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__Projects__EndDat__3335971A") @db.DateTime
+  Season                 String?    @db.NVarChar(Max)
+  NumberEmployeesTrained Int        @default(0, map: "DF__Projects__Number__3429BB53")
+  FieldStaff             Int        @default(0, map: "DF__Projects__FieldS__351DDF8C")
+  Completed              Boolean    @default(false, map: "DF__Projects__Comple__361203C5")
+  NumberInterns          Int        @default(0, map: "DF__Services__Number__45544755")
+  Certificate            Boolean
+  Companies              Companies? @relation(fields: [Company_Id], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_dbo.Projects_dbo.Companies_Company_Id")
+
+  @@index([Company_Id], map: "IX_Company_Id")
+}
+
+model Timelogs {
+  Id          String   @id(map: "PK_dbo.Timelogs") @db.NVarChar(128)
+  Start       DateTime @db.DateTime
+  End         DateTime @db.DateTime
+  Description String?  @db.NVarChar(Max)
+  Intern_Id   String?  @db.NVarChar(128)
+  Lunch       Float    @default(0, map: "DF__Timelogs__Lunch__65F62111")
+  Interns     Interns? @relation(fields: [Intern_Id], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_dbo.Timelogs_dbo.Interns_Intern_Id")
+
+  @@index([Intern_Id], map: "IX_Intern_Id")
+}
+
+model WorkSchedules {
+  Id        String   @id(map: "PK_dbo.WorkSchedules") @db.NVarChar(128)
+  Start     DateTime @db.DateTime
+  End       DateTime @db.DateTime
+  Intern_Id String?  @db.NVarChar(128)
+  Start2    DateTime @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__WorkSched__Start__0EF836A4") @db.DateTime
+  End2      DateTime @default(dbgenerated("1900-01-01T00:00:00.000"), map: "DF__WorkSchedu__End2__0FEC5ADD") @db.DateTime
+  Interns   Interns? @relation(fields: [Intern_Id], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_dbo.WorkSchedules_dbo.Interns_Intern_Id")
+
+  @@index([Intern_Id], map: "IX_Intern_Id")
+}
+
+model PastTimelogs {
+  Id           String      @id(map: "PK_dbo.PastTimelogs") @db.NVarChar(128)
+  Start        DateTime    @db.DateTime
+  End          DateTime    @db.DateTime
+  Lunch        Float
+  Description  String?     @db.NVarChar(Max)
+  Approved     Boolean
+  PastInternId Int
+  PastInterns  PastInterns @relation(fields: [PastInternId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_dbo.PastTimelogs_dbo.PastInterns_PastInternId")
+
+  @@index([PastInternId], map: "IX_PastInternId")
 }

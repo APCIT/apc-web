@@ -1,14 +1,21 @@
-import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import PartnerFooter from '@/components/PartnerFooter';
-import { Providers } from './providers';
+import "./globals.css";
+import Navbar from "@/components/Navbar";
+import PartnerFooter from "@/components/PartnerFooter";
+import { Providers } from "./providers";
+import { getSession } from "@/lib/auth";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
+  const initialUser =
+    session?.isLoggedIn && session?.userId
+      ? { userName: session.userName }
+      : null;
+  const initialRoles = session?.roles ?? [];
+
   return (
     <html lang="en">
       <head>
@@ -18,7 +25,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <Providers>
-          <Navbar/>
+          <Navbar initialUser={initialUser} initialRoles={initialRoles} />
           <main className="pt-[100px]">
             {children}
           </main>
