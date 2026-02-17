@@ -2,11 +2,20 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { LOGIN_API } from '@/lib/api';
+
+/** Safe redirect: same-origin path only (no open redirect). */
+function getSafeReturnUrl(returnUrl: string | null): string {
+  if (!returnUrl || typeof returnUrl !== 'string') return '/';
+  const trimmed = returnUrl.trim();
+  if (trimmed.startsWith('/') && !trimmed.startsWith('//')) return trimmed;
+  return '/';
+}
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -40,7 +49,9 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/');
+      const returnUrl = searchParams.get('returnUrl');
+      const targetPath = getSafeReturnUrl(returnUrl);
+      router.push(targetPath);
       router.refresh();
     } catch {
       setErrors({ general: 'An error occurred. Please try again.' });

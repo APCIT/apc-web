@@ -56,7 +56,7 @@ const newsletterEntries: NewsletterEntry[] = [
   },
   {
     title: 'Past News',
-    href: '/PastNewsletters',
+    href: '/Home/PastNewsletters',
     cta: 'Past Newsletters'
   }
 ];
@@ -192,7 +192,7 @@ export default function NewslettersPage() {
         <div className="flex w-full" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
           {/* Left column - newsletters */}
           <div className="w-1/2 text-black" style={{ marginLeft: '-30px', backgroundColor: 'white', paddingLeft: '30px', paddingRight: '30px' }}>
-            {newsletterEntries.map((entry, index) => (
+            {newsletterEntries.map((entry) => (
               <div
                 key={entry.title}
                 className="newsletter-row"
@@ -244,7 +244,7 @@ export default function NewslettersPage() {
 
           {/* Right column - news articles */}
           <div className="w-1/2 bg-[#9e1b32] flex flex-col" style={{ paddingLeft: '30px', paddingRight: '30px' }}>
-            {newsArticles.slice(0, newsletterEntries.length).map((article, index) => (
+            {newsArticles.slice(0, newsletterEntries.length).map((article) => (
               <div 
                 key={article.title} 
                 className="news-article-row"

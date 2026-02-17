@@ -62,6 +62,7 @@ function getMenuLinksForRoles(roles: string[]): MenuLink[] {
     add("interns", "Interns", "/Interns");
     add("applicants", "Applicants", "/Applicants");
     add("past-interns", "Past Interns", "/PastInterns");
+    add("presentations", "Presentations", "/Presentations");
     add("registrants", "Class Registrants", "/Classes/Registrants");
     add("companies", "Companies", "/Companies");
     add("services", "Professional Services", "/Services");
