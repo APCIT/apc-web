@@ -4,8 +4,12 @@
  * null = any authenticated user. First matching rule wins (more specific paths first).
  */
 const ROUTE_ROLES: { path: string; roles: string[] | null; exact?: boolean }[] = [
-  // Manage/Users — IT, admin only (staff does not get Users link)
-  { path: "/Manage/Users", roles: ["admin", "IT"], exact: true },
+  // Create New User — IT only (must be before /Manage/Users so it takes precedence)
+  { path: "/Manage/Users/CreateNewUser", roles: ["IT"], exact: true },
+  // Manage/Users list — IT, admin only (staff does not get Users link)
+  { path: "/Manage/Users", roles: ["admin", "IT"], exact: false },
+  // Assign Roles — IT only (Manage/AssignRoles/[id])
+  { path: "/Manage/AssignRoles", roles: ["IT"], exact: false },
   // Manage/ToDoList — intern only
   { path: "/Manage/ToDoList", roles: ["intern"], exact: false },
   // Interns sub-routes before /Interns

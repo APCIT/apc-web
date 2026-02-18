@@ -14,6 +14,7 @@ export const API = {
   charts: `${base}/api/charts`,
   companies: `${base}/api/companies`,
   presentations: `${base}/api/presentations`,
+  users: `${base}/api/users`,
 } as const;
 
 const defaultFetchOptions: RequestInit = {
@@ -261,6 +262,193 @@ export async function DELETE_COMPANY_API(id: number): Promise<
     return {
       ok: false,
       error: (data?.error as string) ?? "Failed to delete company",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** User row for the Manage Users table (by role). canDelete is false when user has an associated Intern. */
+export type UserListItem = {
+  id: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  companyName: string;
+  canDelete: boolean;
+};
+
+const USERS_BY_ROLE_KEYS = [
+  "accountant",
+  "admin",
+  "advisor",
+  "client",
+  "IT",
+  "staff",
+  "intern",
+  "reception",
+] as const;
+
+export type UsersByRoleResponse = {
+  byRole: Record<(typeof USERS_BY_ROLE_KEYS)[number], UserListItem[]>;
+  usersWithoutRole: UserListItem[];
+};
+
+/** Call this to get all users grouped by role (admin/IT only). */
+export async function GET_USERS_API(): Promise<
+  | { ok: true; data: UsersByRoleResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.users, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load users",
+      status: res.status,
+    };
+  }
+  return { ok: true, data: data as UsersByRoleResponse };
+}
+
+/** Payload for creating a user. Default password is set on server (Alabama2025!). */
+export type CreateUserPayload = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  companyId: number;
+  role: string;
+};
+
+/** Call this to create a user (admin/IT only). */
+export async function CREATE_USER_API(
+  payload: CreateUserPayload
+): Promise<
+  | { ok: true; id: string; userName: string }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.users, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to create user",
+      status: res.status,
+    };
+  }
+  const id = (data as { id?: string }).id;
+  const userName = (data as { userName?: string }).userName;
+  if (typeof id !== "string" || typeof userName !== "string") {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Invalid response from server",
+      status: res.status,
+    };
+  }
+  return { ok: true, id, userName };
+}
+
+/** Call this to reset a user's password to Alabama2025! (admin/IT only). */
+export async function RESET_USER_PASSWORD_API(userId: string): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.users}/${encodeURIComponent(userId)}/reset-password`, {
+    ...defaultFetchOptions,
+    method: "POST",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to reset password",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Call this to delete a user (IT only). Removes intern/timelogs if present, then roles, logins, user. */
+export async function DELETE_USER_API(userId: string): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.users}/${encodeURIComponent(userId)}`, {
+    ...defaultFetchOptions,
+    method: "DELETE",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to delete user",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** User roles for Assign Roles page (all 8 roles; intern is display-only). */
+export type UserRolesResponse = {
+  firstName: string;
+  lastName: string;
+  roles: Record<string, boolean>;
+};
+
+/** Call this to get a user's name and current roles (IT only). */
+export async function GET_USER_ROLES_API(userId: string): Promise<
+  | { ok: true; data: UserRolesResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.users}/${encodeURIComponent(userId)}/roles`, {
+    ...defaultFetchOptions,
+    method: "GET",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load user roles",
+      status: res.status,
+    };
+  }
+  return { ok: true, data: data as UserRolesResponse };
+}
+
+/** Payload for updating roles (editable roles only; intern is not sent). */
+export type UpdateUserRolesPayload = {
+  accountant?: boolean;
+  admin?: boolean;
+  advisor?: boolean;
+  client?: boolean;
+  IT?: boolean;
+  reception?: boolean;
+  staff?: boolean;
+};
+
+/** Call this to update a user's roles (IT only). Intern is not updated. */
+export async function UPDATE_USER_ROLES_API(
+  userId: string,
+  payload: UpdateUserRolesPayload
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.users}/${encodeURIComponent(userId)}/roles`, {
+    ...defaultFetchOptions,
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update roles",
       status: res.status,
     };
   }
