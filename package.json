@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@azure/storage-blob": "^12.31.0",
     "@heroui/accordion": "^2.2.24",
     "@heroui/dropdown": "^2.3.27",
     "@heroui/skeleton": "^2.2.18",

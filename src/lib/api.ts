@@ -13,6 +13,7 @@ export const API = {
   interns: `${base}/api/interns`,
   charts: `${base}/api/charts`,
   companies: `${base}/api/companies`,
+  presentations: `${base}/api/presentations`,
 } as const;
 
 const defaultFetchOptions: RequestInit = {
@@ -88,6 +89,77 @@ export async function GET_CHARTS_API(): Promise<
     };
   }
   return { ok: true, data: data as ChartsResponse };
+}
+
+/** Presentation item from DB (for accordion sections and tables). */
+export type PresentationItem = {
+  id: string;
+  name: string;
+  semester: string;
+  semesterLabel: string;
+  uploadDate: string;
+  uploader: string;
+  company: string;
+};
+
+/** Call this to get all presentations ordered by Semester desc (distinct semesters = accordion sections). */
+export async function GET_PRESENTATIONS_API(): Promise<
+  | { ok: true; presentations: PresentationItem[] }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.presentations, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load presentations",
+      status: res.status,
+    };
+  }
+  return { ok: true, presentations: data as PresentationItem[] };
+}
+
+/** Payload for creating a presentation (JSON body with base64 file to avoid multipart handling issues). */
+export type CreatePresentationPayload = {
+  presentationFileBase64: string;
+  presentationFileName: string;
+  presentationName: string;
+  companyId: string | number;
+  presentationSeason: string;
+  presentationYear: string;
+};
+
+/** Call this to create a presentation (IT only). Sends JSON with base64-encoded file. */
+export async function CREATE_PRESENTATION_API(
+  payload: CreatePresentationPayload,
+  options?: { signal?: AbortSignal }
+): Promise<
+  | { ok: true; id: string }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.presentations, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(payload),
+    signal: options?.signal,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to upload presentation",
+      status: res.status,
+    };
+  }
+  const id = (data as { id?: string }).id;
+  if (typeof id !== "string") {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Invalid response from server",
+      status: res.status,
+    };
+  }
+  return { ok: true, id };
 }
 
 /** Company list item (Name and Abbreviation from DB). */
