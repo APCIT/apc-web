@@ -73,6 +73,9 @@ function getYearOptions(): number[] {
   return out.reverse();
 }
 
+/** Initial accordion section shown until API semesters are loaded. */
+const INITIAL_SEMESTER_LABEL = `Semester ${new Date().getFullYear()}`;
+
 export default function PresentationsPage() {
   const [presentations, setPresentations] = useState<PresentationItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -200,9 +203,13 @@ export default function PresentationsPage() {
     () => getSemestersFromPresentations(presentations),
     [presentations]
   );
+  const displaySemesters = useMemo(
+    () => (loading ? [INITIAL_SEMESTER_LABEL] : semesters),
+    [loading, semesters]
+  );
   const bySemester = useMemo(
-    () => groupBySemester(presentations, semesters),
-    [presentations, semesters]
+    () => groupBySemester(presentations, displaySemesters),
+    [presentations, displaySemesters]
   );
 
   const isIT = roles.includes("IT");
@@ -349,60 +356,64 @@ export default function PresentationsPage() {
           </div>
 
           <div className="manage-accordion px-4 mt-8">
-            {loading && (
-              <p className="font-roboto text-[#666]">Loading presentations…</p>
-            )}
             {error && (
-              <p className="font-roboto text-red-600">{error}</p>
+              <p className="font-roboto text-red-600 mb-4">{error}</p>
             )}
-            {!loading && !error && semesters.length === 0 && (
+            {!loading && displaySemesters.length === 0 && (
               <p className="font-roboto text-[#666]">No presentations yet. Upload one to see semester sections here.</p>
             )}
-            {!loading && !error && semesters.length > 0 && (
-              <Accordion
-                disableIndicatorAnimation={false}
-                showDivider={false}
-                selectionMode="multiple"
-                itemClasses={{
-                  base: "px-0 shadow-none border border-gray-300 rounded-lg mb-3",
-                  heading: "m-0 p-0",
-                  trigger: "bg-gray-100 hover:bg-gray-200 data-[hover=true]:bg-gray-200 rounded-lg",
-                  title: "text-[16px] font-normal text-[#666666] text-left",
-                  titleWrapper: "flex-1",
-                  content: "bg-white rounded-lg",
-                  indicator: "text-black"
-                }}
-              >
-                {semesters.map((semesterLabel) => (
-                  <AccordionItem
-                    key={semesterLabel}
-                    aria-label={semesterLabel}
-                    title={<span className="!font-bold" style={{ fontWeight: 700 }}>{semesterLabel}</span>}
-                    HeadingComponent="div"
-                  >
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse font-roboto text-sm">
-                        <thead>
-                          <tr className="bg-[#9E1B32]">
-                            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
-                              Name(s)
-                            </th>
-                            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
-                              Company
-                            </th>
-                            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
-                              Upload Date
-                            </th>
-                            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
-                              Uploaded By
-                            </th>
-                            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
-                              Actions
-                            </th>
+            {displaySemesters.length > 0 && (
+            <Accordion
+              disableIndicatorAnimation={false}
+              showDivider={false}
+              selectionMode="multiple"
+              itemClasses={{
+                base: "px-0 shadow-none border border-gray-300 rounded-lg mb-3",
+                heading: "m-0 p-0",
+                trigger: "bg-gray-100 hover:bg-gray-200 data-[hover=true]:bg-gray-200 rounded-lg",
+                title: "text-[16px] font-normal text-[#666666] text-left",
+                titleWrapper: "flex-1",
+                content: "bg-white rounded-lg",
+                indicator: "text-black"
+              }}
+            >
+              {displaySemesters.map((semesterLabel) => (
+                <AccordionItem
+                  key={semesterLabel}
+                  aria-label={semesterLabel}
+                  title={<span className="!font-bold" style={{ fontWeight: 700 }}>{semesterLabel}</span>}
+                  HeadingComponent="div"
+                >
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse font-roboto text-sm">
+                      <thead>
+                        <tr className="bg-[#9E1B32]">
+                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                            Name(s)
+                          </th>
+                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                            Company
+                          </th>
+                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                            Upload Date
+                          </th>
+                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                            Uploaded By
+                          </th>
+                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                            Actions
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {loading && semesterLabel === INITIAL_SEMESTER_LABEL ? (
+                          <tr>
+                            <td colSpan={5} className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                              Loading…
+                            </td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {(bySemester.get(semesterLabel) ?? []).map((p) => (
+                        ) : (
+                          (bySemester.get(semesterLabel) ?? []).map((p) => (
                             <tr key={p.id} className="bg-white hover:bg-[#f5f5f5]">
                               <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
                                 {p.name || '\u00A0'}
@@ -442,13 +453,14 @@ export default function PresentationsPage() {
                                 </a>
                               </td>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </AccordionItem>
+              ))}
+            </Accordion>
             )}
           </div>
         </div>
