@@ -19,6 +19,8 @@ export const API = {
   classesRegistrants: `${base}/api/classes/registrants`,
   pastInterns: `${base}/api/past-interns`,
   archiveExportPastIntern: `${base}/api/archive/export-past-intern`,
+  internsWorkSchedules: `${base}/api/interns/work-schedules`,
+  archiveExportInternSchedules: `${base}/api/archive/export-intern-schedules`,
 } as const;
 
 const defaultFetchOptions: RequestInit = {
@@ -184,6 +186,46 @@ export async function GET_CLASS_REGISTRANTS_API(sortBy?: string): Promise<
     };
   }
   return { ok: true, registrants: data as ClassRegItem[] };
+}
+
+/** Work schedule row for ScheduleDisplay (weekday only). Times are in org timezone (America/Chicago). */
+export type WorkScheduleDisplayItem = {
+  id: string;
+  dayOfWeek: number;
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  startDisplay: string;
+  endDisplay: string;
+  start2Display: string | null;
+  end2Display: string | null;
+};
+
+export type WorkSchedulesResponse = {
+  daysOfWeek: string[];
+  workSchedules: WorkScheduleDisplayItem[];
+};
+
+/** Call this to get weekday work schedules for Intern Schedules page (IT, admin, staff). */
+export async function GET_WORK_SCHEDULES_API(): Promise<
+  | { ok: true; data: WorkSchedulesResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.internsWorkSchedules, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load work schedules",
+      status: res.status,
+    };
+  }
+  return { ok: true, data: data as WorkSchedulesResponse };
+}
+
+/** URL for "Semester Schedules" export (GET returns file). */
+export function getInternSchedulesExportUrl(): string {
+  return API.archiveExportInternSchedules;
 }
 
 /** Past intern list item (for accordion table rows). */
