@@ -1,12 +1,178 @@
+"use client";
+
+import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
+import {
+  GET_INTERNS_API,
+  type InternListItem,
+  type InternsListResponse,
+} from "@/lib/api";
+import { isBirthdayWeek, formatDobShort } from "@/lib/interns-table";
+
+const SORT_OPTIONS = [
+  { value: "", label: "Order By" },
+  { value: "lastname", label: "Name" },
+  { value: "company", label: "Company" },
+  { value: "hours", label: "Hours" },
+  { value: "graddate", label: "Grad Date" },
+] as const;
+
+/** Simple gift/present icon (red). Uses rects so it always renders. */
+function GiftIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="#9E1B32"
+      width={20}
+      height={20}
+      className={className}
+      aria-hidden
+    >
+      {/* Box body */}
+      <rect x="4" y="11" width="16" height="9" rx="0" />
+      {/* Lid */}
+      <rect x="3" y="7" width="18" height="4" rx="0" />
+      {/* Vertical ribbon */}
+      <rect x="10.5" y="7" width="3" height="13" />
+      {/* Horizontal ribbon */}
+      <rect x="4" y="13" width="16" height="3" />
+      {/* Bow: left and right loops */}
+      <ellipse cx="8" cy="6" rx="2.5" ry="2" />
+      <ellipse cx="16" cy="6" rx="2.5" ry="2" />
+    </svg>
+  );
+}
+
+function GiftCell({ item }: { item: InternListItem }) {
+  const show = isBirthdayWeek(item.dob);
+  if (!show) {
+    return (
+      <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" />
+    );
+  }
+  const message = `${item.firstName}'s birthday is ${formatDobShort(item.dob)}`;
+  return (
+    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+      <Popover placement="right">
+        <PopoverTrigger>
+          <button
+            type="button"
+            className="cursor-pointer bg-transparent border-none p-0 inline-flex items-center justify-center text-[#9E1B32] hover:opacity-80"
+            aria-label="Birthday"
+          >
+            <GiftIcon className="size-4" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="bg-[#e8e8e8] border border-[#ccc] rounded-[10px] shadow-lg">
+          <div className="text-[#333] font-roboto text-sm flex items-center gap-2" style={{ padding: "16px 22px" }}>
+            <span className="inline-flex shrink-0 text-[#9E1B32]" aria-hidden>
+              <GiftIcon className="size-5" />
+            </span>
+            <span>{message}</span>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </td>
+  );
+}
+
+/** Hours-this-week box: 110×22px track, crimson border. Under 5h: black text centered in full box; 5h+: white text in red fill. Two decimal places. */
+function HoursBar({
+  hours,
+  isSummer,
+}: {
+  hours: number;
+  isSummer: boolean;
+}) {
+  const cap = isSummer ? 40 : 20;
+  const pct = hours >= cap ? 100 : Math.min(100, (hours / cap) * 100);
+  const underFive = hours > 0 && hours < 5;
+  const display = hours.toFixed(2);
+  return (
+    <div
+      className="weekly-hours-bar relative overflow-hidden"
+      style={{
+        width: 110,
+        height: 22,
+        border: "1px solid #990000",
+        borderRadius: 3,
+      }}
+    >
+      {hours > 0 && (
+        <div
+          className="weekly-hours-fill flex h-full min-w-0 items-center justify-center bg-[#990000] text-xs font-medium"
+          style={{
+            width: `${pct}%`,
+            color: "white",
+          }}
+        >
+          {!underFive && display}
+        </div>
+      )}
+      {hours > 0 && underFive && (
+        <div
+          className="pointer-events-none text-xs font-medium text-black"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+          }}
+          aria-hidden
+        >
+          {display}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function InternsPage() {
+  const searchParams = useSearchParams();
+  const sortby = searchParams.get("sortby") ?? "";
+  const [data, setData] = useState<InternsListResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    const result = await GET_INTERNS_API(
+      sortby && SORT_OPTIONS.some((o) => o.value === sortby) ? sortby : undefined
+    );
+    setLoading(false);
+    if (result.ok) {
+      setData(result.data);
+    } else {
+      setError(result.error);
+    }
+  }, [sortby]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const onOrderChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) params.set("sortby", value);
+    else params.delete("sortby");
+    window.location.search = params.toString();
+  };
+
   return (
     <div className="w-full bg-white">
       <div className="py-8 px-[50px]">
-        {/* Page Title */}
         <div className="mb-6 text-center">
           <h2
             className="text-[24px] font-roboto"
-            style={{ fontWeight: 'normal', color: '#900' }}
+            style={{ fontWeight: "normal", color: "#900" }}
           >
             Current Interns
           </h2>
@@ -14,23 +180,33 @@ export default function InternsPage() {
 
         <div className="flex justify-end mb-4">
           <select
-            defaultValue="Order By"
+            value={sortby}
+            onChange={(e) => onOrderChange(e.target.value)}
             className="pl-[12px] pr-[32px] py-[8px] border border-[#333] rounded-[6px] text-[#333] bg-white text-[14px] font-normal cursor-pointer appearance-none bg-no-repeat"
             style={{
-              minWidth: '160px',
+              minWidth: "160px",
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
-              backgroundPosition: 'right 12px center',
+              backgroundPosition: "right 12px center",
             }}
           >
-            <option value="Order By">Order By</option>
-            <option value="Name">Name</option>
-            <option value="Company">Company</option>
-            <option value="Hours">Hours</option>
-            <option value="Grad Date">Grad Date</option>
+            {SORT_OPTIONS.map((opt) => (
+              <option key={opt.value || "default"} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
           </select>
         </div>
 
-        <div className="overflow-x-auto" style={{ marginTop: '20px', marginBottom: '48px' }}>
+        {error && (
+          <div className="mb-4 text-red-600 text-sm">
+            {error}
+          </div>
+        )}
+
+        <div
+          className="overflow-x-auto"
+          style={{ marginTop: "20px", marginBottom: "48px" }}
+        >
           <table className="w-full border-collapse font-roboto text-sm">
             <thead>
               <tr className="bg-[#9E1B32]">
@@ -84,10 +260,10 @@ export default function InternsPage() {
                   ⚑
                 </th>
                 <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
-                  Actions
+                  $
                 </th>
                 <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
-                  $
+                  Actions
                 </th>
                 <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                   To&nbsp;Applicant
@@ -98,79 +274,168 @@ export default function InternsPage() {
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-white hover:bg-[#f5f5f5]">
-                <td className="border border-[#ddd] p-[10px] text-center align-middle"></td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle">
-                  <a href="#" className="text-[#909090] no-underline hover:underline text-sm">
-                    Details
-                  </a>
-                </td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">—</td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle !bg-white">
-                  <button
-                    type="button"
-                    className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-white focus:!bg-white focus:outline-none focus:ring-0 active:!bg-white"
-                    style={{ backgroundColor: 'white', width: '48px', minWidth: '48px' }}
-                    aria-label="Download to applicant"
+              {loading && (
+                <tr className="bg-white hover:bg-[#f5f5f5]">
+                  <td
+                    colSpan={15}
+                    className="border border-[#ddd] p-[10px] text-center text-[#666]"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#444444"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M12 5v10" />
-                      <path d="M8 11l4 4 4-4" />
-                      <path d="M5 19h14" />
-                    </svg>
-                  </button>
-                </td>
-                <td className="border border-[#ddd] p-[10px] text-center align-middle !bg-white">
-                  <button
-                    type="button"
-                    className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-white focus:!bg-white focus:outline-none focus:ring-0 active:!bg-white"
-                    style={{ backgroundColor: 'white', width: '48px', minWidth: '48px' }}
-                    aria-label="Archive intern"
+                    Loading…
+                  </td>
+                </tr>
+              )}
+              {!loading && data?.interns.length === 0 && (
+                <tr className="bg-white hover:bg-[#f5f5f5]">
+                  <td
+                    colSpan={15}
+                    className="border border-[#ddd] p-[10px] text-center text-[#666]"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#444444"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M12 5v10" />
-                      <path d="M8 11l4 4 4-4" />
-                      <path d="M5 19h14" />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
+                    No interns found.
+                  </td>
+                </tr>
+              )}
+              {!loading &&
+                data?.interns.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="bg-white hover:bg-[#f5f5f5]"
+                  >
+                    <GiftCell item={item} />
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      {item.cwid ?? "—"}
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      <span
+                        className={
+                          item.nameStyle === "text-bold"
+                            ? "font-bold text-[#666]"
+                            : "font-normal text-[#666]"
+                        }
+                      >
+                        {item.lastName}, {item.firstName}
+                      </span>
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      {item.email ?? "—"}
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      {item.phone ?? "—"}
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      <span
+                        className={
+                          item.companyStyle === "text-bold"
+                            ? "font-bold text-[#666]"
+                            : "font-normal text-[#666]"
+                        }
+                      >
+                        {item.companyName || "—"}
+                      </span>
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      {item.semester || "—"}
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      {item.level ?? "—"}
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      {item.gradDate || "—"}
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      <div className="flex justify-center">
+                        <HoursBar
+                          hours={item.hoursBar}
+                          isSummer={data?.isSummer ?? false}
+                        />
+                      </div>
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      {(data?.isSummer && item.hoursThisWeek > 40) ||
+                      (!data?.isSummer && item.hoursThisWeek > 20) ? (
+                        <span className="text-amber-600" title="Over weekly cap">
+                          ⚑
+                        </span>
+                      ) : null}
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      {item.wage != null && item.wage !== 0
+                        ? String(item.wage)
+                        : "—"}
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                      <Link
+                        href={`/Interns/Details/${item.id}`}
+                        className="text-[#666] text-sm no-underline hover:underline"
+                      >
+                        Details
+                      </Link>
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white">
+                      <button
+                        type="button"
+                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-white focus:!bg-white focus:outline-none focus:ring-0 active:!bg-white opacity-50 cursor-not-allowed"
+                        style={{
+                          width: "48px",
+                          minWidth: "48px",
+                        }}
+                        disabled
+                        aria-label="Download to applicant (not implemented)"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#444444"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M12 5v10" />
+                          <path d="M8 11l4 4 4-4" />
+                          <path d="M5 19h14" />
+                        </svg>
+                      </button>
+                    </td>
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white">
+                      <button
+                        type="button"
+                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-white focus:!bg-white focus:outline-none focus:ring-0 active:!bg-white opacity-50 cursor-not-allowed"
+                        style={{
+                          width: "48px",
+                          minWidth: "48px",
+                        }}
+                        disabled
+                        aria-label="Archive intern (not implemented)"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#444444"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M12 5v10" />
+                          <path d="M8 11l4 4 4-4" />
+                          <path d="M5 19h14" />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
 
-        <div className="flex flex-wrap" style={{ marginTop: '32px', gap: '24px' }}>
-          {/* Export ATN Report */}
+        <div
+          className="flex flex-wrap"
+          style={{ marginTop: "32px", gap: "24px" }}
+        >
           <button
             type="button"
             className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none"
@@ -194,8 +459,6 @@ export default function InternsPage() {
             </span>
             <span>Export ATN Report</span>
           </button>
-
-          {/* Semester Timelogs */}
           <button
             type="button"
             className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none"
@@ -219,8 +482,6 @@ export default function InternsPage() {
             </span>
             <span>Semester Timelogs</span>
           </button>
-
-          {/* Tara Timelogs */}
           <button
             type="button"
             className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none"
@@ -244,8 +505,6 @@ export default function InternsPage() {
             </span>
             <span>Tara Timelogs</span>
           </button>
-
-          {/* Interns Reports (alert icon) */}
           <button
             type="button"
             className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none"

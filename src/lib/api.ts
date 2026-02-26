@@ -228,6 +228,279 @@ export function getInternSchedulesExportUrl(): string {
   return API.archiveExportInternSchedules;
 }
 
+/** Current intern row for the Interns table (sortby applied on server). */
+export type InternListItem = {
+  id: string;
+  cwid: string | null;
+  firstName: string;
+  lastName: string;
+  email: string | null;
+  phone: string | null;
+  companyName: string;
+  semester: string;
+  level: string | null;
+  gradDate: string;
+  wage: number;
+  dob: string;
+  hoursThisWeek: number;
+  hoursBar: number;
+  nameStyle: "text-bold" | "text-normal";
+  companyStyle: "text-bold" | "text-normal";
+};
+
+/** Response from GET /api/interns (list with weekStart and isSummer for bar/flag). */
+export type InternsListResponse = {
+  interns: InternListItem[];
+  weekStart: string;
+  isSummer: boolean;
+};
+
+/** sortby: "lastname" | "company" | "hours" | "graddate" (or default lastname). */
+export async function GET_INTERNS_API(sortby?: string): Promise<
+  | { ok: true; data: InternsListResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const url = sortby
+    ? `${API.interns}?${new URLSearchParams({ sortby }).toString()}`
+    : API.interns;
+  const res = await fetch(url, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load interns",
+      status: res.status,
+    };
+  }
+  return { ok: true, data: data as InternsListResponse };
+}
+
+/** Timelog row for Intern Details week view. */
+export type TimelogEntry = {
+  id: string;
+  start: string;
+  end: string;
+  description: string | null;
+  lunch: number;
+  hours: number;
+};
+
+/** Current intern detail (for Details page). */
+export type InternDetailItem = {
+  id: string;
+  cwid: string | null;
+  firstName: string;
+  lastName: string;
+  email: string | null;
+  phone: string | null;
+  companyName: string;
+  /** Company id for Employment dropdown (user's CompanyId). */
+  companyId: number | null;
+  semester: string;
+  level: string | null;
+  gradDate: string;
+  /** ISO date for School Graduation (MMM yyyy). */
+  gradDateIso: string | null;
+  wage: number;
+  dob: string;
+  major: string | null;
+  minor: string | null;
+  school: string | null;
+  department: string | null;
+  mentorName: string | null;
+  mentorTitle: string | null;
+  mentorPhone: string | null;
+  mentorEmail: string | null;
+  note: string | null;
+  /** Personal section */
+  street: string | null;
+  apt: string | null;
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+  hometown: string | null;
+  contactName: string | null;
+  contactRelationship: string | null;
+  contactPhone: string | null;
+};
+
+/** Response from GET /api/interns/[id] (optional ?date=yyyy-MM-dd for week). */
+export type InternDetailsResponse = {
+  intern: InternDetailItem;
+  weekStart: string;
+  weekEnd: string;
+  totalHours: number;
+  thisWeek: TimelogEntry[];
+};
+
+/** Get one intern's details and week timelogs. date = yyyy-MM-dd (Sunday of week); omit for current week. */
+export async function GET_INTERN_DETAIL_API(
+  id: string,
+  date?: string
+): Promise<
+  | { ok: true; data: InternDetailsResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const url = date
+    ? `${API.interns}/${encodeURIComponent(id)}?${new URLSearchParams({ date }).toString()}`
+    : `${API.interns}/${encodeURIComponent(id)}`;
+  const res = await fetch(url, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load intern details",
+      status: res.status,
+    };
+  }
+  return { ok: true, data: data as InternDetailsResponse };
+}
+
+/** Update intern CWID (IT only). PATCH /api/interns/[id]/cwid with body { cwid: string }. */
+export async function PATCH_INTERN_CWID_API(
+  id: string,
+  cwid: string
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/cwid`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ cwid }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update CWID",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Update intern's company (user's CompanyId). PATCH /api/interns/[id]/company with body { companyId: number }. */
+export async function PATCH_INTERN_COMPANY_API(
+  id: string,
+  companyId: number
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/company`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify({ companyId }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update company",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Update intern department. PATCH /api/interns/[id]/department with body { department: string }. */
+export async function PATCH_INTERN_DEPARTMENT_API(
+  id: string,
+  department: string
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/department`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify({ department }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update department",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Update intern mentor. PATCH /api/interns/[id]/mentor with body { mentorName?, mentorTitle?, mentorPhone?, mentorEmail? }. */
+export async function PATCH_INTERN_MENTOR_API(
+  id: string,
+  payload: { mentorName?: string; mentorTitle?: string; mentorPhone?: string; mentorEmail?: string }
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/mentor`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update mentor",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Update intern wage. PATCH /api/interns/[id]/wage with body { wage: number }. */
+export async function PATCH_INTERN_WAGE_API(
+  id: string,
+  wage: number
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/wage`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify({ wage }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update wage",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Update intern note. PATCH /api/interns/[id]/note with body { note: string }. */
+export async function PATCH_INTERN_NOTE_API(
+  id: string,
+  note: string
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/note`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify({ note }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update note",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
 /** Past intern list item (for accordion table rows). */
 export type PastInternItem = {
   id: number;
