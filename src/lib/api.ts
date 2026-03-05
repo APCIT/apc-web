@@ -21,6 +21,7 @@ export const API = {
   archiveExportPastIntern: `${base}/api/archive/export-past-intern`,
   internsWorkSchedules: `${base}/api/interns/work-schedules`,
   archiveExportInternSchedules: `${base}/api/archive/export-intern-schedules`,
+  archiveExportInternTimesheet: `${base}/api/archive/export-intern-timesheet`,
 } as const;
 
 const defaultFetchOptions: RequestInit = {
@@ -228,6 +229,14 @@ export function getInternSchedulesExportUrl(): string {
   return API.archiveExportInternSchedules;
 }
 
+/** URL for "Export Timesheet" on Intern Details (GET returns file). */
+export function getInternTimesheetExportUrl(internId: string): string {
+  const id = internId.trim();
+  if (!id) return API.archiveExportInternTimesheet;
+  const qs = new URLSearchParams({ id }).toString();
+  return `${API.archiveExportInternTimesheet}?${qs}`;
+}
+
 /** Current intern row for the Interns table (sortby applied on server). */
 export type InternListItem = {
   id: string;
@@ -322,6 +331,21 @@ export type InternDetailItem = {
   contactName: string | null;
   contactRelationship: string | null;
   contactPhone: string | null;
+  /** Blob name in resumes container (length > 15 = valid link). */
+  resumeId: string | null;
+  /** Blob name in checklist-impactcalculator container (length > 15 = valid link). */
+  impactCalcId: string | null;
+  /** Blob name in checklist-presentation container (length > 15 = valid link). */
+  presentationId: string | null;
+};
+
+/** Work schedule entry for a single day (Mon–Fri) on Intern Details. */
+export type WorkScheduleEntry = {
+  day: string;
+  startDisplay: string;
+  endDisplay: string;
+  start2Display: string | null;
+  end2Display: string | null;
 };
 
 /** Response from GET /api/interns/[id] (optional ?date=yyyy-MM-dd for week). */
@@ -330,7 +354,10 @@ export type InternDetailsResponse = {
   weekStart: string;
   weekEnd: string;
   totalHours: number;
+  totalPeriodHours: number;
+  totalAllTimeHours: number;
   thisWeek: TimelogEntry[];
+  workSchedule: WorkScheduleEntry[];
 };
 
 /** Get one intern's details and week timelogs. date = yyyy-MM-dd (Sunday of week); omit for current week. */
@@ -495,6 +522,276 @@ export async function PATCH_INTERN_NOTE_API(
     return {
       ok: false,
       error: (data?.error as string) ?? "Failed to update note",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Upload resume file for intern (admin, IT, staff). POST JSON with base64 file data. */
+export async function UPDATE_INTERN_RESUME_API(
+  id: string,
+  payload: { resumeFileBase64: string; resumeFileName: string },
+  options?: { signal?: AbortSignal }
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/resume`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(payload),
+    signal: options?.signal,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update resume",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Upload impact calc file for intern (admin, IT, staff). POST JSON with base64 file data. */
+export async function UPDATE_INTERN_IMPACT_CALC_API(
+  id: string,
+  payload: { fileBase64: string; fileName: string },
+  options?: { signal?: AbortSignal }
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/impact-calc`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(payload),
+    signal: options?.signal,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update impact calculator",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Upload presentation file for intern (admin, IT, staff). POST JSON with base64 file data. */
+export async function UPDATE_INTERN_PRESENTATION_API(
+  id: string,
+  payload: { fileBase64: string; fileName: string },
+  options?: { signal?: AbortSignal }
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/presentation`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(payload),
+    signal: options?.signal,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update presentation",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Payload for New Semester (Returning Intern). */
+export type NewSemesterPayload = {
+  semesterSeason: "April" | "July" | "November";
+  semesterYear: number;
+  wage: number;
+  companyId: number;
+};
+
+/** Archive current stint as PastIntern and update intern for new semester (admin, IT). */
+export async function POST_INTERN_NEW_SEMESTER_API(
+  id: string,
+  payload: NewSemesterPayload
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/new-semester`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to process new semester",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Download intern timesheet (Excel-style) before archiving. Call this before POST_INTERN_ARCHIVE_API / POST_INTERN_TO_APPLICANT_API so data still exists. */
+export async function DOWNLOAD_INTERN_TIMESHEET_API(
+  internId: string
+): Promise<{ ok: true; filename?: string } | { ok: false; error: string }> {
+  const url = `${API.archiveExportInternTimesheet}?${new URLSearchParams({ id: internId }).toString()}`;
+  const res = await fetch(url, { credentials: "include", method: "GET" });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    return { ok: false, error: (data?.error as string) ?? "Failed to export timesheet" };
+  }
+  const blob = await res.blob();
+  const disposition = res.headers.get("Content-Disposition");
+  const match = disposition?.match(/filename="?([^";\n]+)"?/);
+  const filename = match?.[1]?.trim() ?? `Timelog-${internId}-${new Date().toISOString().slice(0, 10)}.xls`;
+  const objectUrl = URL.createObjectURL(blob);
+  try {
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = filename;
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+  return { ok: true, filename };
+}
+
+/** Archive intern: snapshot to PastIntern, delete timelogs/schedules/intern/user. IT only. */
+export async function POST_INTERN_ARCHIVE_API(
+  id: string
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/archive`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify({}),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to archive intern",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Send intern to applicant pool: PastIntern + Applicant (PrevIntern=true), delete timelogs/schedules/intern/user. IT only. */
+export async function POST_INTERN_TO_APPLICANT_API(
+  id: string
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/to-applicant`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify({}),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to send intern to applicant pool",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Payload for creating a timelog. */
+export type CreateTimelogPayload = {
+  date: string;
+  startTime: string;
+  endTime: string;
+  lunch: number;
+  description: string;
+};
+
+/** Payload for editing a timelog. */
+export type EditTimelogPayload = CreateTimelogPayload & {
+  timelogId: string;
+};
+
+/** Create a new timelog for an intern. */
+export async function CREATE_TIMELOG_API(
+  internId: string,
+  payload: CreateTimelogPayload
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(internId)}/timelog`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to create timelog",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Update an existing timelog for an intern. */
+export async function UPDATE_TIMELOG_API(
+  internId: string,
+  payload: EditTimelogPayload
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(internId)}/timelog`, {
+    ...defaultFetchOptions,
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update timelog",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Delete the timelog for an intern on the given date (yyyy-MM-dd). */
+export async function DELETE_TIMELOG_API(
+  internId: string,
+  date: string
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(
+    `${API.interns}/${encodeURIComponent(internId)}/timelog?${new URLSearchParams({ date }).toString()}`,
+    { ...defaultFetchOptions, method: "DELETE" }
+  );
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to delete timelog",
       status: res.status,
     };
   }

@@ -78,7 +78,7 @@ export async function GET() {
 
     const weekdayRows = rows.filter((r) => {
       const start = r.Start instanceof Date ? r.Start : new Date(r.Start);
-      const day = start.getDay();
+      const day = start.getUTCDay();
       return WEEKDAY_JS.includes(day);
     });
 
@@ -105,7 +105,7 @@ export async function GET() {
     const distinctDays = new Set<number>();
     for (const r of sorted) {
       const start = r.Start instanceof Date ? r.Start : new Date(r.Start);
-      distinctDays.add(start.getDay());
+      distinctDays.add(start.getUTCDay());
     }
     const dayOrder = [1, 2, 3, 4, 5];
     const daysOfWeek = dayOrder.filter((d) => distinctDays.has(d)).map((d) => DAY_NAMES[d]);
@@ -117,7 +117,7 @@ export async function GET() {
       const end2 = r.End2 instanceof Date ? r.End2 : new Date(r.End2);
       return {
         id: r.Id,
-        dayOfWeek: start.getDay(),
+        dayOfWeek: start.getUTCDay(),
         firstName: r.Interns?.AspNetUsers?.FirstName ?? "",
         lastName: r.Interns?.AspNetUsers?.LastName ?? "",
         companyName: r.Interns?.AspNetUsers?.Companies?.Name ?? "",

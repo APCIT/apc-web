@@ -2,8 +2,16 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Accordion, AccordionItem } from "@heroui/accordion";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from "@heroui/modal";
 import {
   GET_INTERN_DETAIL_API,
   GET_COMPANIES_API,
@@ -13,9 +21,29 @@ import {
   PATCH_INTERN_MENTOR_API,
   PATCH_INTERN_WAGE_API,
   PATCH_INTERN_NOTE_API,
+  GET_ME_API,
+  getInternTimesheetExportUrl,
+  UPDATE_INTERN_RESUME_API,
+  UPDATE_INTERN_IMPACT_CALC_API,
+  UPDATE_INTERN_PRESENTATION_API,
   type InternDetailItem,
   type CompanyItem,
+  type WorkScheduleEntry,
+  type TimelogEntry,
 } from "@/lib/api";
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result as string;
+      const base64 = dataUrl.split(",")[1];
+      resolve(base64 ?? "");
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
 
 const backButtonClass =
   "inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline";
@@ -131,6 +159,10 @@ const RIGHT_ACTIONS: { label: string; icon?: React.ReactNode }[] = [
   { label: "Presentation", icon: <DocIcon /> },
 ];
 
+const RESUME_BLOB_BASE = "https://apcstorage.blob.core.windows.net/resumes";
+const IMPACT_CALC_BLOB_BASE = "https://apcstorage.blob.core.windows.net/checklist-impactcalculator";
+const PRESENTATION_BLOB_BASE = "https://apcstorage.blob.core.windows.net/checklist-presentation";
+
 /** Left/right table row – same style as PastInterns Details. */
 function TableRow({
   label,
@@ -225,9 +257,17 @@ function EmergencyContent({ intern }: { intern: InternDetailItem }): React.React
 export default function InternDetailsPage() {
   const params = useParams();
   const id = typeof params?.id === "string" ? params.id : "";
-  const year = new Date().getFullYear();
 
-  const [data, setData] = useState<{ intern: InternDetailItem } | null>(null);
+  const [data, setData] = useState<{
+    intern: InternDetailItem;
+    workSchedule: WorkScheduleEntry[];
+    thisWeek: TimelogEntry[];
+    weekStart: string;
+    weekEnd: string;
+    totalHours: number;
+    totalPeriodHours: number;
+    totalAllTimeHours: number;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [cwidValue, setCwidValue] = useState("");
@@ -245,6 +285,24 @@ export default function InternDetailsPage() {
   const [empCompanyId, setEmpCompanyId] = useState<number>(0);
   const [empSaving, setEmpSaving] = useState<"company" | "department" | "mentor" | "wage" | "note" | null>(null);
   const [empError, setEmpError] = useState<string | null>(null);
+  const [roles, setRoles] = useState<string[] | null>(null);
+  const updateResumeDisclosure = useDisclosure();
+  const [updateResumeLoading, setUpdateResumeLoading] = useState(false);
+  const [updateResumeError, setUpdateResumeError] = useState<string | null>(null);
+  const [updateResumeSelectedFileName, setUpdateResumeSelectedFileName] = useState<string | null>(null);
+  const resumeFileInputRef = useRef<HTMLInputElement>(null);
+
+  const updateImpactCalcDisclosure = useDisclosure();
+  const [updateImpactCalcLoading, setUpdateImpactCalcLoading] = useState(false);
+  const [updateImpactCalcError, setUpdateImpactCalcError] = useState<string | null>(null);
+  const [updateImpactCalcSelectedFileName, setUpdateImpactCalcSelectedFileName] = useState<string | null>(null);
+  const impactCalcFileInputRef = useRef<HTMLInputElement>(null);
+
+  const updatePresentationDisclosure = useDisclosure();
+  const [updatePresentationLoading, setUpdatePresentationLoading] = useState(false);
+  const [updatePresentationError, setUpdatePresentationError] = useState<string | null>(null);
+  const [updatePresentationSelectedFileName, setUpdatePresentationSelectedFileName] = useState<string | null>(null);
+  const presentationFileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchDetail = useCallback(() => {
     if (!id) {
@@ -254,10 +312,23 @@ export default function InternDetailsPage() {
     }
     setLoading(true);
     setError(null);
-    GET_INTERN_DETAIL_API(id)
+    const urlDate =
+      typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search).get("date") ?? undefined
+        : undefined;
+    GET_INTERN_DETAIL_API(id, urlDate)
       .then((res) => {
         if (res.ok) {
-          setData({ intern: res.data.intern });
+          setData({
+            intern: res.data.intern,
+            workSchedule: res.data.workSchedule ?? [],
+            thisWeek: res.data.thisWeek ?? [],
+            weekStart: res.data.weekStart,
+            weekEnd: res.data.weekEnd,
+            totalHours: res.data.totalHours,
+            totalPeriodHours: res.data.totalPeriodHours ?? 0,
+            totalAllTimeHours: res.data.totalAllTimeHours ?? 0,
+          });
           setCwidValue(res.data.intern.cwid ?? "");
         } else {
           setError(res.error ?? "Failed to load intern");
@@ -268,6 +339,35 @@ export default function InternDetailsPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  const changeWeek = useCallback(
+    (newDate: string) => {
+      if (!id) return;
+      GET_INTERN_DETAIL_API(id, newDate).then((res) => {
+        if (res.ok) {
+          setData((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  thisWeek: res.data.thisWeek ?? [],
+                  weekStart: res.data.weekStart,
+                  weekEnd: res.data.weekEnd,
+                  totalHours: res.data.totalHours,
+                  totalPeriodHours: res.data.totalPeriodHours ?? 0,
+                  totalAllTimeHours: res.data.totalAllTimeHours ?? 0,
+                }
+              : null
+          );
+        }
+      });
+      window.history.replaceState(
+        null,
+        "",
+        `/Interns/Details/${encodeURIComponent(id)}?date=${newDate}`
+      );
+    },
+    [id]
+  );
+
   useEffect(() => {
     fetchDetail();
   }, [fetchDetail]);
@@ -275,6 +375,13 @@ export default function InternDetailsPage() {
   useEffect(() => {
     GET_COMPANIES_API().then((res) => {
       if (res.ok) setCompanies(res.companies);
+    });
+  }, []);
+
+  useEffect(() => {
+    GET_ME_API().then((res) => {
+      if (res.ok) setRoles(res.roles);
+      else setRoles([]);
     });
   }, []);
 
@@ -299,7 +406,7 @@ export default function InternDetailsPage() {
       .then((res) => {
         if (res.ok) {
           setData((prev) =>
-            prev ? { intern: { ...prev.intern, cwid: cwidValue } } : null
+            prev ? { ...prev, intern: { ...prev.intern, cwid: cwidValue } } : null
           );
         } else {
           setCwidError(res.error ?? "Failed to update CWID");
@@ -318,7 +425,7 @@ export default function InternDetailsPage() {
         if (res.ok) {
           const name = companies.find((c) => c.id === empCompanyId)?.name ?? "";
           setData((prev) =>
-            prev ? { intern: { ...prev.intern, companyName: name, companyId: empCompanyId } } : null
+            prev ? { ...prev, intern: { ...prev.intern, companyName: name, companyId: empCompanyId } } : null
           );
         } else setEmpError(res.error ?? "Failed to update company");
       })
@@ -334,7 +441,7 @@ export default function InternDetailsPage() {
       .then((res) => {
         if (res.ok) {
           setData((prev) =>
-            prev ? { intern: { ...prev.intern, department: empDepartment || null } } : null
+            prev ? { ...prev, intern: { ...prev.intern, department: empDepartment || null } } : null
           );
         } else setEmpError(res.error ?? "Failed to update department");
       })
@@ -357,6 +464,7 @@ export default function InternDetailsPage() {
           setData((prev) =>
             prev
               ? {
+                  ...prev,
                   intern: {
                     ...prev.intern,
                     mentorName: empMentorName || null,
@@ -385,7 +493,7 @@ export default function InternDetailsPage() {
     PATCH_INTERN_WAGE_API(id, num)
       .then((res) => {
         if (res.ok) {
-          setData((prev) => (prev ? { intern: { ...prev.intern, wage: num } } : null));
+          setData((prev) => (prev ? { ...prev, intern: { ...prev.intern, wage: num } } : null));
         } else setEmpError(res.error ?? "Failed to update wage");
       })
       .catch(() => setEmpError("Failed to update wage"))
@@ -399,12 +507,138 @@ export default function InternDetailsPage() {
     PATCH_INTERN_NOTE_API(id, empNote)
       .then((res) => {
         if (res.ok) {
-          setData((prev) => (prev ? { intern: { ...prev.intern, note: empNote || null } } : null));
+          setData((prev) => (prev ? { ...prev, intern: { ...prev.intern, note: empNote || null } } : null));
         } else setEmpError(res.error ?? "Failed to update note");
       })
       .catch(() => setEmpError("Failed to update note"))
       .finally(() => setEmpSaving(null));
   }, [id, empNote]);
+
+  const handleUpdateResumeClick = useCallback(
+    async (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (!id) return;
+      const file = resumeFileInputRef.current?.files?.[0];
+      if (!file || file.size === 0) {
+        setUpdateResumeError("Please select a file to upload.");
+        return;
+      }
+      setUpdateResumeError(null);
+      setUpdateResumeLoading(true);
+      const abort = new AbortController();
+      const timeoutId = setTimeout(() => abort.abort(), 120_000);
+      try {
+        const resumeFileBase64 = await fileToBase64(file);
+        const res = await UPDATE_INTERN_RESUME_API(
+          id,
+          { resumeFileBase64, resumeFileName: file.name },
+          { signal: abort.signal }
+        );
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          updateResumeDisclosure.onClose();
+          fetchDetail();
+          if (resumeFileInputRef.current) resumeFileInputRef.current.value = "";
+          setUpdateResumeSelectedFileName(null);
+        } else {
+          setUpdateResumeError(res.error ?? "Failed to update resume");
+        }
+      } catch (err) {
+        const isAbort = err instanceof Error && err.name === "AbortError";
+        setUpdateResumeError(
+          isAbort ? "Upload timed out. Please try again." : "Failed to update resume"
+        );
+      } finally {
+        clearTimeout(timeoutId);
+        setUpdateResumeLoading(false);
+      }
+    },
+    [id, fetchDetail, updateResumeDisclosure]
+  );
+
+  const handleUpdateImpactCalcClick = useCallback(
+    async (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (!id) return;
+      const file = impactCalcFileInputRef.current?.files?.[0];
+      if (!file || file.size === 0) {
+        setUpdateImpactCalcError("Please select a file to upload.");
+        return;
+      }
+      setUpdateImpactCalcError(null);
+      setUpdateImpactCalcLoading(true);
+      const abort = new AbortController();
+      const timeoutId = setTimeout(() => abort.abort(), 120_000);
+      try {
+        const fileBase64 = await fileToBase64(file);
+        const res = await UPDATE_INTERN_IMPACT_CALC_API(
+          id,
+          { fileBase64, fileName: file.name },
+          { signal: abort.signal }
+        );
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          updateImpactCalcDisclosure.onClose();
+          fetchDetail();
+          if (impactCalcFileInputRef.current) impactCalcFileInputRef.current.value = "";
+          setUpdateImpactCalcSelectedFileName(null);
+        } else {
+          setUpdateImpactCalcError(res.error ?? "Failed to update impact calculator");
+        }
+      } catch (err) {
+        const isAbort = err instanceof Error && err.name === "AbortError";
+        setUpdateImpactCalcError(
+          isAbort ? "Upload timed out. Please try again." : "Failed to update impact calculator"
+        );
+      } finally {
+        clearTimeout(timeoutId);
+        setUpdateImpactCalcLoading(false);
+      }
+    },
+    [id, fetchDetail, updateImpactCalcDisclosure]
+  );
+
+  const handleUpdatePresentationClick = useCallback(
+    async (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (!id) return;
+      const file = presentationFileInputRef.current?.files?.[0];
+      if (!file || file.size === 0) {
+        setUpdatePresentationError("Please select a file to upload.");
+        return;
+      }
+      setUpdatePresentationError(null);
+      setUpdatePresentationLoading(true);
+      const abort = new AbortController();
+      const timeoutId = setTimeout(() => abort.abort(), 120_000);
+      try {
+        const fileBase64 = await fileToBase64(file);
+        const res = await UPDATE_INTERN_PRESENTATION_API(
+          id,
+          { fileBase64, fileName: file.name },
+          { signal: abort.signal }
+        );
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          updatePresentationDisclosure.onClose();
+          fetchDetail();
+          if (presentationFileInputRef.current) presentationFileInputRef.current.value = "";
+          setUpdatePresentationSelectedFileName(null);
+        } else {
+          setUpdatePresentationError(res.error ?? "Failed to update presentation");
+        }
+      } catch (err) {
+        const isAbort = err instanceof Error && err.name === "AbortError";
+        setUpdatePresentationError(
+          isAbort ? "Upload timed out. Please try again." : "Failed to update presentation"
+        );
+      } finally {
+        clearTimeout(timeoutId);
+        setUpdatePresentationLoading(false);
+      }
+    },
+    [id, fetchDetail, updatePresentationDisclosure]
+  );
 
   if (error && !data) {
     return (
@@ -421,6 +655,34 @@ export default function InternDetailsPage() {
 
   const intern = data?.intern ?? null;
   const showSkeleton = loading && !intern;
+  const rolesLoading = roles === null;
+  const canExportTimesheet = !!roles?.some((r) =>
+    ["admin", "IT", "staff", "reception"].includes(r)
+  );
+  const canViewResume = !!roles?.some((r) =>
+    ["admin", "IT", "staff", "reception"].includes(r)
+  );
+  const canUpdateResume = !!roles?.some((r) =>
+    ["admin", "IT", "staff"].includes(r)
+  );
+  const canNewSemester = !!roles?.some((r) =>
+    ["admin", "IT"].includes(r)
+  );
+  const canEditTimelogs = !!roles?.some((r) =>
+    ["admin", "IT"].includes(r)
+  );
+  const canViewImpactCalc = !!roles?.some((r) =>
+    ["admin", "IT", "staff", "reception"].includes(r)
+  );
+  const canUpdateImpactCalc = !!roles?.some((r) =>
+    ["admin", "IT", "staff"].includes(r)
+  );
+  const canViewPresentation = !!roles?.some((r) =>
+    ["admin", "IT", "staff", "reception"].includes(r)
+  );
+  const canUpdatePresentation = !!roles?.some((r) =>
+    ["admin", "IT", "staff"].includes(r)
+  );
 
   return (
     <div className="w-full bg-white">
@@ -439,7 +701,7 @@ export default function InternDetailsPage() {
           Intern
         </h2>
 
-        {/* Semester Time Logs / Work Schedule accordions */}
+        {/* Time Logs / Work Schedule accordions – titles use intern's semester from API */}
         <div className="manage-accordion mb-8">
           <Accordion
             disableIndicatorAnimation={false}
@@ -449,22 +711,236 @@ export default function InternDetailsPage() {
           >
             <AccordionItem
               key="timelogs"
-              aria-label={`Semester ${year} Time Logs`}
-              title={`Semester ${year} Time Logs`}
+              aria-label={
+                intern?.semester
+                  ? `${intern.semester} Time Logs - ${Number.isInteger(data?.totalAllTimeHours ?? 0) ? String(data?.totalAllTimeHours ?? 0) : (data?.totalAllTimeHours ?? 0).toFixed(2)} Hours`
+                  : "Time Logs"
+              }
+              title={
+                <>
+                  {intern?.semester ? `${intern.semester} Time Logs` : "Time Logs"}
+                  {" - "}
+                  <span style={{ color: "#900" }}>
+                    {Number.isInteger(data?.totalAllTimeHours ?? 0)
+                      ? String(data?.totalAllTimeHours ?? 0)
+                      : (data?.totalAllTimeHours ?? 0).toFixed(2)}{" "}
+                    Hours
+                  </span>
+                </>
+              }
               HeadingComponent="div"
             >
-              <div className="p-4 text-[#666] font-roboto text-sm">
-                (Empty for now)
+              <div className="p-4">
+                {showSkeleton ? (
+                  <div style={{ height: "200px", ...skeletonStyle }} aria-hidden />
+                ) : (() => {
+                  const weekStartDate = data?.weekStart ? new Date(data.weekStart) : null;
+                  const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                  const weekDays = weekStartDate
+                    ? Array.from({ length: 7 }, (_, i) => {
+                        const d = new Date(weekStartDate);
+                        d.setDate(d.getDate() + i);
+                        const y = d.getFullYear();
+                        const m = String(d.getMonth() + 1).padStart(2, "0");
+                        const dd = String(d.getDate()).padStart(2, "0");
+                        const dateStr = `${y}-${m}-${dd}`;
+                        const tl = (data?.thisWeek ?? []).find(
+                          (t) => t.start.slice(0, 10) === dateStr
+                        );
+                        return {
+                          dayName: DAY_NAMES[d.getDay()],
+                          date: dateStr,
+                          displayDate: `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`,
+                          timelog: tl ?? null,
+                        };
+                      })
+                    : [];
+
+                  const isSummer = intern?.semester?.toLowerCase().includes("summer");
+                  const maxWeek = isSummer ? 40 : 20;
+                  const maxPeriod = isSummer ? 80 : 40;
+
+                  const currentSunday = (() => {
+                    const now = new Date();
+                    const day = now.getDay();
+                    const s = new Date(now);
+                    s.setDate(s.getDate() - day);
+                    s.setHours(0, 0, 0, 0);
+                    return s;
+                  })();
+                  const showNextWeek = weekStartDate ? weekStartDate < currentSunday : false;
+                  const isCurrentWeek =
+                    weekStartDate &&
+                    currentSunday &&
+                    weekStartDate.getFullYear() === currentSunday.getFullYear() &&
+                    weekStartDate.getMonth() === currentSunday.getMonth() &&
+                    weekStartDate.getDate() === currentSunday.getDate();
+
+                  function formatTimeDisplay(iso: string): string {
+                    const d = new Date(iso);
+                    const h = d.getUTCHours();
+                    const m = d.getUTCMinutes();
+                    const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+                    const ampm = h < 12 ? "AM" : "PM";
+                    return `${hour12}:${String(m).padStart(2, "0")} ${ampm}`;
+                  }
+
+                  function formatLunchDisplay(hours: number): string {
+                    if (hours === 0) return "No Lunch";
+                    const minutes = Math.round(hours * 60);
+                    return `${minutes} min`;
+                  }
+
+                  return (
+                    <>
+                      <div className="flex items-center justify-between mb-3 font-roboto">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!weekStartDate) return;
+                            const prev = new Date(weekStartDate);
+                            prev.setDate(prev.getDate() - 7);
+                            const y = prev.getFullYear();
+                            const m = String(prev.getMonth() + 1).padStart(2, "0");
+                            const dd = String(prev.getDate()).padStart(2, "0");
+                            changeWeek(`${y}-${m}-${dd}`);
+                          }}
+                          className={backButtonClass + " no-underline"}
+                        >
+                          &laquo;&laquo; Prev Week
+                        </button>
+                        {showNextWeek && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!weekStartDate) return;
+                              const next = new Date(weekStartDate);
+                              next.setDate(next.getDate() + 7);
+                              const y = next.getFullYear();
+                              const m = String(next.getMonth() + 1).padStart(2, "0");
+                              const dd = String(next.getDate()).padStart(2, "0");
+                              changeWeek(`${y}-${m}-${dd}`);
+                            }}
+                            className={backButtonClass + " no-underline"}
+                          >
+                            Next Week &raquo;&raquo;
+                          </button>
+                        )}
+                      </div>
+
+                      <div style={{ height: "12px" }} aria-hidden />
+
+                      <table className="w-full max-w-full border-collapse font-roboto text-sm">
+                        <thead>
+                          <tr className="bg-[#9E1B32]">
+                            <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Date</th>
+                            <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Start</th>
+                            <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">End</th>
+                            <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Lunch</th>
+                            <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Description</th>
+                            {canEditTimelogs && (
+                              <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Actions</th>
+                            )}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {weekDays.map((day) => (
+                            <tr key={day.date} className="bg-white hover:bg-[#f5f5f5]">
+                              <td className="border border-[#ddd] p-[10px] text-[#666] text-center whitespace-nowrap">
+                                {day.dayName} {day.displayDate}
+                              </td>
+                              <td className="border border-[#ddd] p-[10px] text-[#666] text-center">
+                                {day.timelog ? formatTimeDisplay(day.timelog.start) : "—"}
+                              </td>
+                              <td className="border border-[#ddd] p-[10px] text-[#666] text-center">
+                                {day.timelog ? formatTimeDisplay(day.timelog.end) : "—"}
+                              </td>
+                              <td className="border border-[#ddd] p-[10px] text-[#666] text-center">
+                                {day.timelog ? formatLunchDisplay(day.timelog.lunch) : "—"}
+                              </td>
+                              <td className="border border-[#ddd] p-[10px] text-[#666] text-left">
+                                {day.timelog?.description ?? ""}
+                              </td>
+                              {canEditTimelogs && (
+                                <td className="border border-[#ddd] p-[10px] text-center">
+                                  {day.timelog ? (
+                                    <Link
+                                      href={`/Time/Edit/${encodeURIComponent(id)}?date=${day.date}`}
+                                      className="text-[#CC6600] no-underline hover:no-underline text-xl"
+                                      title="Edit"
+                                    >
+                                      &#9998;
+                                    </Link>
+                                  ) : (
+                                    <Link
+                                      href={`/Time/Create/${encodeURIComponent(id)}?date=${day.date}`}
+                                      className="text-[#228B22] no-underline hover:no-underline text-xl font-bold"
+                                      title="Add"
+                                    >
+                                      +
+                                    </Link>
+                                  )}
+                                </td>
+                              )}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+
+                      <div className="mt-3 flex items-center justify-between font-roboto" style={{ fontSize: "14px", color: "#900" }}>
+                        <span style={{ fontWeight: 700 }}>
+                          {isCurrentWeek ? `${Number.isInteger(data?.totalPeriodHours ?? 0) ? String(data?.totalPeriodHours ?? 0) : (data?.totalPeriodHours ?? 0).toFixed(2)} Hours This Period` : "\u00A0"}
+                        </span>
+                        <span style={{ fontWeight: 700 }}>
+                          {Number.isInteger(data?.totalHours ?? 0) ? String(data?.totalHours ?? 0) : (data?.totalHours ?? 0).toFixed(2)} Hours This Week
+                        </span>
+                      </div>
+                    </>
+                  );
+                })()}
               </div>
             </AccordionItem>
             <AccordionItem
               key="workschedule"
-              aria-label={`Semester ${year} Work Schedule`}
-              title={`Semester ${year} Work Schedule`}
+              aria-label={intern?.semester ? `${intern.semester} Work Schedule` : "Work Schedule"}
+              title={intern?.semester ? `${intern.semester} Work Schedule` : "Work Schedule"}
               HeadingComponent="div"
             >
-              <div className="p-4 text-[#666] font-roboto text-sm">
-                (Empty for now)
+              <div className="p-4">
+                {showSkeleton ? (
+                  <div style={{ height: "200px", ...skeletonStyle }} aria-hidden />
+                ) : (
+                  <table className="w-full max-w-full border-collapse font-roboto text-sm">
+                    <thead>
+                      <tr className="bg-[#9E1B32]">
+                        <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Day</th>
+                        <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Start Time</th>
+                        <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">End Time</th>
+                        <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Start Time</th>
+                        <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">End Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(data?.workSchedule ?? []).map((ws) => (
+                        <tr key={ws.day} className="bg-white hover:bg-[#f5f5f5]">
+                          <td className="border border-[#ddd] p-[10px] text-[#666] text-center">{ws.day}</td>
+                          <td className="border border-[#ddd] p-[10px] text-[#666] text-center">
+                            {ws.startDisplay || "—"}
+                          </td>
+                          <td className="border border-[#ddd] p-[10px] text-[#666] text-center">
+                            {ws.endDisplay || "—"}
+                          </td>
+                          <td className="border border-[#ddd] p-[10px] text-[#666] text-center">
+                            {ws.start2Display || "—"}
+                          </td>
+                          <td className="border border-[#ddd] p-[10px] text-[#666] text-center">
+                            {ws.end2Display || "—"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </AccordionItem>
           </Accordion>
@@ -854,33 +1330,489 @@ export default function InternDetailsPage() {
               <div className="flex flex-col">
                 {LEFT_ACTIONS.map(({ label, icon }) => (
                   <div key={label} style={{ marginBottom: 12 }}>
-                    <button type="button" className={actionButtonClass}>
-                      {icon && <span className="inline-flex shrink-0">{icon}</span>}
-                      <span>{label}</span>
-                    </button>
+                    {label === "Export Timesheet" ? (
+                      rolesLoading || !id ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : canExportTimesheet ? (
+                        <a
+                          href={getInternTimesheetExportUrl(id)}
+                          className={actionButtonClass}
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </a>
+                      ) : null
+                    ) : label === "Update Resume" ? (
+                      rolesLoading || !id ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : canUpdateResume ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass}
+                          onClick={() => {
+                            setUpdateResumeError(null);
+                            setUpdateResumeSelectedFileName(null);
+                            if (resumeFileInputRef.current) resumeFileInputRef.current.value = "";
+                            updateResumeDisclosure.onOpen();
+                          }}
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      )
+                    ) : label === "Update Impact Calc" ? (
+                      rolesLoading || !id ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : canUpdateImpactCalc ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass}
+                          onClick={() => {
+                            setUpdateImpactCalcError(null);
+                            setUpdateImpactCalcSelectedFileName(null);
+                            if (impactCalcFileInputRef.current) impactCalcFileInputRef.current.value = "";
+                            updateImpactCalcDisclosure.onOpen();
+                          }}
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      )
+                    ) : label === "Update Presentation" ? (
+                      rolesLoading || !id ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : canUpdatePresentation ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass}
+                          onClick={() => {
+                            setUpdatePresentationError(null);
+                            setUpdatePresentationSelectedFileName(null);
+                            if (presentationFileInputRef.current) presentationFileInputRef.current.value = "";
+                            updatePresentationDisclosure.onOpen();
+                          }}
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      )
+                    ) : label === "New Semester" ? (
+                      rolesLoading || !id ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : canNewSemester ? (
+                        <Link
+                          href={`/Interns/ReturningIntern/${encodeURIComponent(id)}`}
+                          className={actionButtonClass + " no-underline"}
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </Link>
+                      ) : null
+                    ) : (
+                      <button type="button" className={actionButtonClass}>
+                        {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                        <span>{label}</span>
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
               <div className="flex flex-col">
                 {RIGHT_ACTIONS.map(({ label, icon }) => (
                   <div key={label} style={{ marginBottom: 12 }}>
-                    <button type="button" className={actionButtonClass}>
-                      {icon && <span className="inline-flex shrink-0">{icon}</span>}
-                      <span>{label}</span>
-                    </button>
+                    {label === "View Resume" ? (() => {
+                      const rid = intern?.resumeId?.trim() ?? "";
+                      const hasValidResume = rid.length > 15;
+                      const displayLabel = rid ? "View Resume" : "Resume";
+                      if (rolesLoading || !id) {
+                        return (
+                          <button
+                            type="button"
+                            className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                            disabled
+                            aria-disabled="true"
+                          >
+                            {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                            <span>View Resume</span>
+                          </button>
+                        );
+                      }
+                      if (canViewResume && hasValidResume) {
+                        return (
+                          <a
+                            href={`${RESUME_BLOB_BASE}/${encodeURIComponent(rid)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={actionButtonClass}
+                          >
+                            {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                            <span>{displayLabel}</span>
+                          </a>
+                        );
+                      }
+                      return (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{displayLabel}</span>
+                        </button>
+                      );
+                    })() : label === "Impact Calculator" ? (() => {
+                      const icId = intern?.impactCalcId?.trim() ?? "";
+                      const hasValid = icId.length > 15;
+                      if (rolesLoading || !id) {
+                        return (
+                          <button
+                            type="button"
+                            className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                            disabled
+                            aria-disabled="true"
+                          >
+                            {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                            <span>Impact Calculator</span>
+                          </button>
+                        );
+                      }
+                      if (canViewImpactCalc && hasValid) {
+                        return (
+                          <a
+                            href={`${IMPACT_CALC_BLOB_BASE}/${encodeURIComponent(icId)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={actionButtonClass}
+                          >
+                            {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                            <span>Impact Calculator</span>
+                          </a>
+                        );
+                      }
+                      return (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>Impact Calculator</span>
+                        </button>
+                      );
+                    })() : label === "Presentation" ? (() => {
+                      const pId = intern?.presentationId?.trim() ?? "";
+                      const hasValid = pId.length > 15;
+                      if (rolesLoading || !id) {
+                        return (
+                          <button
+                            type="button"
+                            className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                            disabled
+                            aria-disabled="true"
+                          >
+                            {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                            <span>Presentation</span>
+                          </button>
+                        );
+                      }
+                      if (canViewPresentation && hasValid) {
+                        return (
+                          <a
+                            href={`${PRESENTATION_BLOB_BASE}/${encodeURIComponent(pId)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={actionButtonClass}
+                          >
+                            {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                            <span>Presentation</span>
+                          </a>
+                        );
+                      }
+                      return (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>Presentation</span>
+                        </button>
+                      );
+                    })() : (
+                      <button type="button" className={actionButtonClass}>
+                        {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                        <span>{label}</span>
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
-              <div
-                className="flex-shrink-0 w-40 h-40 min-w-[160px] bg-gray-200 rounded-lg flex items-center justify-center text-[#999] font-roboto text-sm"
-                aria-hidden
-              >
-                Image placeholder
-              </div>
+              {(() => {
+                const cwid = intern?.cwid?.trim() ?? "";
+                const phone = intern?.phone?.replace(/\D/g, "") ?? "";
+                const hasCustomHeadshot = !!cwid && !!phone;
+                const src = hasCustomHeadshot
+                  ? `/images/InternHeadshots/${encodeURIComponent(phone)}.jpg`
+                  : "/images/InternHeadshots/default.jpg";
+                return (
+                  <img
+                    key={src}
+                    src={src}
+                    alt={intern ? `${intern.firstName} ${intern.lastName}`.trim() : "Intern headshot"}
+                    width={300}
+                    height={300}
+                    className="flex-shrink-0 rounded-lg object-cover"
+                    style={{ width: 300, height: 300 }}
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      if (!img.src.endsWith("/default.jpg")) {
+                        img.src = "/images/InternHeadshots/default.jpg";
+                      }
+                    }}
+                  />
+                );
+              })()}
             </div>
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={updateResumeDisclosure.isOpen}
+        onClose={() => {
+          updateResumeDisclosure.onClose();
+          setUpdateResumeError(null);
+          setUpdateResumeSelectedFileName(null);
+          if (resumeFileInputRef.current) resumeFileInputRef.current.value = "";
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>Update Resume</ModalHeader>
+              <ModalBody>
+                <div>
+                  <input
+                    ref={resumeFileInputRef}
+                    type="file"
+                    name="resume"
+                    id="resume"
+                    accept=".pdf,.doc,.docx"
+                    aria-label="Resume file"
+                    className="font-roboto text-[14px]"
+                    onChange={(e) =>
+                      setUpdateResumeSelectedFileName(e.target.files?.[0]?.name ?? null)
+                    }
+                  />
+                  <p className="font-roboto text-[14px] text-[#666] mt-1">
+                    {updateResumeSelectedFileName ? (
+                      <span className="text-green-700">
+                        File chosen: {updateResumeSelectedFileName}
+                      </span>
+                    ) : (
+                      <span>No file chosen</span>
+                    )}
+                  </p>
+                  {updateResumeError && (
+                    <p className="font-roboto text-sm text-red-600 mt-1">{updateResumeError}</p>
+                  )}
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <button
+                  type="button"
+                  disabled={updateResumeLoading}
+                  onClick={handleUpdateResumeClick}
+                  className="inline-flex items-center px-4 py-2 border border-[#ccc] rounded-lg bg-white text-sm font-roboto cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {updateResumeLoading ? "Updating…" : "Update"}
+                </button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={updateImpactCalcDisclosure.isOpen}
+        onClose={() => {
+          updateImpactCalcDisclosure.onClose();
+          setUpdateImpactCalcError(null);
+          setUpdateImpactCalcSelectedFileName(null);
+          if (impactCalcFileInputRef.current) impactCalcFileInputRef.current.value = "";
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>Update Impact Calc</ModalHeader>
+              <ModalBody>
+                <div>
+                  <input
+                    ref={impactCalcFileInputRef}
+                    type="file"
+                    name="impactCalc"
+                    aria-label="Impact calculator file"
+                    className="font-roboto text-[14px]"
+                    onChange={(e) =>
+                      setUpdateImpactCalcSelectedFileName(e.target.files?.[0]?.name ?? null)
+                    }
+                  />
+                  <p className="font-roboto text-[14px] text-[#666] mt-1">
+                    {updateImpactCalcSelectedFileName ? (
+                      <span className="text-green-700">
+                        File chosen: {updateImpactCalcSelectedFileName}
+                      </span>
+                    ) : (
+                      <span>No file chosen</span>
+                    )}
+                  </p>
+                  {updateImpactCalcError && (
+                    <p className="font-roboto text-sm text-red-600 mt-1">{updateImpactCalcError}</p>
+                  )}
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <button
+                  type="button"
+                  disabled={updateImpactCalcLoading}
+                  onClick={handleUpdateImpactCalcClick}
+                  className="inline-flex items-center px-4 py-2 border border-[#ccc] rounded-lg bg-white text-sm font-roboto cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {updateImpactCalcLoading ? "Updating…" : "Update"}
+                </button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={updatePresentationDisclosure.isOpen}
+        onClose={() => {
+          updatePresentationDisclosure.onClose();
+          setUpdatePresentationError(null);
+          setUpdatePresentationSelectedFileName(null);
+          if (presentationFileInputRef.current) presentationFileInputRef.current.value = "";
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>Update Presentation</ModalHeader>
+              <ModalBody>
+                <div>
+                  <input
+                    ref={presentationFileInputRef}
+                    type="file"
+                    name="presentation"
+                    aria-label="Presentation file"
+                    className="font-roboto text-[14px]"
+                    onChange={(e) =>
+                      setUpdatePresentationSelectedFileName(e.target.files?.[0]?.name ?? null)
+                    }
+                  />
+                  <p className="font-roboto text-[14px] text-[#666] mt-1">
+                    {updatePresentationSelectedFileName ? (
+                      <span className="text-green-700">
+                        File chosen: {updatePresentationSelectedFileName}
+                      </span>
+                    ) : (
+                      <span>No file chosen</span>
+                    )}
+                  </p>
+                  {updatePresentationError && (
+                    <p className="font-roboto text-sm text-red-600 mt-1">{updatePresentationError}</p>
+                  )}
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <button
+                  type="button"
+                  disabled={updatePresentationLoading}
+                  onClick={handleUpdatePresentationClick}
+                  className="inline-flex items-center px-4 py-2 border border-[#ccc] rounded-lg bg-white text-sm font-roboto cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {updatePresentationLoading ? "Updating…" : "Update"}
+                </button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

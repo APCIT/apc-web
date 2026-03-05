@@ -6,6 +6,10 @@ import { useSearchParams } from "next/navigation";
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
 import {
   GET_INTERNS_API,
+  GET_ME_API,
+  DOWNLOAD_INTERN_TIMESHEET_API,
+  POST_INTERN_ARCHIVE_API,
+  POST_INTERN_TO_APPLICANT_API,
   type InternListItem,
   type InternsListResponse,
 } from "@/lib/api";
@@ -140,6 +144,14 @@ export default function InternsPage() {
   const [data, setData] = useState<InternsListResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isIT, setIsIT] = useState(false);
+  const [actionId, setActionId] = useState<string | null>(null);
+
+  useEffect(() => {
+    GET_ME_API().then((res) => {
+      if (res.ok) setIsIT(res.roles.includes("IT"));
+    });
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -373,13 +385,31 @@ export default function InternsPage() {
                     <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white">
                       <button
                         type="button"
-                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-white focus:!bg-white focus:outline-none focus:ring-0 active:!bg-white opacity-50 cursor-not-allowed"
+                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-[#f5f5f5] focus:!bg-white focus:outline-none focus:ring-0 active:!bg-[#eee] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:!bg-white"
                         style={{
                           width: "48px",
                           minWidth: "48px",
                         }}
-                        disabled
-                        aria-label="Download to applicant (not implemented)"
+                        disabled={!isIT || actionId != null}
+                        aria-label="To Applicant"
+                        onClick={async () => {
+                          if (
+                            !window.confirm(
+                              "Are you sure you wish to send this intern to the applicant pool?"
+                            )
+                          )
+                            return;
+                          setActionId(item.id);
+                          setError(null);
+                          await DOWNLOAD_INTERN_TIMESHEET_API(item.id);
+                          const result = await POST_INTERN_TO_APPLICANT_API(item.id);
+                          setActionId(null);
+                          if (result.ok) {
+                            load();
+                          } else {
+                            setError(result.error);
+                          }
+                        }}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -401,13 +431,31 @@ export default function InternsPage() {
                     <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white">
                       <button
                         type="button"
-                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-white focus:!bg-white focus:outline-none focus:ring-0 active:!bg-white opacity-50 cursor-not-allowed"
+                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-[#f5f5f5] focus:!bg-white focus:outline-none focus:ring-0 active:!bg-[#eee] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:!bg-white"
                         style={{
                           width: "48px",
                           minWidth: "48px",
                         }}
-                        disabled
-                        aria-label="Archive intern (not implemented)"
+                        disabled={!isIT || actionId != null}
+                        aria-label="Archive Intern"
+                        onClick={async () => {
+                          if (
+                            !window.confirm(
+                              "Are you sure you wish to archive this intern?"
+                            )
+                          )
+                            return;
+                          setActionId(item.id);
+                          setError(null);
+                          await DOWNLOAD_INTERN_TIMESHEET_API(item.id);
+                          const result = await POST_INTERN_ARCHIVE_API(item.id);
+                          setActionId(null);
+                          if (result.ok) {
+                            load();
+                          } else {
+                            setError(result.error);
+                          }
+                        }}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

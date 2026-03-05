@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { formatScheduleTime, isScheduleMidnight } from "@/lib/schedule-time";
 
 /** Same roles as Interns list. Client may only view interns from their company. */
 const ROLES = ["IT", "admin", "staff", "reception", "client", "accountant"];
@@ -116,6 +117,17 @@ export type InternDetailItem = {
   contactName: string | null;
   contactRelationship: string | null;
   contactPhone: string | null;
+  resumeId: string | null;
+  impactCalcId: string | null;
+  presentationId: string | null;
+};
+
+export type WorkScheduleEntry = {
+  day: string;
+  startDisplay: string;
+  endDisplay: string;
+  start2Display: string | null;
+  end2Display: string | null;
 };
 
 export type InternDetailsResponse = {
@@ -123,7 +135,10 @@ export type InternDetailsResponse = {
   weekStart: string;
   weekEnd: string;
   totalHours: number;
+  totalPeriodHours: number;
+  totalAllTimeHours: number;
   thisWeek: TimelogEntry[];
+  workSchedule: WorkScheduleEntry[];
 };
 
 /** GET: one intern by id (Details page). Query: date=yyyy-MM-dd (optional, week's Sunday). */
@@ -144,7 +159,7 @@ export async function GET(
     const dateParam = request.nextUrl.searchParams.get("date")?.trim();
     let weekStart: Date;
     if (dateParam) {
-      const parsed = new Date(dateParam + "T00:00:00.000Z");
+      const parsed = new Date(dateParam + "T00:00:00");
       if (Number.isNaN(parsed.getTime())) {
         return NextResponse.json({ error: "Invalid date (use yyyy-MM-dd)" }, { status: 400 });
       }
@@ -158,6 +173,7 @@ export async function GET(
       include: {
         AspNetUsers: { include: { Companies: true } },
         Timelogs: true,
+        WorkSchedules: true,
       },
     });
 
@@ -183,6 +199,18 @@ export async function GET(
     });
 
     const totalHours = calcHours(timelogsInWeek);
+
+    const periodStart = new Date(weekStart);
+    periodStart.setDate(periodStart.getDate() - 7);
+    const periodStartTime = periodStart.getTime();
+    const timelogsInPeriod = (intern.Timelogs ?? []).filter((t) => {
+      const start = t.Start instanceof Date ? t.Start : new Date(t.Start);
+      const startDate = new Date(start.getFullYear(), start.getMonth(), start.getDate()).getTime();
+      return startDate >= periodStartTime && startDate < weekEndTime;
+    });
+    const totalPeriodHours = calcHours(timelogsInPeriod);
+
+    const totalAllTimeHours = calcHours(intern.Timelogs ?? []);
 
     const thisWeek: TimelogEntry[] = timelogsInWeek.map((t) => {
       const start = t.Start instanceof Date ? t.Start : new Date(t.Start);
@@ -234,14 +262,56 @@ export async function GET(
       contactName: intern.ContactName ?? null,
       contactRelationship: intern.ContactRelationship ?? null,
       contactPhone: intern.ContactPhone ?? null,
+      resumeId: intern.ResumeId ?? null,
+      impactCalcId: intern.ImpactCalcId ?? null,
+      presentationId: intern.PresentationId ?? null,
     };
+
+    const DAY_NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const scheduleByDay = new Map<number, typeof intern.WorkSchedules[number]>();
+    for (const ws of intern.WorkSchedules ?? []) {
+      const start = ws.Start instanceof Date ? ws.Start : new Date(ws.Start);
+      const dow = start.getUTCDay();
+      if (dow >= 1 && dow <= 5) {
+        scheduleByDay.set(dow, ws);
+      }
+    }
+
+    const workSchedule: WorkScheduleEntry[] = [];
+    for (let dow = 1; dow <= 5; dow++) {
+      const ws = scheduleByDay.get(dow);
+      if (ws) {
+        const start = ws.Start instanceof Date ? ws.Start : new Date(ws.Start);
+        const end = ws.End instanceof Date ? ws.End : new Date(ws.End);
+        const start2 = ws.Start2 instanceof Date ? ws.Start2 : new Date(ws.Start2);
+        const end2 = ws.End2 instanceof Date ? ws.End2 : new Date(ws.End2);
+        workSchedule.push({
+          day: DAY_NAMES[dow],
+          startDisplay: formatScheduleTime(start),
+          endDisplay: formatScheduleTime(end),
+          start2Display: isScheduleMidnight(start2) ? null : formatScheduleTime(start2),
+          end2Display: isScheduleMidnight(end2) ? null : formatScheduleTime(end2),
+        });
+      } else {
+        workSchedule.push({
+          day: DAY_NAMES[dow],
+          startDisplay: "",
+          endDisplay: "",
+          start2Display: null,
+          end2Display: null,
+        });
+      }
+    }
 
     return NextResponse.json({
       intern: internDetail,
       weekStart: weekStart.toISOString(),
       weekEnd: weekEnd.toISOString(),
       totalHours: Math.round(totalHours * 100) / 100,
+      totalPeriodHours: Math.round(totalPeriodHours * 100) / 100,
+      totalAllTimeHours: Math.round(totalAllTimeHours * 100) / 100,
       thisWeek,
+      workSchedule,
     } as InternDetailsResponse);
   } catch (e) {
     console.error(e);
