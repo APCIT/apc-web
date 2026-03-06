@@ -9,6 +9,10 @@
   50% { opacity: 0.5; }
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ===== HeroUI Modal – explicit styles (Tailwind purges the theme classes) ===== */
 [data-slot="wrapper"][data-overlay-container] > div > [data-slot="wrapper"],
 div[tabindex="-1"] > [data-slot="wrapper"] {

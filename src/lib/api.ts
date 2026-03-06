@@ -22,6 +22,8 @@ export const API = {
   internsWorkSchedules: `${base}/api/interns/work-schedules`,
   archiveExportInternSchedules: `${base}/api/archive/export-intern-schedules`,
   archiveExportInternTimesheet: `${base}/api/archive/export-intern-timesheet`,
+  time: `${base}/api/time`,
+  timeUpdate: `${base}/api/time/update`,
 } as const;
 
 const defaultFetchOptions: RequestInit = {
@@ -480,6 +482,30 @@ export async function PATCH_INTERN_MENTOR_API(
   return { ok: true };
 }
 
+/** Update intern hometown. PATCH /api/interns/[id]/hometown. Allowed for staff or intern (own record). */
+export async function PATCH_INTERN_HOMETOWN_API(
+  id: string,
+  hometown: string
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/hometown`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify({ hometown }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update hometown",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
 /** Update intern wage. PATCH /api/interns/[id]/wage with body { wage: number }. */
 export async function PATCH_INTERN_WAGE_API(
   id: string,
@@ -796,6 +822,89 @@ export async function DELETE_TIMELOG_API(
     };
   }
   return { ok: true };
+}
+
+/** Time week entry (intern's own /Time page). */
+export type TimeWeekTimelogEntry = {
+  id: string;
+  start: string;
+  end: string;
+  description: string | null;
+  lunch: number;
+  hours: number;
+};
+
+export type TimeWeekResponse = {
+  weekStart: string;
+  weekEnd: string;
+  thisWeek: TimeWeekTimelogEntry[];
+  currentWeek: boolean;
+  nextWeek: boolean;
+  intern: {
+    id: string;
+    hometown: string | null;
+    mentorName: string | null;
+    mentorTitle: string | null;
+    mentorPhone: string | null;
+    mentorEmail: string | null;
+  };
+};
+
+/** Get current intern's week data for /Time page. date = yyyy-MM-dd (Sunday); omit for current week. */
+export async function GET_TIME_WEEK_API(
+  date?: string
+): Promise<
+  | { ok: true; data: TimeWeekResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const url = date
+    ? `${API.time}?${new URLSearchParams({ date }).toString()}`
+    : API.time;
+  const res = await fetch(url, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load time week",
+      status: res.status,
+    };
+  }
+  return { ok: true, data: data as TimeWeekResponse };
+}
+
+/** Payload row for POST_TIME_UPDATE_API (one day). */
+export type TimeWeekRow = {
+  Id?: string;
+  Date: string;
+  StartHour?: string | null;
+  StartMinute?: string | null;
+  EndHour?: string | null;
+  EndMinute?: string | null;
+  Description?: string | null;
+  Lunch?: string | number | null;
+};
+
+/** Save current intern's week (create/update/delete timelogs). Returns hours for saved week. */
+export async function POST_TIME_UPDATE_API(
+  week: TimeWeekRow[]
+): Promise<
+  | { ok: true; hours: number }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.timeUpdate, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify({ week }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to save timesheet",
+      status: res.status,
+    };
+  }
+  return { ok: true, hours: (data?.hours as number) ?? 0 };
 }
 
 /** Past intern list item (for accordion table rows). */

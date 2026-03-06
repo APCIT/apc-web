@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth";
 
 const STAFF_ROLES = ["IT", "admin", "staff", "reception", "client", "accountant"];
 
+/** Allow staff (with company check) or intern updating their own record (id === session.userId). */
 async function requireAccess(internId: string): Promise<
   | { error: NextResponse }
   | { ok: true }
@@ -39,13 +40,7 @@ async function requireAccess(internId: string): Promise<
   return { ok: true };
 }
 
-/** Normalize phone to digits only. */
-function phoneDigitsOnly(phone: string | null): string {
-  if (phone == null || typeof phone !== "string") return "";
-  return phone.replace(/\D/g, "");
-}
-
-/** PATCH: set intern mentor fields. Body: mentorName, mentorTitle, mentorPhone, mentorEmail. Staff or intern (own record). Saves only when all four are valid; phone stored as digits only (must be 10 digits). */
+/** PATCH: set intern hometown. Allowed for staff (same as mentor) or intern updating own record. */
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -59,42 +54,11 @@ export async function PATCH(
     if ("error" in access) return access.error;
 
     const body = await request.json().catch(() => ({}));
-    const mentorName = typeof body.mentorName === "string" ? body.mentorName.trim() : "";
-    const mentorTitle = typeof body.mentorTitle === "string" ? body.mentorTitle.trim() : "";
-    const mentorPhoneRaw = typeof body.mentorPhone === "string" ? body.mentorPhone : "";
-    const mentorEmail = typeof body.mentorEmail === "string" ? body.mentorEmail.trim() : "";
-
-    const mentorPhone = phoneDigitsOnly(mentorPhoneRaw);
-
-    if (!mentorName) {
-      return NextResponse.json({ error: "Mentor name is required." }, { status: 400 });
-    }
-    if (!mentorTitle) {
-      return NextResponse.json({ error: "Job title is required." }, { status: 400 });
-    }
-    if (mentorPhone.length !== 10) {
-      return NextResponse.json({ error: "Phone must be exactly 10 digits." }, { status: 400 });
-    }
-    if (!mentorEmail) {
-      return NextResponse.json({ error: "Email is required." }, { status: 400 });
-    }
-
-    const intern = await prisma.interns.findUnique({
-      where: { Id: id },
-      include: { AspNetUsers: true },
-    });
-    if (!intern) {
-      return NextResponse.json({ error: "Intern not found" }, { status: 404 });
-    }
+    const hometown = typeof body.hometown === "string" ? body.hometown.trim() || null : null;
 
     await prisma.interns.update({
       where: { Id: id },
-      data: {
-        MentorName: mentorName,
-        MentorTitle: mentorTitle,
-        MentorPhone: mentorPhone,
-        MentorEmail: mentorEmail,
-      },
+      data: { Hometown: hometown ?? undefined },
     });
 
     return NextResponse.json({ ok: true });
