@@ -1,8 +1,48 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+const GRAD_YEARS = (() => {
+  const y = new Date().getFullYear();
+  return [y, y + 1, y + 2, y + 3, y + 4];
+})();
 
 export default function ApplicantSearchPage() {
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const get = (name: string) => (form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement)?.value?.trim() ?? '';
+    const params = new URLSearchParams();
+    const firstName = get('firstName');
+    const lastName = get('lastName');
+    const school = get('school');
+    const major = get('major');
+    const minor = get('minor');
+    const level = get('level');
+    const skills = get('skills');
+    const foreignLanguage = get('foreignLanguage');
+    const semester = get('semester');
+    const city = get('city');
+    const gradMonth = get('gradMonth');
+    const gradYear = get('gradYear');
+    if (firstName) params.set('FirstName', firstName);
+    if (lastName) params.set('LastName', lastName);
+    if (school) params.set('School', school);
+    if (major) params.set('Major', major);
+    if (minor) params.set('Minor', minor);
+    if (level) params.set('Level', level);
+    if (skills) params.set('Skills', skills);
+    if (foreignLanguage) params.set('ForeignLanguage', foreignLanguage);
+    if (semester) params.set('Semester', semester);
+    if (city) params.set('City', city);
+    if (gradMonth) params.set('GradMonth', gradMonth);
+    if (gradYear) params.set('GradYear', gradYear);
+    router.push(`/Applicants/SearchResults?${params.toString()}`);
+  };
+
   return (
     <div className="w-full bg-white">
       <div className="py-8 px-[50px]">
@@ -31,8 +71,8 @@ export default function ApplicantSearchPage() {
         {/* Horizontal Rule */}
         <hr className="border-t border-[#ccc] mb-6" />
 
-        {/* Search Form */}
-        <form className="max-w-4xl">
+        {/* Search Form - POST semantics: submit redirects to SearchResults with query params */}
+        <form className="max-w-4xl" onSubmit={handleSubmit}>
           {/* First Name */}
           <div className="flex items-center" style={{ marginBottom: '24px' }}>
             <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
@@ -110,54 +150,54 @@ export default function ApplicantSearchPage() {
                 <option value="">Select a Major</option>
                 {/* Arts & Sciences */}
                 <option value="" disabled>-----------ARTS &amp; SCIENCES-----------</option>
-                <option value="Biology">Biology</option>
-                <option value="Chemistry">Chemistry</option>
-                <option value="Environmental Science">Environmental Science</option>
-                <option value="Marine Science">Marine Science</option>
-                <option value="Mathematics">Mathematics</option>
-                <option value="Microbiology">Microbiology</option>
-                <option value="Physics">Physics</option>
-                <option value="Psychology">Psychology</option>
-                <option value="Political Science">Political Science</option>
-                <option value="Public Health">Public Health</option>
+                <option value="BY">BY - Biology</option>
+                <option value="CH">CH - Chemistry</option>
+                <option value="ES">ES - Environmental Science</option>
+                <option value="MS">MS - Marine Science</option>
+                <option value="MA">MA - Mathematics</option>
+                <option value="MBY">MBY - Microbiology</option>
+                <option value="PH">PH - Physics</option>
+                <option value="PY">PY - Psychology</option>
+                <option value="PSC">PSC - Political Science</option>
+                <option value="PUH">PUH - Public Health</option>
                 {/* Business */}
                 <option value="" disabled>-----------BUSINESS-----------</option>
-                <option value="Accounting">Accounting</option>
-                <option value="Business, general">Business, general</option>
-                <option value="Economics">Economics</option>
-                <option value="Finance">Finance</option>
-                <option value="Management">Management</option>
-                <option value="Management Information Systems">Management Information Systems</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Operations Management">Operations Management</option>
+                <option value="AC">AC - Accounting</option>
+                <option value="GB">GB - Business, general</option>
+                <option value="EC">EC - Economics</option>
+                <option value="FI">FI - Finance</option>
+                <option value="MGT">MGT - Management</option>
+                <option value="MIS">MIS - Management Information Systems</option>
+                <option value="MKT">MKT - Marketing</option>
+                <option value="OM">OM - Operations Management</option>
                 {/* Communications */}
                 <option value="" disabled>-----------COMMUNICATIONS-----------</option>
-                <option value="Advertising">Advertising</option>
-                <option value="Communication Studies">Communication Studies</option>
-                <option value="Journalism">Journalism</option>
-                <option value="Public Relations">Public Relations</option>
-                <option value="Telecommunication and Film">Telecommunication and Film</option>
+                <option value="ADV">ADV - Advertising</option>
+                <option value="COM">COM - Communication Studies</option>
+                <option value="JN">JN - Journalism</option>
+                <option value="PURL">PURL - Public Relations</option>
+                <option value="TCF">TCF - Telecommunication and Film</option>
                 {/* Engineering */}
                 <option value="" disabled>-----------ENGINEERING-----------</option>
-                <option value="Aerospace Engineering">Aerospace Engineering</option>
-                <option value="Biomedical Engineering">Biomedical Engineering</option>
-                <option value="Chemical Engineering">Chemical Engineering</option>
-                <option value="Civil Engineering">Civil Engineering</option>
-                <option value="Computer Science">Computer Science</option>
-                <option value="Computer Engineering">Computer Engineering</option>
-                <option value="Electrical Engineering">Electrical Engineering</option>
-                <option value="Industrial and Systems Engineering">Industrial and Systems Engineering</option>
-                <option value="Mechanical Engineering">Mechanical Engineering</option>
-                <option value="Metallurgical Engineering">Metallurgical Engineering</option>
+                <option value="AEM">AEM - Aerospace Engineering</option>
+                <option value="BME">BME - Biomedical Engineering</option>
+                <option value="CHE">CHE - Chemical Engineering</option>
+                <option value="CE">CE - Civil Engineering</option>
+                <option value="CS">CS - Computer Science</option>
+                <option value="COE">COE - Computer Engineering</option>
+                <option value="ECE">ECE - Electrical Engineering</option>
+                <option value="ISE">ISE - Industrial and Systems Engineering</option>
+                <option value="ME">ME - Mechanical Engineering</option>
+                <option value="MTE">MTE - Metallurgical Engineering</option>
                 {/* Human Environmental */}
                 <option value="" disabled>-----------HUMAN ENVIRONMENTAL-----------</option>
-                <option value="Consumer Sciences">Consumer Sciences</option>
-                <option value="Human Environmental Sciences">Human Environmental Sciences</option>
-                <option value="Restaurant and Hospitality Management">Restaurant and Hospitality Management</option>
+                <option value="CSM">CSM - Consumer Sciences</option>
+                <option value="HES">HES - Human Environmental Sciences</option>
+                <option value="RHM">RHM - Restaurant and Hospitality Management</option>
                 {/* Education */}
                 <option value="" disabled>-----------EDUCATION-----------</option>
-                <option value="Kinesiology">Kinesiology</option>
-                <option value="Exercise Science">Exercise Science</option>
+                <option value="KIN">KIN - Kinesiology</option>
+                <option value="EXSC">EXSC - Exercise Science</option>
               </select>
             </div>
           </div>
@@ -187,7 +227,7 @@ export default function ApplicantSearchPage() {
                 className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
               >
                 <option value="">Select a Level</option>
-                <option value="Undergraduate">Undergraduate</option>
+                <option value="UG">UG</option>
                 <option value="Master's">Master&apos;s</option>
                 <option value="PhD">PhD</option>
               </select>
@@ -283,9 +323,9 @@ export default function ApplicantSearchPage() {
                 className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
               >
                 <option value="">Month</option>
-                <option value="May">May</option>
-                <option value="August">August</option>
-                <option value="December">December</option>
+                <option value="05">May</option>
+                <option value="08">August</option>
+                <option value="12">December</option>
               </select>
               <select
                 name="gradYear"
@@ -293,11 +333,9 @@ export default function ApplicantSearchPage() {
                 style={{ marginLeft: '20px' }}
               >
                 <option value="">Year</option>
-                <option value="2026">2026</option>
-                <option value="2027">2027</option>
-                <option value="2028">2028</option>
-                <option value="2029">2029</option>
-                <option value="2030">2030</option>
+                {GRAD_YEARS.map((year) => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
               </select>
             </div>
           </div>

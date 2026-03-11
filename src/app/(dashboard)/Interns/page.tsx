@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import type { CSSProperties } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@heroui/popover";
 import {
+  API,
   GET_INTERNS_API,
   GET_ME_API,
   DOWNLOAD_INTERN_TIMESHEET_API,
@@ -22,6 +24,16 @@ const SORT_OPTIONS = [
   { value: "hours", label: "Hours" },
   { value: "graddate", label: "Grad Date" },
 ] as const;
+
+/** Column index in the table for each dropdown sort value. Used to bold the active sort column. */
+const SORTBY_TO_COLUMN_INDEX: Record<string, number> = {
+  lastname: 2,   // Name
+  company: 5,    // Company
+  hours: 9,       // Hours This Week
+  graddate: 8,   // Grad Date
+};
+
+const boldStyle: CSSProperties = { fontWeight: "bold" };
 
 /** Simple gift/present icon (red). Uses rects so it always renders. */
 function GiftIcon({ className }: { className?: string }) {
@@ -50,16 +62,16 @@ function GiftIcon({ className }: { className?: string }) {
   );
 }
 
-function GiftCell({ item }: { item: InternListItem }) {
+function GiftCell({ item, style }: { item: InternListItem; style?: CSSProperties }) {
   const show = isBirthdayWeek(item.dob);
   if (!show) {
     return (
-      <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" />
+      <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={style} />
     );
   }
   const message = `${item.firstName}'s birthday is ${formatDobShort(item.dob)}`;
   return (
-    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={style}>
       <Popover placement="right">
         <PopoverTrigger>
           <button
@@ -145,11 +157,17 @@ export default function InternsPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isIT, setIsIT] = useState(false);
+  const [roles, setRoles] = useState<string[]>([]);
   const [actionId, setActionId] = useState<string | null>(null);
+
+  const canAccessInternsReports = roles.some((r) => ["admin", "IT", "reception", "staff"].includes(r));
 
   useEffect(() => {
     GET_ME_API().then((res) => {
-      if (res.ok) setIsIT(res.roles.includes("IT"));
+      if (res.ok) {
+        setIsIT(res.roles.includes("IT"));
+        setRoles(res.roles);
+      }
     });
   }, []);
 
@@ -177,6 +195,19 @@ export default function InternsPage() {
     else params.delete("sortby");
     window.location.search = params.toString();
   };
+
+  const activeSortCol = useMemo(
+    () => (sortby && SORT_OPTIONS.some((o) => o.value === sortby) ? SORTBY_TO_COLUMN_INDEX[sortby] : -1),
+    [sortby]
+  );
+  const getThStyle = useCallback(
+    (colIndex: number) => (activeSortCol >= 0 && activeSortCol === colIndex ? boldStyle : undefined),
+    [activeSortCol]
+  );
+  const getTdStyle = useCallback(
+    (colIndex: number) => (activeSortCol >= 0 && activeSortCol === colIndex ? boldStyle : undefined),
+    [activeSortCol]
+  );
 
   return (
     <div className="w-full bg-white">
@@ -222,7 +253,7 @@ export default function InternsPage() {
           <table className="w-full border-collapse font-roboto text-sm">
             <thead>
               <tr className="bg-[#9E1B32]">
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center w-[40px]">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center w-[40px]" style={getThStyle(0)}>
                   <span className="inline-flex items-center justify-center">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -241,46 +272,46 @@ export default function InternsPage() {
                     </svg>
                   </span>
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(1)}>
                   CWID
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(2)}>
                   Name
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(3)}>
                   Email
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(4)}>
                   Phone
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(5)}>
                   Company
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(6)}>
                   Semester
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(7)}>
                   Level
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(8)}>
                   Grad&nbsp;Date
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(9)}>
                   Hours&nbsp;This&nbsp;Week
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center w-[40px]">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center w-[40px]" style={getThStyle(10)}>
                   ⚑
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(11)}>
                   $
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(12)}>
                   Actions
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(13)}>
                   To&nbsp;Applicant
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(14)}>
                   Archive&nbsp;Intern
                 </th>
               </tr>
@@ -312,11 +343,11 @@ export default function InternsPage() {
                     key={item.id}
                     className="bg-white hover:bg-[#f5f5f5]"
                   >
-                    <GiftCell item={item} />
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <GiftCell item={item} style={getTdStyle(0)} />
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(1)}>
                       {item.cwid ?? "—"}
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(2)}>
                       <span
                         className={
                           item.nameStyle === "text-bold"
@@ -327,13 +358,13 @@ export default function InternsPage() {
                         {item.lastName}, {item.firstName}
                       </span>
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(3)}>
                       {item.email ?? "—"}
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(4)}>
                       {item.phone ?? "—"}
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(5)}>
                       <span
                         className={
                           item.companyStyle === "text-bold"
@@ -344,16 +375,16 @@ export default function InternsPage() {
                         {item.companyName || "—"}
                       </span>
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(6)}>
                       {item.semester || "—"}
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(7)}>
                       {item.level ?? "—"}
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(8)}>
                       {item.gradDate || "—"}
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(9)}>
                       <div className="flex justify-center">
                         <HoursBar
                           hours={item.hoursBar}
@@ -361,7 +392,7 @@ export default function InternsPage() {
                         />
                       </div>
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(10)}>
                       {(data?.isSummer && item.hoursThisWeek > 40) ||
                       (!data?.isSummer && item.hoursThisWeek > 20) ? (
                         <span className="text-amber-600" title="Over weekly cap">
@@ -369,12 +400,12 @@ export default function InternsPage() {
                         </span>
                       ) : null}
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(11)}>
                       {item.wage != null && item.wage !== 0
                         ? String(item.wage)
                         : "—"}
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(12)}>
                       <Link
                         href={`/Interns/Details/${item.id}`}
                         className="text-[#666] text-sm no-underline hover:underline"
@@ -382,7 +413,7 @@ export default function InternsPage() {
                         Details
                       </Link>
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white" style={getTdStyle(13)}>
                       <button
                         type="button"
                         className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-[#f5f5f5] focus:!bg-white focus:outline-none focus:ring-0 active:!bg-[#eee] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:!bg-white"
@@ -428,7 +459,7 @@ export default function InternsPage() {
                         </svg>
                       </button>
                     </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white">
+                    <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white" style={getTdStyle(14)}>
                       <button
                         type="button"
                         className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-[#f5f5f5] focus:!bg-white focus:outline-none focus:ring-0 active:!bg-[#eee] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:!bg-white"
@@ -484,9 +515,12 @@ export default function InternsPage() {
           className="flex flex-wrap"
           style={{ marginTop: "32px", gap: "24px" }}
         >
-          <button
-            type="button"
-            className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none"
+          <a
+            href={API.archiveExportInternDetails}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline"
+            style={{ textDecoration: "none" }}
           >
             <span className="inline-flex items-center justify-center mr-[8px]">
               <svg
@@ -506,10 +540,13 @@ export default function InternsPage() {
               </svg>
             </span>
             <span>Export ATN Report</span>
-          </button>
-          <button
-            type="button"
-            className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none"
+          </a>
+          <a
+            href={API.archiveExportInternHours}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline"
+            style={{ textDecoration: "none" }}
           >
             <span className="inline-flex items-center justify-center mr-[8px]">
               <svg
@@ -529,10 +566,13 @@ export default function InternsPage() {
               </svg>
             </span>
             <span>Semester Timelogs</span>
-          </button>
-          <button
-            type="button"
-            className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none"
+          </a>
+          <a
+            href={API.archiveExportWeeklyHours}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline"
+            style={{ textDecoration: "none" }}
           >
             <span className="inline-flex items-center justify-center mr-[8px]">
               <svg
@@ -552,30 +592,33 @@ export default function InternsPage() {
               </svg>
             </span>
             <span>Tara Timelogs</span>
-          </button>
-          <button
-            type="button"
-            className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none"
-          >
-            <span className="inline-flex items-center justify-center mr-[8px]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#333333"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 3 3 20h18L12 3z" />
-                <path d="M12 9v5" />
-                <path d="M12 17.5h.01" />
-              </svg>
-            </span>
-            <span>Interns Reports</span>
-          </button>
+          </a>
+          {canAccessInternsReports && (
+            <Link
+              href="/Interns/Reports"
+              className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline"
+              style={{ textDecoration: "none" }}
+            >
+              <span className="inline-flex items-center justify-center mr-[8px]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#333333"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 3 3 20h18L12 3z" />
+                  <path d="M12 9v5" />
+                  <path d="M12 17.5h.01" />
+                </svg>
+              </span>
+              <span>Interns Reports</span>
+            </Link>
+          )}
         </div>
       </div>
     </div>

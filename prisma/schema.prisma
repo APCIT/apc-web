@@ -52,6 +52,7 @@ model Applicants {
   Skills              String?  @default("", map: "DF__Applicant__Skill__3FD07829") @db.NVarChar(Max)
   PrevIntern          Boolean  @default(false, map: "DF__Applicant__PrevI__52E34C9D")
   Note                String?  @db.NVarChar(Max)
+  ValidEmp            Boolean  @default(false)
   Preference          String?  @db.NVarChar(Max)
   BlueSprings         Boolean  @default(false, map: "DF__Applicant__BlueS__6B79F03D")
   HearAboutUs         String?  @db.NVarChar(Max)

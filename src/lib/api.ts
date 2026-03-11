@@ -19,11 +19,19 @@ export const API = {
   classesRegistrants: `${base}/api/classes/registrants`,
   pastInterns: `${base}/api/past-interns`,
   archiveExportPastIntern: `${base}/api/archive/export-past-intern`,
+  archiveExportInternDetails: `${base}/api/archive/export-intern-details`,
+  archiveExportInternHours: `${base}/api/archive/export-intern-hours`,
+  archiveExportWeeklyHours: `${base}/api/archive/export-weekly-hours`,
+  archiveExportInternsWithoutReports: `${base}/api/archive/export-interns-without-reports`,
+  internsWithoutReports: `${base}/api/interns/without-reports`,
   internsWorkSchedules: `${base}/api/interns/work-schedules`,
+  internsWorkSchedule: `${base}/api/interns/work-schedule`,
+  internsWorkScheduleUpdate: `${base}/api/interns/work-schedule/update`,
   archiveExportInternSchedules: `${base}/api/archive/export-intern-schedules`,
   archiveExportInternTimesheet: `${base}/api/archive/export-intern-timesheet`,
   time: `${base}/api/time`,
   timeUpdate: `${base}/api/time/update`,
+  applicants: `${base}/api/applicants`,
 } as const;
 
 const defaultFetchOptions: RequestInit = {
@@ -191,6 +199,310 @@ export async function GET_CLASS_REGISTRANTS_API(sortBy?: string): Promise<
   return { ok: true, registrants: data as ClassRegItem[] };
 }
 
+/** Applicant row for Internship Applicants table. */
+export type ApplicantItem = {
+  id: number;
+  interviewStatus: boolean;
+  callBack: boolean;
+  callBackDate: string;
+  prevIntern: boolean;
+  note: string | null;
+  firstName: string | null;
+  validEmp: boolean;
+  dateApplied: string;
+  lastName: string | null;
+  major: string | null;
+  school: string | null;
+  level: string | null;
+  gradDate: string;
+  skills: string | null;
+  foreignLanguage: string | null;
+  resumeId: string | null;
+};
+
+/** Applicant row for Search Results table (includes semester, city, minor, email). */
+export type ApplicantSearchItem = ApplicantItem & {
+  semester: string | null;
+  city: string | null;
+  minor: string | null;
+  email: string | null;
+};
+
+/** Call this to get applicants. sortBy: symbol|level|major|name|recent|school|graddate (default recent). Removes GradDate < today before loading. */
+export async function GET_APPLICANTS_API(sortBy?: string): Promise<
+  | { ok: true; applicants: ApplicantItem[]; sortBy: string }
+  | { ok: false; error: string; status?: number }
+> {
+  const url = sortBy
+    ? `${API.applicants}?${new URLSearchParams({ sortBy }).toString()}`
+    : API.applicants;
+  const res = await fetch(url, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load applicants",
+      status: res.status,
+    };
+  }
+  return {
+    ok: true,
+    applicants: (data as { applicants: ApplicantItem[] }).applicants,
+    sortBy: (data as { sortBy: string }).sortBy,
+  };
+}
+
+/** Search applicants by optional criteria. Params: firstName, lastName, major, minor, level, semester, city, foreignLanguage, skills, gradMonth (05|08|12), gradYear. */
+export async function GET_APPLICANTS_SEARCH_API(params: {
+  firstName?: string;
+  lastName?: string;
+  school?: string;
+  major?: string;
+  minor?: string;
+  level?: string;
+  semester?: string;
+  city?: string;
+  foreignLanguage?: string;
+  skills?: string;
+  gradMonth?: string;
+  gradYear?: string;
+}): Promise<
+  | { ok: true; applicants: ApplicantSearchItem[]; count: number }
+  | { ok: false; error: string; status?: number }
+> {
+  const q = new URLSearchParams();
+  Object.entries(params).forEach(([k, v]) => {
+    if (v != null && String(v).trim() !== "") q.set(k, String(v).trim());
+  });
+  const url = `${API.applicants}/search${q.toString() ? `?${q.toString()}` : ""}`;
+  const res = await fetch(url, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Search failed",
+      status: res.status,
+    };
+  }
+  const payload = data as { applicants: ApplicantSearchItem[]; count: number };
+  return {
+    ok: true,
+    applicants: payload.applicants ?? [],
+    count: payload.count ?? 0,
+  };
+}
+
+/** Single applicant for Edit form (editable + display-only fields). */
+export type ApplicantEditItem = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  school: string;
+  major: string;
+  minor: string;
+  comment: string;
+  note: string;
+  interviewStatus: boolean;
+  callBack: boolean;
+  callBackDate: string;
+  validEmp: boolean;
+  prevIntern: boolean;
+  dateApplied: string;
+  phone: string;
+  street: string;
+  apt: string;
+  city: string;
+  state: string;
+  zip: string;
+  foreignLanguage: string;
+  birmingham: boolean;
+  huntsville: boolean;
+  mobile: boolean;
+  montgomery: boolean;
+  tuscaloosa: boolean;
+  semester: string;
+  level: string;
+  gradDate: string;
+  contactName: string;
+  contactRelationship: string;
+  contactPhone: string;
+  hearAboutUs: string;
+  preference: string;
+  skills: string;
+  annistonGadsden: boolean;
+  dothan: boolean;
+  blueSprings: boolean;
+  resumeId: string | null;
+};
+
+export async function GET_APPLICANT_API(id: number): Promise<
+  | { ok: true; applicant: ApplicantEditItem }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.applicants}/${id}`, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load applicant",
+      status: res.status,
+    };
+  }
+  return { ok: true, applicant: data as ApplicantEditItem };
+}
+
+export async function UPDATE_APPLICANT_API(
+  id: number,
+  body: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    school: string;
+    major: string;
+    minor: string;
+    comment: string;
+    note: string;
+    interviewStatus: boolean;
+    callBack: boolean;
+    validEmp: boolean;
+    prevIntern: boolean;
+  }
+): Promise<{ ok: true } | { ok: false; error: string; status?: number }> {
+  const res = await fetch(`${API.applicants}/${id}`, {
+    ...defaultFetchOptions,
+    method: "PUT",
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update applicant",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** PATCH: update applicant Comment only (e.g. from Details Employment accordion). */
+export async function UPDATE_APPLICANT_COMMENT_API(
+  id: number,
+  comment: string
+): Promise<{ ok: true } | { ok: false; error: string; status?: number }> {
+  const res = await fetch(`${API.applicants}/${id}/comment`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify({ comment }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update comment",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** PATCH: update applicant Note only (e.g. from Details Employment accordion). */
+export async function UPDATE_APPLICANT_NOTE_API(
+  id: number,
+  note: string
+): Promise<{ ok: true } | { ok: false; error: string; status?: number }> {
+  const res = await fetch(`${API.applicants}/${id}/note`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify({ note }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update note",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** DELETE: remove applicant permanently (admin, IT only). */
+export async function DELETE_APPLICANT_API(id: number): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.applicants}/${id}`, {
+    ...defaultFetchOptions,
+    method: "DELETE",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to delete applicant",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Promote applicant to intern (admin, IT only). Creates user + intern, deletes applicant. */
+export async function PROMOTE_APPLICANT_API(
+  id: number,
+  body: {
+    cwid: string;
+    companyId: number;
+    wage: number;
+    semesterSeason: string;
+    semesterYear: string;
+  }
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.applicants}/${id}/promote`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to promote applicant",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Upload resume file for applicant (admin, IT, staff). POST JSON with base64 file data. */
+export async function UPDATE_APPLICANT_RESUME_API(
+  id: number,
+  payload: { resumeFileBase64: string; resumeFileName: string },
+  options?: { signal?: AbortSignal }
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.applicants}/${id}/resume`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(payload),
+    signal: options?.signal,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update resume",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
 /** Work schedule row for ScheduleDisplay (weekday only). Times are in org timezone (America/Chicago). */
 export type WorkScheduleDisplayItem = {
   id: string;
@@ -284,6 +596,34 @@ export async function GET_INTERNS_API(sortby?: string): Promise<
     };
   }
   return { ok: true, data: data as InternsListResponse };
+}
+
+/** Response from GET /api/interns/without-reports (Interns Without Reports page). */
+export type WithoutReportsItem = {
+  firstName: string;
+  lastName: string;
+  companyName: string;
+};
+export type WithoutReportsResponse = {
+  reportTypes: string[];
+  impactCalcList: WithoutReportsItem[];
+  presentationList: WithoutReportsItem[];
+};
+
+export async function GET_INTERNS_WITHOUT_REPORTS_API(): Promise<
+  | { ok: true; data: WithoutReportsResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.internsWithoutReports, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load data",
+      status: res.status,
+    };
+  }
+  return { ok: true, data: data as WithoutReportsResponse };
 }
 
 /** Timelog row for Intern Details week view. */
@@ -905,6 +1245,82 @@ export async function POST_TIME_UPDATE_API(
     };
   }
   return { ok: true, hours: (data?.hours as number) ?? 0 };
+}
+
+/** Work schedule day for Interns/WorkSchedule page (first week of semester, Mon–Fri). */
+export type WorkScheduleDayItem = {
+  id: string;
+  day: string;
+  dayName: string;
+  startHour1: string;
+  startMinute1: string;
+  endHour1: string;
+  endMinute1: string;
+  startHour2: string;
+  startMinute2: string;
+  endHour2: string;
+  endMinute2: string;
+  hasSecondBlock: boolean;
+};
+
+export type WorkSchedulePageResponse = {
+  internId: string;
+  weekStart: string;
+  days: WorkScheduleDayItem[];
+};
+
+/** Get current intern's semester work schedule (first week Mon–Fri). */
+export async function GET_WORK_SCHEDULE_PAGE_API(): Promise<
+  | { ok: true; data: WorkSchedulePageResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.internsWorkSchedule, { ...defaultFetchOptions, method: "GET" });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load work schedule",
+      status: res.status,
+    };
+  }
+  return { ok: true, data: data as WorkSchedulePageResponse };
+}
+
+/** Payload row for POST_WORK_SCHEDULE_UPDATE_API (one day). */
+export type WorkScheduleUpdateRow = {
+  Id?: string;
+  Day: string;
+  StartHour1?: string | null;
+  StartMinute1?: string | null;
+  EndHour1?: string | null;
+  EndMinute1?: string | null;
+  StartHour2?: string | null;
+  StartMinute2?: string | null;
+  EndHour2?: string | null;
+  EndMinute2?: string | null;
+};
+
+/** Save current intern's semester work schedule. */
+export async function POST_WORK_SCHEDULE_UPDATE_API(
+  week: WorkScheduleUpdateRow[]
+): Promise<
+  | { ok: true; valid: boolean }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.internsWorkScheduleUpdate, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify({ week }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to save work schedule",
+      status: res.status,
+    };
+  }
+  return { ok: true, valid: (data?.valid as boolean) ?? false };
 }
 
 /** Past intern list item (for accordion table rows). */
