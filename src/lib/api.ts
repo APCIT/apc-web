@@ -10,6 +10,11 @@ export const API = {
     me: `${base}/api/auth/me`,
     logout: `${base}/api/auth/logout`,
   },
+  manage: {
+    changePassword: `${base}/api/manage/change-password`,
+    setPassword: `${base}/api/manage/set-password`,
+    internContact: `${base}/api/manage/intern-contact`,
+  },
   interns: `${base}/api/interns`,
   charts: `${base}/api/charts`,
   companies: `${base}/api/companies`,
@@ -27,6 +32,7 @@ export const API = {
   internsWorkSchedules: `${base}/api/interns/work-schedules`,
   internsWorkSchedule: `${base}/api/interns/work-schedule`,
   internsWorkScheduleUpdate: `${base}/api/interns/work-schedule/update`,
+  internsTodoList: `${base}/api/interns/todo-list`,
   archiveExportInternSchedules: `${base}/api/archive/export-intern-schedules`,
   archiveExportInternTimesheet: `${base}/api/archive/export-intern-timesheet`,
   time: `${base}/api/time`,
@@ -62,15 +68,79 @@ export async function LOGIN_API(credentials: {
   return { ok: true, user: data.user, roles: data.roles };
 }
 
-/** Call this to get the current user (requires session cookie). */
+/** Call this to get the current user (requires session cookie). Includes hasPassword for Manage page. */
 export async function GET_ME_API(): Promise<
-  | { ok: true; user: { id: string; userName: string; firstName: string | null; lastName: string | null; email: string | null }; roles: string[] }
+  | { ok: true; user: { id: string; userName: string; firstName: string | null; lastName: string | null; email: string | null }; roles: string[]; hasPassword: boolean }
   | { ok: false; error: string }
 > {
   const res = await fetch(API.auth.me, { ...defaultFetchOptions, method: "GET" });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) return { ok: false, error: (data?.error as string) ?? "Unauthorized" };
-  return { ok: true, user: data.user, roles: data.roles };
+  const hasPassword = Boolean((data as { hasPassword?: boolean }).hasPassword);
+  return { ok: true, user: data.user, roles: data.roles, hasPassword };
+}
+
+/** Change password for current user. Body: { currentPassword, newPassword }. */
+export async function CHANGE_PASSWORD_API(body: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<{ ok: true } | { ok: false; error: string; status?: number }> {
+  const res = await fetch(API.manage.changePassword, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to change password",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Set initial password for current user (when hasPassword is false). Body: { newPassword }. */
+export async function SET_PASSWORD_API(body: {
+  newPassword: string;
+}): Promise<{ ok: true } | { ok: false; error: string; status?: number }> {
+  const res = await fetch(API.manage.setPassword, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to set password",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
+/** Submit intern help request. Body: { name, email, message }. Sends email to configured recipient. */
+export async function SUBMIT_INTERN_CONTACT_API(body: {
+  name: string;
+  email: string;
+  message: string;
+}): Promise<{ ok: true } | { ok: false; error: string; status?: number }> {
+  const res = await fetch(API.manage.internContact, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to send message",
+      status: res.status,
+    };
+  }
+  return { ok: true };
 }
 
 /** Call this to log out. */
@@ -846,6 +916,53 @@ export async function PATCH_INTERN_HOMETOWN_API(
   return { ok: true };
 }
 
+/** Update intern's own profile (Manage/EditInfo). PATCH /api/interns/[id]/edit-info. Intern only, own record. */
+export async function PATCH_INTERN_EDIT_INFO_API(
+  id: string,
+  body: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
+    dobMonth?: number;
+    dobDay?: number;
+    dobYear?: number;
+    street?: string;
+    apt?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    contactName?: string;
+    contactRelationship?: string;
+    contactPhone?: string;
+    hometown?: string;
+    school?: string;
+    major?: string;
+    minor?: string;
+    level?: string;
+    gradMonth?: number;
+    gradYear?: number;
+  }
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/edit-info`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update information",
+      status: res.status,
+    };
+  }
+  return { ok: true };
+}
+
 /** Update intern wage. PATCH /api/interns/[id]/wage with body { wage: number }. */
 export async function PATCH_INTERN_WAGE_API(
   id: string,
@@ -1321,6 +1438,34 @@ export async function POST_WORK_SCHEDULE_UPDATE_API(
     };
   }
   return { ok: true, valid: (data?.valid as boolean) ?? false };
+}
+
+export type TodoListResponse = {
+  internId: string;
+  firstName: string;
+  lastName: string;
+  semesterMonth: number | null;
+  impactCalcId: string | null;
+  presentationId: string | null;
+};
+
+export async function GET_TODO_LIST_API(): Promise<
+  | { ok: true; data: TodoListResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(API.internsTodoList, {
+    ...defaultFetchOptions,
+    method: "GET",
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load to-do list",
+      status: res.status,
+    };
+  }
+  return { ok: true, data: data as TodoListResponse };
 }
 
 /** Past intern list item (for accordion table rows). */

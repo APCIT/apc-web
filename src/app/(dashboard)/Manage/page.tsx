@@ -1,49 +1,155 @@
 'use client';
 
 import { Accordion, AccordionItem } from "@heroui/accordion";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { GET_ME_API } from "@/lib/api";
+
+const INTERNSHIP_INFO_URL =
+  process.env.NEXT_PUBLIC_INTERNSHIP_INFO_URL ??
+  "https://bama365.sharepoint.com/:x:/t/Intern-AlabamaProductivityCenter/ESJD3H41yXVDo8ai2A-XbNYBW7iAJUk7ud0OgaN0DKLydQ?e=eqZPza";
+
+const linkCls = "text-[#666666] font-roboto text-sm whitespace-nowrap";
+
+function PasswordCell({ hasPassword }: { hasPassword: boolean }) {
+  return (
+    <div className={linkCls}>
+      <span className="font-medium">Password:</span>{" "}
+      [{" "}
+      {hasPassword ? (
+        <Link href="/Manage/ChangePassword" className="manage-link">Change password</Link>
+      ) : (
+        <Link href="/Manage/SetPassword" className="manage-link">Create</Link>
+      )}{" "}
+      ]
+    </div>
+  );
+}
 
 export default function ManagePage() {
+  const searchParams = useSearchParams();
+  const [roles, setRoles] = useState<string[]>([]);
+  const [hasPassword, setHasPassword] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  const passwordMessage = searchParams.get("message");
+  const showPasswordSuccess = passwordMessage === "PasswordChanged" || passwordMessage === "PasswordSet";
+
+  useEffect(() => {
+    GET_ME_API().then((res) => {
+      if (res.ok) {
+        setRoles(res.roles);
+        setHasPassword(res.hasPassword);
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  const isStaff = roles.includes("staff");
+  const isIT = roles.includes("IT");
+  const isAdmin = roles.includes("admin");
+  const isReception = roles.includes("reception");
+  const isAdvisor = roles.includes("advisor");
+  const isIntern = roles.includes("intern");
+
+  const staffOrITOrAdmin = isStaff || isIT || isAdmin;
+  const staffAndIntern = (isStaff || isIT || isAdmin || isReception) && isIntern;
+
+  /* Show accordion block while loading (so reload doesn't hide content) or when user has a role that sees it. */
+  const showAccordionBlock = loading || isStaff || isIT || isAdmin || isIntern;
+  /* Staff Files panel only when we know user is staff/IT/admin (not while loading). */
+  const showStaffFiles = !loading && (isStaff || isIT || isAdmin);
+
   return (
     <div className="w-full bg-white">
       <div className="py-8 px-[50px]">
-        {/* Page Title */}
+        {/* Page Title - black, left */}
         <div className="mb-6">
-          <h2 className="text-[30px] font-roboto" style={{ fontWeight: 'normal', color: '#000000' }}>
+          <h2 className="text-[30px] font-roboto text-left" style={{ fontWeight: "normal", color: "#000000" }}>
             My Account
           </h2>
         </div>
 
-        {/* Account Options */}
-        <div className="flex justify-between items-center mt-8 px-4">
-          <div className="text-[#666666] font-roboto text-sm whitespace-nowrap">
-            <span className="font-medium">Password:</span> [ <a href="#" className="manage-link">Change password</a> ]
-          </div>
-          <div className="text-[#666666] font-roboto text-sm whitespace-nowrap">
-            <span className="font-medium">To-Do List:</span> [ <a href="#" className="manage-link">To-Do List</a> ]
-          </div>
-          <div className="text-[#666666] font-roboto text-sm whitespace-nowrap">
-            <span className="font-medium">Work Schedule:</span> [ <a href="#" className="manage-link">Schedule</a> ]
-          </div>
-          <div className="text-[#666666] font-roboto text-sm whitespace-nowrap">
-            <span className="font-medium">Teams Sheets:</span> [ <a href="#" className="manage-link">Internship Info</a> ]
-          </div>
-          <div className="text-[#666666] font-roboto text-sm whitespace-nowrap">
-            <span className="font-medium">Info:</span> [ <a href="#" className="manage-link">Edit your Information</a> ]
-          </div>
+        {showPasswordSuccess && (
+          <p className="mb-4 font-roboto text-sm" style={{ color: "#3c763d" }}>
+            Your password has been changed.
+          </p>
+        )}
+
+        {/* Account Options - role-based link bar (always show; use default layout while loading so reload keeps content) */}
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 mt-8 px-4 w-full">
+          {/* Layout 1: Staff/IT/admin/reception + intern → 5 columns */}
+          {!loading && staffAndIntern && (
+            <>
+              <PasswordCell hasPassword={hasPassword} />
+              {hasPassword && (
+                <>
+                  <div className={linkCls}>
+                    <span className="font-medium">To-Do List:</span> [ <Link href="/Manage/ToDoList" className="manage-link">To-Do List</Link> ]
+                  </div>
+                  <div className={linkCls}>
+                    <span className="font-medium">Work Schedule:</span> [ <Link href="/Interns/WorkSchedule" className="manage-link">Schedule</Link> ]
+                  </div>
+                  <div className={linkCls}>
+                    <span className="font-medium">Teams Sheets:</span> [ <a href={INTERNSHIP_INFO_URL} className="manage-link" target="_blank" rel="noopener noreferrer">Internship Info</a> ]
+                  </div>
+                  <div className={linkCls}>
+                    <span className="font-medium">Info:</span> [ <Link href="/Manage/EditInfo" className="manage-link">Edit your Information</Link> ]
+                  </div>
+                </>
+              )}
+            </>
+          )}
+          {/* Layout 2: Staff/IT/admin (no intern branch) → 2 columns */}
+          {!loading && !staffAndIntern && staffOrITOrAdmin && (
+            <>
+              <PasswordCell hasPassword={hasPassword} />
+              <div className={linkCls}>
+                <span className="font-medium">Teams Sheets:</span> [ <a href={INTERNSHIP_INFO_URL} className="manage-link" target="_blank" rel="noopener noreferrer">Internship Info</a> ]
+              </div>
+            </>
+          )}
+          {/* Layout 3: Advisor → 1 column */}
+          {!loading && !staffAndIntern && !staffOrITOrAdmin && isAdvisor && (
+            <PasswordCell hasPassword={hasPassword} />
+          )}
+          {/* Layout 4: Everyone else (e.g. intern-only) — also default while loading so content stays on reload */}
+          {((loading || (!staffAndIntern && !staffOrITOrAdmin && !isAdvisor)) && (
+            <>
+              <PasswordCell hasPassword={loading ? true : hasPassword} />
+              {(loading || hasPassword) && (
+                <>
+                  <div className={linkCls}>
+                    <span className="font-medium">To-Do List:</span> [ <Link href="/Manage/ToDoList" className="manage-link">To-Do List</Link> ]
+                  </div>
+                  <div className={linkCls}>
+                    <span className="font-medium">Work Schedule:</span> [ <Link href="/Interns/WorkSchedule" className="manage-link">Schedule</Link> ]
+                  </div>
+                  <div className={linkCls}>
+                    <span className="font-medium">Info:</span> [ <Link href="/Manage/EditInfo" className="manage-link">Edit your Information</Link> ]
+                  </div>
+                </>
+              )}
+            </>
+          ))}
         </div>
 
         {/* Spacer */}
-        <div style={{ height: '80px' }} aria-hidden="true"></div>
+        <div style={{ height: "80px" }} aria-hidden="true" />
 
-        {/* Resources Section */}
-        <div className="pl-4 flex flex-col gap-1 mb-8">
-          <a href="/Manage/InternContact" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]">Intern Help Request</a>
-          <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Intern-Handbook-Revision-13-01132025.docx" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Intern Handbook</a>
-          <a href="https://apcstorage.blob.core.windows.net/active-shooter-info/ActiveShooterFiles.zip" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Active Shooter Information</a>
-        </div>
+        {/* Resources Section + Accordion - only for staff, IT, admin, intern */}
+        {showAccordionBlock && (
+          <>
+            <div className="pl-4 flex flex-col gap-1 mb-8">
+              <Link href="/Manage/InternContact" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]">Intern Help Request</Link>
+              <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Intern-Handbook-Revision-13-01132025.docx" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Intern Handbook</a>
+              <a href="https://apcstorage.blob.core.windows.net/active-shooter-info/ActiveShooterFiles.zip" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Active Shooter Information</a>
+            </div>
 
-        {/* Accordion Section */}
-        <div className="manage-accordion px-4 mt-8">
+            <div style={{ height: "32px" }} aria-hidden="true" />
+
+            <div className="manage-accordion px-4 mt-8">
           <Accordion
             disableIndicatorAnimation={false}
             showDivider={false}
@@ -244,7 +350,8 @@ export default function ManagePage() {
               </div>
             </AccordionItem>
 
-            {/* Staff Files */}
+            {/* Staff Files - only for staff, IT, admin */}
+            {showStaffFiles && (
             <AccordionItem key="11" aria-label="Staff Files" title="Staff Files" HeadingComponent="div">
               <div className="flex flex-col gap-3">
                 <h5 className="text-[15px] font-semibold mt-2 mb-1 text-[#333333]">Proposals</h5>
@@ -274,6 +381,7 @@ export default function ManagePage() {
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Interview-Questionnaire-Revision-9-03242025.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Questionnaire</a>
               </div>
             </AccordionItem>
+            )}
 
             {/* Interview Tips */}
             <AccordionItem key="12" aria-label="Interview Tips" title="Interview Tips" HeadingComponent="div">
@@ -288,7 +396,9 @@ export default function ManagePage() {
               </div>
             </AccordionItem>
           </Accordion>
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

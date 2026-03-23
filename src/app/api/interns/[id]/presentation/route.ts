@@ -3,27 +3,46 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { uploadChecklistPresentationBlob } from "@/lib/azure-storage";
 
-const ROLES = ["admin", "IT", "staff"];
+const STAFF_ROLES = ["admin", "IT", "staff"];
 
-async function requireAccess(): Promise<
-  | { error: NextResponse }
-  | { ok: true }
-> {
+async function requireAccessForInternId(
+  internId: string,
+): Promise<{ error: NextResponse } | { ok: true }> {
   const session = await getSession();
   if (!session?.isLoggedIn || !session.userId) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+    return {
+      error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+    };
   }
+
   const user = await prisma.aspNetUsers.findUnique({
     where: { Id: session.userId },
     include: { AspNetUserRoles: { include: { AspNetRoles: true } } },
   });
+
   if (!user) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+    return {
+      error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+    };
   }
+
   const roles = user.AspNetUserRoles.map((ur) => ur.AspNetRoles.Name);
-  if (!ROLES.some((r) => roles.includes(r))) {
-    return { error: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
+
+  if (roles.includes("intern")) {
+    if (session.userId !== internId) {
+      return {
+        error: NextResponse.json({ error: "Forbidden" }, { status: 403 }),
+      };
+    }
+    return { ok: true };
   }
+
+  if (!STAFF_ROLES.some((r) => roles.includes(r))) {
+    return {
+      error: NextResponse.json({ error: "Forbidden" }, { status: 403 }),
+    };
+  }
+
   return { ok: true };
 }
 
@@ -34,13 +53,13 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const access = await requireAccess();
-    if ("error" in access) return access.error;
-
     const id = (await params).id;
     if (!id?.trim()) {
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
+
+    const access = await requireAccessForInternId(id);
+    if ("error" in access) return access.error;
 
     const body = await _request.json().catch(() => ({}));
     const fileBase64 = typeof body.fileBase64 === "string" ? body.fileBase64 : "";

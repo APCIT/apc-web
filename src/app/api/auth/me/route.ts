@@ -32,6 +32,7 @@ export async function GET() {
     }
 
     const roles = user.AspNetUserRoles.map((ur) => ur.AspNetRoles.Name);
+    const hasPassword = Boolean(user.PasswordHash && String(user.PasswordHash).trim() !== "");
 
     return NextResponse.json({
       user: {
@@ -42,6 +43,7 @@ export async function GET() {
         email: user.Email,
       },
       roles,
+      hasPassword,
     });
   } catch (e) {
     console.error(e);
