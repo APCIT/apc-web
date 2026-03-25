@@ -38,6 +38,7 @@ export const API = {
   time: `${base}/api/time`,
   timeUpdate: `${base}/api/time/update`,
   applicants: `${base}/api/applicants`,
+  apply: `${base}/api/apply`,
 } as const;
 
 const defaultFetchOptions: RequestInit = {
@@ -148,6 +149,26 @@ export async function LOGOUT_API(): Promise<{ ok: boolean }> {
   const res = await fetch(API.auth.logout, { ...defaultFetchOptions, method: "POST" });
   const data = await res.json().catch(() => ({}));
   return { ok: res.ok && (data?.ok === true) };
+}
+
+/** Submit internship application (public, no auth). Sends FormData (multipart) with resume file. */
+export async function SUBMIT_APPLICATION_API(formData: FormData): Promise<
+  | { ok: true; firstName: string }
+  | { ok: false; error: string; errors?: Record<string, string> }
+> {
+  const res = await fetch(API.apply, {
+    method: "POST",
+    body: formData,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "An error occurred. Please try again.",
+      errors: data?.errors as Record<string, string> | undefined,
+    };
+  }
+  return { ok: true, firstName: data.firstName };
 }
 
 /** Chart data: 2D array, first row = headers, rest = [label, number]. */
