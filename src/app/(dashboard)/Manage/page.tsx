@@ -350,8 +350,8 @@ export default function ManagePage() {
               </div>
             </AccordionItem>
 
-            {/* Staff Files - only for staff, IT, admin */}
-            {showStaffFiles && (
+            {/* Staff Files — use ? : null so Accordion children are never `false` */}
+            {showStaffFiles ? (
             <AccordionItem key="11" aria-label="Staff Files" title="Staff Files" HeadingComponent="div">
               <div className="flex flex-col gap-3">
                 <h5 className="text-[15px] font-semibold mt-2 mb-1 text-[#333333]">Proposals</h5>
@@ -381,7 +381,7 @@ export default function ManagePage() {
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Interview-Questionnaire-Revision-9-03242025.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Questionnaire</a>
               </div>
             </AccordionItem>
-            )}
+            ) : null}
 
             {/* Interview Tips */}
             <AccordionItem key="12" aria-label="Interview Tips" title="Interview Tips" HeadingComponent="div">
