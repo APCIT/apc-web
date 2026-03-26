@@ -23,10 +23,20 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: npm install, build, and test
+      - name: Install dependencies
         run: |
           npm install
+
+      - name: Generate Prisma Client
+        run: |
+          npx prisma generate
+
+      - name: Build
+        run: |
           npm run build --if-present
+
+      - name: Test
+        run: |
           npm run test --if-present
 
       - name: Upload artifact for deployment job
@@ -51,9 +61,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2AC7BF2B97C74AFCBEB797A16933BFC8 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2B39DC3B79E148C1B62CCF99A450182F }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7A247A160FF244A7A622F5AAD60DE466 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_81334A4DAE154FC8847F25D56BA515FB }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AEFED5A2D3044AC5A625A6CD4795E50C }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_90EFBA5C9BDE4ECD814116DEF1FB165A }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -62,4 +72,3 @@ jobs:
           app-name: 'apc-next-preview'
           slot-name: 'Production'
           package: .
-          
