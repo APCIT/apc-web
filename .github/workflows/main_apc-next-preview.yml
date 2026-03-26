@@ -28,10 +28,14 @@ jobs:
           npm install
 
       - name: Generate Prisma Client
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           npx prisma generate
 
       - name: Build
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           npm run build --if-present
 
