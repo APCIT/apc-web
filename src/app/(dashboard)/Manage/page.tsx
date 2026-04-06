@@ -379,6 +379,7 @@ export default function ManagePage() {
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Aknowledgement-of-Understanding-and-Receipt-of-Handbook-Rev-3-41223.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Handbook Acknowledgement</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/New-Health-Insurance-Marketplace-CoverageOptions-and-Your-Health-Coverage.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Health Insurance Information</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Interview-Questionnaire-Revision-9-03242025.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Questionnaire</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Non-UA-Onboarding-Checklist-Rev-2-042026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Non-UA Onboarding Checklist</a>
               </div>
             </AccordionItem>
             ) : null}
