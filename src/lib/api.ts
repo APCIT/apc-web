@@ -151,7 +151,7 @@ export async function LOGOUT_API(): Promise<{ ok: boolean }> {
   return { ok: res.ok && (data?.ok === true) };
 }
 
-/** Submit internship application (public, no auth). Sends FormData (multipart) with resume file. */
+/** Submit internship application (guests only; API returns 403 if a session is present). Sends FormData (multipart) with resume file. */
 export async function SUBMIT_APPLICATION_API(formData: FormData): Promise<
   | { ok: true; firstName: string }
   | { ok: false; error: string; errors?: Record<string, string> }

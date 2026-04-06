@@ -288,7 +288,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
             </Dropdown>
           </li>
           <NavItem href="/Home/Internships">Internships</NavItem>
-          <NavItem href="/Apply">Apply</NavItem>
+          {!user && <NavItem href="/Apply">Apply</NavItem>}
           <li className="leading-none list-none">
             <Dropdown 
               classNames={{
@@ -492,7 +492,13 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
               </Dropdown>
             </li>
             <li><Link href="/Home/Internships" onClick={closeMobileMenu}>Internships</Link></li>
-            <li><Link href="/Apply" onClick={closeMobileMenu}>Apply</Link></li>
+            {!user && (
+              <li>
+                <Link href="/Apply" onClick={closeMobileMenu}>
+                  Apply
+                </Link>
+              </li>
+            )}
             <li className="mobile-dropdown">
               <Dropdown 
                 classNames={{

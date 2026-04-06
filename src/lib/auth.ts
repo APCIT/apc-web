@@ -32,6 +32,11 @@ export async function getSession() {
   return getIronSession<SessionData>(await cookies(), sessionOptions);
 }
 
+/** True when a user is logged in (Apply and similar public-only flows should be blocked). */
+export function hasLoggedInUser(session: SessionData): boolean {
+  return Boolean(session.isLoggedIn && session.userId);
+}
+
 export async function createSession(
   data: Omit<SessionData, "isLoggedIn" | "lastValidatedAt">,
   rememberMe: boolean

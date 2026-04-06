@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { uploadResumeBlob } from "@/lib/azure-storage";
+import { getSession, hasLoggedInUser } from "@/lib/auth";
 
 function getSemesterLabels(): [string, string, string] {
   const now = new Date();
@@ -37,6 +38,14 @@ function parseGradDate(monthStr: string, yearStr: string): Date {
 
 export async function POST(request: Request) {
   try {
+    const session = await getSession();
+    if (hasLoggedInUser(session)) {
+      return NextResponse.json(
+        { error: "Applications are only available when you are not logged in." },
+        { status: 403 }
+      );
+    }
+
     const form = await request.formData();
     const s = (name: string) => ((form.get(name) as string) ?? "").trim();
     const has = (name: string) => form.get(name) !== null;
