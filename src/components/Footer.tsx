@@ -257,7 +257,7 @@ const Footer: React.FC = () => {
               <ul className="space-y-4 text-base">
                 <li className="flex gap-3 items-start">
                   <Image
-                    src="/images/Icons/Locations Icon PNG (1).png"
+                    src="/images/Icons/locations icon PNG (1).png"
                     alt=""
                     width={20}
                     height={20}

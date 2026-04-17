@@ -201,7 +201,7 @@ export default function InternshipsClient({ showApplyButton }: { showApplyButton
                   <hr style={{ width: '50%', height: '1px', backgroundColor: 'black', border: 'none', margin: '0 auto', marginTop: '1rem', marginBottom: '1rem' }} />
                   <div className="flex justify-center">
                     <img
-                      src="/images/Internship_page.jpg"
+                      src="/images/internship_page.jpg"
                       alt="APC Partner Colleges"
                       className="rounded"
                       style={{ width: '90%', maxWidth: '420px', height: 'auto', display: 'block' }}
