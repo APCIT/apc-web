@@ -26,8 +26,11 @@ stages:
               key: 'npm | "$(Agent.OS)" | package-lock.json'
               restoreKeys: |
                 npm | "$(Agent.OS)"
-              path: ~/.npm
+              path: $(Pipeline.Workspace)/.npm
             displayName: 'Cache npm'
+
+          - script: npm config set cache $(Pipeline.Workspace)/.npm --global
+            displayName: 'Point npm to cache dir'
 
           - script: npm ci
             displayName: 'Install dependencies'
