@@ -31,6 +31,8 @@ stages:
 
           - script: npm ci
             displayName: 'Install dependencies'
+            env:
+              DATABASE_URL: $(DATABASE_URL)
 
           - script: npx prisma generate
             displayName: 'Generate Prisma Client'
