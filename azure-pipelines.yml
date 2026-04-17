@@ -48,14 +48,25 @@ stages:
               DATABASE_URL: $(DATABASE_URL)
               NEXT_TELEMETRY_DISABLED: '1'
 
+          - script: |
+              set -e
+              mkdir -p $(Build.ArtifactStagingDirectory)/deploy
+              cp -r .next/standalone/. $(Build.ArtifactStagingDirectory)/deploy/
+              mkdir -p $(Build.ArtifactStagingDirectory)/deploy/.next
+              cp -r .next/static $(Build.ArtifactStagingDirectory)/deploy/.next/static
+              if [ -d public ]; then cp -r public $(Build.ArtifactStagingDirectory)/deploy/public; fi
+              if [ -d prisma ]; then cp -r prisma $(Build.ArtifactStagingDirectory)/deploy/prisma; fi
+              ls -la $(Build.ArtifactStagingDirectory)/deploy
+            displayName: 'Assemble standalone package'
+
           - task: ArchiveFiles@2
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+              rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/deploy'
               includeRootFolder: false
               archiveType: zip
               archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
               replaceExistingArchive: true
-            displayName: 'Zip build output'
+            displayName: 'Zip standalone build'
 
           - publish: '$(Build.ArtifactStagingDirectory)/app.zip'
             artifact: drop
@@ -79,3 +90,4 @@ stages:
                     appType: 'webAppLinux'
                     appName: $(webAppName)
                     package: '$(Pipeline.Workspace)/drop/app.zip'
+                    startUpCommand: 'node server.js'
