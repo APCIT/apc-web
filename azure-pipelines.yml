@@ -8,7 +8,7 @@ pool:
 
 variables:
   azureSubscription: 'APC-Azure'
-  webAppName: 'apc-next-preview'
+  webAppName: 'apc-ua-next'
 
 stages:
   - stage: Build
@@ -76,7 +76,7 @@ stages:
     dependsOn: Build
     jobs:
       - deployment: Deploy
-        environment: 'apc-next-preview'
+        environment: 'apc-ua-next'
         strategy:
           runOnce:
             deploy:
