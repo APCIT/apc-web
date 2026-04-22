@@ -45,6 +45,24 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
+function parseDateOnly(value: string | null | undefined): Date | null {
+  if (!value) return null;
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) return null;
+  return new Date(year, month - 1, day, 12, 0, 0, 0);
+}
+
+function toYmd(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 const backButtonClass =
   "inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline";
 
@@ -734,16 +752,13 @@ export default function InternDetailsPage() {
                 {showSkeleton ? (
                   <div style={{ height: "200px", ...skeletonStyle }} aria-hidden />
                 ) : (() => {
-                  const weekStartDate = data?.weekStart ? new Date(data.weekStart) : null;
+                  const weekStartDate = parseDateOnly(data?.weekStart);
                   const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                   const weekDays = weekStartDate
                     ? Array.from({ length: 7 }, (_, i) => {
                         const d = new Date(weekStartDate);
                         d.setDate(d.getDate() + i);
-                        const y = d.getFullYear();
-                        const m = String(d.getMonth() + 1).padStart(2, "0");
-                        const dd = String(d.getDate()).padStart(2, "0");
-                        const dateStr = `${y}-${m}-${dd}`;
+                        const dateStr = toYmd(d);
                         const tl = (data?.thisWeek ?? []).find(
                           (t) => t.start.slice(0, 10) === dateStr
                         );
@@ -765,16 +780,14 @@ export default function InternDetailsPage() {
                     const day = now.getDay();
                     const s = new Date(now);
                     s.setDate(s.getDate() - day);
-                    s.setHours(0, 0, 0, 0);
+                    s.setHours(12, 0, 0, 0);
                     return s;
                   })();
-                  const showNextWeek = weekStartDate ? weekStartDate < currentSunday : false;
+                  const showNextWeek = weekStartDate ? toYmd(weekStartDate) < toYmd(currentSunday) : false;
                   const isCurrentWeek =
                     weekStartDate &&
                     currentSunday &&
-                    weekStartDate.getFullYear() === currentSunday.getFullYear() &&
-                    weekStartDate.getMonth() === currentSunday.getMonth() &&
-                    weekStartDate.getDate() === currentSunday.getDate();
+                    toYmd(weekStartDate) === toYmd(currentSunday);
 
                   function formatTimeDisplay(iso: string): string {
                     const d = new Date(iso);
@@ -800,10 +813,7 @@ export default function InternDetailsPage() {
                             if (!weekStartDate) return;
                             const prev = new Date(weekStartDate);
                             prev.setDate(prev.getDate() - 7);
-                            const y = prev.getFullYear();
-                            const m = String(prev.getMonth() + 1).padStart(2, "0");
-                            const dd = String(prev.getDate()).padStart(2, "0");
-                            changeWeek(`${y}-${m}-${dd}`);
+                            changeWeek(toYmd(prev));
                           }}
                           className={backButtonClass + " no-underline"}
                         >
@@ -816,10 +826,7 @@ export default function InternDetailsPage() {
                               if (!weekStartDate) return;
                               const next = new Date(weekStartDate);
                               next.setDate(next.getDate() + 7);
-                              const y = next.getFullYear();
-                              const m = String(next.getMonth() + 1).padStart(2, "0");
-                              const dd = String(next.getDate()).padStart(2, "0");
-                              changeWeek(`${y}-${m}-${dd}`);
+                              changeWeek(toYmd(next));
                             }}
                             className={backButtonClass + " no-underline"}
                           >
