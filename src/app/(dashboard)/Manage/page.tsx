@@ -6,10 +6,6 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { GET_ME_API } from "@/lib/api";
 
-const INTERNSHIP_INFO_URL =
-  process.env.NEXT_PUBLIC_INTERNSHIP_INFO_URL ??
-  "https://bama365.sharepoint.com/:x:/t/Intern-AlabamaProductivityCenter/ESJD3H41yXVDo8ai2A-XbNYBW7iAJUk7ud0OgaN0DKLydQ?e=eqZPza";
-
 const linkCls = "text-[#666666] font-roboto text-sm whitespace-nowrap";
 
 function PasswordCell({ hasPassword }: { hasPassword: boolean }) {
@@ -92,7 +88,7 @@ export default function ManagePage() {
                     <span className="font-medium">Work Schedule:</span> [ <Link href="/Interns/WorkSchedule" className="manage-link">Schedule</Link> ]
                   </div>
                   <div className={linkCls}>
-                    <span className="font-medium">Teams Sheets:</span> [ <a href={INTERNSHIP_INFO_URL} className="manage-link" target="_blank" rel="noopener noreferrer">Internship Info</a> ]
+                    <span className="font-medium">Teams Sheets:</span> [ <a href="https://bama365.sharepoint.com/:x:/t/Intern-AlabamaProductivityCenter/ESJD3H41yXVDo8ai2A-XbNYBW7iAJUk7ud0OgaN0DKLydQ?e=eqZPza" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Info</a> ]
                   </div>
                   <div className={linkCls}>
                     <span className="font-medium">Info:</span> [ <Link href="/Manage/EditInfo" className="manage-link">Edit your Information</Link> ]
@@ -106,7 +102,7 @@ export default function ManagePage() {
             <>
               <PasswordCell hasPassword={hasPassword} />
               <div className={linkCls}>
-                <span className="font-medium">Teams Sheets:</span> [ <a href={INTERNSHIP_INFO_URL} className="manage-link" target="_blank" rel="noopener noreferrer">Internship Info</a> ]
+                <span className="font-medium">Teams Sheets:</span> [ <a href="https://bama365.sharepoint.com/:x:/t/Intern-AlabamaProductivityCenter/ESJD3H41yXVDo8ai2A-XbNYBW7iAJUk7ud0OgaN0DKLydQ?e=eqZPza" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Info</a> ]
               </div>
             </>
           )}
@@ -373,7 +369,7 @@ export default function ManagePage() {
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Confidentiality-Statement-for-Student-Employees-updated-2013-1.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">CCB Confidential Agreement</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Graduate-New-Hire-Documents-Checklist-Revision-10-08252023.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Graduate New Hire Checklist</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Letter-of-Intent-for-Non-UA-students-Revision-11-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Offer Letter for Non-UA students</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Offer-Letter-for-UA-Student-Revision-20-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Letter for UA students</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Offer-Letter-for-UA-Student-Revision-21.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Letter for UA students</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Return-Student-Offer-Letter-Revision-5-2212024.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Return Student Offer Letter</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Handbook-Compliance-Highlights-Revision-3-0825223.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Handbook Compliance Document</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Aknowledgement-of-Understanding-and-Receipt-of-Handbook-Rev-3-41223.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Handbook Acknowledgement</a>

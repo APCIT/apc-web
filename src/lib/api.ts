@@ -2,7 +2,7 @@
  * Centralized API: paths and callable APIs.
  * Use LOGIN_API, GET_ME_API, LOGOUT_API in components instead of calling fetch directly.
  */
-const base = process.env.NEXT_PUBLIC_API_URL ?? "";
+const base = "";
 
 export const API = {
   auth: {
