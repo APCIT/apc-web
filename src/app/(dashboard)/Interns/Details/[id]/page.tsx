@@ -701,6 +701,9 @@ export default function InternDetailsPage() {
   const canUpdatePresentation = !!roles?.some((r) =>
     ["admin", "IT", "staff"].includes(r)
   );
+  const displayName = intern
+    ? [intern.firstName, intern.lastName].filter(Boolean).join(" ")
+    : "";
 
   return (
     <div className="w-full bg-white">
@@ -716,7 +719,16 @@ export default function InternDetailsPage() {
           className="font-roboto mt-6 mb-6 text-center"
           style={{ fontSize: 24, fontWeight: "normal", color: "#900" }}
         >
-          Intern
+          Intern{" "}
+          {loading ? (
+            <span
+              className="inline-block align-middle ml-1"
+              style={{ ...skeletonStyle, width: "160px", height: "24px" }}
+              aria-hidden
+            />
+          ) : (
+            displayName ? ` - ${displayName}` : ""
+          )}
         </h2>
 
         {/* Time Logs / Work Schedule accordions – titles use intern's semester from API */}

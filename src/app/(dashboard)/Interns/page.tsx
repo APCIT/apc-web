@@ -591,7 +591,7 @@ export default function InternsPage() {
                 <path d="M9.5 15.5 12 18l2.5-2.5" />
               </svg>
             </span>
-            <span>Tara Timelogs</span>
+            <span>Payroll Time Logs</span>
           </a>
           {canAccessInternsReports && (
             <Link
