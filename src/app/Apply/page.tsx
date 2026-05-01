@@ -1,9 +1,9 @@
 "use client";
 
-import { Fragment, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { Fragment, useEffect, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import HeadingIntroBanner from "@/components/HeadingIntroBanner";
-import { SUBMIT_APPLICATION_API } from "@/lib/api";
+import { GET_ME_API, SUBMIT_APPLICATION_API } from "@/lib/api";
 
 const MONTHS = [
   { v: "", t: "Month" },
@@ -312,14 +312,23 @@ function getSemesterLabels(): [string, string, string] {
   return [`Spring ${y + 1}`, `Summer ${y + 1}`, `Fall ${y + 1}`];
 }
 
+type ApplySession = "loading" | "loggedOut" | "loggedIn";
+
 export default function ApplyPage() {
   const router = useRouter();
   const yearNow = new Date().getFullYear();
   const [semThis, semNext, semThird] = getSemesterLabels();
 
+  const [applySession, setApplySession] = useState<ApplySession>("loading");
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [globalError, setGlobalError] = useState("");
+
+  useEffect(() => {
+    GET_ME_API().then((res) => {
+      setApplySession(res.ok ? "loggedIn" : "loggedOut");
+    });
+  }, []);
 
   const gradYearOptions = [
     { v: "", t: "Year" },
@@ -328,6 +337,13 @@ export default function ApplyPage() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (applySession === "loggedIn") {
+      setGlobalError("You are signed in. Log out first if you need to submit a new application.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (applySession !== "loggedOut") return;
+
     setSubmitting(true);
     setErrors({});
     setGlobalError("");
@@ -373,6 +389,25 @@ export default function ApplyPage() {
             }}
           >
             {globalError}
+          </div>
+        )}
+
+        {applySession === "loggedIn" && (
+          <div
+            style={{
+              background: "#e7f3ff",
+              border: "1px solid #b8daff",
+              color: "#004085",
+              padding: "0.75rem 1rem",
+              borderRadius: "4px",
+              marginBottom: "1.5rem",
+              fontFamily: "Roboto, sans-serif",
+              fontSize: "0.95rem",
+            }}
+          >
+            You are logged in. You can review this application, but new submissions are only accepted when you are not
+            signed in. Use <strong>Log Out</strong> in the menu if you need to apply with a different account or as a
+            guest.
           </div>
         )}
 
@@ -653,21 +688,27 @@ export default function ApplyPage() {
           <div style={{ textAlign: "center", marginTop: "2rem" }}>
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || applySession !== "loggedOut"}
               style={{
-                backgroundColor: submitting ? "#b0b0b0" : "#9E1B32",
+                backgroundColor: submitting || applySession !== "loggedOut" ? "#b0b0b0" : "#9E1B32",
                 color: "#fff",
                 border: "none",
                 padding: "0.65rem 2.5rem",
                 fontSize: "1.25rem",
                 fontWeight: 700,
                 borderRadius: "4px",
-                cursor: submitting ? "not-allowed" : "pointer",
+                cursor: submitting || applySession !== "loggedOut" ? "not-allowed" : "pointer",
                 fontFamily: "Roboto, sans-serif",
                 transition: "background-color 0.2s",
               }}
             >
-              {submitting ? "Submitting..." : "Apply"}
+              {submitting
+                ? "Submitting..."
+                : applySession === "loading"
+                  ? "…"
+                  : applySession === "loggedIn"
+                    ? "Log out to submit"
+                    : "Apply"}
             </button>
           </div>
         </form>

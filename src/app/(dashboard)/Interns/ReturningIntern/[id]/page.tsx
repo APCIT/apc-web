@@ -7,6 +7,7 @@ import {
   GET_INTERN_DETAIL_API,
   GET_COMPANIES_API,
   POST_INTERN_NEW_SEMESTER_API,
+  DOWNLOAD_INTERN_TIMESHEET_API,
   type CompanyItem,
 } from "@/lib/api";
 
@@ -109,6 +110,12 @@ export default function ReturningInternPage() {
     }
 
     setSubmitting(true);
+    const dl = await DOWNLOAD_INTERN_TIMESHEET_API(id);
+    if (!dl.ok) {
+      setSubmitting(false);
+      setError(dl.error ?? "Failed to export timesheet. Semester was not changed.");
+      return;
+    }
     const res = await POST_INTERN_NEW_SEMESTER_API(id, {
       semesterSeason: season as "April" | "July" | "November",
       semesterYear: Number(year),

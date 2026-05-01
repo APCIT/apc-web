@@ -1,13 +1,8 @@
 import type { ReactNode } from "react";
-import { redirect } from "next/navigation";
-import { getSession, hasLoggedInUser } from "@/lib/auth";
 
-export default async function ApplyLayout({
+/** Logged-in users may open /Apply to read the form; submission is blocked in the API and on the client. */
+export default function ApplyLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  const session = await getSession();
-  if (hasLoggedInUser(session)) {
-    redirect("/Manage");
-  }
   return <>{children}</>;
 }

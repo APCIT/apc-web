@@ -5,7 +5,7 @@ import HeadingIntroBanner from '@/components/HeadingIntroBanner';
 
 type ViewState = 'split' | 'studentExpanded' | 'companyExpanded';
 
-export default function InternshipsClient({ showApplyButton }: { showApplyButton: boolean }) {
+export default function InternshipsClient() {
   const [viewState, setViewState] = useState<ViewState>('split');
   const [showContactForm, setShowContactForm] = useState(false);
 
@@ -165,12 +165,12 @@ export default function InternshipsClient({ showApplyButton }: { showApplyButton
                     We help develop YOUR skills. We make sure YOU secure good recommendations.
                   </p>
                   <hr style={{ width: '50%', height: '1px', backgroundColor: 'black', border: 'none', margin: '0 auto', marginTop: '1rem', marginBottom: '1rem' }} />
-                  {showApplyButton && (
-                    <div className="text-center mt-4">
-                      <button
-                        id="applyNow"
-                        onClick={() => (window.location.href = "/Apply")}
-                        className={`
+                  <div className="text-center mt-4">
+                    <button
+                      id="applyNow"
+                      type="button"
+                      onClick={() => (window.location.href = "/Apply")}
+                      className={`
                         w-[450px]
                         bg-[#9E1B32]
                         font-roboto
@@ -185,12 +185,11 @@ export default function InternshipsClient({ showApplyButton }: { showApplyButton
                         hover:shadow-[0_10px_20px_rgba(0,0,0,0.7)]
                         hover:border-[rgba(0,0,0,0.5)]
                       `}
-                        style={{ height: "auto" }}
-                      >
-                        Apply Now
-                      </button>
-                    </div>
-                  )}
+                      style={{ height: "auto" }}
+                    >
+                      Apply Now
+                    </button>
+                  </div>
                 </div>
 
                 {/* Right Column */}

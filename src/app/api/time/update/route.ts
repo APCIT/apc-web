@@ -56,8 +56,11 @@ function validate(
   const start = new Date(`${startDate}T${startTime}:00.000Z`);
   const end = new Date(`${startDate}T${endTime}:00.000Z`);
   if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return "Invalid date/time.";
-  if (end <= start) return "End time must be after start time.";
+  if (end < start) return "End time must be on or after start time.";
   if (lunch < 0) return "Lunch cannot be negative.";
+  const grossHours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+  const netHours = grossHours - lunch;
+  if (netHours < 0) return "Hours cannot be negative (check end time and lunch).";
   return null;
 }
 
