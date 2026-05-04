@@ -3,33 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { formatScheduleTime, isScheduleMidnight } from "@/lib/schedule-time";
 
-/** Same roles as Interns list. Client may only view interns from their company. */
+/** Same roles as Interns list. Staff may view interns (company rules apply); interns may GET only their own id. */
 const ROLES = ["IT", "admin", "staff", "reception", "client", "accountant"];
-
-async function requireAccess(): Promise<
-  | { error: NextResponse }
-  | { ok: true; roles: string[]; companyId: number | null }
-> {
-  const session = await getSession();
-  if (!session?.isLoggedIn || !session.userId) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-  }
-  const user = await prisma.aspNetUsers.findUnique({
-    where: { Id: session.userId },
-    include: {
-      AspNetUserRoles: { include: { AspNetRoles: true } },
-      Companies: true,
-    },
-  });
-  if (!user) {
-    return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
-  }
-  const roles = user.AspNetUserRoles.map((ur) => ur.AspNetRoles.Name);
-  if (!ROLES.some((r) => roles.includes(r))) {
-    return { error: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
-  }
-  return { ok: true, roles, companyId: user.CompanyId ?? null };
-}
 
 /** Sunday at 00:00:00 local. */
 function startOfWeek(d: Date): Date {
@@ -141,20 +116,43 @@ export type InternDetailsResponse = {
   workSchedule: WorkScheduleEntry[];
 };
 
-/** GET: one intern by id (Details page). Query: date=yyyy-MM-dd (optional, week's Sunday). */
+/** GET: one intern by id (Details page). Query: date=yyyy-MM-dd (optional, week's Sunday).
+ * Interns may read only their own row (`id` === user id) for Manage/EditInfo. */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const access = await requireAccess();
-    if ("error" in access) return access.error;
-    const { roles, companyId } = access;
+    const session = await getSession();
+    if (!session?.isLoggedIn || !session.userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     const id = (await params).id;
     if (!id) {
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
+
+    const user = await prisma.aspNetUsers.findUnique({
+      where: { Id: session.userId },
+      include: {
+        AspNetUserRoles: { include: { AspNetRoles: true } },
+        Companies: true,
+      },
+    });
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const roles = user.AspNetUserRoles.map((ur) => ur.AspNetRoles.Name);
+    const viewingOwnRecordAsIntern = roles.includes("intern") && id === session.userId;
+    const hasStaffListAccess = ROLES.some((r) => roles.includes(r));
+
+    if (!viewingOwnRecordAsIntern && !hasStaffListAccess) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const companyId = user.CompanyId ?? null;
 
     const dateParam = request.nextUrl.searchParams.get("date")?.trim();
     let weekStart: Date;
@@ -181,7 +179,11 @@ export async function GET(
       return NextResponse.json({ error: "Intern not found" }, { status: 404 });
     }
 
-    if (roles.includes("client") && companyId != null) {
+    if (
+      hasStaffListAccess &&
+      roles.includes("client") &&
+      companyId != null
+    ) {
       if (intern.AspNetUsers?.CompanyId !== companyId) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }

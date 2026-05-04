@@ -52,6 +52,9 @@ export default function ManagePage() {
   const staffOrITOrAdmin = isStaff || isIT || isAdmin;
   const staffAndIntern = (isStaff || isIT || isAdmin || isReception) && isIntern;
 
+  /** To-Do, work schedule, and Edit Info are intern-only (routes require intern role). */
+  const showInternAccountLinks = (loading || isIntern) && (loading || hasPassword);
+
   /* Show accordion block while loading (so reload doesn't hide content) or when user has a role that sees it. */
   const showAccordionBlock = loading || isStaff || isIT || isAdmin || isIntern;
   /* Staff Files panel only when we know user is staff/IT/admin (not while loading). */
@@ -114,7 +117,7 @@ export default function ManagePage() {
           {((loading || (!staffAndIntern && !staffOrITOrAdmin && !isAdvisor)) && (
             <>
               <PasswordCell hasPassword={loading ? true : hasPassword} />
-              {(loading || hasPassword) && (
+              {showInternAccountLinks && (
                 <>
                   <div className={linkCls}>
                     <span className="font-medium">To-Do List:</span> [ <Link href="/Manage/ToDoList" className="manage-link">To-Do List</Link> ]

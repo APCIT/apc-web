@@ -12,6 +12,8 @@ const ROUTE_ROLES: { path: string; roles: string[] | null; exact?: boolean }[] =
   { path: "/Manage/AssignRoles", roles: ["IT"], exact: false },
   // Manage/ToDoList — intern only
   { path: "/Manage/ToDoList", roles: ["intern"], exact: false },
+  // Manage/EditInfo — intern profile (own record only); must be before /Manage
+  { path: "/Manage/EditInfo", roles: ["intern"], exact: false },
   // Interns sub-routes before /Interns
   { path: "/Interns/ScheduleDisplay", roles: ["IT", "admin", "staff"], exact: false },
   { path: "/Interns/WorkSchedule", roles: ["intern"], exact: false },
