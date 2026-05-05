@@ -24,6 +24,7 @@ export const API = {
   classesRegistrants: `${base}/api/classes/registrants`,
   pastInterns: `${base}/api/past-interns`,
   archiveExportPastIntern: `${base}/api/archive/export-past-intern`,
+  archiveExportPastInternAtn: `${base}/api/archive/export-past-intern-atn`,
   archiveExportInternDetails: `${base}/api/archive/export-intern-details`,
   archiveExportInternHours: `${base}/api/archive/export-intern-hours`,
   archiveExportWeeklyHours: `${base}/api/archive/export-weekly-hours`,
@@ -1597,10 +1598,16 @@ export async function DELETE_PAST_INTERN_API(id: number): Promise<
   return { ok: true };
 }
 
-/** Build export ATN report URL for a semester (date as yyyy-MM-dd). */
+/** Build Intern Profile Report URL for a semester (date as yyyy-MM-dd). */
 export function getPastInternExportUrl(semesterDateIso: string): string {
   const yyyyMmDd = semesterDateIso.slice(0, 10);
   return `${API.archiveExportPastIntern}?thisSemester=${encodeURIComponent(yyyyMmDd)}`;
+}
+
+/** Build Export ATN Report URL for past interns for one semester (date as yyyy-MM-dd). */
+export function getPastInternAtnExportUrl(semesterDateIso: string): string {
+  const yyyyMmDd = semesterDateIso.slice(0, 10);
+  return `${API.archiveExportPastInternAtn}?thisSemester=${encodeURIComponent(yyyyMmDd)}`;
 }
 
 /** Single service for Details/Edit (full company name and all fields). */

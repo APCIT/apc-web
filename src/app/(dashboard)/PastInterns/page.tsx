@@ -7,6 +7,7 @@ import {
   GET_PAST_INTERNS_API,
   GET_ME_API,
   DELETE_PAST_INTERN_API,
+  getPastInternAtnExportUrl,
   getPastInternExportUrl,
   type PastInternItem,
 } from "@/lib/api";
@@ -132,11 +133,18 @@ export default function PastInternsPage() {
     else alert(res.error);
   }
 
-  function getExportUrl(semesterLabel: string): string | null {
+  function getProfileExportUrl(semesterLabel: string): string | null {
     const list = grouped.get(semesterLabel);
     const first = list?.[0];
     if (!first?.semester) return null;
     return getPastInternExportUrl(first.semester);
+  }
+
+  function getAtnExportUrl(semesterLabel: string): string | null {
+    const list = grouped.get(semesterLabel);
+    const first = list?.[0];
+    if (!first?.semester) return null;
+    return getPastInternAtnExportUrl(first.semester);
   }
 
   const thClass = "border border-[#7a0000] p-[10px] text-white font-normal text-center";
@@ -278,17 +286,28 @@ export default function PastInternsPage() {
                       </tbody>
                     </table>
                   </div>
-                  {!loading && semesterLabel !== INITIAL_SEMESTER_LABEL && canExportAtn && getExportUrl(semesterLabel) && (
-                    <div className="mt-4 pb-2">
-                      <a
-                        href={getExportUrl(semesterLabel)!}
-                        className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-gray-50 text-[14px] font-normal no-underline"
-                        download
-                      >
-                        Export ATN Report
-                      </a>
-                    </div>
-                  )}
+                  {!loading &&
+                    semesterLabel !== INITIAL_SEMESTER_LABEL &&
+                    canExportAtn &&
+                    getProfileExportUrl(semesterLabel) &&
+                    getAtnExportUrl(semesterLabel) && (
+                      <div className="mt-4 pb-2 flex flex-wrap gap-3">
+                        <a
+                          href={getAtnExportUrl(semesterLabel)!}
+                          className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-gray-50 text-[14px] font-normal no-underline"
+                          download
+                        >
+                          Export ATN Report
+                        </a>
+                        <a
+                          href={getProfileExportUrl(semesterLabel)!}
+                          className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-gray-50 text-[14px] font-normal no-underline"
+                          download
+                        >
+                          Intern Profile Report
+                        </a>
+                      </div>
+                    )}
                 </AccordionItem>
               ))}
             </Accordion>

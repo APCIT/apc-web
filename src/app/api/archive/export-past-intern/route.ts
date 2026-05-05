@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 
-/** Export ATN Report: admin, IT, staff only (reception cannot run it). */
+/** Intern Profile Report: admin, IT, staff only (reception cannot run it). */
 const EXPORT_ROLES = ["admin", "IT", "staff"];
 
 async function requireAccess(): Promise<
@@ -54,7 +54,7 @@ function formatGradDate(d: Date): string {
   return `${m} ${y}`;
 }
 
-/** Column headers for Export ATN Report (26 columns in order). */
+/** Column headers for Intern Profile Report (26 columns in order). */
 const HEADERS = [
   "Semester",
   "Company",
@@ -84,7 +84,7 @@ const HEADERS = [
   "Note",
 ];
 
-/** GET: Export ATN Report for one semester. Query: thisSemester=yyyy-MM-dd. Auth: admin, IT, staff. Sorted by LastName asc. */
+/** GET: Intern Profile Report for one semester. Query: thisSemester=yyyy-MM-dd. Auth: admin, IT, staff. Sorted by LastName asc. */
 export async function GET(request: Request) {
   try {
     const access = await requireAccess();
