@@ -356,7 +356,7 @@ export default function ManagePage() {
                 <h5 className="text-[15px] font-semibold mt-2 mb-1 text-[#333333]">Proposals</h5>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Internship-Proposal-Rev-18-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Proposal for Internship Program</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Professional-Services-Proposal-Rev-11-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Proposal for Professional Services</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Proposal-Calculator-1.15.2026.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">Proposal Calculator</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Proposal-Calculator-1.15.2026.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Proposal Calculator</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Staff Materials</h5>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Service%20Log%20Instructions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Service Log Instructions</a>
