@@ -106,7 +106,7 @@ export default function Home() {
 
               <div className="about-annual w-full mt-5 text-center mt-[20px]">
                 <a
-                  href="https://apcstorage.blob.core.windows.net/staff-only-materials/FY23-Annual-Report-FINAL.pdf"
+                  href="https://apcstorage.blob.core.windows.net/staff-only-materials/FY25 Impact Alabama - APC Annual Report.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="about-annual-link flex justify-center items-center no-underline text-white !text-white visited:!text-white hover:!text-white focus:!text-white active:!text-white hover:decoration-transparent"
