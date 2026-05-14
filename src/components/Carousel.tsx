@@ -104,7 +104,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
   return (
     <div
       className={`carousel-container relative w-full overflow-hidden isolate ${variant === 'intro' ? 'carousel-intro bg-black' : 'carousel-stories'}`}
-      style={{ height: variant === 'intro' ? 600 : 400, backgroundColor: variant === 'intro' ? '#000000' : 'transparent' }}
+      style={{ height: variant === 'intro' ? 600 : 500, backgroundColor: variant === 'intro' ? '#000000' : 'transparent' }}
       onMouseEnter={() => setIsAuto(false)}
       onMouseLeave={() => setIsAuto(true)}
     >
