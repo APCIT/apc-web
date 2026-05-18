@@ -395,6 +395,22 @@ export default function ManagePage() {
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Resume_Building.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Resume Optimization</a>
               </div>
             </AccordionItem>
+
+            {/*AI Resources*/}
+            <AccordionItem key="13" aria-label="AI Resources" title="AI Resources" HeadingComponent="div">
+              <div className="flex flex-col gap-3">
+                <a href="https://chaton.ai/claude/?utm_source=google&utm_medium=cpc&utm_campaign=GA%20%7C%20ChatOn%20%7C%20Web%20%7C%20US%20%7C%20Search%20%7C%20Main%20%7C%20CPA%20%7C%2021.07.25&utm_content=790508279447&utm_term=claude%20ai&campaign_id=22809916767&adset_id=186149762341&ad_id=790508279447&adgroup=Claude_Anthropic&gad_source=1&gad_campaignid=22809916767&gbraid=0AAAAA9SXzF5e0Mz-P7oKK9cdW_E55_YdD&gclid=Cj0KCQjwp7jOBhDGARIsABe7C4c-cgihc0_N6Lgh_pylTRlmsnNExCrzpL_CQorUlN7kXkRThtk58YAaArExEALw_wcB" className="manage-link" target="_blank" rel="noopener noreferrer">For Writing - Claude</a>
+                <a href="https://openai.com/index/chatgpt/" className="manage-link" target="_blank" rel="noopener noreferrer">For Brainstorming - ChatGPT</a>
+                <a href="https://gemini.google.com/app" className="manage-link"  target="_blank" rel="noopener noreferrer">For Brainstorming - Gemini</a>
+                <a href="https://www.perplexity.ai/" className="manage-link" target="_blank" rel="noopener noreferrer">For Research - Perplexity</a>
+                <a href="https://nanobananaimg.com/?utm_source=google_ads&utm_medium=cpc&utm_campaign=23337254372&utm_content=192274769880&utm_term=nano%20banana&gclid=Cj0KCQjwp7jOBhDGARIsABe7C4cLsdeL2NfgBJrwTROByfr0okUxIpruCwx356ANM0xBj6sAQ6q6xJ0aAp04EALw_wcB&gad_source=1&gad_campaignid=23337254372&gbraid=0AAAABBJ4uaZ0a84P14ui6smSrU5YhNUZK&gclid=Cj0KCQjwp7jOBhDGARIsABe7C4cLsdeL2NfgBJrwTROByfr0okUxIpruCwx356ANM0xBj6sAQ6q6xJ0aAp04EALw_wcB" className="manage-link" target="_blank" rel="noopener noreferrer">For Image Generation - Google Nano Banana</a>
+                <a href="https://higgsfield.ai/" className="manage-link" target="_blank" rel="noopener noreferrer">For Video Generation - Higgsfield </a>
+                <a href="https://claude.com/product/claude-code?utm_source=google&utm_medium=paid_search_coder&utm_campaign=acq_code_us_q3&utm_term=claude%20code&gclsrc=aw.ds&gad_source=1&gad_campaignid=23253558478&gbraid=0AAAAA99jmqsbwonux7WEQK3AXE7uecoeA&gclid=Cj0KCQjwp7jOBhDGARIsABe7C4fuzyU_IFKIfEqjnksuOAwG58IAjcB9dKctdMO9ZOjwBMtpKZyXIN4aAmMqEALw_wcB" className="manage-link" target="_blank" rel="noopener noreferrer">For Building Websites and Apps - Claude Code</a>
+                <a href="https://cursor.com/" className="manage-link" target="_blank" rel="noopener noreferrer">For Building Websites and Apps - Cursor</a>
+                <a href="https://notebooklm.google/?gad_source=1&gad_campaignid=22476587015&gbraid=0AAAAA-fwSscsxheeVvpChP6307oSSI8Q6&gclid=Cj0KCQjwp7jOBhDGARIsABe7C4dL_g8fGLbU2LONalgr0JuN6bmnj6d0TbOBaHDr15iC1Oqz9-0F9I8aArCtEALw_wcB" className="manage-link" target="_blank" rel="noopener noreferrer">For Learning Something New - NotebookLM</a>
+                <a href="https://manus.im/" className="manage-link" target="_blank" rel="noopener noreferrer">For Automated Tasks - Manus</a>
+              </div>
+            </AccordionItem>
           </Accordion>
             </div>
           </>
@@ -403,3 +419,4 @@ export default function ManagePage() {
     </div>
   );
 }
+
