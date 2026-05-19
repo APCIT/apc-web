@@ -24,24 +24,16 @@ declare global {
         setOnLoadCallback: (fn: () => void) => void;
       };
       visualization: {
-        arrayToDataTable: (data: any[][]) => unknown;
+        arrayToDataTable: (data: (string | number)[][]) => unknown;
         ColumnChart: new (el: HTMLElement) => {
           draw: (data: unknown, options: Record<string, unknown>) => void;
-        };
-        NumberFormat: new (opts?: { pattern?: string }) => {
-          format: (dataTable: unknown, columnIndex: number) => void;
         };
       };
     };
   }
 }
 
-const CHART_COLORS: Record<string, string> = {
-  major: "#B22222",
-  company: "#B22222",
-  hours: "#B22222",
-  default: "#B22222",
-};
+const CHART_COLOR = "#990000";
 
 function drawColumnChart(elementId: string, data: ChartData): void {
   const el = document.getElementById(elementId);
@@ -50,135 +42,19 @@ function drawColumnChart(elementId: string, data: ChartData): void {
   const h = Math.max(el.offsetHeight || 300, 300);
   if (w < 10) return;
   try {
-    // Build an enhanced data array with an HTML tooltip column so tooltips
-    // can show value + percent and be styled.
-    const header = data[0] as (string | number)[];
-    const rows = data.slice(1) as (string | number)[][];
-    const total = rows.reduce((s, r) => s + Number(r[1] ?? 0), 0);
-
-    // Add an annotation column (value labels only for the top 5 values) and an HTML tooltip column.
-    // Determine the top 5 row indices by value.
-    const indexed = rows.map((r, i) => [i, Number(r[1] ?? 0)] as [number, number]);
-    const topIndices = new Set(indexed.sort((a, b) => b[1] - a[1]).slice(0, 5).map(([i]) => i));
-
-    const enhanced: (string | number | object)[][] = [
-      [header[0], header[1], { role: "annotation" }, { role: "tooltip", p: { html: true } }],
-      ...rows.map((r, idx) => {
-        const label = String(r[0] ?? "");
-        const val = Number(r[1] ?? 0);
-        const pct = total > 0 ? Math.round((val / total) * 1000) / 10 : 0; // one decimal
-        const annotation = topIndices.has(idx) ? val.toLocaleString() : "";
-        const tooltipHtml = `<div style="padding:6px 8px;font-family:Roboto"><div style="font-weight:700">${label}</div><div style="color:#666;margin-top:4px">${val.toLocaleString()} (${pct}%)</div></div>`;
-        return [label, val, annotation, tooltipHtml];
-      }),
-    ];
-
-    const dataTable = window.google.visualization.arrayToDataTable(enhanced as any[][]);
-
-    // Choose color based on element id (major/company/hrs)
-    const key = elementId.includes("major")
-      ? "major"
-      : elementId.includes("company")
-      ? "company"
-      : elementId.includes("hrs")
-      ? "hours"
-      : "default";
-    const color = CHART_COLORS[key] ?? CHART_COLORS.default;
-
-    // Format numeric column for hours to 2 decimals
-    try {
-      if (window.google.visualization.NumberFormat && /Hours?/i.test(String(data[0][1] ?? ""))) {
-        const formatter = new window.google.visualization.NumberFormat({ pattern: "#,##0.##" });
-        formatter.format(dataTable, 1);
-      }
-    } catch {
-      // ignore formatting errors
-    }
-
+    const dataTable = window.google.visualization.arrayToDataTable(data);
     const chart = new window.google.visualization.ColumnChart(el);
-
-    const isDark = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const textColor = isDark ? "#ddd" : "#444";
-    const bgFill = isDark ? "transparent" : "transparent";
-
-    const small = w < 480;
-    const chartArea = small ? { left: 40, top: 16, width: "85%", height: "70%" } : { left: 60, top: 20, width: "80%", height: "75%" };
-
     chart.draw(dataTable, {
       width: w,
       height: h,
-      legend: { position: "top", alignment: "center", textStyle: { color: textColor, fontName: "Roboto", fontSize: 12 } },
-      colors: [color],
-      vAxis: {
-        title: "",
-        textStyle: { color: textColor, fontName: "Roboto", fontSize: 12 },
-        minValue: 0,
-      },
-      hAxis: {
-        title: "",
-        textStyle: { color: textColor, fontName: "Roboto", fontSize: 12 },
-      },
-      tooltip: { isHtml: true, textStyle: { fontName: "Roboto", color: textColor }, showColorCode: true },
-      explorer: { actions: ["dragToZoom", "rightClickToReset"], axis: "horizontal" },
-      animation: { startup: true, duration: 700, easing: "out" },
-      chartArea,
-      backgroundColor: { fill: bgFill },
-      bar: { groupWidth: small ? "55%" : "70%" },
-      titleTextStyle: { color: textColor, fontName: "Roboto", fontSize: 14 },
-      annotations: { alwaysOutside: false, textStyle: { fontName: "Roboto", color: textColor, fontSize: 11 } },
+      legend: { position: "none" },
+      colors: [CHART_COLOR],
+      vAxis: { title: "", textPosition: "none" },
+      hAxis: { title: "", textPosition: "none" },
+      chartArea: { width: "85%", height: "80%" },
     });
-    try {
-      // Add a select listener that shows a small overlay with details (label/value/percent)
-      (window.google as any).visualization.events.addListener(chart, "select", () => {
-        try {
-          const sel = (chart as any).getSelection();
-          const overlayClass = "chart-select-overlay";
-          let overlay = el.querySelector(`.${overlayClass}`) as HTMLElement | null;
-          if (!sel || sel.length === 0) {
-            if (overlay) overlay.style.display = "none";
-            return;
-          }
-          const rowIndex = sel[0].row;
-          const row = rows[rowIndex];
-          if (!row) return;
-          const label = String(row[0] ?? "");
-          const val = Number(row[1] ?? 0);
-          const pct = total > 0 ? Math.round((val / total) * 1000) / 10 : 0;
-          const html = `<div style="font-family:Roboto"><div style="font-weight:700">${label}</div><div style="color:#666;margin-top:4px">${val.toLocaleString()} (${pct}%)</div></div>`;
-
-          if (!overlay) {
-            overlay = document.createElement("div");
-            overlay.className = overlayClass;
-            overlay.style.position = "absolute";
-            overlay.style.right = "12px";
-            overlay.style.top = "12px";
-            overlay.style.background = "rgba(255,255,255,0.95)";
-            overlay.style.border = "1px solid rgba(0,0,0,0.08)";
-            overlay.style.padding = "8px 10px";
-            overlay.style.borderRadius = "6px";
-            overlay.style.boxShadow = "0 6px 18px rgba(0,0,0,0.08)";
-            overlay.style.zIndex = "10";
-            overlay.style.minWidth = "120px";
-            overlay.style.display = "none";
-            el.style.position = el.style.position || "relative";
-            el.appendChild(overlay);
-          }
-          overlay.innerHTML = html;
-          overlay.style.display = "block";
-          // auto-hide after 4s
-          setTimeout(() => {
-            overlay && (overlay.style.display = "none");
-          }, 4000);
-        } catch {
-          // ignore overlay errors
-        }
-      });
-    } catch {
-      // ignore event registration errors
-    }
-  } catch (err) {
-    // ignore drawing errors but log for debugging
-    // console.error(err);
+  } catch {
+    // ignore
   }
 }
 
