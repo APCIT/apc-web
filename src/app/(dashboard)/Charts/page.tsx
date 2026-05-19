@@ -7,7 +7,7 @@ import { API, type ChartData } from "@/lib/api";
 function ChartSkeleton() {
   return (
     <div
-      className="min-h-[450px] w-full min-w-0 rounded-lg animate-pulse"
+      className="min-h-[300px] w-full min-w-0 rounded-lg animate-pulse"
       style={{ backgroundColor: "rgb(229 231 235)" }}
       aria-hidden
     />
@@ -102,9 +102,7 @@ function drawColumnChart(elementId: string, data: ChartData): void {
     const bgFill = isDark ? "transparent" : "transparent";
 
     const small = w < 480;
-    const chartArea = elementId.includes("hrs")
-      ? small ? { left: 40, top: 20, width: "85%", height: "75%" } : { left: 60, top: 20, width: "80%", height: "75%" }
-      : small ? { left: 40, top: 20, width: "85%", height: "75%" } : { left: 60, top: 20, width: "80%", height: "75%" };
+    const chartArea = small ? { left: 40, top: 16, width: "85%", height: "70%" } : { left: 60, top: 20, width: "80%", height: "75%" };
 
     chart.draw(dataTable, {
       width: w,
@@ -115,11 +113,6 @@ function drawColumnChart(elementId: string, data: ChartData): void {
         title: "",
         textStyle: { color: textColor, fontName: "Roboto", fontSize: 12 },
         minValue: 0,
-        ...(elementId === "chart-current-hrs" && { maxValue: 60000 }),
-        ...(elementId === "chart-past-hrs" && { maxValue: 55000 }),
-        ...(elementId === "chart-current-company" && { maxValue: 18 }),
-        ...(elementId === "chart-past-company" && { maxValue: 180 }),
-        ...(elementId === "chart-current-major" && { maxValue: 6 }),
       },
       hAxis: {
         title: "",
@@ -132,7 +125,7 @@ function drawColumnChart(elementId: string, data: ChartData): void {
       backgroundColor: { fill: bgFill },
       bar: { groupWidth: small ? "55%" : "70%" },
       titleTextStyle: { color: textColor, fontName: "Roboto", fontSize: 14 },
-      annotations: { alwaysOutside: true, textStyle: { fontName: "Roboto", color: textColor, fontSize: 9 } },
+      annotations: { alwaysOutside: false, textStyle: { fontName: "Roboto", color: textColor, fontSize: 11 } },
     });
     try {
       // Add a select listener that shows a small overlay with details (label/value/percent)
@@ -349,7 +342,7 @@ export default function ChartsPage() {
                               ? "chart-past-company"
                               : "chart-past-hrs"
                         }
-                        className="min-h-[450px] w-full min-w-0 overflow-hidden"
+                        className="min-h-[300px] w-full min-w-0 overflow-hidden"
                         role="img"
                         aria-label={`Chart: ${item.title} (Past)`}
                       />
@@ -373,7 +366,7 @@ export default function ChartsPage() {
                               ? "chart-current-company"
                               : "chart-current-hrs"
                         }
-                        className="min-h-[450px] w-full min-w-0 overflow-hidden"
+                        className="min-h-[300px] w-full min-w-0 overflow-hidden"
                         role="img"
                         aria-label={`Chart: ${item.title} (Current)`}
                       />
