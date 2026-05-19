@@ -19,7 +19,7 @@ const successStories: SuccessStory[] = [
     image: '/images/Backgrounds/Lear.jpg',
     text: 'Anabelle has been a vital member to the team. She has been responsible for the plant\'s change notification process, making sure that responsible parties acknowledge notification and submit documentation in a timely manner. Anabelle has led the team in AI integration for the automation of processes.',
     attribution: '- Konrad Piepke, Engineering Change Coordinator',
-    link: 'https://new.express.adobe.com/webpage/68LGyHC4tozxZ'
+    link: 'https://new.express.adobe.com/webpage/tujdoLv5SNnOp'
   },
   {
     id: 2,
