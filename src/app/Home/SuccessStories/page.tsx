@@ -84,10 +84,10 @@ const successStories: SuccessStory[] = [
   },
   {
     id: 11,
-    image: '/images/Logos/movi.png',
-    text: 'The Alabama Productivity Center Internship Program provided a level of support that would be expected from many professional services. The interns were able to come in, take ownership of Key projects and follow through without holding their hand every step of the way. Their work resulted in significant cost savings and cost avoidance.',
-    attribution: '- Gray Shipley and Lloyd Cooper of Movi Medical',
-    link: 'https://spark.adobe.com/page/5xvnMItWnRcir/'
+    image: '/images/Logos/MTM Logo.jpeg',
+    text: 'Travis left a vital impact on the Accounting & Finance Department. His analytical skills were critical in creating new processes for improving forecasting metrics on the Treasury side. He also provided vital support in many Treasury activities critical to maintaining proper company standing.',
+    attribution: '- Theodore Kubista, Financial Reporting, Insurance & Treasury Specialist',
+    link: 'https://new.express.adobe.com/webpage/nv1M4kSYGVHLE'
   }
 ];
 
