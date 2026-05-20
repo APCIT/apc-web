@@ -3,6 +3,7 @@
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import { useEffect, useRef, useState } from "react";
 import { API, type ChartData } from "@/lib/api";
+import { text } from "stream/consumers";
 
 function ChartSkeleton() {
   return (
@@ -50,8 +51,8 @@ function drawColumnChart(elementId: string, data: ChartData): void {
       legend: { position: "none" },
       colors: [CHART_COLOR],
       vAxis: { title: "", textPosition: "none" },
-      hAxis: { title: "", textPosition: "none" },
-      chartArea: { width: "85%", height: "80%" },
+      hAxis: { title: "", textPosition: "out", slantedText: true, slantedTextAngle: 45, textStyle: {fontSize: 10}, maxAlternation: 1, showEveryText: 1, annotations: {alwaysOutside: true, textStyle: {fontSize: 12, color: "#000"}} },
+      chartArea: { width: "85%", height: "70%", bottom: 100 },
     });
   } catch {
     // ignore
