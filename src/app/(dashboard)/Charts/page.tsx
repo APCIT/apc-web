@@ -50,9 +50,10 @@ function drawColumnChart(elementId: string, data: ChartData): void {
       height: h,
       legend: { position: "none" },
       colors: [CHART_COLOR],
-      vAxis: { title: "", textPosition: "none" },
-      hAxis: { title: "", textPosition: "out", slantedText: true, slantedTextAngle: 45, textStyle: {fontSize: 10}, maxAlternation: 1, showEveryText: 1, annotations: {alwaysOutside: true, textStyle: {fontSize: 12, color: "#000"}} },
-      chartArea: { width: "85%", height: "70%", bottom: 100 },
+      annotations: {alwaysOutside: true, textStyle: {fontSize: 12, color: "#000"}},
+      vAxis: { title: "", textPosition: "out", gridlines: {count: 6}, format: "0" },
+      hAxis: { title: "", textPosition: "out", slantedText: true, slantedTextAngle: 45, textStyle: {fontSize: 10}, maxAlternation: 1, showEveryText: 1 },
+      chartArea: { width: "80%", height: "60%", top:50,  bottom: 100 },
     });
   } catch {
     // ignore
