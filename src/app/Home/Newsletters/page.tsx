@@ -19,6 +19,24 @@ type NewsArticle = {
 
 const newsletterEntries: NewsletterEntry[] = [
   {
+    title: 'Spring 2026',
+    href: '',
+    cta: 'Coming Soon!',
+    isExternal: true,
+  },
+  {
+    title: 'Fall 2025',
+    href: 'https://apcstorage.blob.core.windows.net/staff-only-materials/APC Fall 2025 Newsletter .pdf',
+    cta: 'View Newsletter',
+    isExternal: true,
+  },
+  { 
+    title: 'Spring 2025',
+    href:'https://apcstorage.blob.core.windows.net/staff-only-materials/APC Spring 2025 Newsletter.pdf',
+    cta: 'View Newsletter',
+    isExternal: true
+  },
+  {
     title: 'Fall 2023',
     href: 'https://myemail.constantcontact.com/Alabama-Productivity-Center-2023-Fall-Newsletter.html?soid=1127193424690&aid=5J0Jh5gn764',
     cta: 'View Newsletter',
