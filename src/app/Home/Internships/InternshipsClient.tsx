@@ -195,7 +195,7 @@ export default function InternshipsClient() {
                 {/* Right Column */}
                 <div className="w-full">
                   <h2 className="text-center" style={{ color: 'black', fontSize: '2em' }}>
-                    <strong>WHAT OTHER COLLEGES DOES APC TEAM WITH?</strong>
+                    <strong>WHAT COLLEGES DOES APC TEAM WITH?</strong>
                   </h2>
                   <hr style={{ width: '50%', height: '1px', backgroundColor: 'black', border: 'none', margin: '0 auto', marginTop: '1rem', marginBottom: '1rem' }} />
                   <div className="flex justify-center">
@@ -226,24 +226,25 @@ export default function InternshipsClient() {
                 <div style={{ width: '8.333333%' }} />
                 <div style={{ width: '25%', fontSize: '20px', paddingLeft: '4px', paddingRight: '4px' }}>
                   <ul style={{ color: '#ffffff', listStyleType: 'disc', paddingLeft: '1.5rem' }}>
-                    <li>Operations Management</li>
-                    <li>Mechanical Engineering</li>
-                    <li>Management Information Systems</li>
+                    <li>Accounting</li>
+                    <li>Aerospace Engineering</li>
+                    <li>Business Management</li>
+                    <li>Communication and Information Science</li>
+                    <li>Community College</li>
+                    <li>Computer Science</li>
                     <li>Electrical Engineering</li>
                     <li>Finance</li>
-                    <li>Business Management</li>
-                    <li>Marketing</li>
                   </ul>
                 </div>
                 <div style={{ width: '25%', fontSize: '20px', paddingLeft: '4px', paddingRight: '4px' }}>
                   <ul style={{ color: '#ffffff', listStyleType: 'disc', paddingLeft: '1.5rem' }}>
-                    <li>Industrial & System Engineering</li>
-                    <li>Accounting</li>
-                    <li>Community College</li>
-                    <li>Aerospace Engineering</li>
-                    <li>Communication and Info. Science</li>
-                    <li>Computer Science</li>
+                    <li>Industrial and System Engineering</li>
+                    <li>Management Information Systems</li>
+                    <li>Marketing</li>
+                    <li>Mechanical Engineering</li>
+                    <li>Operations Management</li>
                     <li>Studio Art</li>
+                    <li>And looking to add more!</li>
                   </ul>
                 </div>
                 <div style={{ width: '16.666667%' }} />
