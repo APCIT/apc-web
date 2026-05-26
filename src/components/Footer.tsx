@@ -23,13 +23,12 @@ const STAFF_LEFT: StaffMember[] = [
   { name: 'Alan Hill', title: 'Executive Director', email: 'alan.hill@ua.edu', phone: '(205) 222-7111', profileHref: '/Profiles/AlanHill' },
   { name: 'Jan Ingenrieth', title: 'Director', subtitle: 'APC Internship Program', email: 'jan.ingenrieth@ua.edu', phone: '(205) 242-6057', profileHref: '/Profiles/JanIngenrieth' },
   { name: 'Morgan Harrison', title: 'Productivity Engineer', email: 'morgan.harrison@ua.edu', phone: '(205) 348-7968', profileHref: '/Profiles/MorganHarrison' },
-  { name: 'Justin Rodgers', title: 'Productivity Engineer', email: 'justin.rodgers@ua.edu', phone: '(251) 234-1724', profileHref: '/Profiles/JustinRodgers' },
 ];
 
 const STAFF_RIGHT: StaffMember[] = [
   { name: 'Susan Maples', title: 'Productivity Engineer', email: 'susan.maples@ua.edu', phone: '(205) 292-5848', profileHref: '/Profiles/SusanMaples' },
   { name: 'Ben Baxter', title: 'Productivity Engineer', email: 'ben.baxter@ua.edu', phone: '(205) 348-7957', profileHref: '/Profiles/BenBaxter' },
-  { name: 'Tara Johnson', title: 'Business Manager', email: 'tara.johnson@ua.edu', phone: '(205) 348-8953', profileHref: '/Profiles/TaraJohnson' },
+  { name: 'Justin Rodgers', title: 'Productivity Engineer', email: 'justin.rodgers@ua.edu', phone: '(251) 234-1724', profileHref: '/Profiles/JustinRodgers' },
 ];
 
 const SOCIAL: SocialLink[] = [
