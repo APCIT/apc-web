@@ -67,7 +67,6 @@ const HEADERS = [
   "University",
   "Fund",
   "APC Project Manager(s)",
-  "Alabama County",
   "Email",
   "Phone Number",
 ];
@@ -116,7 +115,6 @@ export async function GET(request: Request) {
         r.School ?? "",
         "", // Fund — blank
         "", // APC Project Manager(s) — blank
-        "", // Alabama County — blank
         r.Email ?? "",
         r.Phone ?? "",
       ];

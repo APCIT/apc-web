@@ -80,7 +80,6 @@ const HEADERS = [
   "University",
   "Fund",
   "APC Project Manager(s)",
-  "Alabama County",
   "Note",
 ];
 
@@ -140,7 +139,6 @@ export async function GET(request: Request) {
         r.School ?? "", // University
         "", // Fund - empty
         "", // APC Project Manager(s) - empty
-        "", // Alabama County - empty
         r.Note ?? "",
       ];
       tableRows += "<tr>" + cells.map((c) => `<td>${escapeHtml(String(c))}</td>`).join("") + "</tr>";
