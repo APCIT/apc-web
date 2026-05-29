@@ -66,7 +66,6 @@ const HEADERS = [
   "University",
   "Fund",
   "APC Project Manager(s)",
-  "Alabama County",
   "Email",
   "Phone Number",
 ];
@@ -110,7 +109,6 @@ export async function GET() {
         i.School ?? "", // University
         "", // Fund – blank
         "", // APC Project Manager(s) – blank
-        "", // Alabama County – blank
         i.AspNetUsers?.Email ?? "",
         i.Phone ?? "",
       ];
