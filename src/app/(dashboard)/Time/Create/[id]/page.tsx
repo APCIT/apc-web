@@ -62,11 +62,9 @@ const MINUTE_OPTIONS = [
 
 const LUNCH_OPTIONS = [
   { value: "0", label: "No Lunch" },
-  { value: "15", label: "15 Min" },
   { value: "30", label: "30 Min" },
   { value: "45", label: "45 Min" },
   { value: "60", label: "1 Hour" },
-  { value: "75", label: "1 Hour & 15 Min" },
 ];
 
 function TimeCreateContent() {
