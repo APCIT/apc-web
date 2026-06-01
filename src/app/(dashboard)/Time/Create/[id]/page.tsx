@@ -119,7 +119,7 @@ function TimeCreateContent() {
     const endTime = `${endHour}:${endMinute}`;
     const startMinutes = parseInt(startHour, 10) * 60 + parseInt(startMinute, 10);
     const endMinutes = parseInt(endHour, 10) * 60 + parseInt(endMinute, 10);
-    if (endMinutes <= startMinutes) {
+    if (endMinutes < startMinutes) {
       setError("End time must be after start time.");
       return;
     }

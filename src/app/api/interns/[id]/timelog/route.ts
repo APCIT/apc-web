@@ -40,7 +40,7 @@ function validate(
   const start = new Date(`${startDate}T${startTime}:00.000Z`);
   const end = new Date(`${startDate}T${endTime}:00.000Z`);
   if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return "Invalid date/time.";
-  if (end <= start) return "End time must be after start time.";
+  if (end < start) return "End time must be after start time.";
   if (lunch < 0) return "Lunch cannot be negative.";
 
   return null;
