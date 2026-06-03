@@ -34,13 +34,13 @@ declare global {
   }
 }
 
-const CHART_COLOR = "#990000";
+const CHART_COLOR = "#9E1B32";
 
-function drawColumnChart(elementId: string, data: ChartData): void {
+function drawColumnChart(elementId: string, data: ChartData, xLabel = "Category", yLabel = "Count"): void {
   const el = document.getElementById(elementId);
   if (!el || !window.google?.visualization || !data?.length) return;
   const w = el.offsetWidth || 0;
-  const h = Math.max(el.offsetHeight || 300, 300);
+  const h = Math.max(el.offsetHeight || 400, 400);
   if (w < 10) return;
   try {
     const dataTable = window.google.visualization.arrayToDataTable(data);
@@ -50,10 +50,11 @@ function drawColumnChart(elementId: string, data: ChartData): void {
       height: h,
       legend: { position: "none" },
       colors: [CHART_COLOR],
-      annotations: {alwaysOutside: true, textStyle: {fontSize: 12, color: "#000"}},
-      vAxis: { title: "", textPosition: "out", gridlines: {count: 6}, format: "0" },
-      hAxis: { title: "", textPosition: "out", slantedText: true, slantedTextAngle: 45, textStyle: {fontSize: 10}, maxAlternation: 1, showEveryText: 1 },
-      chartArea: { width: "80%", height: "60%", top:50,  bottom: 100 },
+      bar: {groupWidth: "75%"},
+      annotations: {alwaysOutside: true, textStyle: {fontSize: 13, bold: true, color: "#333333"}},
+      vAxis: { title: yLabel, textPosition: "out", gridlines: {count: 6, color: "#e5e7eb"}, textStyle: {color: "#666666"}, format: "short" },
+      hAxis: { title: xLabel, textPosition: "out", slantedText: true, slantedTextAngle: 45, textStyle: {fontSize: 12, color: "#333333"}, maxAlternation: 1, showEveryText: 1 },
+      chartArea: { width: "82%", height: "65%", top: 40,  bottom: 120 },
     });
   } catch {
     // ignore
@@ -115,13 +116,14 @@ export default function ChartsPage() {
     if (!chartsReady || !data?.ok) return;
     const d = data.data;
     const draw = () => {
-      drawColumnChart("chart-past-major", d.pastInternsByMajorData);
-      drawColumnChart("chart-current-major", d.internsByMajorData);
-      drawColumnChart("chart-past-company", d.pastInternsByCompanyData);
-      drawColumnChart("chart-current-company", d.internsByCompanyData);
-      drawColumnChart("chart-past-hrs", d.pastHrsByCompanyData);
-      drawColumnChart("chart-current-hrs", d.hrsByCompanyData);
-    };
+    drawColumnChart("chart-past-major", d.pastInternsByMajorData, "Major", "Count");
+    drawColumnChart("chart-current-major", d.internsByMajorData, "Major", "Count");
+    drawColumnChart("chart-past-company", d.pastInternsByCompanyData, "Company", "Count");
+    drawColumnChart("chart-current-company", d.internsByCompanyData, "Company", "Count");
+    drawColumnChart("chart-past-hrs", d.pastHrsByCompanyData, "Company", "Hours");
+    drawColumnChart("chart-current-hrs", d.hrsByCompanyData, "Company", "Hours");
+  };
+
     draw();
     const delay = expandedKeys.size > 0 ? 250 : 100;
     const t = setTimeout(draw, delay);
@@ -201,10 +203,10 @@ export default function ChartsPage() {
                 }
                 HeadingComponent="div"
               >
-                <div className="flex flex-col gap-6 py-2">
+                <div className="flex flex-col gap-8 py-2">
                   <div>
                     <h3
-                      className="text-[14px] font-roboto mb-2"
+                      className="text-[16px] font-roboto mb-3"
                       style={{ fontWeight: 700, color: "#000000" }}
                     >
                       Past (Starting Spring 2016)
