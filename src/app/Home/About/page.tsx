@@ -260,25 +260,6 @@ export default function AboutPage() {
                 Productivity Engineer
               </h4>
             </div>
-
-            {/* Tara Johnson */}
-            <div className="staff-member" style={{flex: '0 0 auto'}}>
-              <div className="headshot-container">
-                <a href="/Profiles/TaraJohnson" className="image-cropper">
-                  <img 
-                    className="staff-photo" 
-                    src="/images/StaffProfilePics/TaraJohnson.jpg" 
-                    alt="Tara Johnson"
-                  />
-                </a>
-              </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
-                Tara Johnson
-              </h3>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
-                Business Manager
-              </h4>
-            </div>
           </div>
         </div>
       </div>
