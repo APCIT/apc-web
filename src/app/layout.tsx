@@ -1,4 +1,4 @@
-// @ts-ignore: allow importing global CSS without type declarations
+// @ts-expect-error: allow importing global CSS without type declarations
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import PartnerFooter from "@/components/PartnerFooter";
