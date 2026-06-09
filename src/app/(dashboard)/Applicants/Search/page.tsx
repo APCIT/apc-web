@@ -122,6 +122,7 @@ export default function ApplicantSearchPage() {
                 <option value="MS">MS - Mississippi State</option>
                 <option value="OM">OM - Ole Miss</option>
                 <option value="PU">PU - Purdue</option>
+                <option value="SHC">SHC - Spring Hill College </option>
                 <option value="SC">SC - Stillman College</option>
                 <option value="SSCC">SSCC - Shelton State Community College</option>
                 <option value="TUS">TUS - Tuskegee University</option>
