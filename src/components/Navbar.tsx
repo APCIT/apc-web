@@ -194,16 +194,16 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[1030] w-full bg-[#3d3d3d] border-b border-[#2a2a2a] transition-[background,padding] duration-500 ease-in-out">
-      <nav className="mx-auto flex h-[100px] w-full max-w-7xl items-center px-6">
+    <header className="sticky inset-x-0 top-0 z-[1030] w-full bg-[#4A4C54] border-b border-[#35363B] transition-[background,padding] duration-500 ease-in-out">
+      <nav className="mx-auto flex h-[96px] w-full max-w-[77rem] items-center gap-6 px-4">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2 pl-2">
             <Image
               src="/images/APCLogoDark.png"
               alt="APC Logo"
-              width={160}
-              height={100}
-              className="w-auto h-[100px] object-contain"
+              width={135}
+              height={84}
+              className="w-auto h-[65px] object-contain"
               priority
               quality={100}
             />
@@ -222,7 +222,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
         </button>
 
         {/* Desktop Navigation */}
-        <ul className="navbar-desktop-menu flex items-center list-none mx-auto" style={{fontFamily: 'var(--font-sans)'}}>
+        <ul className="navbar-desktop-menu flex items-center list-none mx-auto flex-nowrap" style={{fontFamily: 'var(--font-sans)'}}>
           <NavItem href="/">Home</NavItem>
           <li className="leading-none list-none">
             <Dropdown 
@@ -233,8 +233,8 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
             >
               <DropdownTrigger>
                 <button
-                  className="nav-link block rounded px-[15px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
-                  style={{color: 'white', fontSize: '18px', lineHeight: '50px', fontWeight: '400', backgroundColor: 'transparent', boxShadow: 'none'}}
+                  className="nav-link block whitespace-nowrap roundedpx-[10px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
+                  style={{color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '400', letterSpacing: '0', backgroundColor: 'transparent', boxShadow: 'none'}}
                 >
                   About
                   <svg
@@ -266,21 +266,21 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                   key="about-us"
                   as={Link}
                   href="/Home/About"
-                  style={{fontSize: '18px', lineHeight: '1.35', fontWeight: '400'}}
+                  style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
                 >
                   About Us
                 </DropdownItem>
                 <DropdownItem 
                   key="staff"
                   onClick={(e) => handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#StaffSectionLoc", "StaffSectionLoc")}
-                  style={{fontSize: '18px', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
+                  style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
                 >
                   Staff Directory
                 </DropdownItem>
                 <DropdownItem 
                   key="board"
                   onClick={(e) => handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#BoardSectionLoc", "BoardSectionLoc")}
-                  style={{fontSize: '18px', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
+                  style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
                 >
                   Board Directory
                 </DropdownItem>
@@ -298,8 +298,8 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
             >
               <DropdownTrigger>
                 <button
-                  className="nav-link block rounded px-[15px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
-                  style={{color: 'white', fontSize: '18px', lineHeight: '50px', fontWeight: '400', backgroundColor: 'transparent', boxShadow: 'none'}}
+                  className="nav-link block rounded px-[10px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
+                  style={{color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '400', letterSpacing: '0', backgroundColor: 'transparent', boxShadow: 'none'}}
                 >
                   Client Services
                   <svg
@@ -331,7 +331,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                   key="our-services"
                   as={Link}
                   href="/Home/Services"
-                  style={{fontSize: '18px', lineHeight: '1.35', fontWeight: '400'}}
+                  style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
                 >
                   Our Services
                 </DropdownItem>
@@ -339,22 +339,37 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                   key="class-registration"
                   as={Link}
                   href="/Home/Classes"
-                  style={{fontSize: '18px', lineHeight: '1.35', fontWeight: '400'}}
+                  style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
                 >
                   Class Registration
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </li>
-          <NavItem href="/Home/SuccessStories">Success Stories</NavItem>
+
+          <li className="leading-none list-none">
+          <Link
+          href="/Home/SuccessStories"
+          className="nav-link flex w-[90px] flex-col items-center justify-center rounded px-[8px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white text-center"
+            style={{
+              color: "white",
+              fontSize: "1rem",
+              lineHeight: "1.5rem",
+              fontWeight: "300",
+              textAlign: "center",
+    }}
+  >
+    Success Stories
+  </Link>
+</li>
           <NavItem href="/Home/Locations">Locations</NavItem>
           <NavItem href="/Home/Newsletters">News</NavItem>
           <li className="leading-none list-none">
             <a
               href="#contact"
               onClick={handleContactClick}
-              className="nav-link block rounded px-[15px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white cursor-pointer"
-              style={{color: 'white', fontSize: '18px', lineHeight: '50px', fontWeight: '400'}}
+              className="nav-link flex flex-col items-center justify-center rounded px-[15px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white cursor-pointer"
+              style={{color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '400'}}
             >
               Contact
             </a>
@@ -372,8 +387,8 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
               >
                 <DropdownTrigger>
                   <button
-                    className="nav-link block rounded px-[15px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
-                    style={{ color: "white", fontSize: "18px", lineHeight: "50px", fontWeight: "400", backgroundColor: "transparent", boxShadow: "none" }}
+                    className="nav-link block rounded px-[10px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
+                    style={{ color: "white", fontSize: "1rem", lineHeight: "50px", fontWeight: "300", backgroundColor: "transparent", boxShadow: "none" }}
                   >
                     {user.userName}
                     <CaretSvg open={isUserOpen} />
@@ -392,14 +407,14 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                         key={item.key}
                         as={Link}
                         href={item.href}
-                        style={{ fontSize: "18px", lineHeight: "1.35", fontWeight: "400" }}
+                        style={{ fontSize: "1rem", lineHeight: "1.35", fontWeight: "300" }}
                       >
                         {item.label}
                       </DropdownItem>
                     )),
                     <DropdownItem
                       key="logout"
-                      style={{ fontSize: "18px", lineHeight: "1.35", fontWeight: "400", cursor: "pointer" }}
+                      style={{ fontSize: "1rem", lineHeight: "1.35", fontWeight: "300", cursor: "pointer" }}
                       onPress={async () => {
                         await LOGOUT_API();
                         setUser(null);
@@ -418,7 +433,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                 href="/Account/Login"
                 id="loginLink"
                 className="nav-link block px-[15px] py-[8px] font-normal text-white hover:text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white"
-                style={{ color: "white", fontSize: "18px", lineHeight: "50px", fontWeight: "400" }}
+                style={{ color: "white", fontSize: "1rem", lineHeight: "50px", fontWeight: "300" }}
               >
                 Log In
               </Link>
@@ -470,21 +485,21 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                     as={Link}
                     href="/Home/About"
                     onClick={closeMobileMenu}
-                    style={{fontSize: '16px', lineHeight: '1.35', fontWeight: '400'}}
+                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
                   >
                     About Us
                   </DropdownItem>
                   <DropdownItem 
                     key="staff-mobile"
                     onClick={(e) => { handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#StaffSectionLoc", "StaffSectionLoc"); closeMobileMenu(); }}
-                    style={{fontSize: '16px', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
+                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
                   >
                     Staff Directory
                   </DropdownItem>
                   <DropdownItem 
                     key="board-mobile"
                     onClick={(e) => { handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#BoardSectionLoc", "BoardSectionLoc"); closeMobileMenu(); }}
-                    style={{fontSize: '16px', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
+                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
                   >
                     Board Directory
                   </DropdownItem>
@@ -537,7 +552,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                     as={Link}
                     href="/Home/Services"
                     onClick={closeMobileMenu}
-                    style={{fontSize: '16px', lineHeight: '1.35', fontWeight: '400'}}
+                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
                   >
                     Our Services
                   </DropdownItem>
@@ -546,7 +561,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                     as={Link}
                     href="/Home/Classes"
                     onClick={closeMobileMenu}
-                    style={{fontSize: '16px', lineHeight: '1.35', fontWeight: '400'}}
+                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
                   >
                     Class Registration
                   </DropdownItem>
@@ -594,14 +609,14 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                             as={Link}
                             href={item.href}
                             onClick={closeMobileMenu}
-                            style={{ fontSize: "16px", lineHeight: "1.35", fontWeight: "400" }}
+                            style={{ fontSize: "1rem", lineHeight: "1.35", fontWeight: "400" }}
                           >
                             {item.label}
                           </DropdownItem>
                         )),
                         <DropdownItem
                           key="logout-mobile"
-                          style={{ fontSize: "16px", lineHeight: "1.35", fontWeight: "400", cursor: "pointer" }}
+                          style={{ fontSize: "1rem", lineHeight: "1.35", fontWeight: "400", cursor: "pointer" }}
                           onPress={async () => {
                             await LOGOUT_API();
                             setUser(null);
@@ -636,7 +651,7 @@ function NavItem({ href, children }: { href: string; children: React.ReactNode }
         <Link
           href={href}
           className="nav-link block rounded px-[15px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white"
-          style={{color: 'white', fontSize: '18px', lineHeight: '50px', fontWeight: '400'}}
+          style={{color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '400'}}
         >
         { children }
       </Link>

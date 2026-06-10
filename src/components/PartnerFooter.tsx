@@ -60,7 +60,7 @@ const PartnerFooter: React.FC = () => {
         ))}
       </div>
     </footer>
-  );
+  ); 
 };
 
 export default PartnerFooter;
