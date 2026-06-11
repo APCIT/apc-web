@@ -539,7 +539,7 @@ export default function InternsPage() {
                 <path d="M9.5 15.5 12 18l2.5-2.5" />
               </svg>
             </span>
-            <span>Export ATN Report</span>
+            <span>Intern Profile Data</span>
           </a>
           <a
             href={API.archiveExportInternHours}

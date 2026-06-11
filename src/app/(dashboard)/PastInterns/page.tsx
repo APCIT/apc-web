@@ -297,7 +297,7 @@ export default function PastInternsPage() {
                           className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-gray-50 text-[14px] font-normal no-underline"
                           download
                         >
-                          Export ATN Report
+                          Intern Profile Data
                         </a>
                         <a
                           href={getProfileExportUrl(semesterLabel)!}
