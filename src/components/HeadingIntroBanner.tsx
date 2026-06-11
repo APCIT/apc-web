@@ -15,7 +15,7 @@ export default function HeadingIntroBanner({
 }: HeadingIntroBannerProps) {
   return (
     <div 
-      className="relative w-full bg-cover border-b-[0.75em] border-[#696969] pt-[1.5%] flex items-center justify-center"
+      className="relative w-full bg-cover pt-[1.5%] flex items-center justify-center"
       style={{
         height,
         backgroundImage: `url('${backgroundImage}')`,

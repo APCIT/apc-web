@@ -5,6 +5,31 @@ import Link from 'next/link';
 import Script from 'next/script';
 import HeadingIntroBanner from '@/components/HeadingIntroBanner';
 
+const ua = {
+  color: {
+    textDefault: '#35363B',
+    textAlt: '#4A4C54',
+    textSubtle: '#757C88',
+    primary: '#9E1B32',
+    primaryHover: '#70202C',
+    surface: '#FFFFFF',
+    element: '#F2F3F4',
+    chip: '#DFE2E5',
+    neutral800: '#35363B',
+  },
+  font: {
+    heading: 'proxima-nova, sans-serif',
+    body: 'proxima-nova, sans-serif',
+  },
+  space: {
+    1: '0.5rem',
+    2: '1rem',
+    4: '2rem',
+    section: '4rem',
+    gutter: '1rem',
+  },
+};
+
 type NewsletterEntry = {
   title: string;
   href: string;
@@ -19,9 +44,9 @@ type NewsArticle = {
 
 const newsletterEntries: NewsletterEntry[] = [
   {
-    title: 'Spring 2026',
-    href: '',
-    cta: 'Coming Soon!',
+    title: 'June 2026',
+    href: 'https://t.e2ma.net/webview/1jx0xr/38070c206d36976aa9f25e3752b2a0c3?fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnbnu4Ohz2JwXkYQSwTjd2T_WMLcVhUxcdWBpRILzQKZ7eJmoaAGbFR4RjCRg_aem_n_VZyvzF-0Vt-4UBZJx2IA',
+    cta: 'View Newsletter',
     isExternal: true,
   },
   {
@@ -115,19 +140,29 @@ const newsArticles: NewsArticle[] = [
 ];
 
 const newsletterTitleStyle: CSSProperties = {
-  fontSize: '3em',
-  color: '#7a808a',
-  fontFamily: 'Roboto, sans-serif',
-  margin: 0
+  fontSize: 'clamp(1.5rem, 2vw, 2.25rem)',
+  lineHeight: 1.2,
+  color: '#35363B',
+  fontFamily: 'proxima-nova, Arial, sans-serif',
+  margin: 0,
+  fontWeight: 700,
 };
 
 const newsletterRowStyle: CSSProperties = {
-  paddingTop: '40px',
-  paddingBottom: '40px',
-  minHeight: '140px',
+  backgroundColor: '#FFFFFF',
+  border: '4px solid #9E1B32',
+  borderRadius: '32px',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+  padding: '28px 36px',
+  minHeight: '110px',
   display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between'
+  alignItems: 'center',
+  justifyContent: 'center',
+  boxSizing: 'border-box',
+  marginTop: ua.space[2],
+  marginBottom: ua.space[2],
+  maxWidth: '95%',
+  margin: '0 auto',
 };
 
 const buttonSectionStyle: CSSProperties = {
@@ -140,8 +175,8 @@ const buttonSectionStyle: CSSProperties = {
   height: '100%',
   display: 'flex',
   alignItems: 'stretch',
-  marginTop: '10px',
-  marginBottom: '10px'
+  marginTop: ua.space[2],
+  marginBottom: ua.space[2],
 };
 
 const newsArticleContainerStyle: CSSProperties = {
@@ -165,7 +200,7 @@ const buttonBarStyle: CSSProperties = {
   textAlign: 'center',
   fontSize: 'clamp(0.9rem, 1.2vw, 1.3rem)',
   lineHeight: 1.4,
-  fontFamily: 'Roboto, sans-serif',
+  fontFamily: 'proxima-nova, Arial, sans-serif',
   fontWeight: 600,
   wordWrap: 'break-word',
   overflowWrap: 'break-word',
@@ -175,7 +210,7 @@ const buttonBarStyle: CSSProperties = {
 
 export default function NewslettersPage() {
   return (
-    <div className="w-full bg-white text-black" style={{ overflowX: 'hidden' }}>
+    <div className="w-full" style={{ backgroundColor: '#DFE2E5',  overflowX: 'hidden' }}>
       <HeadingIntroBanner
         title="News"
         backgroundImage="/images/Headers/NewsPages.jpeg"
@@ -184,32 +219,32 @@ export default function NewslettersPage() {
       />
 
       {/* Section headers */}
-      <section className="w-full bg-[#3d3d3d] text-white" style={{ overflowX: 'hidden' }}>
+      <section className="w-full text-white" style={{ backgroundColor: '#DFE2E5',  color: '#35363B', overflowX: 'hidden' }}>
         <div className="flex w-full" style={{ maxWidth: '100%' }}>
           <div className="w-1/2 text-center" style={{ height: '14vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <h2
               className="text-white font-bold"
-              style={{ fontSize: '3vw', fontFamily: 'Roboto, sans-serif' }}
+              style={{ fontSize: '3vw', fontFamily: 'proxima-nova, Arial, sans-serif' }}
             >
-              <strong>Newsletters</strong>
+              <>Newsletters</>
             </h2>
           </div>
           <div className="w-1/2 text-center" style={{ height: '14vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <h2
               className="text-white font-bold"
-              style={{ fontSize: '3vw', fontFamily: 'Roboto, sans-serif' }}
+              style={{ fontSize: '3vw', fontFamily: 'proxima-nova, Arial, sans-serif' }}
             >
-              <strong>APC in the News</strong>
+              <>APC in the News</>
             </h2>
           </div>
         </div>
       </section>
 
       {/* Main content */}
-      <section className="w-full bg-[#9e1b32]" style={{ overflowX: 'hidden' }}>
+      <section className="w-full" style={{ backgroundColor: '#DFE2E5', overflowX: 'hidden' }}>
         <div className="flex w-full" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
           {/* Left column - newsletters */}
-          <div className="w-1/2 text-black" style={{ marginLeft: '-30px', backgroundColor: 'white', paddingLeft: '30px', paddingRight: '30px' }}>
+          <div className="w-1/2" style={{backgroundColor: '#DFE2E5', paddingLeft: ua.space[4], paddingRight: ua.space[4], paddingBottom: ua.space[4],}}>
             {newsletterEntries.map((entry) => (
               <div
                 key={entry.title}
@@ -246,22 +281,14 @@ export default function NewslettersPage() {
                       )}
                     </div>
                   </div>
-                  <hr
-                    style={{
-                      width: '97%',
-                      color: '#000',
-                      height: '1px',
-                      backgroundColor: '#000',
-                      marginTop: '24px',
-                      marginBottom: 0
-                    }}
-                  />
+                  
+                  
                 </div>
               ))}
           </div>
 
           {/* Right column - news articles */}
-          <div className="w-1/2 bg-[#9e1b32] flex flex-col" style={{ paddingLeft: '30px', paddingRight: '30px' }}>
+          <div className="w-1/2 flex flex-col" style={{ backgroundColor: '#DFE2E5', paddingLeft: ua.space[4], paddingRight: ua.space[4] }}>
             {newsArticles.slice(0, newsletterEntries.length).map((article) => (
               <div 
                 key={article.title} 
