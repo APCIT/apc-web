@@ -432,7 +432,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
               <Link
                 href="/Account/Login"
                 id="loginLink"
-                className="nav-link block px-[15px] py-[8px] font-normal text-white hover:text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white"
+                className="nav-link block whitespace-nowrap px-[15px] py-[8px] font-normal text-white hover:text-white/80 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white"
                 style={{ color: "white", fontSize: "1rem", lineHeight: "50px", fontWeight: "300" }}
               >
                 Log In
