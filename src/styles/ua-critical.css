@@ -1,0 +1,134 @@
+/* =================================================================
+/* University of Alabama
+/* Minerva 1.4.1-dev
+================================================================= */
+@import 'https://use.typekit.net/ivh1kiq.css';
+/* =================================================================
+/* SECTION Brand UI
+================================================================= */
+/* =================================================================
+/* SECTION Brand Bar
+================================================================= */
+.ua_minerva .ua_brand-bar {
+  font-size: var(--ua_font-size--small, 1rem);
+  line-height: var(--ua_line-height--small, 1.5rem);
+  color: white;
+  background: #9e1b32;
+}
+
+.ua_minerva .ua_brand-bar_content {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--ua_layout-width--wide, calc(var(--ua_layout-width--content, 58rem) + var(--ua_layout-width--sidebar, 18rem) + var(--ua_space--gutter, 1rem)));
+  margin: auto;
+}
+
+.ua_minerva .ua_brand-bar_logo {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  position: relative;
+  width: 20rem;
+  max-width: 100%;
+  padding: var(--ua_space--2, 1rem);
+}
+
+.ua_minerva .ua_brand-bar_logo img {
+  width: 100%;
+}
+
+.ua_minerva a.ua_brand-bar_logo:hover,
+.ua_minerva a.ua_brand-bar_logo:focus,
+.ua_minerva a.ua_brand-bar_link:hover,
+.ua_minerva a.ua_brand-bar_link:focus {
+  background-color: colorRef("primary", "600");
+}
+
+.ua_minerva .ua_brand-bar_link {
+  font-weight: var(--ua_weight--bold, 700);
+  color: white;
+  text-decoration: none;
+  padding: var(--ua_space--2, 1rem);
+}
+
+/* !SECTION Brand Bar */
+/* =================================================================
+/* SECTION Brand Footer
+================================================================= */
+.ua_minerva .ua_brand-footer {
+  color: white;
+  background: #9e1b32;
+  font-size: var(--ua_font-size--xsmall, 0.75rem);
+  line-height: var(--ua_line-height--xsmall, 1rem);
+}
+
+.ua_minerva .ua_brand-footer a[href] {
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-decoration: none;
+  padding: 0.75em 0;
+  font-weight: var(--ua_weight--semibold, 600);
+}
+
+.ua_minerva .ua_brand-footer a[href]:hover,
+.ua_minerva .ua_brand-footer a[href]:focus {
+  color: white;
+  text-decoration: underline;
+}
+
+.ua_minerva .ua_brand-footer ol,
+.ua_minerva .ua_brand-footer ul,
+.ua_minerva .ua_brand-footer p {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ua_minerva .ua_brand-footer_content {
+  box-sizing: border-box;
+  max-width: var(--ua_layout-width--wide, calc(var(--ua_layout-width--content, 58rem) + var(--ua_layout-width--sidebar, 18rem) + var(--ua_space--gutter, 1rem)));
+  padding: var(--ua_space--2, 1rem);
+  row-gap: var(--ua_space--grid-gap, 2rem);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: auto;
+}
+
+.ua_minerva .ua_brand-footer_logo-copyright,
+.ua_minerva .ua_brand-footer_link-list {
+  display: flex;
+  column-gap: var(--ua_space--2, 1rem);
+}
+
+.ua_minerva .ua_brand-footer_link-list {
+  flex-wrap: wrap;
+}
+
+.ua_minerva .ua_brand-footer_logo-copyright span {
+  display: block;
+}
+
+.ua_minerva .ua_brand-footer .ua_brand-footer_logo-copyright img {
+  max-height: 4.5em;
+  max-width: 4.5em;
+  margin: 0;
+}
+
+@media (max-width: 400px) {
+  .ua_minerva .ua_brand-footer_logo-copyright a {
+    display: block;
+  }
+  .ua_minerva .ua_brand-footer .ua_brand-footer_logo-copyright img {
+    max-height: 5.5em;
+    max-width: 5.5em;
+  }
+}
+/* !SECTION Brand Footer */
+/* !SECTION Brand UI */

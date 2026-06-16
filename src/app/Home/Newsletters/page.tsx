@@ -162,7 +162,7 @@ const newsletterRowStyle: CSSProperties = {
   marginTop: ua.space[2],
   marginBottom: ua.space[2],
   maxWidth: '95%',
-  margin: '0 auto',
+  margin: '0 auto 0.75rem auto',
 };
 
 const buttonSectionStyle: CSSProperties = {
@@ -240,11 +240,42 @@ export default function NewslettersPage() {
         </div>
       </section>
 
+            {/* Newsletter Signup CTA */}
+      <section
+        className="w-full"
+        style={{
+          backgroundColor: '#DFE2E5',
+          paddingBottom: '2rem',
+          textAlign: 'center'
+        }}
+      >
+        <a
+          href="https://app.e2ma.net/app2/audience/signup/2096667/2062159/"
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display: 'inline-block',
+            backgroundColor: '#9E1B32',
+            color: '#FFFFFF',
+            padding: '0.85rem 1.75rem',
+            borderRadius: '999px',
+            fontFamily: 'proxima-nova, Arial, sans-serif',
+            fontSize: '1.1rem',
+            fontWeight: 700,
+            textDecoration: 'none',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          Sign Up for Our Newsletter!
+        </a>
+      </section>
+
       {/* Main content */}
       <section className="w-full" style={{ backgroundColor: '#DFE2E5', overflowX: 'hidden' }}>
         <div className="flex w-full" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
           {/* Left column - newsletters */}
-          <div className="w-1/2" style={{backgroundColor: '#DFE2E5', paddingLeft: ua.space[4], paddingRight: ua.space[4], paddingBottom: ua.space[4],}}>
+          <div className="w-1/2" style={{backgroundColor: '#DFE2E5', paddingLeft: ua.space[4], paddingRight: ua.space[4], paddingBottom: ua.space[4] }}>
             {newsletterEntries.map((entry) => (
               <div
                 key={entry.title}
