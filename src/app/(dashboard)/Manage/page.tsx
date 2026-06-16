@@ -143,7 +143,6 @@ export default function ManagePage() {
             <div className="pl-4 flex flex-col gap-1 mb-8">
               <Link href="/Manage/InternContact" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]">Intern Help Request</Link>
               <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Intern-Handbook-Revision-13-01132025.docx" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Intern Handbook</a>
-              <a href="https://apcstorage.blob.core.windows.net/active-shooter-info/ActiveShooterFiles.zip" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Active Shooter Information</a>
             </div>
 
             <div style={{ height: "32px" }} aria-hidden="true" />
