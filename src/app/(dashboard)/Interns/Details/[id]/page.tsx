@@ -26,11 +26,14 @@ import {
   UPDATE_INTERN_RESUME_API,
   UPDATE_INTERN_IMPACT_CALC_API,
   UPDATE_INTERN_PRESENTATION_API,
+  GET_IMPACT_TOTALS_API,
   type InternDetailItem,
+  type ImpactTotalsResponse,
   type CompanyItem,
   type WorkScheduleEntry,
   type TimelogEntry,
 } from "@/lib/api";
+import { table } from "console";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -244,6 +247,17 @@ function formatGraduation(gradDateIso: string | null): string | undefined {
   return `${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }
 
+function formatImpactValue(value: number | string | null | undefined, isCount = false): string {
+  if (value === "" || value === null || value === undefined) return "—";
+  const num = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(num)) return String(value);
+  if (isCount) return String(num);
+  return `$${num.toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
 /** Address line from street, apt, city, state, zip. */
 function formatAddress(i: InternDetailItem): string | undefined {
   if (!i.street?.trim()) return undefined;
@@ -315,7 +329,7 @@ export default function InternDetailsPage() {
   const [updateImpactCalcError, setUpdateImpactCalcError] = useState<string | null>(null);
   const [updateImpactCalcSelectedFileName, setUpdateImpactCalcSelectedFileName] = useState<string | null>(null);
   const impactCalcFileInputRef = useRef<HTMLInputElement>(null);
-
+  const [impactTotals, setImpactTotals] = useState<ImpactTotalsResponse | null>(null);
   const updatePresentationDisclosure = useDisclosure();
   const [updatePresentationLoading, setUpdatePresentationLoading] = useState(false);
   const [updatePresentationError, setUpdatePresentationError] = useState<string | null>(null);
@@ -389,6 +403,16 @@ export default function InternDetailsPage() {
   useEffect(() => {
     fetchDetail();
   }, [fetchDetail]);
+
+  useEffect(() => {
+  if (!id) return;
+
+  GET_IMPACT_TOTALS_API(id).then((res) => {
+    if (res.ok) {
+      setImpactTotals(res.data);
+    }
+  });
+}, [id]);
 
   useEffect(() => {
     GET_COMPANIES_API().then((res) => {
@@ -1338,6 +1362,30 @@ export default function InternDetailsPage() {
                       </tbody>
                     </table>
                   </div>
+                </AccordionItem>
+                <AccordionItem
+
+        key="impactTotals"
+        aria-label="Impact Totals"
+        title="Impact Totals"
+        HeadingComponent="div"
+>
+          <div className="p-0">
+            <table className="w-full border-collapse font-roboto text-sm">
+              <tbody>
+                <TableRow label="Increased Sales" value={formatImpactValue(impactTotals?.increasedSales)} skeleton={showSkeleton} />
+                <TableRow label="Retained Sales" value={formatImpactValue(impactTotals?.retainedSales)} skeleton={showSkeleton} />
+                <TableRow label="Jobs Created" value={formatImpactValue(impactTotals?.jobsCreated)} skeleton={showSkeleton} />
+                <TableRow label="# Jobs Created" value={formatImpactValue(impactTotals?.numberJobsCreated, true)} skeleton={showSkeleton} />
+                <TableRow label="Jobs Retained" value={formatImpactValue(impactTotals?.jobsRetained)} skeleton={showSkeleton} />
+                <TableRow label="# Jobs Retained" value={formatImpactValue(impactTotals?.numberJobsRetained, true)} skeleton={showSkeleton} />
+                <TableRow label="Gov't Fines" value={formatImpactValue(impactTotals?.costAvoidanceGovtFines)} skeleton={showSkeleton} />
+                <TableRow label="Time Cost Reduction" value={formatImpactValue(impactTotals?.timeCostReduction)} skeleton={showSkeleton} />
+                <TableRow label="Investments" value={formatImpactValue(impactTotals?.investments)} skeleton={showSkeleton} />
+                <TableRow label="Avoided Investments" value={formatImpactValue(impactTotals?.avoidedInvestments)} skeleton={showSkeleton} />
+                </tbody>
+                </table>
+                </div>
                 </AccordionItem>
               </Accordion>
             </div>

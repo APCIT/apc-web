@@ -175,6 +175,7 @@ export default function ManagePage() {
             <AccordionItem key="2" aria-label="Intern's Required Reports" title="Intern's Required Reports" HeadingComponent="div">
               <div className="flex flex-col gap-3">
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Impact_Calculator_10312025.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">Impact Calculator</a>
+                <Link href="/Manage/ImpactTotals" className="manage-link">Impact Totals Submission</Link>
                 <a href="https://apcstorage.blob.core.windows.net/intern-reports/Impacts-Intern-Perspective.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Helpful Powerpoint for completing the Impact Calculator</a>
                 <a href="https://apcstorage.blob.core.windows.net/intern-reports/Sample%20Presentation.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Sample Presentation</a>
               </div>

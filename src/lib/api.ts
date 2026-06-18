@@ -34,6 +34,7 @@ export const API = {
   internsWorkSchedule: `${base}/api/interns/work-schedule`,
   internsWorkScheduleUpdate: `${base}/api/interns/work-schedule/update`,
   internsTodoList: `${base}/api/interns/todo-list`,
+  internImpactTotals: `${base}/api/interns/impact-totals`,
   archiveExportInternSchedules: `${base}/api/archive/export-intern-schedules`,
   archiveExportInternTimesheet: `${base}/api/archive/export-intern-timesheet`,
   time: `${base}/api/time`,
@@ -2069,5 +2070,74 @@ export async function UPDATE_USER_ROLES_API(
       status: res.status,
     };
   }
+  return { ok: true };
+}
+
+export type ImpactTotalsResponse = {
+  increasedSales: number | string;
+  retainedSales: number | string;
+  jobsCreated: number | string;
+  numberJobsCreated: number | string;
+  jobsRetained: number | string;
+  numberJobsRetained: number | string;
+  costAvoidanceGovtFines: number | string;
+  timeCostReduction: number | string;
+  investments: number | string;
+  avoidedInvestments: number | string;
+};
+
+export async function GET_IMPACT_TOTALS_API(
+  internId: string
+): Promise<
+  | { ok: true; data: ImpactTotalsResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(
+    `${API.interns}/${encodeURIComponent(internId)}/impact-totals`,
+    {
+      ...defaultFetchOptions,
+      method: "GET",
+    }
+  );
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to load impact totals",
+      status: res.status,
+    };
+  }
+
+  return { ok: true, data: data as ImpactTotalsResponse };
+}
+
+export async function SAVE_IMPACT_TOTALS_API(
+  internId: string,
+  body: ImpactTotalsResponse
+): Promise<
+  | { ok: true }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(
+    `${API.interns}/${encodeURIComponent(internId)}/impact-totals`,
+    {
+      ...defaultFetchOptions,
+      method: "POST",
+      body: JSON.stringify(body),
+    }
+  );
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to save impact totals",
+      status: res.status,
+    };
+  }
+
   return { ok: true };
 }

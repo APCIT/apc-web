@@ -52,12 +52,12 @@ model Applicants {
   Skills              String?  @default("", map: "DF__Applicant__Skill__3FD07829") @db.NVarChar(Max)
   PrevIntern          Boolean  @default(false, map: "DF__Applicant__PrevI__52E34C9D")
   Note                String?  @db.NVarChar(Max)
-  ValidEmp            Boolean  @default(false)
   Preference          String?  @db.NVarChar(Max)
   BlueSprings         Boolean  @default(false, map: "DF__Applicant__BlueS__6B79F03D")
   HearAboutUs         String?  @db.NVarChar(Max)
   AnnistonGadsden     Boolean  @default(false, map: "DF_Applicants_AnnistonGadsden")
   Dothan              Boolean  @default(false, map: "DF_Applicants_Dothan")
+  ValidEmp            Boolean  @default(false)
 }
 
 model Archives {
@@ -191,6 +191,7 @@ model Interns {
   AspNetUsers         AspNetUsers     @relation(fields: [Id], references: [Id], onUpdate: NoAction, map: "FK_dbo.Interns_dbo.AspNetUsers_Id")
   Timelogs            Timelogs[]
   WorkSchedules       WorkSchedules[]
+  ImpactTotals        ImpactTotals?
 
   @@index([Id], map: "IX_Id")
 }
@@ -292,4 +293,25 @@ model PastTimelogs {
   PastInterns  PastInterns @relation(fields: [PastInternId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_dbo.PastTimelogs_dbo.PastInterns_PastInternId")
 
   @@index([PastInternId], map: "IX_PastInternId")
+}
+
+model ImpactTotals {
+  Id       String @id @default(cuid()) @db.NVarChar(128)
+  InternId String @unique @db.NVarChar(128)
+
+  IncreasedSales         Float?
+  RetainedSales          Float?
+  JobsCreated            Float?
+  NumberJobsCreated      Int?
+  JobsRetained           Float?
+  NumberJobsRetained     Int?
+  CostAvoidanceGovtFines Float?
+  TimeCostReduction      Float?
+  Investments            Float?
+  AvoidedInvestments     Float?
+  UpdatedAt              DateTime @updatedAt @db.DateTime
+
+  Interns Interns @relation(fields: [InternId], references: [Id])
+
+  @@index([InternId])
 }
