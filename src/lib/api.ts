@@ -29,6 +29,7 @@ export const API = {
   archiveExportInternHours: `${base}/api/archive/export-intern-hours`,
   archiveExportWeeklyHours: `${base}/api/archive/export-weekly-hours`,
   archiveExportInternsWithoutReports: `${base}/api/archive/export-interns-without-reports`,
+  archiveExportImpactTotals: `${base}/api/archive/export-impact-totals`,
   internsWithoutReports: `${base}/api/interns/without-reports`,
   internsWorkSchedules: `${base}/api/interns/work-schedules`,
   internsWorkSchedule: `${base}/api/interns/work-schedule`,

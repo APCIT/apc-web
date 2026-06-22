@@ -511,7 +511,7 @@ export default function InternsPage() {
           </table>
         </div>
 
-        <div
+              <div
           className="flex flex-wrap"
           style={{ marginTop: "32px", gap: "24px" }}
         >
@@ -523,17 +523,7 @@ export default function InternsPage() {
             style={{ textDecoration: "none" }}
           >
             <span className="inline-flex items-center justify-center mr-[8px]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#333333"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M7 18a4 4 0 0 1 0-8h.5A5.5 5.5 0 0 1 19 11a3.5 3.5 0 0 1-1 6.9H14" />
                 <path d="M12 10v9" />
                 <path d="M9.5 15.5 12 18l2.5-2.5" />
@@ -541,6 +531,7 @@ export default function InternsPage() {
             </span>
             <span>Intern Profile Data</span>
           </a>
+
           <a
             href={API.archiveExportInternHours}
             target="_blank"
@@ -549,17 +540,7 @@ export default function InternsPage() {
             style={{ textDecoration: "none" }}
           >
             <span className="inline-flex items-center justify-center mr-[8px]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#333333"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M7 18a4 4 0 0 1 0-8h.5A5.5 5.5 0 0 1 19 11a3.5 3.5 0 0 1-1 6.9H14" />
                 <path d="M12 10v9" />
                 <path d="M9.5 15.5 12 18l2.5-2.5" />
@@ -567,6 +548,7 @@ export default function InternsPage() {
             </span>
             <span>Semester Timelogs</span>
           </a>
+
           <a
             href={API.archiveExportWeeklyHours}
             target="_blank"
@@ -575,17 +557,7 @@ export default function InternsPage() {
             style={{ textDecoration: "none" }}
           >
             <span className="inline-flex items-center justify-center mr-[8px]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#333333"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M7 18a4 4 0 0 1 0-8h.5A5.5 5.5 0 0 1 19 11a3.5 3.5 0 0 1-1 6.9H14" />
                 <path d="M12 10v9" />
                 <path d="M9.5 15.5 12 18l2.5-2.5" />
@@ -593,6 +565,24 @@ export default function InternsPage() {
             </span>
             <span>Payroll Time Logs</span>
           </a>
+
+          <a
+            href={API.archiveExportImpactTotals}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline"
+            style={{ textDecoration: "none" }}
+          >
+            <span className="inline-flex items-center justify-center mr-[8px]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 18a4 4 0 0 1 0-8h.5A5.5 5.5 0 0 1 19 11a3.5 3.5 0 0 1-1 6.9H14" />
+                <path d="M12 10v9" />
+                <path d="M9.5 15.5 12 18l2.5-2.5" />
+              </svg>
+            </span>
+            <span>Export Impact Totals</span>
+          </a>
+
           {canAccessInternsReports && (
             <Link
               href="/Interns/Reports"
@@ -600,17 +590,7 @@ export default function InternsPage() {
               style={{ textDecoration: "none" }}
             >
               <span className="inline-flex items-center justify-center mr-[8px]">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#333333"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 3 3 20h18L12 3z" />
                   <path d="M12 9v5" />
                   <path d="M12 17.5h.01" />
