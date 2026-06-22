@@ -566,7 +566,7 @@ export default function InternsPage() {
             <span>Payroll Time Logs</span>
           </a>
 
-          <a
+          {/* <a
             href={API.archiveExportImpactTotals}
             target="_blank"
             rel="noopener noreferrer"
@@ -581,7 +581,7 @@ export default function InternsPage() {
               </svg>
             </span>
             <span>Export Impact Totals</span>
-          </a>
+          </a>  */}
 
           {canAccessInternsReports && (
             <Link
