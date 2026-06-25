@@ -1,5 +1,4 @@
 import HeadingIntroBanner from "@/components/HeadingIntroBanner";
-import Image from "next/image";
 
 const staff = [
   {
@@ -49,27 +48,27 @@ const socialLinks = [
   {
     name: "LinkedIn",
     href: "https://www.linkedin.com/company/alabamapc",
-    icon: "/images/icons/linkedin-brands-solid.png",
+    icon: "/images/Icons/linkedin-brands-solid.png",
   },
   {
     name: "Facebook",
     href: "https://www.facebook.com/uaapc/",
-    icon: "/images/icons/facebook-brands-solid.png",
+    icon: "/images/Icons/facebook-brands-solid.png",
   },
   {
     name: "Instagram",
     href: "https://www.instagram.com/apc_uofa/",
-    icon: "/images/icons/instagram-brands-solid.png",
+    icon: "/images/Icons/instagram-brands-solid.png",
   },
   {
     name: "YouTube",
     href: "https://www.youtube.com/channel/UCz79rexgXksseSAp2s9tQgw",
-    icon: "/images/icons/youtube-brands-solid.png",
+    icon: "/images/Icons/youtube-brands-solid.png",
   },
   {
     name: "Newsletters",
     href: "https://signup.e2ma.net/signup/2096667/2062159/",
-    icon: "/images/icons/envelope-solid.png",
+    icon: "/images/Icons/envelope-solid.png",
   },
 ];
 
@@ -231,12 +230,16 @@ export default function Page() {
             flexShrink: 0,
             }}
             >
-          <Image
-            src={link.icon}
-            alt={link.name}
-            width={28}
-            height={28}
-            />
+            <img
+              src={link.icon}
+              alt={link.name}
+              style={{
+                width: "28px",
+                height: "28px",
+                objectFit: "contain",
+                display: "block",
+            }}
+          />
           </div>
 
           <span>
