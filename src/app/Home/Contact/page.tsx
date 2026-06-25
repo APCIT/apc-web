@@ -89,7 +89,7 @@ export default function Page() {
     <main style={{ backgroundColor: "#FFFFFF", color: "FFFFFF",  fontFamily: "proxima-nova, sans-serif",}}>
       <HeadingIntroBanner
         title="Contact Us"
-        backgroundImage="/images/Contact_Banner.jpg"
+        backgroundImage="/images/Contact-Banner.JPG"
         backgroundPosition="center"
       />
 
