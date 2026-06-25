@@ -29,8 +29,8 @@ export default function HeadingIntroBanner({
         style={{
           fontSize: 'clamp(2.5em, 8vw, 6.5em)',
           lineHeight: '1.2',
-          fontFamily: 'Roboto, sans-serif',
-          fontWeight: '400'
+          fontFamily: 'proxima-nova, sans-serif',
+          fontWeight: '500',
         }}
       >
         <strong>{title}</strong>

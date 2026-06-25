@@ -365,14 +365,13 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
           <NavItem href="/Home/Locations">Locations</NavItem>
           <NavItem href="/Home/Newsletters">News</NavItem>
           <li className="leading-none list-none">
-            <a
-              href="#contact"
-              onClick={handleContactClick}
+          <Link
+              href="/Home/Contact"
               className="nav-link flex flex-col items-center justify-center rounded px-[15px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white cursor-pointer"
-              style={{color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '400'}}
-            >
-              Contact
-            </a>
+              style={{ color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '300' }}
+              >
+            Contact
+        </Link>
           </li>
         </ul>
         <ul className="navbar-desktop-login flex items-center list-none mr-[5px]" style={{fontFamily: 'var(--font-sans)', marginTop: '0.5%'}}>

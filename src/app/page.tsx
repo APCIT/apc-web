@@ -151,7 +151,6 @@ export default function Home() {
         style={{ height: '64px' }}
         aria-hidden
       />
-      <Footer />
     </div>
   );
 }

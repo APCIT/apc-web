@@ -1,67 +1,50 @@
-import React from 'react';
+import React from "react";
 
 const PartnerFooter: React.FC = () => {
-  const partners = [
-    {
-      name: 'Alabama Workforce Training Center',
-      logo: '/images/BottomBar/aidt.png',
-      url: 'http://www.awtc.aidt.edu/'
-    },
-    {
-      name: 'Manufacturing Extension Partnership',
-      logo: '/images/BottomBar/mep.png',
-      url: 'http://www.nist.gov/mep/'
-    },
-    {
-      name: 'Alabama Industrial Development Training',
-      logo: '/images/BottomBar/aidt-logoTrans.png',
-      url: 'http://www.aidt.edu/'
-    },
-    {
-      name: 'Alabama Aviation Training Center',
-      logo: '/images/BottomBar/AviationTrans.png',
-      url: 'http://www.aidt.edu/team/alabama-aviation-training-center-airbus/'
-    },
-    {
-      name: 'Alabama Technology Network',
-      logo: '/images/BottomBar/atn-logo3.png',
-      url: 'http://www.atn.org/'
-    },
-    {
-      name: 'University of Alabama',
-      logo: '/images/BottomBar/ua.png',
-      url: 'http://www.ua.edu'
-    },
-    {
-      name: 'University of Alabama System',
-      logo: '/images/BottomBar/UAS-AlignLogo-Stack-Black-RGB.png',
-      url: 'https://uasystem.edu/'
-    }
-  ];
-
   return (
-    <footer className="partner-footer">
-      <br />
-      <div className="partner-logos">
-        {partners.map((partner) => (
-          <a
-            key={partner.name}
-            href={partner.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="partner-link"
-          >
+    <div className="ua_minerva">
+      <section className="ua_brand-footer">
+        <div className="ua_brand-footer_content">
+          <div className="ua_brand-footer_logo-copyright">
             <img
-              src={partner.logo}
-              alt={partner.name}
-              className="footer-icon"
+              src="https://assetfiles.ua.edu/brand/logos/Capstone_A-White.svg"
+              alt="The University of Alabama Logo"
             />
-          </a>
-        ))}
-      </div>
-    </footer>
-  ); 
+            <p>
+              <span>
+                <a href="https://www.ua.edu/copyright">Copyright © 2026</a>{" "}
+                <a href="https://www.ua.edu">The University of Alabama</a>
+              </span>
+              <span>Alabama Productivity Center</span>
+              <span>
+                <a href="tel:+12053488956">(205) 348-8956</a>
+              </span>
+              <span>
+                <a href="mailto:culverhouse-apcstaff@ua.edu">
+                  culverhouse-apcstaff@ua.edu
+                </a>
+              </span>
+            </p>
+          </div>
+
+          <nav aria-label="Footer Links">
+            <ul className="ua_brand-footer_link-list">
+              <li><a href="http://www.awtc.aidt.edu/">AWTC</a></li>
+              <li><a href="http://www.nist.gov/mep/">MEP</a></li>
+              <li><a href="http://www.aidt.edu/">AIDT</a></li>
+              <li><a href="http://www.atn.org/">ATN</a></li>
+              <li><a href="https://uasystem.edu/">UA System</a></li>
+              <li><a href="https://accessibility.ua.edu/statement/">Accessibility</a></li>
+              <li><a href="https://oie.ua.edu/accreditation">SACSCOC</a></li>
+              <li><a href="http://eop.ua.edu/">Equal Opportunity</a></li>
+              <li><a href="https://www.ua.edu/disclaimer">Disclaimer</a></li>
+              <li><a href="https://www.ua.edu/privacy">Privacy</a></li>
+            </ul>
+          </nav>
+        </div>
+      </section>
+    </div>
+  );
 };
 
 export default PartnerFooter;
-
