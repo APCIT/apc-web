@@ -86,7 +86,7 @@ const border = "#DFE2E5";
 
 export default function Page() {
   return (
-    <main style={{ backgroundColor: "#FFFFFF", color: "FFFFFF",  fontFamily: "proxima-nova, sans-serif",}}>
+    <main style={{ backgroundColor: "#FFFFFF", color: "white",  fontFamily: "proxima-nova, sans-serif",}}>
       <HeadingIntroBanner
         title="Contact Us"
         backgroundImage="/images/Contact-Banner.JPG"
@@ -123,18 +123,19 @@ export default function Page() {
 >
     <article
       style={{
-        backgroundColor: "#F2F3F4",
-        border: `4px solid ${crimson}`,
-        borderRadius: "32px",
+        backgroundColor: "#FFFFFF",
+        border: "1px solid #DFE2E5",
+        borderRadius: "12px",
+        color: "#FFFFFF",
         padding: "2rem",
         textAlign: "center",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+        boxShadow: "0 12px 28px rgba(0,0,0,.14)",
       }}
     >
-      <h3 style={{ color: text, fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>
+      <h3 style={{ color: '#212124', fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>
         Visit Us
       </h3>
-      <p style={{ color: textAlt, lineHeight: "1.7rem" }}>
+      <p style={{ color: '#4A4C54', lineHeight: "1.7rem" }}>
         2008 12th Street<br />
         Tuscaloosa, AL 35401
       </p>
@@ -142,36 +143,36 @@ export default function Page() {
 
     <article
       style={{
-        backgroundColor: "#F2F3F4",
-        border: `4px solid ${crimson}`,
-        borderRadius: "32px",
+        backgroundColor: "#FFFFFF",
+        border: "1px solid #DFE2E5",
+        borderRadius: "12px",
         padding: "2rem",
         textAlign: "center",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+        boxShadow: "0 12px 28px rgba(0,0,0,.14)",
       }}
     >
-      <h3 style={{ color: text, fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>
+      <h3 style={{ color: '#212124', fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>
         Call Us
       </h3>
-      <a href="tel:+12053488956" style={{ color: crimson, fontWeight: 600, textDecoration: "underline" }}>
+      <a href="tel:+12053488956" style={{ color: '#9E1B32', fontWeight: 600, textDecoration: "underline" }}>
         (205) 348-8956
       </a>
     </article>
 
     <article
       style={{
-        backgroundColor: "#F2F3F4",
-        border: `4px solid ${crimson}`,
-        borderRadius: "32px",
+        backgroundColor: "#FFFFFF",
+        border: "1px solid #DFE2E5",
+        borderRadius: "12px",
         padding: "2rem",
         textAlign: "center",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+        boxShadow: "0 12px 28px rgba(0,0,0,.14)",
       }}
     >
-      <h3 style={{ color: text, fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>
+      <h3 style={{ color: '#212124', fontSize: "1.5rem", fontWeight: 600, marginBottom: "1rem" }}>
         Email Us
       </h3>
-      <a href="mailto:culverhouse-apcstaff@ua.edu" style={{ color: crimson, fontWeight: 600, textDecoration: "underline" }}>
+      <a href="mailto:culverhouse-apcstaff@ua.edu" style={{ color: '#9E1B32', fontWeight: 600, textDecoration: "underline" }}>
         culverhouse-apcstaff@ua.edu
       </a>
     </article>
@@ -183,7 +184,8 @@ export default function Page() {
       backgroundColor: crimson,
       color: "#FFFFFF",
       padding: "2rem",
-      borderRadius: "6px",
+      borderRadius: "20px",
+      boxShadow: "0 12px 28px rgba(0,0,0,.12)",
     }}
   >
     <h2
@@ -259,10 +261,10 @@ export default function Page() {
   </aside>
 </section>
 
-      <section
+<section
   style={{
     backgroundColor: "#F2F3F4",
-    padding: "4rem 1.5rem",
+    padding: "5rem 1.5rem",
   }}
 >
   <div
@@ -277,14 +279,23 @@ export default function Page() {
         fontSize: "2.25rem",
         fontWeight: 600,
         marginBottom: "0.5rem",
+        textAlign: 'center'
       }}
     >
       Staff Contacts
     </h2>
 
+      <div
+        style={{
+          width: "70px",
+          height: "4px",
+          backgroundColor: crimson,
+          margin: "0 auto 3rem",
+        }}
+      />
     <p
       style={{
-        color: textAlt,
+        color: 'FFFFFF',
         maxWidth: "48rem",
         lineHeight: "1.75rem",
         marginBottom: "2rem",
@@ -296,23 +307,24 @@ export default function Page() {
       style={{
         display: "grid",
         gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-        gap: "1.5rem",
+        gap: "2.25rem",
       }}
     >
       {staff.flatMap((group) => group.people).map((person) => (
         <article
           key={person.email}
           style={{
-            backgroundColor: "#FFFFFF",
-            border: `4px solid ${crimson}`,
-            borderRadius: "32px",
+            backgroundColor: "#2B2C31",
+            border: "1px solid #35363B",
+            borderRadius: "18px",
             padding: "1.75rem",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+            boxShadow: "0 12px 28px rgba(0,0,0,.14)",
+            transition: "transform .2s ease, box-shadow .2s ease",
           }}
         >
           <h3
             style={{
-              color: text,
+              color: 'FFFFFF',
               fontSize: "1.35rem",
               fontWeight: 600,
               marginBottom: "0.25rem",
@@ -323,19 +335,19 @@ export default function Page() {
 
           <p
             style={{
-              color: subtle,
+              color: '#DFE2E5',
               marginBottom: "1.25rem",
               lineHeight: "1.5rem",
             }}
           >
             {person.title}
           </p>
-
+            
           <a
             href={`mailto:${person.email}`}
             style={{
               display: "block",
-              color: crimson,
+              color: "#E87C90",
               textDecoration: "underline",
               marginBottom: "0.5rem",
             }}
@@ -347,7 +359,7 @@ export default function Page() {
             href={telHref(person.phone)}
             style={{
               display: "block",
-              color: crimson,
+              color: "#E87C90",
               textDecoration: "underline",
             }}
           >
