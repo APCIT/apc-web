@@ -597,35 +597,33 @@ textarea.form-control {
   background-color: transparent !important;
 }
 
-/* Service-specific background colors */
+/* Service Details Accordion Headers */
+.service-qualityLoc,
 .service-qualityLoc [data-slot="base"],
-.service-qualityLoc {
-  background-color: #022e69 !important;
-}
-
+.service-leanLoc,
 .service-leanLoc [data-slot="base"],
-.service-leanLoc {
-  background-color: #3d3d3d !important;
-}
-
+.service-industry_toolsLoc,
 .service-industry_toolsLoc [data-slot="base"],
-.service-industry_toolsLoc {
-  background-color: #9E1B32 !important;
-}
-
+.service-technologyLoc,
 .service-technologyLoc [data-slot="base"],
-.service-technologyLoc {
-  background-color: #f6c80d !important;
-}
-
+.service-designLoc,
 .service-designLoc [data-slot="base"],
-.service-designLoc {
-  background-color: #9E1B32 !important;
+.service-leadershipLoc,
+.service-leadershipLoc [data-slot="base"] {
+  background-color: #212124 !important;
 }
 
-.service-leadershipLoc [data-slot="base"],
-.service-leadershipLoc {
-  background-color: #022e69 !important;
+.serviceDetailsRow {
+  max-width: 1232px;
+  margin: 0 auto 1rem !important;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #35363B !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+
+.serviceDetailsRow:first-of-type {
+  margin-top: 2rem !important;
 }
 
 /* Statistics Counter Responsive Layout */
@@ -2177,4 +2175,152 @@ header nav button {
 
 .dropdown-item:hover {
   color: #9e1b32 !important;
+}
+
+.services-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ua_space--grid-gap, 2rem);
+}
+
+.service-card {
+  background-color: #212124;
+  color: white;
+  min-height: 220px;
+  padding: 2.5rem 2rem;
+  border: 1px solid #5F646D;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.service-card-line {
+  width: 80px;
+  height: 3px;
+  background-color: #9E1B32;
+  margin: 1rem auto;
+}
+
+.service-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(0,0,0,.30);
+}
+
+.service-card:hover img {
+    transform: scale(1.08);
+}
+
+@media (max-width: 900px) {
+  .services-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .services-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contact-section {
+  background-color: #F2F3F4;
+  background-image: url('/images/shattered-dark.png');
+  background-size: 25%;
+  background-position: center;
+  padding: 4rem 1rem;
+}
+
+.contact-container {
+  max-width: 928px;
+  margin: 0 auto;
+}
+
+.contact-title {
+  font-family: proxima-nova, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #212124;
+  text-align: center;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.contact-title-line {
+  width: 72px;
+  height: 4px;
+  background-color: #9E1B32;
+  margin: 1rem auto 2rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.contact-input {
+  width: 100%;
+  height: 56px;
+  padding: 0 1rem;
+  font-family: proxima-nova, sans-serif;
+  font-size: 1rem;
+  color: #212124;
+  background-color: #ffffff;
+  border: 1px solid #ACB2BA;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.contact-input:focus {
+  outline: 3px solid #F8C2CD;
+  border-color: #9E1B32;
+}
+
+.contact-textarea {
+  height: auto;
+  min-height: 140px;
+  padding: 1rem;
+  resize: vertical;
+}
+
+.contact-submit {
+  width: 100%;
+  max-width: 280px;
+  margin: 1rem auto 0;
+  background-color: #9E1B32;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 1.5rem;
+  font-family: proxima-nova, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.contact-submit:hover {
+  background-color: #821E2E;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+}
+
+@media (max-width: 700px) {
+  .contact-row {
+    flex-direction: column;
+  }
+
+  .contact-title {
+    font-size: 1.75rem;
+  }
 }
