@@ -2,7 +2,6 @@
 
 import type { CSSProperties } from 'react';
 import Link from 'next/link';
-import Script from 'next/script';
 import HeadingIntroBanner from '@/components/HeadingIntroBanner';
 
 const ua = {
@@ -142,41 +141,39 @@ const newsArticles: NewsArticle[] = [
 const newsletterTitleStyle: CSSProperties = {
   fontSize: 'clamp(1.5rem, 2vw, 2.25rem)',
   lineHeight: 1.2,
-  color: '#35363B',
+  color: '#FFFFFF',
   fontFamily: 'proxima-nova, Arial, sans-serif',
   margin: 0,
   fontWeight: 700,
 };
 
 const newsletterRowStyle: CSSProperties = {
-  backgroundColor: '#FFFFFF',
-  border: '4px solid #9E1B32',
-  borderRadius: '32px',
-  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-  padding: '28px 36px',
+  backgroundColor: '#212124',
+  border: '1px solid #35363B',
+  borderRadius: '12px',
+  boxShadow: '0 10px 24px rgba(0,0,0,.14)',
+  padding: '28px 32px',
   minHeight: '110px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   boxSizing: 'border-box',
-  marginTop: ua.space[2],
-  marginBottom: ua.space[2],
   maxWidth: '95%',
-  margin: '0 auto 0.75rem auto',
+  margin: '0 auto 1.25rem auto',
 };
 
 const buttonSectionStyle: CSSProperties = {
-  backgroundColor: '#9e1b32',
-  borderRadius: '32px',
-  padding: '0.25rem',
+  backgroundColor: '#212124',
+  border: '1px solid #35363B',
+  borderRadius: '12px',
+  boxShadow: '0 10px 24px rgba(0,0,0,.14)',
+  padding: '28px 32px',
   width: '100%',
-  maxWidth: '100%',
   boxSizing: 'border-box',
-  height: '100%',
+  minHeight: '110px',
   display: 'flex',
-  alignItems: 'stretch',
-  marginTop: ua.space[2],
-  marginBottom: ua.space[2],
+  alignItems: 'center',
+  marginBottom: '1.25rem',
 };
 
 const newsArticleContainerStyle: CSSProperties = {
@@ -189,214 +186,204 @@ const newsArticleContainerStyle: CSSProperties = {
 };
 
 const buttonBarStyle: CSSProperties = {
-  backgroundColor: '#ffffff',
-  color: '#9e1b32',
-  padding: '16px 20px',
+  color: '#E87C90',
   width: '100%',
-  borderRadius: '25px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
-  fontSize: 'clamp(0.9rem, 1.2vw, 1.3rem)',
-  lineHeight: 1.4,
+  fontSize: '1.05rem',
+  lineHeight: 1.5,
   fontFamily: 'proxima-nova, Arial, sans-serif',
-  fontWeight: 600,
-  wordWrap: 'break-word',
-  overflowWrap: 'break-word',
-  height: '100%',
-  boxSizing: 'border-box'
+  fontWeight: 700,
+  textDecoration: 'underline',
+  boxSizing: 'border-box',
 };
 
 export default function NewslettersPage() {
   return (
-    <div className="w-full" style={{ backgroundColor: '#DFE2E5',  overflowX: 'hidden' }}>
-      <HeadingIntroBanner
-        title="News"
-        backgroundImage="/images/Headers/NewsPages.jpeg"
-        backgroundPosition="bottom"
-        height="20em"
-      />
+  <div className="w-full" style={{ backgroundColor: '#F2F3F4', overflowX: 'hidden' }}>
+    <HeadingIntroBanner
+      title="News"
+      backgroundImage="/images/Headers/NewsPages.jpeg"
+      backgroundPosition="bottom"
+      height="20em"
+    />
 
-      {/* Section headers */}
-      <section className="w-full text-white" style={{ backgroundColor: '#DFE2E5',  color: '#35363B', overflowX: 'hidden' }}>
-        <div className="flex w-full" style={{ maxWidth: '100%' }}>
-          <div className="w-1/2 text-center" style={{ height: '14vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <h2
-              className="text-white font-bold"
-              style={{ fontSize: '3vw', fontFamily: 'proxima-nova, Arial, sans-serif' }}
-            >
-              <>Newsletters</>
-            </h2>
-          </div>
-          <div className="w-1/2 text-center" style={{ height: '14vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <h2
-              className="text-white font-bold"
-              style={{ fontSize: '3vw', fontFamily: 'proxima-nova, Arial, sans-serif' }}
-            >
-              <>APC in the News</>
-            </h2>
-          </div>
-        </div>
-      </section>
-
-            {/* Newsletter Signup CTA */}
-      <section
-        className="w-full"
-        style={{
-          backgroundColor: '#DFE2E5',
-          paddingBottom: '2rem',
-          textAlign: 'center'
-        }}
-      >
-        <a
-          href="https://app.e2ma.net/app2/audience/signup/2096667/2062159/"
-          target="_blank"
-          rel="noreferrer"
+    {/* Section headers */}
+    <section className="w-full" style={{ backgroundColor: '#F2F3F4', color: '#35363B', overflowX: 'hidden' }}>
+      <div className="flex w-full" style={{ maxWidth: '100%' }}>
+        <div
+          className="w-1/2 text-center"
           style={{
-            display: 'inline-block',
-            backgroundColor: '#9E1B32',
-            color: '#FFFFFF',
-            padding: '0.85rem 1.75rem',
-            borderRadius: '999px',
-            fontFamily: 'proxima-nova, Arial, sans-serif',
-            fontSize: '1.1rem',
-            fontWeight: 700,
-            textDecoration: 'none',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
-            transition: 'all 0.2s ease'
+            paddingTop: '3.5rem',
+            paddingBottom: '3rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          Sign Up for Our Newsletter!
-        </a>
-      </section>
+          <h2 style={{ fontSize: '3vw', fontFamily: 'proxima-nova, sans-serif', margin: 0 }}>
+            Newsletters
+          </h2>
 
-      {/* Main content */}
-      <section className="w-full" style={{ backgroundColor: '#DFE2E5', overflowX: 'hidden' }}>
-        <div className="flex w-full" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
-          {/* Left column - newsletters */}
-          <div className="w-1/2" style={{backgroundColor: '#DFE2E5', paddingLeft: ua.space[4], paddingRight: ua.space[4], paddingBottom: ua.space[4] }}>
-            {newsletterEntries.map((entry) => (
-              <div
-                key={entry.title}
-                className="newsletter-row"
-                style={{ 
-                  ...newsletterRowStyle, 
-                  transitionDuration: '0.6s', 
-                  backgroundColor: 'white'
-                }}
-              >
-                  <div className="flex flex-row items-center justify-between w-full">
-                    <p style={newsletterTitleStyle}>
-                      {entry.title}
-                    </p>
-                    <div className="flex justify-end">
-                      {entry.isExternal ? (
-                        <a
-                          href={entry.href}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="homepageButton boxshadowEffect"
-                          style={{ color: 'white', textDecoration: 'none' }}
-                        >
-                          {entry.cta}
-                        </a>
-                      ) : (
-                        <Link
-                          href={entry.href}
-                          className="homepageButton boxshadowEffect"
-                          style={{ color: 'white', textDecoration: 'none' }}
-                        >
-                          {entry.cta}
-                        </Link>
-                      )}
-                    </div>
-                  </div>
-                  
-                  
-                </div>
-              ))}
-          </div>
-
-          {/* Right column - news articles */}
-          <div className="w-1/2 flex flex-col" style={{ backgroundColor: '#DFE2E5', paddingLeft: ua.space[4], paddingRight: ua.space[4] }}>
-            {newsArticles.slice(0, newsletterEntries.length).map((article) => (
-              <div 
-                key={article.title} 
-                className="news-article-row"
-                style={newsArticleContainerStyle}
-              >
-                <div style={buttonSectionStyle}>
-                  <a
-                    href={article.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="button-bar"
-                    style={buttonBarStyle}
-                  >
-                    {article.title}
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter Signup Form */}
-      <section className="w-full bg-white" style={{ overflow: 'hidden', position: 'relative', zIndex: 1 }}>
-        <div className="w-full" style={{ padding: '24px', boxSizing: 'border-box', maxWidth: '100%', overflow: 'hidden' }}>
-          {/* Custom CSS for Constant Contact Form */}
-          <style dangerouslySetInnerHTML={{
-            __html: `
-              .ctct-inline-form {
-                width: 100% !important;
-                max-width: 100% !important;
-                box-sizing: border-box !important;
-                padding-right: 0 !important;
-                margin-right: 0 !important;
-              }
-              .ctct-inline-form input[type="email"],
-              .ctct-inline-form input[type="text"] {
-                width: 25% !important;
-                max-width: 25% !important;
-              }
-              .ctct-inline-form button[type="submit"],
-              .ctct-inline-form input[type="submit"] {
-                width: 100% !important;
-                max-width: 100% !important;
-              }
-              @media (max-width: 640px) {
-                .ctct-inline-form input,
-                .ctct-inline-form input[type="email"],
-                .ctct-inline-form input[type="text"] {
-                  width: 100% !important;
-                  max-width: 100% !important;
-                  min-height: 50px !important;
-                  padding: 15px !important;
-                  font-size: 16px !important;
-                  box-sizing: border-box !important;
-                }
-              }
-            `
-          }} />
-          
-          {/* Constant Contact config – run on client navigation */}
-          <Script id="ctct-config" strategy="afterInteractive">
-            {`window._ctct_m = "b6f79c47d6d4b7882fda66111f433ca1";`}
-          </Script>
-          
-          {/* Constant Contact Inline Form */}
-          <div className="ctct-inline-form" data-form-id="2769e6e6-8eee-455d-a8b5-cdb2ad3d73e3"></div>
-          
-          {/* Constant Contact Signup Form Script */}
-          <Script
-            id="signupScript"
-            src="https://static.ctctcdn.com/js/signup-form-widget/current/signup-form-widget.min.js"
-            strategy="afterInteractive"
+          <div
+            style={{
+              width: '70px',
+              height: '4px',
+              backgroundColor: '#9E1B32',
+              margin: '1rem auto 0',
+              borderRadius: '999px',
+            }}
           />
         </div>
-      </section>
-    </div>
+
+        <div
+          className="w-1/2 text-center"
+          style={{
+            paddingTop: '3.5rem',
+            paddingBottom: '3rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <h2 style={{ fontSize: '3vw', fontFamily: 'proxima-nova, sans-serif', margin: 0 }}>
+            APC in the News
+          </h2>
+
+          <div
+            style={{
+              width: '70px',
+              height: '4px',
+              backgroundColor: '#9E1B32',
+              margin: '1rem auto 0',
+              borderRadius: '999px',
+            }}
+          />
+        </div>
+      </div>
+    </section>
+
+    {/* Main content */}
+    <section className="w-full" style={{ backgroundColor: '#F2F3F4', overflowX: 'hidden' }}>
+      <div className="flex w-full" style={{ maxWidth: '100%', overflowX: 'hidden' }}>
+        {/* Left column - newsletters */}
+        <div
+          className="w-1/2"
+          style={{
+            backgroundColor: '#F2F3F4',
+            paddingLeft: ua.space[4],
+            paddingRight: ua.space[4],
+            paddingBottom: ua.space[4],
+          }}
+        >
+          {newsletterEntries.map((entry) => (
+            <div
+              key={entry.title}
+              className="newsletter-row"
+              style={{
+                ...newsletterRowStyle,
+                transitionDuration: '0.6s',
+              }}
+            >
+              <div className="flex flex-row items-center justify-between w-full">
+                <p style={newsletterTitleStyle}>{entry.title}</p>
+
+                <div className="flex justify-end">
+                  {entry.isExternal ? (
+                    <a
+                      href={entry.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="homepageButton boxshadowEffect"
+                      style={{ color: 'white', textDecoration: 'none' }}
+                    >
+                      {entry.cta}
+                    </a>
+                  ) : (
+                    <Link
+                      href={entry.href}
+                      className="homepageButton boxshadowEffect"
+                      style={{ color: 'white', textDecoration: 'none' }}
+                    >
+                      {entry.cta}
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Right column - news articles */}
+        <div
+          className="w-1/2 flex flex-col"
+          style={{
+            backgroundColor: '#F2F3F4',
+            paddingLeft: ua.space[4],
+            paddingRight: ua.space[4],
+          }}
+        >
+          {newsArticles.slice(0, newsletterEntries.length).map((article) => (
+            <div key={article.title} className="news-article-row" style={newsArticleContainerStyle}>
+              <div style={buttonSectionStyle}>
+                <a
+                  href={article.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button-bar"
+                  style={buttonBarStyle}
+                >
+                  {article.title}
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Newsletter Signup CTA */}
+    <section
+      style={{
+        backgroundColor: '#FFFFFF',
+        padding: '4rem 1.5rem',
+        textAlign: 'center',
+      }}
+    >
+      <h2
+        style={{
+           fontSize: '2rem', fontFamily: 'proxima-nova, sans-serif', margin: 0, color: '#35363B'
+        }}
+      >
+        Want to Stay Updated?
+      </h2>
+
+      <div
+        style={{
+          width: '70px',
+          height: '4px',
+          backgroundColor: '#9E1B32',
+          margin: '0 auto 2rem',
+          borderRadius: '999px',
+        }}
+      />
+
+      <a
+        href="https://app.e2ma.net/app2/audience/signup/2096667/2062159/"
+        target="_blank"
+        rel="noreferrer"
+        className="contact-submit"
+        style={{
+          display: 'inline-block',
+          textDecoration: 'none',
+          maxWidth: '320px',
+        }}
+      >
+        Sign Up for Our Newsletter
+      </a>
+    </section>
+  </div>
   );
 }
