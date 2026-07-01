@@ -41,6 +41,7 @@ const config: Config = {
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui"],
         felix: ["var(--font-felix)", "serif"],
         roboto: ["Roboto", "ui-sans-serif", "system-ui"],
+        proxima: ["proxima-nova", "sans-serif"],
       },
       lineHeight: { normal: "var(--leading)" },
       width: {

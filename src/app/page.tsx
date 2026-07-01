@@ -35,7 +35,7 @@ export default function Home() {
       <StatisticsCounter stats={statsData} />
       <div
         className="w-full bg-[#3d3d3d] block shrink-0"
-        style={{ height: '64px' }}
+        style={{ height: '64px', fontFamily: 'proxima-nova, sans-serif' }}
         aria-hidden
       />
 
@@ -53,13 +53,19 @@ export default function Home() {
             </div>
 
             <div className="about-text-col w-1/2 px-4 pr-[75px]">
-              <h1 className="my-[0.67em] text-[2em] font-bold font-roboto text-white text-center">
+              <h1
+                className="my-[0.67em] text-[2em] font-bold text-white text-center"
+                style={{ fontFamily: "proxima-nova, sans-serif" }}
+              >
                 ABOUT US
               </h1>
 
               <hr className="w-3/5 mx-auto border-0 border-t border-gray-400" />
 
-              <p className="text-center text-white text-[18pt] pl-[15px] pr-[15px] leading-relaxed font-roboto font-normal">
+              <p
+                className="text-center text-white text-[18pt] pl-[15px] pr-[15px] leading-relaxed font-normal"
+                style={{ fontFamily: "proxima-nova, sans-serif" }}
+                >
               The Alabama Productivity Center, a non-profit organization, is an outcome
                 of a 1983 joint venture of the University of Alabama and General Motors to
                 save a Tuscaloosa GM plant from closing. The positive experience utilizing
@@ -76,7 +82,7 @@ export default function Home() {
                       w-[75%]
                       bg-[#9E1B32]
                       !text-white
-                      font-roboto
+                      font-proxima
                       text-[20px]
                       px-[20px]
                       py-[10px]
@@ -95,8 +101,8 @@ export default function Home() {
                       ease-in-out
                       hover:text-[24px]
                       hover:shadow-[0_10px_20px_rgba(0,0,0,0.7)]
-                      hover:border-[rgba(0,0,0,0.5)]
-                    "
+                      hover:border-[rgba(0,0,0,0.5)]"
+                      style={{ fontFamily: "proxima-nova, sans-serif" }}
                   >
                     Learn More
                   </button>
@@ -117,7 +123,7 @@ export default function Home() {
                     alt="Annual Report"
                     className="about-annual-icon w-[150px] h-[150px] mr-2.5"
                   />
-                  <span className="mt-2.5 text-[20px] text-white">Click to view our annual report</span>
+                  <span className="mt-2.5 text-[20px] text-white" style={{ fontFamily: "proxima-nova, sans-serif" }}>Click to view our annual report</span>
                 </a>
               </div>
             </div>

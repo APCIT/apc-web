@@ -53,7 +53,7 @@ export default function StatisticsCounter({ stats }: StatisticsCounterProps) {
           </div>
         </div>
       </div>
-      <p className="stats-since text-white text-sm">
+      <p className="stats-since text-white text-sm" style={{ fontFamily: 'proxima-nova, sans-serif', fontSize: '11px' }}>
         Since 2013
       </p>
     </div>
@@ -95,7 +95,7 @@ function StatItemComponent({
       <div 
         className="stat-value flex items-center justify-center text-white" 
         style={{ 
-          fontFamily: '"Sanchez", times, serif'
+          fontFamily: 'proxima-nova, sans-serif',
         }}
       >
         <Image 
@@ -111,7 +111,7 @@ function StatItemComponent({
       <div 
         className="stat-label text-white uppercase block"
         style={{ 
-          fontFamily: '"Montserrat", arial, sans-serif'
+          fontFamily: '"proxima-nova", sans-serif',
         }}
       >
         {stat.label}

@@ -104,7 +104,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
   return (
     <div
       className={`carousel-container relative w-full overflow-hidden isolate ${variant === 'intro' ? 'carousel-intro bg-black' : 'carousel-stories'}`}
-      style={{ height: variant === 'intro' ? 600 : 500, backgroundColor: variant === 'intro' ? '#000000' : 'transparent' }}
+      style={{ height: variant === 'intro' ? 500 : 450, backgroundColor: 'transparent' }}
       onMouseEnter={() => setIsAuto(false)}
       onMouseLeave={() => setIsAuto(true)}
     >
@@ -142,7 +142,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
                     fill
                     sizes="100vw"
                     priority={idx === 1}
-                    className="carousel-slide-image object-contain"
+                    className="carousel-slide-image object-cover"
                     style={{ opacity: s.opacity ?? 1 }}
                   />
                 )}
@@ -172,14 +172,14 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
                   <div className="stories-text w-1/2 h-full flex items-center">
                     <div className="stories-text-inner" style={{ paddingRight: '25%' }}>
                       {s.content?.body && (
-                        <p className="stories-body" style={{ color: 'black', fontSize: '1.5em', fontWeight: 400 }}>
+                        <p className="stories-body" style={{ color: 'black', fontSize: '1.3em', fontWeight: 400, fontFamily: 'proxima-nova, sans serif' }}>
                           {s.content.body}
                         </p>
                       )}
                       {s.content?.attribution && (
                         <>
                           <br />
-                          <span className="stories-attribution" style={{ float: 'right', fontSize: '1.5em', fontWeight: 400, color: 'black' }}>{s.content.attribution}</span>
+                          <span className="stories-attribution" style={{ float: 'right', fontSize: '1.3em', fontWeight: 400, fontFamily: 'proxima-nova, sans serif', color: 'black' }}>{s.content.attribution}</span>
                         </>
                       )}
                     </div>
@@ -199,7 +199,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
         style={{
           backgroundColor: 'transparent',
           border: 'none',
-          left: '100px',
+          left: '16px',
           top: '0',
           height: '100%',
           width: '64px',
@@ -224,7 +224,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
         style={{
           backgroundColor: 'transparent',
           border: 'none',
-          right: '100px',
+          right: '16px',
           top: '0',
           height: '100%',
           width: '64px',

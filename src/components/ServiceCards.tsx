@@ -22,7 +22,7 @@ export default function ServiceCards() {
       id: 1,
       title: 'Client Services',
       description:
-        'View the services we provide for our clients such as internships',
+        'View the professional services we provide for our clients.',
       image: '/images/HomepageButtons/servicesCard.jpg',
       imageStyles: { marginLeft: '-8px', marginTop: '-30px' },
       link: '/Home/Services',
@@ -32,7 +32,7 @@ export default function ServiceCards() {
       id: 2,
       title: 'Internships',
       description:
-        'View information about student internships and finding interns',
+        'View information about our internship program and how to apply.',
       image: '/images/HomepageButtons/internshipsCard.jpg',
       imageStyles: { marginLeft: '-5px', marginTop: '-30px' },
       link: '/Home/Internships',
@@ -42,11 +42,11 @@ export default function ServiceCards() {
       id: 3,
       title: 'Locations',
       description:
-        'View the locations of all our business partners and see where you could go',
+        'View the locations of all our business partners across Alabama.',
       image: '/images/Icons/alabamastateicon.jpg',
       imageStyles: { marginLeft: '-5px', marginTop: '-5px' },
       link: '/Home/Locations',
-      buttonText: 'View Locations',
+      buttonText: 'Learn More',
     },
   ];
 
@@ -97,8 +97,7 @@ export default function ServiceCards() {
                                  shadow-[0_3px_10px_rgba(0,0,0,0.5)]
                                  transition-all duration-500 ease-in-out
                                  group-hover:shadow-[0_10px_20px_rgba(0,0,0,0.7)] group-hover:border-[rgba(0,0,0,0.5)]
-                                 hover:shadow-[0_10px_20px_rgba(0,0,0,0.7)] hover:border-[rgba(0,0,0,0.5)]"
-                    >
+                                 hover:shadow-[0_10px_20px_rgba(0,0,0,0.7)] hover:border-[rgba(0,0,0,0.5)]">
                       <img
                         src={card.image}
                         alt={card.title}
@@ -114,17 +113,20 @@ export default function ServiceCards() {
 
                 {/* TEXT */}
                 <div className="text-center px-2">
-                  <h2 className="text-2xl font-semibold mb-1 text-[#1a1a1a]">
+                  <h2 className="text-2xl font-semibold mb-1 text-[#1a1a1a]"
+                    style={{ fontFamily: 'proxima-nova, sans-serif' }}>
                     {card.title}
                   </h2>
-                  <p className="text-[#6b6b6b] text-[15px] leading-snug max-w-[400px] mx-auto">
+                  <p className="text-[#6b6b6b] text-[15px] leading-snug max-w-[400px] mx-auto"
+                    style={{ fontFamily: 'proxima-nova, sans-serif' }}
+                  >
                     {card.description}
                   </p>
                 </div>
                 <div className="mt-10 flex justify-center">
                   <Link
                     href={card.link}
-                    style={{ color: 'white', textDecoration: 'none' }}
+                    style={{ color: 'white', textDecoration: 'none', fontFamily: 'proxima-nova, sans-serif' }}
                     className="
                       w-[80%]
                       bg-[#9E1B32]
@@ -154,7 +156,7 @@ export default function ServiceCards() {
          <div className="success-stories-btn-container mt-6 flex justify-center">
           <Link
             href="/Home/SuccessStories"
-            style={{ color: 'white', textDecoration: 'none' }}
+            style={{ color: 'white', textDecoration: 'none', fontFamily: 'proxima-nova, sans-serif' }}
             className="success-stories-btn
               w-[60%] sm:w-[55%] md:w-[50%] lg:w-[45%]
               bg-[#9E1B32]
@@ -171,7 +173,7 @@ export default function ServiceCards() {
               hover:border-[rgba(0,0,0,0.5)]
             "
           >
-            Click here to read our Success Stories
+            Click here to read our Success Stories!
           </Link>
         </div>
     </>
