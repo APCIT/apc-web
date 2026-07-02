@@ -2324,3 +2324,13 @@ header nav button {
     font-size: 1.75rem;
   }
 }
+
+@media (max-width: 768px) {
+  .locations-map-card {
+    height: 460px !important;
+  }
+
+  .locations-map-card iframe {
+    height: 460px !important;
+  }
+}
