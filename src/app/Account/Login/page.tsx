@@ -60,31 +60,89 @@ export default function LoginPage() {
     }
   };
 
-  return (
-    <div className="w-full bg-white">
-      <div className="container mx-auto px-8 py-4">
-        {/* Page Title */}
-        <div style={{ marginBottom: '1rem' }}>
-          <h2 style={{ fontSize: '1.5em', fontWeight: 'normal', color: '#333333', fontFamily: 'Roboto, sans-serif', textAlign: 'center' }}>
-            Log In
-          </h2>
-          <hr style={{ marginTop: '0.5rem', borderColor: '#999999', borderWidth: '1px', borderStyle: 'solid', borderBottom: 'none' }} />
-        </div>
+      const labelStyle: React.CSSProperties = {
+      display: 'block',
+      marginBottom: '0.5rem',
+      color: '#ffffff',
+      fontWeight: 700,
+    };
 
-        {/* Main Content - Two Column Layout */}
-        <div className="login-content" style={{ display: 'flex', flexDirection: 'row', gap: '2rem' }}>
-          {/* Left Half: Login Form */}
-          <div className="login-form-column" style={{ width: '50%', paddingLeft: '5%' }}>
-            <form onSubmit={handleSubmit}>
-              {errors.general && (
-                <div style={{ marginBottom: '1rem', padding: '0.75rem', backgroundColor: '#fef2f2', border: '1px solid #fecaca', borderRadius: '4px', color: '#b91c1c' }}>
-                  {errors.general}
-                </div>
-              )}
+    const inputStyle: React.CSSProperties = {
+      width: '100%',
+      padding: '0.75rem 0.9rem',
+      marginBottom: '1.25rem',
+      fontSize: '1rem',
+      color: '#35363B',
+      backgroundColor: '#ffffff',
+      border: '2px solid #9E1B32',
+      outline: 'none',
+    };
 
-              {/* Username */}
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '3rem' }}>
-                <label htmlFor="username" style={{ width: '100px', textAlign: 'right', paddingRight: '1rem', color: '#333333', fontWeight: 500 }}>
+    const errorTextStyle: React.CSSProperties = {
+      color: '#fecaca',
+      fontSize: '0.85rem',
+      marginTop: '-0.75rem',
+      marginBottom: '1rem',
+    };
+
+      return (
+        <main style={{ backgroundColor: '#A7ABA9', padding: '4rem 1.5rem 5rem' }}>
+          <section
+            style={{
+              maxWidth: '900px',
+              margin: '0 auto',
+              textAlign: 'center',
+            }}
+          >
+            <h1
+              style={{
+                fontSize: '3rem',
+                fontWeight: 800,
+                color: '#ffffff',
+                fontFamily: 'proxima-nova, sans-serif',
+                marginBottom: '0.5rem',
+                textShadow: '2px 2px 0 #000000',
+              }}
+            >
+              Log In
+            </h1>
+
+            <div
+              style={{
+                width: '320px',
+                maxWidth: '80%',
+                height: '5px',
+                backgroundColor: '#212124',
+                margin: '0 auto 2.5rem',
+              }}
+            />
+
+            <div
+              style={{
+                maxWidth: '520px',
+                margin: '0 auto',
+                backgroundColor: '#212124',
+                padding: '2.75rem 3rem',
+                boxShadow: '0 8px 20px rgba(0,0,0,0.25)',
+              }}
+            >
+              <form onSubmit={handleSubmit} style={{fontFamily: 'proxima-nova, sans-serif', textAlign: 'left' }}>
+                {errors.general && (
+                  <div
+                    style={{
+                      marginBottom: '1rem',
+                      padding: '0.75rem',
+                      backgroundColor: '#fef2f2',
+                      border: '1px solid #fecaca',
+                      borderRadius: '4px',
+                      color: '#b91c1c',
+                    }}
+                  >
+                    {errors.general}
+                  </div>
+                )}
+
+                <label htmlFor="username" style={labelStyle}>
                   Username
                 </label>
                 <input
@@ -93,22 +151,14 @@ export default function LoginPage() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   style={{
-                    width: '200px',
-                    height: '30px',
-                    padding: '0 8px',
-                    fontSize: '14px',
-                    color: '#333333',
-                    backgroundColor: '#ffffff',
-                    border: errors.username ? '1px solid #ef4444' : '1px solid #cccccc',
-                    borderRadius: '4px',
-                    outline: 'none'
+                    ...inputStyle,
+                    border: errors.username ? '2px solid #ef4444' : inputStyle.border,
                   }}
                 />
-              </div>
 
-              {/* Password */}
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '3rem' }}>
-                <label htmlFor="password" style={{ width: '100px', textAlign: 'right', paddingRight: '1rem', color: '#333333', fontWeight: 500 }}>
+                {errors.username && <p style={errorTextStyle}>{errors.username}</p>}
+
+                <label htmlFor="password" style={labelStyle}>
                   Password
                 </label>
                 <input
@@ -117,68 +167,73 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   style={{
-                    width: '200px',
-                    height: '30px',
-                    padding: '0 8px',
-                    fontSize: '14px',
-                    color: '#333333',
-                    backgroundColor: '#ffffff',
-                    border: errors.password ? '1px solid #ef4444' : '1px solid #cccccc',
-                    borderRadius: '4px',
-                    outline: 'none'
+                    ...inputStyle,
+                    border: errors.password ? '2px solid #ef4444' : inputStyle.border,
                   }}
                 />
-              </div>
 
-              {/* Remember Me */}
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '3rem' }}>
-                <div style={{ width: '100px' }}></div>
-                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                {errors.password && <p style={errorTextStyle}>{errors.password}</p>}
+
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    margin: '1.5rem 0',
+                    color: '#ffffff',
+                    fontSize: '0.95rem',
+                    cursor: 'pointer',
+                    fontFamily: 'proxima-nova, sans-serif',
+                  }}
+                >
                   <input
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
                     style={{ width: '16px', height: '16px' }}
                   />
-                  <span style={{ marginLeft: '8px', color: '#333333', fontSize: '14px' }}>Remember me?</span>
+                  Remember me?
                 </label>
-              </div>
 
-              {/* Submit Button */}
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ width: '100px' }}></div>
                 <button
                   type="submit"
                   disabled={isLoading}
                   style={{
-                    padding: '6px 16px',
-                    fontSize: '14px',
-                    color: '#990000',
-                    backgroundColor: '#e0e0e0',
-                    border: '1px solid #990000',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
+                    width: '100%',
+                    padding: '0.85rem 1rem',
+                    backgroundColor: '#9E1B32',
+                    color: '#ffffff',
+                    border: 'none',
+                    fontWeight: 800,
+                    fontSize: '1rem',
+                    cursor: isLoading ? 'not-allowed' : 'pointer',
+                    opacity: isLoading ? 0.7 : 1,
+                    fontFamily: 'proxima-nova, sans-serif',
                   }}
                 >
                   {isLoading ? 'Logging in...' : 'Log in'}
                 </button>
-              </div>
-            </form>
-          </div>
+              </form>
 
-          {/* Right Half: Password Recovery */}
-          <div className="login-recovery-column" style={{ width: '50%', paddingRight: '5%' }}>
-            <p style={{ color: '#333333' }}>
-              Forgotten your password?<br />
-              Let the administrators know at our{' '}
-              <Link href="/#contact" style={{ color: '#990000', textDecoration: 'underline' }}>
-                Contact form
-              </Link>
-              .
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+              <p
+                style={{
+                  textAlign: 'center',
+                  color: '#ffffff',
+                  marginTop: '1.75rem',
+                  fontSize: '0.95rem',
+                  lineHeight: 1.5,
+                  fontFamily: 'proxima-nova, sans-serif',
+                }}
+              >
+                Forgotten your password?<br />
+                Let the administrators know using our{' '}
+                <Link href="/#contact" style={{ color: '#ffffff', fontWeight: 700, textDecoration: 'underline' }}>
+                  Contact Form
+                </Link>
+                .
+              </p>
+            </div>
+          </section>
+        </main>
+      );
+  }
