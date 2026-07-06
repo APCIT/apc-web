@@ -260,6 +260,26 @@ export default function AboutPage() {
                 Productivity Engineer
               </h4>
             </div>
+
+             {/* Ashley Dodds*/}
+            <div className="staff-member" style={{flex: '0 0 auto'}}>
+              <div className="headshot-container">
+                <a href="/Profiles/AshleyDodds" className="image-cropper">
+                  <img 
+                    className="staff-photo" 
+                    src="/images/StaffProfilePics/AshleyDoddsHeadshot.jpg" 
+                    alt="Ashley Dodds"
+                  />
+                </a>
+              </div>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+                Ashley Dodds
+              </h3>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+                Operations Manager
+              </h4>
+            </div>
+
           </div>
         </div>
       </div>
@@ -408,28 +428,28 @@ export default function AboutPage() {
               </h4>
             </div>
 
-            {/* Ed Castile */}
+            {/* Danielle Crowder */}
             <div className="staff-member" style={{flex: '0 0 auto'}}>
               <div className="headshot-container">
                 <div className="image-cropper">
                   <img 
                     className="staff-photo" 
-                    src="/images/Board Headshots/Ed.png" 
-                    alt="Ed Castile"
+                    src="/images/Board Headshots/Danielle_Crowder.png" 
+                    alt="Danielle Crowder"
                     style={{width: '113%', height: '113%', marginLeft: '-15px'}}
                   />
                 </div>
               </div>
               <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
-                Ed Castile (Chair)
+                Danielle Crowder (Chair)
               </h3>
-              <a href="https://www.aidt.edu/" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.alabamapower.com/" target="_blank" rel="noopener noreferrer">
                 <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
-                  Alabama Department of Commerce/AIDT
+                  Alabama Power Company
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', maxWidth: '275px', margin: '0 auto', wordWrap: 'break-word'}}>
-                Deputy Secretary of Commerce/Director of AIDT
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+                Sales Director
               </h4>
             </div>
 
@@ -848,28 +868,27 @@ export default function AboutPage() {
               </h4>
             </div>
 
-            {/* Danielle Crowder */}
+            {/* Ethan Mattocks */}
             <div className="staff-member" style={{flex: '0 0 auto'}}>
               <div className="headshot-container">
                 <div className="image-cropper">
                   <img 
                     className="staff-photo" 
-                    src="/images/Board Headshots/Danielle_Crowder.png" 
-                    alt="Danielle Crowder"
-                    style={{width: '113%', height: '113%', marginLeft: '-15px'}}
+                    src="/images/Board Headshots/Ethan_Mattocks.jpg" 
+                    alt="Ethan Mattocks"
                   />
                 </div>
               </div>
               <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
-                Danielle Crowder
+                Ethan Mattocks
               </h3>
-              <a href="https://www.alabamapower.com/" target="_blank" rel="noopener noreferrer">
+              <a href="https://www.airbus.com/en" target="_blank" rel="noopener noreferrer">
                 <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
-                  Alabama Power Company
+                  Airbus Americas, Inc.
                 </h4>
               </a>
               <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
-                Sales Director
+                Director of Technical Learning and Early Careers
               </h4>
             </div>
 
@@ -895,37 +914,6 @@ export default function AboutPage() {
               </a>
               <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
                 Manager, HR
-              </h4>
-            </div>
-          </div>
-
-          {/* Sixth Row - Ethan Mattocks centered */}
-          <div className="board-row" style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: '3em'
-          }}>
-            {/* Ethan Mattocks */}
-            <div className="staff-member" style={{flex: '0 0 auto'}}>
-              <div className="headshot-container">
-                <div className="image-cropper">
-                  <img 
-                    className="staff-photo" 
-                    src="/images/Board Headshots/Ethan_Mattocks.jpg" 
-                    alt="Ethan Mattocks"
-                  />
-                </div>
-              </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
-                Ethan Mattocks
-              </h3>
-              <a href="https://www.airbus.com/en" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
-                  Airbus Americas, Inc.
-                </h4>
-              </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
-                Director of Technical Learning and Early Careers
               </h4>
             </div>
           </div>
