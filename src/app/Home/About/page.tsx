@@ -15,11 +15,11 @@ export default function AboutPage() {
         {/* Title Container */}
         <div style={{padding: '2em 0', paddingBottom: 0, backgroundColor: '#9E1B32'}}>
           <h1 style={{
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: 'proxima-nova, sans-serif',
             color: 'white',
             textAlign: 'center',
             fontSize: '2em',
-            fontWeight: 'bold'
+            fontWeight: '500'
           }}>
             <strong>MISSION</strong>
           </h1>
@@ -41,7 +41,7 @@ export default function AboutPage() {
             color: 'white',
             fontSize: '1.5em',
             marginBottom: 0,
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: 'proxima-nova, sans-serif',
             lineHeight: 'normal'
           }}>
             APC will enhance economic development in Alabama using UA resources to increase productivity in organizations <br /> by solving real-world problems while providing positive experiences for students.
@@ -58,11 +58,11 @@ export default function AboutPage() {
         {/* Title Container */}
         <div style={{padding: '2em 0', backgroundColor: '#EEEEEE'}}>
           <h1 style={{
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: 'proxima-nova, sans-serif',
             color: 'black',
             textAlign: 'center',
             fontSize: '2em',
-            fontWeight: 'bold'
+            fontWeight: '500'
           }}>
             <strong>HISTORY</strong>
           </h1>
@@ -83,12 +83,12 @@ export default function AboutPage() {
           <p className="history-text" style={{
             textAlign: 'center',
             color: 'black',
-            fontSize: '1.5em',
+            fontSize: '1.4rem',
             marginBottom: 0,
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: 'proxima-nova, sans-serif',
             lineHeight: 'normal',
             paddingLeft: '24px',
-            paddingRight: '24px'
+            paddingRight: '40px'
           }}>
             {`In an effort to improve economic development in the state of Alabama, the Alabama Productivity Center was established on January 1, 1986, on the University of Alabama campus. The mission of the APC is to focus research and educational resources on the enhancement of productivity and quality within Alabama businesses and the state's industry. The Alabama Productivity Center, a non-profit organization, is an outcome of a 1983 joint venture of the University of Alabama and General Motors to save a Tuscaloosa GM plant from closing. The positive experience utilizing university faculty and students to save Alabama jobs led to the establishment and sponsorship by Alabama Power Company and the University of Alabama.`}
             <br /><br />
@@ -106,11 +106,11 @@ export default function AboutPage() {
         {/* Title Container */}
         <div style={{padding: '2em 0 1em 0'}}>
           <h1 style={{
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: 'proxima-nova, sans-serif',
             color: 'black',
             textAlign: 'center',
             fontSize: '2em',
-            fontWeight: 'bold'
+            fontWeight: '500'
           }}>
             <strong>MEET THE STAFF</strong>
           </h1>
@@ -149,10 +149,10 @@ export default function AboutPage() {
                   />
                 </a>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Alan Hill
               </h3>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Executive Director
               </h4>
             </div>
@@ -168,10 +168,10 @@ export default function AboutPage() {
                   />
                 </a>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Morgan Harrison
               </h3>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Productivity Engineer
               </h4>
             </div>
@@ -187,10 +187,10 @@ export default function AboutPage() {
                   />
                 </a>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Jan Ingenrieth
               </h3>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Director, APC Internship Program
               </h4>
             </div>
@@ -215,10 +215,10 @@ export default function AboutPage() {
                   />
                 </a>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Justin Rodgers
               </h3>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Productivity Engineer
               </h4>
             </div>
@@ -234,10 +234,10 @@ export default function AboutPage() {
                   />
                 </a>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Susan Maples
               </h3>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Productivity Engineer
               </h4>
             </div>
@@ -253,10 +253,10 @@ export default function AboutPage() {
                   />
                 </a>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Ben Baxter
               </h3>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Productivity Engineer
               </h4>
             </div>
@@ -272,10 +272,10 @@ export default function AboutPage() {
                   />
                 </a>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Ashley Dodds
               </h3>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Operations Manager
               </h4>
             </div>
@@ -307,11 +307,11 @@ export default function AboutPage() {
             paddingRight: '1.5em'
           }}>
             <h1 style={{
-              fontFamily: 'Roboto, sans-serif',
+              fontFamily: 'proxima-nova, sans-serif',
               color: 'white',
               textAlign: 'center',
               fontSize: '2.5em',
-              fontWeight: 'bold',
+              fontWeight: '500',
               marginBottom: '0.5em'
             }}>
               THE ADVISORY BOARD
@@ -325,7 +325,7 @@ export default function AboutPage() {
             <p style={{
               color: 'white',
               fontSize: '1.3em',
-              fontFamily: 'Roboto, sans-serif',
+              fontFamily: 'proxima-nova, sans-serif',
               textAlign: 'center',
               lineHeight: '1.4',
               width: '100%',
@@ -372,11 +372,11 @@ export default function AboutPage() {
         {/* Title Container */}
         <div style={{padding: '2em 0 1em 0'}}>
           <h1 style={{
-            fontFamily: 'Roboto, sans-serif',
+            fontFamily: 'proxima-nova, sans-serif',
             color: 'black',
             textAlign: 'center',
             fontSize: '2em',
-            fontWeight: 'bold'
+            fontWeight: '500'
           }}>
             <strong>MEET THE BOARD</strong>
           </h1>
@@ -415,15 +415,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Kay Palan
               </h3>
               <a href="https://culverhouse.ua.edu/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   The University of Alabama
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', maxWidth: '275px', margin: '0 auto', wordWrap: 'break-word'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', maxWidth: '275px', margin: '0 auto', wordWrap: 'break-word'}}>
                 Dean, Culverhouse College of Business
               </h4>
             </div>
@@ -440,15 +440,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Danielle Crowder (Chair)
               </h3>
               <a href="https://www.alabamapower.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Alabama Power Company
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Sales Director
               </h4>
             </div>
@@ -465,15 +465,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Dr. Samuel Addy
               </h3>
               <a href="https://culverhouse.ua.edu/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   The University of Alabama
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', maxWidth: '350px', margin: '0 auto', wordWrap: 'break-word', lineHeight: '1.3'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', maxWidth: '350px', margin: '0 auto', wordWrap: 'break-word', lineHeight: '1.3'}}>
                 Associate Dean for Economic Development Outreach, Culverhouse College of Business
               </h4>
             </div>
@@ -500,15 +500,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Frank Anderson
               </h3>
               <a href="https://www.brasfieldgorrie.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Brasfield and Gorrie
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Regional Director of Business Development
               </h4>
             </div>
@@ -525,15 +525,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Kenneth Boswell
               </h3>
               <a href="https://adeca.alabama.gov/Pages/default.aspx" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline', maxWidth: '275px', margin: '0 auto 0.3em auto', wordWrap: 'break-word'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline', maxWidth: '275px', margin: '0 auto 0.3em auto', wordWrap: 'break-word'}}>
                   Alabama Department of Economic and Community Affairs
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Director
               </h4>
             </div>
@@ -550,15 +550,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Mark Brazeal
               </h3>
               <a href="https://www.findabetterjob.com/mazdatoyota" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Mazda Toyota Manufacturing USA
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Vice President Manufacturing
               </h4>
             </div>
@@ -575,15 +575,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Danny Garrett
               </h3>
               <a href="https://www.legislature.state.al.us/aliswww/ISD/Splash_House.aspx" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Alabama State House of Representatives
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 District 44 Representative
               </h4>
             </div>
@@ -610,15 +610,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Miller Girvin
               </h3>
               <a href="https://edpa.org/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline', maxWidth: '275px', margin: '0 auto 0.3em auto', wordWrap: 'break-word'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline', maxWidth: '275px', margin: '0 auto 0.3em auto', wordWrap: 'break-word'}}>
                   Economic Development Partnership of Alabama
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 President
               </h4>
             </div>
@@ -635,15 +635,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Stephanie Howell
               </h3>
               <a href="https://corporate.evonik.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Evonik
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Regional Human Resources Manager
               </h4>
             </div>
@@ -660,15 +660,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Dr. Tonjanita Johnson
               </h3>
               <a href="https://uasystem.edu/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   The University of Alabama System
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', maxWidth: '275px', margin: '0 auto', wordWrap: 'break-word'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', maxWidth: '275px', margin: '0 auto', wordWrap: 'break-word'}}>
                 Senior Vice Chancellor for Academic and Student Affairs
               </h4>
             </div>
@@ -685,15 +685,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Joel McMahon
               </h3>
               <a href="https://jayindustrial.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Jay Industrial Repair
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 CEO
               </h4>
             </div>
@@ -720,15 +720,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Ellen McNair
               </h3>
               <a href="https://www.madeinalabama.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Alabama Department of Commerce
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Secretary of Commerce
               </h4>
             </div>
@@ -745,15 +745,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Robin Murphree
               </h3>
               <a href="https://churchsteeples.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Fiberglass Unlimited
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Partner
               </h4>
             </div>
@@ -770,15 +770,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Keith Phillips
               </h3>
               <a href="https://www.atn.org/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Alabama Technology Network
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Executive Director
               </h4>
             </div>
@@ -795,15 +795,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Jon Pollard
               </h3>
               <a href="https://www.tylerunion.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Tyler Union & M&H Valve
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Vice President, Anniston Operations
               </h4>
             </div>
@@ -830,15 +830,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Greg Scott
               </h3>
               <a href="https://www.ssab.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   SSAB Americas
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', maxWidth: '275px', margin: '0 auto', wordWrap: 'break-word'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', maxWidth: '275px', margin: '0 auto', wordWrap: 'break-word'}}>
                 Vice President, Human Resources and Communication
               </h4>
             </div>
@@ -855,15 +855,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Maria Short
               </h3>
               <a href="https://westervelt.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   The Westervelt Company
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Executive Vice President, Human Resources
               </h4>
             </div>
@@ -879,15 +879,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Ethan Mattocks
               </h3>
               <a href="https://www.airbus.com/en" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Airbus Americas, Inc.
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Director of Technical Learning and Early Careers
               </h4>
             </div>
@@ -904,15 +904,15 @@ export default function AboutPage() {
                   />
                 </div>
               </div>
-              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'Roboto, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
                 Anthony Cancilla
               </h3>
               <a href="https://www.mbusi.com/" target="_blank" rel="noopener noreferrer">
-                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
                   Mercedes Benz
                 </h4>
               </a>
-              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'Roboto, sans-serif', fontWeight: 'normal'}}>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
                 Manager, HR
               </h4>
             </div>
