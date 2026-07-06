@@ -22,7 +22,7 @@ export default function MorganHarrisonProfilePage() {
           <aside className="w-full max-w-[280px] justify-self-start text-center">
             <div className="relative mx-auto h-[230px] w-[230px] overflow-hidden rounded-[4px] border border-black/10 shadow-[0_3px_10px_rgba(0,0,0,0.5)]">
               <Image
-                src="/images/StaffProfilePics/Harrisons18 square .jpg"
+                src="/images/StaffProfilePics/MorganUpdated.jpg"
                 alt="Morgan Harrison"
                 fill
                 className="object-cover"
