@@ -163,7 +163,7 @@ export default function AboutPage() {
                 <a href="/Profiles/MorganHarrison" className="image-cropper">
                   <img 
                     className="staff-photo" 
-                    src="/images/StaffProfilePics/MorganUpdated.jpg" 
+                    src="/images/StaffProfilePics/MorganCropped.jpg" 
                     alt="Morgan Harrison"
                   />
                 </a>
