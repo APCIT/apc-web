@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import HeadingIntroBanner from '@/components/HeadingIntroBanner';
+import Link from 'next/link';
 
 interface SuccessStory {
   id: number;
@@ -19,20 +20,20 @@ const successStories: SuccessStory[] = [
     image: '/images/Backgrounds/Lear.jpg',
     text: 'Anabelle has been a vital member to the team. She has been responsible for the plant\'s change notification process, making sure that responsible parties acknowledge notification and submit documentation in a timely manner. Anabelle has led the team in AI integration for the automation of processes.',
     attribution: '- Konrad Piepke, Engineering Change Coordinator',
-    link: 'https://new.express.adobe.com/webpage/tujdoLv5SNnOp'
+    link: '/Home/SuccessStories/Lear'
   },
   {
     id: 2,
     image: '/images/Backgrounds/motherson_logo.jpg',
     text: 'For Motherson to be able to more accurately gauge improvement opportunities they partnered with APC to perform time studies throughout their facilities serving MBUSI. APC began this work by performing standard time-studies for each assembly line.',
-    link: 'https://express.adobe.com/page/evWom7O1UwBYl/'
+    link: '/Home/SuccessStories/Motherson'
   },
   {
     id: 3,
     image: '/images/Backgrounds/CapstoneA.CulvColl.AlProdCtr.png',
     text: 'Through the projects I completed at the APC, I was able to learn relevant programming skills that I am still able to apply today at other companies. Working at the APC will teach you more than just how to be a programmer. You will learn skills on how to be a database manager, a project manager, and how to deal with general business activities such as reviewing resumes, marketing the company, and helping improve the overall workflow of the system. I believe that the APC offers very rewarding experiences that a lot of students won\'t be able to find anywhere else during the school year.',
     attribution: '- Jared Waller, MIS Intern',
-    link: 'https://express.adobe.com/page/eOTmp19d6R4fb/'
+    link: '/Home/SuccessStories/APC'
   },
   {
     id: 4,
@@ -181,22 +182,18 @@ export default function SuccessStoriesPage() {
                   
                   {/* Button at the bottom */}
                   <div>
-                    <a
+                    <Link
                       href={story.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: 'none', display: 'inline-block' }}
+                      className="homepageButton boxshadowEffect success-story-button"
+                      style={{
+                        display: 'inline-block',
+                        textDecoration: 'none',
+                        fontSize: '1.5em',
+                        fontFamily: 'proxima-nova, sans-serif'
+                      }}
                     >
-                      <button
-                        className="homepageButton boxshadowEffect success-story-button"
-                        style={{
-                          fontSize: '1.5em',
-                          fontFamily: 'Roboto, sans-serif'
-                        }}
-                      >
-                        Read the full story
-                      </button>
-                    </a>
+                      Read the full story
+                    </Link>
                   </div>
                 </div>
               </div>
