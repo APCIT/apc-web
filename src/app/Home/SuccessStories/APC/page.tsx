@@ -241,7 +241,7 @@ export default function APCWebsiteRedesignPage() {
             Back to Success Stories
           </Link>
 
-          <Link href="/Home/Internships" style={secondaryButtonStyle}>
+          <Link href="/Home/Contact" style={secondaryButtonStyle}>
             Explore Internships
           </Link>
         </div>
