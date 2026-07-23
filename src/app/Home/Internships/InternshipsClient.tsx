@@ -48,7 +48,7 @@ export default function InternshipsClient() {
   }, [isSplit, isCompanyExpanded]);
 
   return (
-    <div className="relative h-screen w-full overflow-x-hidden overflow-y-hidden">
+    <div className="relative w-full overflow-x-hidden">
       {/* Mobile Banner - Only visible on mobile */}
       <div className="internships-mobile-banner-wrapper">
         <HeadingIntroBanner
