@@ -108,6 +108,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
   const pathname = usePathname();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isSuccessStoriesOpen, setIsSuccessStoriesOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<{ userName: string } | null>(initialUser ?? null);
@@ -348,21 +349,76 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
           </li>
 
           <li className="leading-none list-none">
-          <Link
-          href="/Home/SuccessStories"
-          className="nav-link flex w-[90px] flex-col items-center justify-center rounded px-[8px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white text-center"
-            style={{
-              color: "white",
-              fontSize: "1rem",
-              lineHeight: "1.5rem",
-              fontWeight: "300",
-              textAlign: "center",
-    }}
-  >
-    Success Stories
-  </Link>
-</li>
-          <NavItem href="/Home/Locations">Locations</NavItem>
+            <Dropdown
+              classNames={{
+                content:
+                  "bg-white p-0 border-0 shadow-lg min-w-[180px] overflow-hidden",
+              }}
+              onOpenChange={(open) => setIsSuccessStoriesOpen(open)}
+            >
+              <DropdownTrigger>
+                <button
+                  className="nav-link block rounded px-[8px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
+                  style={{
+                    color: "white",
+                    fontSize: "1rem",
+                    lineHeight: "1.5rem",
+                    fontWeight: "400",
+                    letterSpacing: "0",
+                    backgroundColor: "transparent",
+                    boxShadow: "none",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: "90px",
+                      textAlign: "center",
+                      whiteSpace: "normal",
+                    }}
+                  >
+                    Success Stories
+                  </span>
+
+                  <CaretSvg open={isSuccessStoriesOpen} />
+                </button>
+              </DropdownTrigger>
+
+              <DropdownMenu
+                aria-label="Success Stories menu"
+                className="p-0 bg-white"
+                itemClasses={{
+                  base: "dropdown-item text-black data-[hover=true]:bg-transparent rounded-none px-4 py-[3px] m-0 text-center justify-center relative",
+                }}
+              >
+                <DropdownItem
+                  key="success-stories"
+                  as={Link}
+                  href="/Home/SuccessStories"
+                  style={{
+                    fontSize: "1rem",
+                    lineHeight: "1.35",
+                    fontWeight: "400",
+                  }}
+                >
+                  Success Stories
+                </DropdownItem>
+
+                <DropdownItem
+                  key="intern-spotlights"
+                  as={Link}
+                  href="/Home/InternSpotlights"
+                  style={{
+                    fontSize: "1rem",
+                    lineHeight: "1.35",
+                    fontWeight: "400",
+                  }}
+                >
+                  Intern Spotlights
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </li>
+                    <NavItem href="/Home/Locations">Locations</NavItem>
           <NavItem href="/Home/Newsletters">News</NavItem>
           <li className="leading-none list-none">
           <Link
@@ -567,7 +623,57 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                 </DropdownMenu>
               </Dropdown>
             </li>
-            <li><Link href="/Home/SuccessStories" onClick={closeMobileMenu}>Success Stories</Link></li>
+            <li className="mobile-dropdown">
+              <Dropdown
+                classNames={{
+                  content: "bg-white p-0 border-0 shadow-lg min-w-[180px] overflow-hidden",
+                }}
+                onOpenChange={(open) => setIsSuccessStoriesOpen(open)}
+              >
+                <DropdownTrigger>
+                  <button className="mobile-dropdown-trigger">
+                    Success Stories
+                    <CaretSvg open={isSuccessStoriesOpen} />
+                  </button>
+                </DropdownTrigger>
+
+                <DropdownMenu
+                  aria-label="Success Stories menu"
+                  className="p-0 bg-white"
+                  itemClasses={{
+                    base: "dropdown-item text-black data-[hover=true]:bg-transparent rounded-none px-4 py-[3px] m-0 text-center justify-center relative",
+                  }}
+                >
+                  <DropdownItem
+                    key="success-stories-mobile"
+                    as={Link}
+                    href="/Home/SuccessStories"
+                    onClick={closeMobileMenu}
+                    style={{
+                      fontSize: "1rem",
+                      lineHeight: "1.35",
+                      fontWeight: "400",
+                    }}
+                  >
+                    Success Stories
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="intern-spotlights-mobile"
+                    as={Link}
+                    href="/Home/InternSpotlights"
+                    onClick={closeMobileMenu}
+                    style={{
+                      fontSize: "1rem",
+                      lineHeight: "1.35",
+                      fontWeight: "400",
+                    }}
+                  >
+                    Intern Spotlights
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </li>
             <li><Link href="/Home/Locations" onClick={closeMobileMenu}>Locations</Link></li>
             <li><Link href="/Home/Newsletters" onClick={closeMobileMenu}>News</Link></li>
             <li>
