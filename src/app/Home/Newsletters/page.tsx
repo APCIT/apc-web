@@ -43,6 +43,12 @@ type NewsArticle = {
 
 const newsletterEntries: NewsletterEntry[] = [
   {
+    title: 'July 2026',
+    href: 'https://t.e2ma.net/webview/1zxrzr/4694f140233ca30bde0184477107f027',
+    cta: 'View Newsletter',
+    isExternal: true,
+  },
+  {
     title: 'June 2026',
     href: 'https://t.e2ma.net/webview/1jx0xr/38070c206d36976aa9f25e3752b2a0c3?fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnbnu4Ohz2JwXkYQSwTjd2T_WMLcVhUxcdWBpRILzQKZ7eJmoaAGbFR4RjCRg_aem_n_VZyvzF-0Vt-4UBZJx2IA',
     cta: 'View Newsletter',
