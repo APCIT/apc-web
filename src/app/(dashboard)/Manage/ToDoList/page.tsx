@@ -215,7 +215,7 @@ export default function ToDoListPage() {
                   </td>
                   <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
                     <span className="text-[#909090] font-roboto text-[14px]">
-                      Impact Calculator/Final Report
+                      Impact Calculator
                     </span>
                   </td>
                   <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
