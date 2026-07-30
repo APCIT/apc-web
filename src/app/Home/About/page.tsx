@@ -347,8 +347,8 @@ export default function AboutPage() {
             paddingRight: '0.5em'
           }}>
             <img 
-              src="/images/Board2023.jpg" 
-              alt="Advisory Board 2023"
+              src="/images/Board2026.jpeg" 
+              alt="Advisory Board 2026"
               className="advisory-image"
               style={{
                 width: '100%',
