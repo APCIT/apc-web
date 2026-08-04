@@ -368,7 +368,7 @@ export default function ManagePage() {
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/One%20Drive%20Collaboration%20Instructions%20(1).docx" className="manage-link" target="_blank" rel="noopener noreferrer">One Drive Instructions</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Intern Hiring Documents</h5>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Undergraduate-New-Hire-Documents-Checklist-Revision-19-08242023.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Undergraduate New Hire Checklist</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/New UA Student Intern Hiring Process Revision 2 072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Undergraduate New Hire Checklist</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Confidentiality-Statement-for-Student-Employees-updated-2013-1.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">CCB Confidential Agreement</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Graduate-New-Hire-Documents-Checklist-Revision-10-08252023.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Graduate New Hire Checklist</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Letter-of-Intent-for-Non-UA-students-Revision-11-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Offer Letter for Non-UA students</a>
@@ -378,7 +378,7 @@ export default function ManagePage() {
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Aknowledgement-of-Understanding-and-Receipt-of-Handbook-Rev-3-41223.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Handbook Acknowledgement</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/New-Health-Insurance-Marketplace-CoverageOptions-and-Your-Health-Coverage.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Health Insurance Information</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Interview Questionnaire Revision 10 04172026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Questionnaire</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Non-UA-Onboarding-Checklist-Rev-2-042026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Non-UA Onboarding Checklist</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/New Non-UA Onboarding Checklist for Interns  Revision 3 072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Non-UA Onboarding Checklist</a>
               </div>
             </AccordionItem>
             ) : null}
