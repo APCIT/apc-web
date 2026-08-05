@@ -20,7 +20,7 @@ const introSlides: Slide[] = [
   { id: 1, src: '/images/Backgrounds/Our_Mission_Slide.svg', alt: 'Lean Manufacturing Class' },
   { id: 2, src: '/images/Backgrounds/Internships_Slide_3.svg', alt: 'Fall Impacts' },
   { id: 3, src: '/images/Backgrounds/Professional_Services_Slide_4.svg', alt: 'Intern Spotlight' },
-  { id: 4, src: '/images/Backgrounds/In-State_Hire_Rate_Slide_5.svg', alt: 'Mission Statement' },
+  { id: 4, src: '/images/Backgrounds/College_Partners_Slide.jpg', alt: 'College Partners' },
 ];
 
 const storiesSlides: Slide[] = [
