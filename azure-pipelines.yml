@@ -42,6 +42,14 @@ stages:
             env:
               DATABASE_URL: $(DATABASE_URL)
 
+          # DATABASE_URL must point at the same database the App Service runs against,
+          # otherwise schema changes are applied to the wrong database and the deploy
+          # silently ships code that the production schema cannot satisfy.
+          - script: npx prisma migrate deploy
+            displayName: 'Apply database migrations'
+            env:
+              DATABASE_URL: $(DATABASE_URL)
+
           - script: npm run build --if-present
             displayName: 'Build Next.js'
             env:
