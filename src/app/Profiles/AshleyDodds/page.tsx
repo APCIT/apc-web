@@ -24,7 +24,7 @@ export default function AshleyDoddsProfilePage() {
                 src="/images/StaffProfilePics/AshleyDoddsHeadshot.jpg"
                 alt="Ashley Dodds"
                 fill
-                className="object-cover"
+                className="object-cover object-[center_35%]"
                 sizes="230px"
                 priority
               />
