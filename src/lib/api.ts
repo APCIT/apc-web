@@ -2142,3 +2142,40 @@ export async function SAVE_IMPACT_TOTALS_API(
 
   return { ok: true };
 }
+
+export type ImpactCalcTotalsResponse = {
+  hasFile: boolean;
+  values: Record<keyof ImpactTotalsResponse, number | null> | null;
+  hasAnyValue: boolean;
+  reason?: string;
+};
+
+/** Reads the totals out of the intern's uploaded impact calculator so the
+ *  form can be pre-filled. Callers should treat any failure as "no
+ *  suggestion available" rather than surfacing an error. */
+export async function GET_IMPACT_CALC_TOTALS_API(
+  internId: string
+): Promise<
+  | { ok: true; data: ImpactCalcTotalsResponse }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(
+    `${API.interns}/${encodeURIComponent(internId)}/impact-calc`,
+    {
+      ...defaultFetchOptions,
+      method: "GET",
+    }
+  );
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to read impact calculator",
+      status: res.status,
+    };
+  }
+
+  return { ok: true, data: data as ImpactCalcTotalsResponse };
+}

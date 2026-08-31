@@ -51,6 +51,13 @@ export async function uploadImpactCalcBlob(
   await blockBlob.uploadData(data);
 }
 
+export async function downloadImpactCalcBlob(blobName: string): Promise<Buffer> {
+  const client = getClient();
+  const container = client.getContainerClient(CONTAINER_IMPACT_CALC);
+  const blockBlob = container.getBlockBlobClient(blobName);
+  return blockBlob.downloadToBuffer();
+}
+
 export async function uploadChecklistPresentationBlob(
   blobName: string,
   data: Buffer

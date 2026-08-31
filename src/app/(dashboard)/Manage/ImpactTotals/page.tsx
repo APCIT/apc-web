@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
+  GET_IMPACT_CALC_TOTALS_API,
   GET_IMPACT_TOTALS_API,
   GET_ME_API,
   SAVE_IMPACT_TOTALS_API,
@@ -42,6 +43,7 @@ export default function ImpactTotalsPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [prefilled, setPrefilled] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -59,18 +61,41 @@ export default function ImpactTotalsPage() {
       setInternId(id);
 
       const totals = await GET_IMPACT_TOTALS_API(id);
-      if (totals.ok) {
-        setForm({
-          ...emptyForm,
-          ...Object.fromEntries(
-            Object.entries(totals.data).map(([key, value]) => [
-              key,
-              value === null ? "" : String(value),
-            ])
-          ),
-        } as ImpactTotalsResponse);
-      } else {
+      if (!totals.ok) {
         setError(totals.error);
+        setLoading(false);
+        return;
+      }
+
+      const saved = {
+        ...emptyForm,
+        ...Object.fromEntries(
+          Object.entries(totals.data).map(([key, value]) => [
+            key,
+            value === null ? "" : String(value),
+          ])
+        ),
+      } as ImpactTotalsResponse;
+
+      setForm(saved);
+
+      // Only suggest figures from the calculator when the intern has not
+      // saved anything, so their own edits are never overwritten.
+      const hasSaved = Object.values(saved).some((value) => value !== "");
+      if (!hasSaved) {
+        const calc = await GET_IMPACT_CALC_TOTALS_API(id);
+        if (calc.ok && calc.data.hasAnyValue && calc.data.values) {
+          setForm({
+            ...emptyForm,
+            ...Object.fromEntries(
+              Object.entries(calc.data.values).map(([key, value]) => [
+                key,
+                value === null ? "" : String(value),
+              ])
+            ),
+          } as ImpactTotalsResponse);
+          setPrefilled(true);
+        }
       }
 
       setLoading(false);
@@ -92,6 +117,7 @@ export default function ImpactTotalsPage() {
 
     if (result.ok) {
       setMessage("Impact totals saved successfully.");
+      setPrefilled(false);
     } else {
       setError(result.error);
     }
@@ -125,6 +151,16 @@ export default function ImpactTotalsPage() {
           <>
             {error && <p className="text-red-600 font-roboto mb-4">{error}</p>}
             {message && <p className="text-green-700 font-roboto mb-4">{message}</p>}
+
+            {prefilled && (
+              <div className="mb-6 max-w-[900px] border border-[#e0d4a8] bg-[#fdf8e8] rounded-md px-4 py-3">
+                <p className="text-[#6b5a1f] font-roboto text-sm">
+                  These figures were read from the impact calculator you uploaded.
+                  Please check them against your workbook and correct anything that
+                  looks wrong before saving.
+                </p>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-[900px]">
               {fields.map((field) => (

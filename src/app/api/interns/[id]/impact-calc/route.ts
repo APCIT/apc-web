@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
-import { uploadImpactCalcBlob } from "@/lib/azure-storage";
+import { downloadImpactCalcBlob, uploadImpactCalcBlob } from "@/lib/azure-storage";
+import { parseImpactCalculator } from "@/lib/impact-calc-parser";
 
 const STAFF_ROLES = ["admin", "IT", "staff"];
 
@@ -44,6 +45,73 @@ async function requireAccessForInternId(
   }
 
   return { ok: true };
+}
+
+/** GET: the ten summary figures read out of the intern's uploaded impact
+ *  calculator, used to pre-fill the Impact Totals form.
+ *
+ *  Responds 200 even when nothing could be read, because this only ever
+ *  supplies a convenience. A missing, old-format, or malformed workbook must
+ *  leave the intern with a working empty form rather than an error. */
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const id = (await params).id;
+    if (!id?.trim()) {
+      return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    }
+
+    const access = await requireAccessForInternId(id);
+    if ("error" in access) return access.error;
+
+    const intern = await prisma.interns.findUnique({ where: { Id: id } });
+    if (!intern) {
+      return NextResponse.json({ error: "Intern not found" }, { status: 404 });
+    }
+
+    const blobName = intern.ImpactCalcId?.trim();
+    if (!blobName) {
+      return NextResponse.json({
+        hasFile: false,
+        values: null,
+        hasAnyValue: false,
+        reason: "No impact calculator has been uploaded yet.",
+      });
+    }
+
+    let file: Buffer;
+    try {
+      file = await downloadImpactCalcBlob(blobName);
+    } catch {
+      return NextResponse.json({
+        hasFile: true,
+        values: null,
+        hasAnyValue: false,
+        reason: "The uploaded impact calculator could not be retrieved.",
+      });
+    }
+
+    const parsed = await parseImpactCalculator(file);
+    if (!parsed.ok) {
+      return NextResponse.json({
+        hasFile: true,
+        values: null,
+        hasAnyValue: false,
+        reason: parsed.reason,
+      });
+    }
+
+    return NextResponse.json({
+      hasFile: true,
+      values: parsed.values,
+      hasAnyValue: parsed.hasAnyValue,
+    });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
 }
 
 /** POST: upload impact calculator file for intern; set Intern.ImpactCalcId to new blob name.
