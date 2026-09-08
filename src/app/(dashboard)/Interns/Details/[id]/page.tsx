@@ -27,13 +27,15 @@ import {
   UPDATE_INTERN_IMPACT_CALC_API,
   UPDATE_INTERN_PRESENTATION_API,
   GET_IMPACT_TOTALS_API,
+  GET_IMPACT_CALC_TOTALS_API,
+  getInternImpactCalcDownloadUrl,
   type InternDetailItem,
   type ImpactTotalsResponse,
   type CompanyItem,
   type WorkScheduleEntry,
   type TimelogEntry,
 } from "@/lib/api";
-import { table } from "console";
+import { differsFromCalc, type CalcValues } from "@/lib/impact-totals";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -181,7 +183,6 @@ const RIGHT_ACTIONS: { label: string; icon?: React.ReactNode }[] = [
 ];
 
 const RESUME_BLOB_BASE = "https://apcstorage.blob.core.windows.net/resumes";
-const IMPACT_CALC_BLOB_BASE = "https://apcstorage.blob.core.windows.net/checklist-impactcalculator";
 const PRESENTATION_BLOB_BASE = "https://apcstorage.blob.core.windows.net/checklist-presentation";
 
 /** Left/right table row – same style as PastInterns Details. */
@@ -258,6 +259,48 @@ function formatImpactValue(value: number | string | null | undefined, isCount = 
   })}`;
 }
 
+const IMPACT_TOTALS_FIELDS: (keyof ImpactTotalsResponse)[] = [
+  "increasedSales",
+  "retainedSales",
+  "jobsCreated",
+  "numberJobsCreated",
+  "jobsRetained",
+  "numberJobsRetained",
+  "costAvoidanceGovtFines",
+  "timeCostReduction",
+  "investments",
+  "avoidedInvestments",
+];
+
+/**
+ * The confirmed figure, followed by the calculator's own figure whenever the
+ * two disagree. Staff review these before reporting, so a silent difference
+ * between what the workbook produced and what the intern confirmed is exactly
+ * what needs surfacing.
+ */
+function impactCellValue(
+  submitted: ImpactTotalsResponse | null,
+  calc: CalcValues | null,
+  field: keyof ImpactTotalsResponse,
+  isCount = false
+): React.ReactNode {
+  const value = submitted?.[field];
+  const calcValue = calc?.[field] ?? null;
+
+  if (!differsFromCalc(String(value ?? ""), calcValue) || calcValue === null) {
+    return formatImpactValue(value, isCount);
+  }
+
+  return (
+    <>
+      <span className="block">{formatImpactValue(value, isCount)}</span>
+      <span className="block mt-[3px] text-[12px] text-[#8a6d1f]">
+        calculator: {formatImpactValue(calcValue, isCount)}
+      </span>
+    </>
+  );
+}
+
 /** Address line from street, apt, city, state, zip. */
 function formatAddress(i: InternDetailItem): string | undefined {
   if (!i.street?.trim()) return undefined;
@@ -330,6 +373,7 @@ export default function InternDetailsPage() {
   const [updateImpactCalcSelectedFileName, setUpdateImpactCalcSelectedFileName] = useState<string | null>(null);
   const impactCalcFileInputRef = useRef<HTMLInputElement>(null);
   const [impactTotals, setImpactTotals] = useState<ImpactTotalsResponse | null>(null);
+  const [calcTotals, setCalcTotals] = useState<CalcValues | null>(null);
   const updatePresentationDisclosure = useDisclosure();
   const [updatePresentationLoading, setUpdatePresentationLoading] = useState(false);
   const [updatePresentationError, setUpdatePresentationError] = useState<string | null>(null);
@@ -410,6 +454,14 @@ export default function InternDetailsPage() {
   GET_IMPACT_TOTALS_API(id).then((res) => {
     if (res.ok) {
       setImpactTotals(res.data);
+    }
+  });
+
+  // Read the intern's calculator too, so staff can see at a glance where the
+  // confirmed figures were changed from what the workbook produced.
+  GET_IMPACT_CALC_TOTALS_API(id).then((res) => {
+    if (res.ok && res.data.hasAnyValue && res.data.values) {
+      setCalcTotals(res.data.values);
     }
   });
 }, [id]);
@@ -713,6 +765,11 @@ export default function InternDetailsPage() {
   const canEditTimelogs = !!roles?.some((r) =>
     ["admin", "IT"].includes(r)
   );
+  const impactTotalsDiffer =
+    calcTotals !== null &&
+    IMPACT_TOTALS_FIELDS.some((field) =>
+      differsFromCalc(String(impactTotals?.[field] ?? ""), calcTotals[field])
+    );
   const canViewImpactCalc = !!roles?.some((r) =>
     ["admin", "IT", "staff", "reception"].includes(r)
   );
@@ -1371,18 +1428,25 @@ export default function InternDetailsPage() {
         HeadingComponent="div"
 >
           <div className="p-0">
+            {impactTotalsDiffer && (
+              <p className="px-[10px] py-[8px] font-roboto text-[13px] text-[#8a6d1f] bg-[#fdf8e8] border border-[#e0d4a8]">
+                Some confirmed figures differ from the intern&rsquo;s uploaded
+                impact calculator. The calculator&rsquo;s figure is shown beneath
+                each one.
+              </p>
+            )}
             <table className="w-full border-collapse font-roboto text-sm">
               <tbody>
-                <TableRow label="Increased Sales" value={formatImpactValue(impactTotals?.increasedSales)} skeleton={showSkeleton} />
-                <TableRow label="Retained Sales" value={formatImpactValue(impactTotals?.retainedSales)} skeleton={showSkeleton} />
-                <TableRow label="Jobs Created" value={formatImpactValue(impactTotals?.jobsCreated)} skeleton={showSkeleton} />
-                <TableRow label="# Jobs Created" value={formatImpactValue(impactTotals?.numberJobsCreated, true)} skeleton={showSkeleton} />
-                <TableRow label="Jobs Retained" value={formatImpactValue(impactTotals?.jobsRetained)} skeleton={showSkeleton} />
-                <TableRow label="# Jobs Retained" value={formatImpactValue(impactTotals?.numberJobsRetained, true)} skeleton={showSkeleton} />
-                <TableRow label="Gov't Fines" value={formatImpactValue(impactTotals?.costAvoidanceGovtFines)} skeleton={showSkeleton} />
-                <TableRow label="Time Cost Reduction" value={formatImpactValue(impactTotals?.timeCostReduction)} skeleton={showSkeleton} />
-                <TableRow label="Investments" value={formatImpactValue(impactTotals?.investments)} skeleton={showSkeleton} />
-                <TableRow label="Avoided Investments" value={formatImpactValue(impactTotals?.avoidedInvestments)} skeleton={showSkeleton} />
+                <TableRow label="Increased Sales" value={impactCellValue(impactTotals, calcTotals, "increasedSales")} skeleton={showSkeleton} />
+                <TableRow label="Retained Sales" value={impactCellValue(impactTotals, calcTotals, "retainedSales")} skeleton={showSkeleton} />
+                <TableRow label="Jobs Created" value={impactCellValue(impactTotals, calcTotals, "jobsCreated")} skeleton={showSkeleton} />
+                <TableRow label="# Jobs Created" value={impactCellValue(impactTotals, calcTotals, "numberJobsCreated", true)} skeleton={showSkeleton} />
+                <TableRow label="Jobs Retained" value={impactCellValue(impactTotals, calcTotals, "jobsRetained")} skeleton={showSkeleton} />
+                <TableRow label="# Jobs Retained" value={impactCellValue(impactTotals, calcTotals, "numberJobsRetained", true)} skeleton={showSkeleton} />
+                <TableRow label="Gov't Fines" value={impactCellValue(impactTotals, calcTotals, "costAvoidanceGovtFines")} skeleton={showSkeleton} />
+                <TableRow label="Time Cost Reduction" value={impactCellValue(impactTotals, calcTotals, "timeCostReduction")} skeleton={showSkeleton} />
+                <TableRow label="Investments" value={impactCellValue(impactTotals, calcTotals, "investments")} skeleton={showSkeleton} />
+                <TableRow label="Avoided Investments" value={impactCellValue(impactTotals, calcTotals, "avoidedInvestments")} skeleton={showSkeleton} />
                 </tbody>
                 </table>
                 </div>
@@ -1617,7 +1681,7 @@ export default function InternDetailsPage() {
                       if (canViewImpactCalc && hasValid) {
                         return (
                           <a
-                            href={`${IMPACT_CALC_BLOB_BASE}/${encodeURIComponent(icId)}`}
+                            href={getInternImpactCalcDownloadUrl(id)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={actionButtonClass}

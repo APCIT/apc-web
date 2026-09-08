@@ -1,5 +1,6 @@
 import { getSession } from "@/lib/auth";
 import { canAccessPath } from "@/lib/auth-routes";
+import ImpactTotalsBanner from "@/components/ImpactTotalsBanner";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -19,5 +20,14 @@ export default async function DashboardLayout({
     redirect("/Account/Unauthorized");
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <ImpactTotalsBanner
+        userId={session.userId}
+        roles={session.roles ?? []}
+        pathname={pathname}
+      />
+      {children}
+    </>
+  );
 }

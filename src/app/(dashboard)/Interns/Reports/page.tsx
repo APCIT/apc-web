@@ -80,7 +80,9 @@ export default function InternsReportsPage() {
                 const list =
                   reportType === "Impact Calculator"
                     ? data.impactCalcList
-                    : data.presentationList;
+                    : reportType === "Impact Totals"
+                      ? (data.impactTotalsList ?? [])
+                      : data.presentationList;
                 return (
                   <AccordionItem
                     key={reportType}

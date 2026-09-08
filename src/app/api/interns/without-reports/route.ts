@@ -37,9 +37,11 @@ export type WithoutReportsResponse = {
   reportTypes: string[];
   impactCalcList: WithoutReportsItem[];
   presentationList: WithoutReportsItem[];
+  impactTotalsList: WithoutReportsItem[];
 };
 
-/** GET: Lists of current interns missing Impact Calculator or Presentation. Auth: admin, IT, reception, staff. */
+/** GET: Lists of current interns missing Impact Calculator, Presentation, or
+ *  confirmed Impact Totals. Auth: admin, IT, reception, staff. */
 export async function GET() {
   try {
     const access = await requireAccess();
@@ -48,6 +50,7 @@ export async function GET() {
     const interns = await prisma.interns.findMany({
       include: {
         AspNetUsers: { include: { Companies: true } },
+        ImpactTotals: { select: { Id: true } },
       },
     });
     interns.sort((a, b) => {
@@ -68,11 +71,13 @@ export async function GET() {
 
     const impactCalcList = interns.filter((i) => i.ImpactCalcId == null || i.ImpactCalcId.trim() === "").map(toItem);
     const presentationList = interns.filter((i) => i.PresentationId == null || i.PresentationId.trim() === "").map(toItem);
+    const impactTotalsList = interns.filter((i) => i.ImpactTotals == null).map(toItem);
 
     const body: WithoutReportsResponse = {
-      reportTypes: ["Impact Calculator", "Presentation"],
+      reportTypes: ["Impact Calculator", "Presentation", "Impact Totals"],
       impactCalcList,
       presentationList,
+      impactTotalsList,
     };
 
     return NextResponse.json(body);

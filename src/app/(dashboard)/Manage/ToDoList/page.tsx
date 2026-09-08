@@ -1,16 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   GET_TODO_LIST_API,
   UPDATE_INTERN_IMPACT_CALC_API,
   UPDATE_INTERN_PRESENTATION_API,
+  getInternImpactCalcDownloadUrl,
   type TodoListResponse,
 } from '@/lib/api';
 
 const BLOB_BASE = 'https://apcstorage.blob.core.windows.net';
-const CONTAINER_IMPACT_CALC = 'checklist-impactcalculator';
 const CONTAINER_PRESENTATION = 'checklist-presentation';
 
 function fileToBase64(file: File): Promise<string> {
@@ -41,6 +42,7 @@ function formatDueDate(semesterMonth: number | null): string {
 }
 
 export default function ToDoListPage() {
+  const router = useRouter();
   const [data, setData] = useState<TodoListResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -77,10 +79,11 @@ export default function ToDoListPage() {
 
   const impactCompleted = !!(data?.impactCalcId && data.impactCalcId.length > 15);
   const presCompleted = !!(data?.presentationId && data.presentationId.length > 15);
+  const totalsCompleted = !!data?.hasImpactTotals;
 
   const impactHref =
-    impactCompleted && data?.impactCalcId
-      ? `${BLOB_BASE}/${CONTAINER_IMPACT_CALC}/${encodeURIComponent(data.impactCalcId)}`
+    impactCompleted && data?.internId
+      ? getInternImpactCalcDownloadUrl(data.internId)
       : null;
 
   const presHref =
@@ -131,6 +134,7 @@ export default function ToDoListPage() {
         if (failed) {
           setSaveError(failed.error ?? 'Failed to save uploads.');
         } else {
+          const uploadedImpactCalc = !!impactFile;
           setSaveSuccess('Files saved successfully.');
           setImpactFile(null);
           setImpactFileName(null);
@@ -138,6 +142,14 @@ export default function ToDoListPage() {
           setPresFileName(null);
           if (impactFileInputRef.current) impactFileInputRef.current.value = '';
           if (presFileInputRef.current) presFileInputRef.current.value = '';
+
+          // A new calculator means new figures to confirm, so take the intern
+          // straight there rather than relying on them to find the page.
+          if (uploadedImpactCalc) {
+            router.push('/Manage/ImpactTotals?fromUpload=1');
+            return;
+          }
+
           load();
         }
       } catch {
@@ -146,7 +158,7 @@ export default function ToDoListPage() {
         setSaving(false);
       }
     },
-    [data?.internId, impactFile, presFile, load],
+    [data?.internId, impactFile, presFile, load, router],
   );
 
   return (
@@ -378,6 +390,41 @@ export default function ToDoListPage() {
                         }}
                       />
                     </div>
+                  </td>
+                  <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
+                    <span className="text-[#909090] font-roboto text-[14px]">
+                      {formatDueDate(data?.semesterMonth ?? null)}
+                    </span>
+                  </td>
+                </tr>
+
+                <tr className="bg-white hover:bg-[#f5f5f5]">
+                  <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-top">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4"
+                      checked={totalsCompleted}
+                      readOnly
+                    />
+                  </td>
+                  <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
+                    <span className="text-[#909090] font-roboto text-[14px]">
+                      Impact Totals
+                    </span>
+                  </td>
+                  <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
+                    <span className="text-[11px] text-[#909090] font-roboto">
+                      Upload your Impact Calculator first and these will be filled in
+                      for you to check.
+                    </span>
+                  </td>
+                  <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
+                    <Link
+                      href="/Manage/ImpactTotals"
+                      className="font-roboto text-[14px] text-[#909090] no-underline hover:underline"
+                    >
+                      {totalsCompleted ? 'Review your totals' : 'Enter your totals'}
+                    </Link>
                   </td>
                   <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
                     <span className="text-[#909090] font-roboto text-[14px]">

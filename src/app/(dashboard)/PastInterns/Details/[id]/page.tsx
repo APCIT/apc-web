@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { GET_PAST_INTERN_BY_ID_API, type PastInternDetailItem } from "@/lib/api";
+import {
+  GET_PAST_INTERN_BY_ID_API,
+  getPastInternImpactCalcDownloadUrl,
+  type PastInternDetailItem,
+} from "@/lib/api";
 
 const BLOB_BASE = "https://apcstorage.blob.core.windows.net";
 const CONTAINER_MID_SEM = "intern-reports";
-const CONTAINER_IMPACT_CALC = "checklist-impactcalculator";
 const CONTAINER_PRESENTATION = "checklist-presentation";
 
 const backButtonClass =
@@ -182,7 +185,7 @@ export default function PastInternDetailsPage() {
       : null;
   const impactHref =
     p?.impactCalcId && p.impactCalcId.length > 15
-      ? `${BLOB_BASE}/${CONTAINER_IMPACT_CALC}/${encodeURIComponent(p.impactCalcId)}`
+      ? getPastInternImpactCalcDownloadUrl(p.id)
       : null;
   const presHref =
     p?.presentationId && p.presentationId.length > 15

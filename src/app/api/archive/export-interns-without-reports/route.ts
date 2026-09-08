@@ -35,16 +35,26 @@ function escapeHtml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-const HEADERS = ["Last Name", "First Name", "Impact Calculator", "Presentation"];
+const HEADERS = [
+  "Last Name",
+  "First Name",
+  "Impact Calculator",
+  "Presentation",
+  "Impact Totals",
+];
 
-/** GET: Export all current interns with Impact Calculator / Presentation status. Auth: admin, IT, reception, staff. */
+/** GET: Export all current interns with Impact Calculator / Presentation /
+ *  Impact Totals status. Auth: admin, IT, reception, staff. */
 export async function GET() {
   try {
     const access = await requireAccess();
     if ("error" in access) return access.error;
 
     const interns = await prisma.interns.findMany({
-      include: { AspNetUsers: { include: { Companies: true } } },
+      include: {
+        AspNetUsers: { include: { Companies: true } },
+        ImpactTotals: { select: { Id: true } },
+      },
     });
     interns.sort((a, b) => {
       const la = a.AspNetUsers?.LastName ?? "";
@@ -63,11 +73,13 @@ export async function GET() {
       const hasPres = i.PresentationId != null && i.PresentationId.trim() !== "";
       const impactCell = hasImpact ? "COMPLETE" : " ";
       const presCell = hasPres ? "COMPLETE" : " ";
+      const totalsCell = i.ImpactTotals != null ? "COMPLETE" : " ";
       const cells = [
         i.AspNetUsers?.LastName ?? "",
         i.AspNetUsers?.FirstName ?? "",
         impactCell,
         presCell,
+        totalsCell,
       ];
       tableRows += "<tr>" + cells.map((c) => `<td>${escapeHtml(String(c))}</td>`).join("") + "</tr>";
     }

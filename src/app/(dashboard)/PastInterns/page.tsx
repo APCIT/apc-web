@@ -9,12 +9,12 @@ import {
   DELETE_PAST_INTERN_API,
   getPastInternAtnExportUrl,
   getPastInternExportUrl,
+  getPastInternImpactCalcDownloadUrl,
   type PastInternItem,
 } from "@/lib/api";
 
 const BLOB_BASE = "https://apcstorage.blob.core.windows.net";
 const CONTAINER_MID_SEM = "intern-reports";
-const CONTAINER_IMPACT_CALC = "checklist-impactcalculator";
 const CONTAINER_PRESENTATION = "checklist-presentation";
 
 const DELETE_CONFIRM_MESSAGE = "Are you sure you want to permanently delete this past intern?";
@@ -224,7 +224,7 @@ export default function PastInternsPage() {
                                 : null;
                             const impactHref =
                               p.impactCalcId && p.impactCalcId.length > 15
-                                ? `${BLOB_BASE}/${CONTAINER_IMPACT_CALC}/${encodeURIComponent(p.impactCalcId)}`
+                                ? getPastInternImpactCalcDownloadUrl(p.id)
                                 : null;
                             const presHref =
                               p.presentationId && p.presentationId.length > 15

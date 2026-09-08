@@ -60,6 +60,7 @@ export type TodoListResponse = {
   semesterMonth: number | null;
   impactCalcId: string | null;
   presentationId: string | null;
+  hasImpactTotals: boolean;
 };
 
 export async function GET() {
@@ -69,7 +70,7 @@ export async function GET() {
 
     const intern = await prisma.interns.findUnique({
       where: { Id: access.internId },
-      include: { AspNetUsers: true },
+      include: { AspNetUsers: true, ImpactTotals: { select: { Id: true } } },
     });
 
     if (!intern) {
@@ -91,6 +92,7 @@ export async function GET() {
       semesterMonth,
       impactCalcId: intern.ImpactCalcId ?? null,
       presentationId: intern.PresentationId ?? null,
+      hasImpactTotals: intern.ImpactTotals !== null,
     };
 
     return NextResponse.json(payload);

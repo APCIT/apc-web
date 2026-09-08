@@ -9,6 +9,7 @@ import {
   SAVE_IMPACT_TOTALS_API,
   type ImpactTotalsResponse,
 } from "@/lib/api";
+import { differsFromCalc, type CalcValues } from "@/lib/impact-totals";
 
 const emptyForm: ImpactTotalsResponse = {
   increasedSales: "",
@@ -44,6 +45,8 @@ export default function ImpactTotalsPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [prefilled, setPrefilled] = useState(false);
+  const [calcValues, setCalcValues] = useState<CalcValues | null>(null);
+  const [fromUpload, setFromUpload] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -78,13 +81,20 @@ export default function ImpactTotalsPage() {
       } as ImpactTotalsResponse;
 
       setForm(saved);
+      setFromUpload(
+        new URLSearchParams(window.location.search).get("fromUpload") === "1"
+      );
 
-      // Only suggest figures from the calculator when the intern has not
-      // saved anything, so their own edits are never overwritten.
-      const hasSaved = Object.values(saved).some((value) => value !== "");
-      if (!hasSaved) {
-        const calc = await GET_IMPACT_CALC_TOTALS_API(id);
-        if (calc.ok && calc.data.hasAnyValue && calc.data.values) {
+      const calc = await GET_IMPACT_CALC_TOTALS_API(id);
+      if (calc.ok && calc.data.hasAnyValue && calc.data.values) {
+        setCalcValues(calc.data.values);
+
+        // Fill the form from the calculator only when nothing has been saved,
+        // so an intern's own figures are never overwritten. Where they have
+        // saved something, the calculator is shown alongside each field
+        // instead and they decide what to do about any difference.
+        const hasSaved = Object.values(saved).some((value) => value !== "");
+        if (!hasSaved) {
           setForm({
             ...emptyForm,
             ...Object.fromEntries(
@@ -125,6 +135,12 @@ export default function ImpactTotalsPage() {
     setSaving(false);
   }
 
+  const differences = calcValues
+    ? fields.filter((field) =>
+        differsFromCalc(String(form[field.name]), calcValues[field.name])
+      )
+    : [];
+
   return (
     <div className="w-full bg-white">
       <div className="py-8 px-[50px]">
@@ -162,19 +178,51 @@ export default function ImpactTotalsPage() {
               </div>
             )}
 
+            {!prefilled && differences.length > 0 && (
+              <div className="mb-6 max-w-[900px] border border-[#e0d4a8] bg-[#fdf8e8] rounded-md px-4 py-3">
+                <p className="text-[#6b5a1f] font-roboto text-sm">
+                  {fromUpload
+                    ? "The calculator you just uploaded reports different figures to the ones saved here."
+                    : "Some of these figures differ from your uploaded impact calculator."}{" "}
+                  The calculator&rsquo;s value is shown under each field that differs.
+                  Nothing has been changed for you &mdash; update anything that needs
+                  correcting, then save.
+                </p>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-[900px]">
-              {fields.map((field) => (
-                <label key={field.name} className="flex flex-col gap-1 text-[#666666] font-roboto text-sm">
-                  <span>{field.label}</span>
-                  <input
-                    type="number"
-                    step="any"
-                    value={form[field.name]}
-                    onChange={(e) => updateField(field.name, e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-2 text-[#333333]"
-                  />
-                </label>
-              ))}
+              {fields.map((field) => {
+                const calcValue = calcValues?.[field.name] ?? null;
+                const differs = differsFromCalc(String(form[field.name]), calcValue);
+
+                return (
+                  <div key={field.name} className="flex flex-col gap-1">
+                    <label className="flex flex-col gap-1 text-[#666666] font-roboto text-sm">
+                      <span>{field.label}</span>
+                      <input
+                        type="number"
+                        step="any"
+                        value={form[field.name]}
+                        onChange={(e) => updateField(field.name, e.target.value)}
+                        className="border border-gray-300 rounded-md px-3 py-2 text-[#333333]"
+                      />
+                    </label>
+                    {differs && calcValue !== null && (
+                      <span className="text-[12px] text-[#6b5a1f] font-roboto">
+                        Calculator: {calcValue}
+                        <button
+                          type="button"
+                          onClick={() => updateField(field.name, String(calcValue))}
+                          className="ml-2 underline"
+                        >
+                          use this
+                        </button>
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             <button

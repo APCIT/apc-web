@@ -702,6 +702,7 @@ export type WithoutReportsResponse = {
   reportTypes: string[];
   impactCalcList: WithoutReportsItem[];
   presentationList: WithoutReportsItem[];
+  impactTotalsList: WithoutReportsItem[];
 };
 
 export async function GET_INTERNS_WITHOUT_REPORTS_API(): Promise<
@@ -1471,6 +1472,7 @@ export type TodoListResponse = {
   semesterMonth: number | null;
   impactCalcId: string | null;
   presentationId: string | null;
+  hasImpactTotals: boolean;
 };
 
 export async function GET_TODO_LIST_API(): Promise<
@@ -1598,6 +1600,17 @@ export async function DELETE_PAST_INTERN_API(id: number): Promise<
     };
   }
   return { ok: true };
+}
+
+/** Impact calculator download for a current intern. Served through the app so
+ *  the file arrives named after the intern rather than its stored blob GUID. */
+export function getInternImpactCalcDownloadUrl(internId: string): string {
+  return `${API.interns}/${encodeURIComponent(internId)}/impact-calc/download`;
+}
+
+/** Impact calculator download for a past intern. */
+export function getPastInternImpactCalcDownloadUrl(pastInternId: number | string): string {
+  return `${API.pastInterns}/${encodeURIComponent(String(pastInternId))}/impact-calc/download`;
 }
 
 /** Build Intern Profile Report URL for a semester (date as yyyy-MM-dd). */
