@@ -43,6 +43,12 @@ type NewsArticle = {
 
 const newsletterEntries: NewsletterEntry[] = [
   {
+    title: 'August 2026',
+    href: 'https://t.e2ma.net/webview/th6r0r/207a7cbe73ea9c7bb8f43a7a6ad009fd',
+    cta: 'View Newsletter',
+    isExternal: true,
+  },
+  {
     title: 'July 2026',
     href: 'https://t.e2ma.net/webview/1zxrzr/4694f140233ca30bde0184477107f027',
     cta: 'View Newsletter',
