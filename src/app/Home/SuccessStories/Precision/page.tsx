@@ -148,7 +148,7 @@ export default function PrecisionSuccessStoryPage() {
           </Link>
 
           <Link href="/Home/Services" style={secondaryButtonStyle}>
-            Explore Client Services
+            Explore Professional Services
           </Link>
         </div>
       </section>

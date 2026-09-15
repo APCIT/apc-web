@@ -13,7 +13,7 @@ const TITLE_RULES: TitleRule[] = [
   { test: /^\/Home$/, title: "Home - APC" },
   { test: /^\/Home\/Index$/, title: "Home - APC" },
   { test: /^\/Home\/About$/, title: "About Us - APC" },
-  { test: /^\/Home\/Services$/, title: "Client Services - APC" },
+  { test: /^\/Home\/Services$/, title: "Professional Services - APC" },
   { test: /^\/Home\/ExpandedServices$/, title: "Services Details - APC" },
   { test: /^\/Home\/Internships$/, title: "Internship Application - APC" },
   { test: /^\/Apply$/, title: "Internship Application - APC" },

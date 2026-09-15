@@ -49,7 +49,7 @@ export default function ServicesPage() {
     <div className="services-page w-full overflow-x-hidden">
       {/* Header Section */}
       <HeadingIntroBanner
-        title="Client Services"
+        title="Professional Services"
         backgroundImage="/images/factory3.jpg"
       />
 
@@ -152,7 +152,7 @@ export default function ServicesPage() {
                 margin: 0,
               }}
             >
-              Our Client Services
+              Our Professional Services
             </h2>
 
             <div

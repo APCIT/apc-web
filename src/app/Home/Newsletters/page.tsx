@@ -79,36 +79,6 @@ const newsletterEntries: NewsletterEntry[] = [
     isExternal: true
   },
   {
-    title: 'Spring 2023',
-    href: 'https://conta.cc/3WU74Ad',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
-    title: 'Summer 2022',
-    href: 'https://conta.cc/3qvnnYa',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
-    title: 'Spring 2022',
-    href: 'https://conta.cc/3hM8w41',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
-    title: 'Fall 2021',
-    href: 'https://conta.cc/3i6enSp',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
-    title: 'Spring 2021',
-    href: 'https://conta.cc/397VzgY',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
     title: 'Past News',
     href: '/Home/PastNewsletters',
     cta: 'Past Newsletters'
@@ -337,7 +307,7 @@ export default function NewslettersPage() {
             paddingRight: ua.space[4],
           }}
         >
-          {newsArticles.slice(0, newsletterEntries.length).map((article) => (
+          {newsArticles.map((article) => (
             <div key={article.title} className="news-article-row" style={newsArticleContainerStyle}>
               <div style={buttonSectionStyle}>
                 <a
