@@ -6,7 +6,7 @@ import Link from "next/link";
 import { GET_COMPANY_API, UPDATE_COMPANY_API } from "@/lib/api";
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold";
 const rowStyle = { marginBottom: "24px" };
@@ -56,6 +56,12 @@ export default function CompaniesEditPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    if (!name.trim()) {
+      setError("Name is required.");
+      return;
+    }
+
     setSubmitting(true);
     const res = await UPDATE_COMPANY_API(id, { name, abbreviation });
     setSubmitting(false);
@@ -71,7 +77,9 @@ export default function CompaniesEditPage() {
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
           <div style={{ height: "20px" }} />
-          <div className="text-center text-red-600 mb-6">{loadError}</div>
+          <div className="text-center text-red-600 mb-6" role="alert">
+            {loadError}
+          </div>
           <div>
             <Link href="/Companies" className={backButtonClass} style={{ fontWeight: "normal", textDecoration: "none" }}>
               <span className="text-[14px] font-bold" style={{ marginRight: "10px" }}>&#10094;</span>
@@ -96,9 +104,14 @@ export default function CompaniesEditPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Edit company">
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">
+            <div
+              id="company-edit-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-sm"
+              style={{ color: "#900" }}
+            >
               {error}
             </div>
           )}
@@ -117,7 +130,12 @@ export default function CompaniesEditPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className={inputClass}
-                  placeholder="Company name"
+                  disabled={submitting}
+                  required
+                  aria-required="true"
+                  aria-invalid={!!error && !name.trim()}
+                  aria-describedby={error ? "company-edit-error" : undefined}
+                  autoComplete="organization"
                 />
               )}
             </div>
@@ -137,7 +155,9 @@ export default function CompaniesEditPage() {
                   value={abbreviation}
                   onChange={(e) => setAbbreviation(e.target.value)}
                   className={inputClass}
-                  placeholder="Abbreviation"
+                  disabled={submitting}
+                  aria-invalid={!!error && error.toLowerCase().includes("abbreviation")}
+                  aria-describedby={error ? "company-edit-error" : undefined}
                 />
               )}
             </div>

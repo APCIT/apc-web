@@ -20,7 +20,7 @@ const impacts = [
 
 export default function AustalSuccessStoryPage() {
   return (
-    <main
+    <div
       className="w-full overflow-x-hidden"
       style={{ backgroundColor: '#F2F3F4' }}
     >
@@ -287,7 +287,7 @@ export default function AustalSuccessStoryPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

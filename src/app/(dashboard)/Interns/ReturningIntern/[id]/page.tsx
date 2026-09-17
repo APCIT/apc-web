@@ -12,9 +12,9 @@ import {
 } from "@/lib/api";
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const selectClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px] bg-white";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px] bg-white";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold";
 const rowStyle = { marginBottom: "24px" };
@@ -136,7 +136,7 @@ export default function ReturningInternPage() {
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
           <div style={{ height: "20px" }} />
-          <div className="text-center text-red-600 mb-6">{loadError}</div>
+          <div className="text-center text-red-600 mb-6" role="alert">{loadError}</div>
           <div>
             <Link
               href="/Interns"
@@ -170,29 +170,45 @@ export default function ReturningInternPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Returning intern semester">
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">
+            <div
+              id="returning-intern-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-sm"
+              style={{ color: "#900" }}
+            >
               {error}
             </div>
           )}
 
           {/* Semester season */}
           <div className="flex items-center" style={rowStyle}>
-            <label htmlFor="semester-season" className={labelClass}>
+            <span className={labelClass} id="semester-label">
               Semester
-            </label>
-            <div className="flex-1 flex gap-3" style={{ marginLeft: "20px" }}>
+            </span>
+            <div
+              className="flex-1 flex gap-3"
+              style={{ marginLeft: "20px" }}
+              role="group"
+              aria-labelledby="semester-label"
+            >
               {loading ? (
                 <div style={skeletonStyle} aria-hidden />
               ) : (
                 <>
+                  <label htmlFor="semester-season" className="sr-only">
+                    Season
+                  </label>
                   <select
                     id="semester-season"
                     value={season}
                     onChange={(e) => setSeason(e.target.value)}
                     className={selectClass}
-                    aria-label="Semester season"
+                    required
+                    aria-required="true"
+                    aria-invalid={!!error && !season}
+                    aria-describedby={error ? "returning-intern-error" : undefined}
                   >
                     {SEASON_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>
@@ -200,12 +216,18 @@ export default function ReturningInternPage() {
                       </option>
                     ))}
                   </select>
+                  <label htmlFor="semester-year" className="sr-only">
+                    Year
+                  </label>
                   <select
                     id="semester-year"
                     value={year}
                     onChange={(e) => setYear(e.target.value)}
                     className={selectClass}
-                    aria-label="Semester year"
+                    required
+                    aria-required="true"
+                    aria-invalid={!!error && !year}
+                    aria-describedby={error ? "returning-intern-error" : undefined}
                   >
                     {yearOptions.map((o) => (
                       <option key={o.value} value={o.value}>
@@ -227,15 +249,28 @@ export default function ReturningInternPage() {
               {loading ? (
                 <div style={skeletonStyle} aria-hidden />
               ) : (
-                <input
-                  id="wage"
-                  type="text"
-                  inputMode="decimal"
-                  value={wage}
-                  onChange={(e) => setWage(e.target.value)}
-                  className={inputClass}
-                  placeholder="Wage"
-                />
+                <>
+                  <input
+                    id="wage"
+                    type="text"
+                    inputMode="decimal"
+                    value={wage}
+                    onChange={(e) => setWage(e.target.value)}
+                    className={inputClass}
+                    required
+                    aria-required="true"
+                    aria-invalid={
+                      !!error &&
+                      (Number.isNaN(parseFloat(wage)) || parseFloat(wage) < 7.25)
+                    }
+                    aria-describedby={
+                      error ? "returning-intern-error wage-help" : "wage-help"
+                    }
+                  />
+                  <p id="wage-help" className="text-[12px] font-roboto text-[#4A4C54] mt-1">
+                    Minimum $7.25.
+                  </p>
+                </>
               )}
             </div>
           </div>
@@ -254,7 +289,10 @@ export default function ReturningInternPage() {
                   value={companyId || ""}
                   onChange={(e) => setCompanyId(Number(e.target.value))}
                   className={selectClass}
-                  aria-label="Company"
+                  required
+                  aria-required="true"
+                  aria-invalid={!!error && companyId <= 0}
+                  aria-describedby={error ? "returning-intern-error" : undefined}
                 >
                   <option value="">Company</option>
                   {companies.map((c) => (

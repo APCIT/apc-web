@@ -116,6 +116,8 @@ function HoursBar({
         border: "1px solid #990000",
         borderRadius: 3,
       }}
+      role="img"
+      aria-label={`${display} hours this week`}
     >
       {hours > 0 && (
         <div
@@ -222,7 +224,11 @@ export default function InternsPage() {
         </div>
 
         <div className="flex justify-end mb-4">
+          <label htmlFor="interns-sort" className="sr-only">
+            Order by
+          </label>
           <select
+            id="interns-sort"
             value={sortby}
             onChange={(e) => onOrderChange(e.target.value)}
             className="pl-[12px] pr-[32px] py-[8px] border border-[#333] rounded-[6px] text-[#333] bg-white text-[14px] font-normal cursor-pointer appearance-none bg-no-repeat"
@@ -241,7 +247,7 @@ export default function InternsPage() {
         </div>
 
         {error && (
-          <div className="mb-4 text-red-600 text-sm">
+          <div className="mb-4 text-red-600 text-sm" role="alert">
             {error}
           </div>
         )}
@@ -251,10 +257,11 @@ export default function InternsPage() {
           style={{ marginTop: "20px", marginBottom: "48px" }}
         >
           <table className="w-full border-collapse font-roboto text-sm">
+            <caption className="sr-only">Current interns</caption>
             <thead>
               <tr className="bg-[#9E1B32]">
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center w-[40px]" style={getThStyle(0)}>
-                  <span className="inline-flex items-center justify-center">
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center w-[40px]" style={getThStyle(0)}>
+                  <span className="inline-flex items-center justify-center" aria-label="Birthday">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -263,6 +270,7 @@ export default function InternsPage() {
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="1.2"
+                      aria-hidden
                     >
                       <rect x="2.5" y="5" width="11" height="8.5" rx="0.75" />
                       <path d="M2.5 7.5h11" />
@@ -272,46 +280,46 @@ export default function InternsPage() {
                     </svg>
                   </span>
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(1)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(1)}>
                   CWID
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(2)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(2)}>
                   Name
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(3)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(3)}>
                   Email
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(4)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(4)}>
                   Phone
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(5)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(5)}>
                   Company
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(6)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(6)}>
                   Semester
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(7)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(7)}>
                   Level
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(8)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(8)}>
                   Grad&nbsp;Date
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(9)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(9)}>
                   Hours&nbsp;This&nbsp;Week
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center w-[40px]" style={getThStyle(10)}>
-                  ⚑
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center w-[40px]" style={getThStyle(10)}>
+                  <span aria-label="Over hours flag">⚑</span>
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(11)}>
-                  $
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(11)}>
+                  <span aria-label="Wage">$</span>
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(12)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(12)}>
                   Actions
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(13)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(13)}>
                   To&nbsp;Applicant
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(14)}>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center" style={getThStyle(14)}>
                   Archive&nbsp;Intern
                 </th>
               </tr>
@@ -395,7 +403,7 @@ export default function InternsPage() {
                     <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666]" style={getTdStyle(10)}>
                       {(data?.isSummer && item.hoursThisWeek > 40) ||
                       (!data?.isSummer && item.hoursThisWeek > 20) ? (
-                        <span className="text-amber-600" title="Over weekly cap">
+                        <span className="text-amber-600" title="Over weekly cap" aria-label="Over weekly hour cap">
                           ⚑
                         </span>
                       ) : null}
@@ -416,7 +424,7 @@ export default function InternsPage() {
                     <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white" style={getTdStyle(13)}>
                       <button
                         type="button"
-                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-[#f5f5f5] focus:!bg-white focus:outline-none focus:ring-0 active:!bg-[#eee] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:!bg-white"
+                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-[#f5f5f5] focus:!bg-white focus:border-[#666] active:!bg-[#eee] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:!bg-white"
                         style={{
                           width: "48px",
                           minWidth: "48px",
@@ -462,7 +470,7 @@ export default function InternsPage() {
                     <td className="border border-[#ddd] p-[10px] text-center align-middle text-[#666] !bg-white" style={getTdStyle(14)}>
                       <button
                         type="button"
-                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-[#f5f5f5] focus:!bg-white focus:outline-none focus:ring-0 active:!bg-[#eee] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:!bg-white"
+                        className="inline-flex h-[40px] shrink-0 items-center justify-center rounded-[6px] border border-[#e8e8e8] !bg-white hover:!bg-[#f5f5f5] focus:!bg-white focus:border-[#666] active:!bg-[#eee] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:!bg-white"
                         style={{
                           width: "48px",
                           minWidth: "48px",

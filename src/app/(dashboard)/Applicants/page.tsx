@@ -179,7 +179,11 @@ export default function ApplicantsPage() {
             </Link>
           </div>
 
+          <label htmlFor="applicants-sort" className="sr-only">
+            Sort by
+          </label>
           <select
+            id="applicants-sort"
             value={effectiveSort}
             onChange={handleSortChange}
             className="pl-[12px] pr-[20px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal cursor-pointer appearance-none bg-no-repeat"
@@ -200,15 +204,24 @@ export default function ApplicantsPage() {
         <div style={{ height: "20px" }} />
 
         <div className="overflow-x-auto">
-          {error && <p className="font-roboto text-red-600 mb-4">{error}</p>}
+          {error && (
+            <p className="font-roboto text-red-600 mb-4" role="alert">
+              {error}
+            </p>
+          )}
           <table className="w-full border-collapse font-roboto text-sm">
+            <caption className="sr-only">Internship applicants</caption>
             <thead>
               <tr className="bg-[#9E1B32]">
-                <th className={`${thClass} w-[40px]`} style={symbolBold}>
+                <th scope="col" className={`${thClass} w-[40px]`} style={symbolBold}>
                   <Popover placement="right">
                     <PopoverTrigger>
-                      <button className="cursor-pointer bg-transparent border-none p-0 text-white hover:opacity-80" type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <button
+                        className="cursor-pointer bg-transparent border-none p-0 text-white hover:opacity-80"
+                        type="button"
+                        aria-label="Status symbol legend"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
                           <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                           <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
                         </svg>
@@ -241,34 +254,34 @@ export default function ApplicantsPage() {
                     </PopoverContent>
                   </Popover>
                 </th>
-                <th className={thClass}>
+                <th scope="col" className={thClass}>
                   Valid US
                   <br />
                   Employee
                 </th>
-                <th className={thClass} style={dateAppliedBold}>
+                <th scope="col" className={thClass} style={dateAppliedBold}>
                   Date
                   <br />
                   Applied
                 </th>
-                <th className={thClass} style={nameBold}>Name</th>
-                <th className={thClass} style={majorBold}>Major</th>
-                <th className={thClass} style={schoolBold}>School</th>
-                <th className={thClass} style={levelBold}>Level</th>
-                <th className={thClass} style={gradDateBold}>
+                <th scope="col" className={thClass} style={nameBold}>Name</th>
+                <th scope="col" className={thClass} style={majorBold}>Major</th>
+                <th scope="col" className={thClass} style={schoolBold}>School</th>
+                <th scope="col" className={thClass} style={levelBold}>Level</th>
+                <th scope="col" className={thClass} style={gradDateBold}>
                   Grad
                   <br />
                   Date
                 </th>
-                <th className={`${thClass}`} style={{ minWidth: "300px" }}>
+                <th scope="col" className={`${thClass}`} style={{ minWidth: "300px" }}>
                   Skills
                 </th>
-                <th className={thClass}>
+                <th scope="col" className={thClass}>
                   Foreign
                   <br />
                   Language
                 </th>
-                <th className={thClass}>Actions</th>
+                <th scope="col" className={thClass}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -291,7 +304,11 @@ export default function ApplicantsPage() {
                   return (
                     <tr key={app.id} className="bg-white hover:bg-[#f5f5f5]">
                       <td className={tdClass} style={symbolBold}>
-                        {symbol.type === "check" && <span className="text-[#228B22] font-bold">✔</span>}
+                        {symbol.type === "check" && (
+                          <span className="text-[#228B22] font-bold" aria-label="Interviewed">
+                            ✔
+                          </span>
+                        )}
                         {symbol.type === "phone" && (
                           <Popover placement="right">
                             <PopoverTrigger>
@@ -300,7 +317,7 @@ export default function ApplicantsPage() {
                                 className="cursor-pointer bg-transparent border-none p-0 inline-flex align-middle text-[#333] hover:opacity-80"
                                 aria-label="Called back details"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1" className="inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1" className="inline-block" aria-hidden>
                                   <rect x="4" y="1" width="8" height="14" rx="1" ry="1" />
                                   <line x1="6" y1="12" x2="10" y2="12" />
                                 </svg>
@@ -317,15 +334,27 @@ export default function ApplicantsPage() {
                             </PopoverContent>
                           </Popover>
                         )}
-                        {symbol.type === "star" && <span className="text-[#DAA520]" style={{ fontFamily: "serif" }}>★</span>}
-                        {symbol.type === "asterisk" && <span className="text-[#DC143C] font-bold">✱</span>}
+                        {symbol.type === "star" && (
+                          <span className="text-[#DAA520]" style={{ fontFamily: "serif" }} aria-label="Previous intern">
+                            ★
+                          </span>
+                        )}
+                        {symbol.type === "asterisk" && (
+                          <span className="text-[#DC143C] font-bold" aria-label="Has note">
+                            ✱
+                          </span>
+                        )}
                         {symbol.type === "none" && ""}
                       </td>
                       <td className={tdClass}>
                         {app.validEmp ? (
-                          <span className="text-[#228B22]">✔</span>
+                          <span className="text-[#228B22]" aria-label="Valid US employee">
+                            ✔
+                          </span>
                         ) : (
-                          <span className="text-[#DC143C]">−</span>
+                          <span className="text-[#DC143C]" aria-label="Not a valid US employee">
+                            −
+                          </span>
                         )}
                       </td>
                       <td className={tdClass} style={dateAppliedBold}>{formatShortDate(app.dateApplied)}</td>

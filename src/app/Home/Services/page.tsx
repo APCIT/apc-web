@@ -298,27 +298,73 @@ export default function ServicesPage() {
           <div className="contact-container">
             <h2 className="contact-title">How Can We Help You? We do more, just ask!</h2>
             <div className="contact-title-line" />
-            <form className="contact-form">
-              <input type="text" id="name" name="name" placeholder="Name" className="contact-input" />
-              <div className="contact-row">
-                <input type="email" id="email" name="email" placeholder="Email" className="contact-input" />
-                <input type="text" id="phone" name="phone" placeholder="Phone" className="contact-input" />
+            <form className="contact-form" aria-label="Request services">
+              <div className="contact-field">
+                <label htmlFor="services-contact-name" className="contact-label">Name</label>
+                <input
+                  type="text"
+                  id="services-contact-name"
+                  name="name"
+                  required
+                  aria-required="true"
+                  autoComplete="name"
+                  className="contact-input"
+                />
               </div>
-              <input type="text" id="company" name="company" placeholder="Company" className="contact-input" />
-              <input
-                type="text"
-                id="services"
-                name="services"
-                placeholder="Services Requested"
-                className="contact-input"
-              />
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                placeholder="Message"
-                className="contact-input contact-textarea"
-              />
+              <div className="contact-row">
+                <div className="contact-field">
+                  <label htmlFor="services-contact-email" className="contact-label">Email</label>
+                  <input
+                    type="email"
+                    id="services-contact-email"
+                    name="email"
+                    required
+                    aria-required="true"
+                    autoComplete="email"
+                    className="contact-input"
+                  />
+                </div>
+                <div className="contact-field">
+                  <label htmlFor="services-contact-phone" className="contact-label">Phone</label>
+                  <input
+                    type="tel"
+                    id="services-contact-phone"
+                    name="phone"
+                    autoComplete="tel"
+                    className="contact-input"
+                  />
+                </div>
+              </div>
+              <div className="contact-field">
+                <label htmlFor="services-contact-company" className="contact-label">Company</label>
+                <input
+                  type="text"
+                  id="services-contact-company"
+                  name="company"
+                  autoComplete="organization"
+                  className="contact-input"
+                />
+              </div>
+              <div className="contact-field">
+                <label htmlFor="services-contact-services" className="contact-label">Services requested</label>
+                <input
+                  type="text"
+                  id="services-contact-services"
+                  name="services"
+                  className="contact-input"
+                />
+              </div>
+              <div className="contact-field">
+                <label htmlFor="services-contact-message" className="contact-label">Message</label>
+                <textarea
+                  id="services-contact-message"
+                  name="message"
+                  rows={5}
+                  required
+                  aria-required="true"
+                  className="contact-input contact-textarea"
+                />
+              </div>
               <button type="submit" className="contact-submit">
                 Send Message →
               </button>

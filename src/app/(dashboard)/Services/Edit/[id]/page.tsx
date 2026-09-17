@@ -36,7 +36,7 @@ function getYearOptions(): number[] {
 }
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold";
 const rowStyle = { marginBottom: "24px" };
@@ -160,7 +160,7 @@ export default function ServiceEditPage() {
     return (
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
-          <p className="font-roboto text-red-600">Invalid service.</p>
+          <p className="font-roboto text-red-600" role="alert">Invalid service.</p>
           <Link href="/Services" className={backButtonClass + " mt-4 inline-block"}>
             Back To Index
           </Link>
@@ -174,7 +174,7 @@ export default function ServiceEditPage() {
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
           <div style={{ height: "20px" }} />
-          <div className="text-center text-red-600 mb-6">{error}</div>
+          <div className="text-center text-red-600 mb-6" role="alert">{error}</div>
           <div>
             <Link href="/Services" className={backButtonClass} style={{ fontWeight: "normal", textDecoration: "none" }}>
               <span className="text-[14px] font-bold" style={{ marginRight: "10px" }}>&#10094;</span>
@@ -204,10 +204,14 @@ export default function ServiceEditPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Edit service record">
           <input type="hidden" name="id" value={id} />
           {submitError && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">
+            <div
+              id="service-edit-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm"
+            >
               {submitError}
             </div>
           )}
@@ -225,6 +229,8 @@ export default function ServiceEditPage() {
                   onChange={(e) => setTypeOfService(e.target.value)}
                   className={inputClass}
                   required
+                  aria-required="true"
+                  aria-describedby={submitError ? "service-edit-error" : undefined}
                 />
               )}
             </div>
@@ -243,6 +249,8 @@ export default function ServiceEditPage() {
                   onChange={(e) => setStaffMember(e.target.value)}
                   className={inputClass}
                   required
+                  aria-required="true"
+                  aria-describedby={submitError ? "service-edit-error" : undefined}
                 />
               )}
             </div>
@@ -278,6 +286,8 @@ export default function ServiceEditPage() {
                   value={companyId === "" ? "" : String(companyId)}
                   onChange={(e) => setCompanyId(e.target.value === "" ? "" : Number(e.target.value))}
                   required
+                  aria-required="true"
+                  aria-describedby={submitError ? "service-edit-error" : undefined}
                 >
                   <option value="">Select company</option>
                   {companyList.map((c) => (
@@ -300,6 +310,8 @@ export default function ServiceEditPage() {
                   value={county}
                   onChange={(e) => setCounty(e.target.value)}
                   required
+                  aria-required="true"
+                  aria-describedby={submitError ? "service-edit-error" : undefined}
                 >
                   <option value="">Select county</option>
                   {countyList.map((c) => (
@@ -329,13 +341,14 @@ export default function ServiceEditPage() {
           </div>
 
           <div className="flex items-center" style={rowStyle}>
-            <label className={labelClass}>Certificate</label>
+            <label className={labelClass} htmlFor="certificate">Certificate</label>
             <div className="flex-1" style={{ marginLeft: "20px" }}>
               {loading ? (
                 <div style={skeletonStyle} aria-hidden />
               ) : (
                 <label className="flex items-center gap-2 font-roboto text-[14px] cursor-pointer">
                   <input
+                    id="certificate"
                     type="checkbox"
                     checked={certificate}
                     onChange={(e) => setCertificate(e.target.checked)}
@@ -365,13 +378,20 @@ export default function ServiceEditPage() {
           </div>
 
           <div className="flex items-center" style={rowStyle}>
-            <label className={labelClass}>Start Date</label>
-            <div className="flex-1 flex gap-2" style={{ marginLeft: "20px" }}>
+            <span id="start-date-label" className={labelClass}>Start Date</span>
+            <div
+              className="flex-1 flex gap-2"
+              style={{ marginLeft: "20px" }}
+              role="group"
+              aria-labelledby="start-date-label"
+            >
               {loading ? (
                 <div style={skeletonStyle} aria-hidden />
               ) : (
                 <>
+                  <label htmlFor="edit-start-month" className="sr-only">Start month</label>
                   <select
+                    id="edit-start-month"
                     className={inputClass}
                     style={{ width: "140px" }}
                     value={startDateMonth}
@@ -381,7 +401,9 @@ export default function ServiceEditPage() {
                       <option key={m} value={i + 1}>{m}</option>
                     ))}
                   </select>
+                  <label htmlFor="edit-start-year" className="sr-only">Start year</label>
                   <select
+                    id="edit-start-year"
                     className={inputClass}
                     style={{ width: "100px" }}
                     value={semesterYear}
@@ -397,13 +419,20 @@ export default function ServiceEditPage() {
           </div>
 
           <div className="flex items-center" style={rowStyle}>
-            <label className={labelClass}>End Date</label>
-            <div className="flex-1 flex gap-2" style={{ marginLeft: "20px" }}>
+            <span id="end-date-label" className={labelClass}>End Date</span>
+            <div
+              className="flex-1 flex gap-2"
+              style={{ marginLeft: "20px" }}
+              role="group"
+              aria-labelledby="end-date-label"
+            >
               {loading ? (
                 <div style={skeletonStyle} aria-hidden />
               ) : (
                 <>
+                  <label htmlFor="edit-end-month" className="sr-only">End month</label>
                   <select
+                    id="edit-end-month"
                     className={inputClass}
                     style={{ width: "140px" }}
                     value={endDateMonth}
@@ -413,7 +442,9 @@ export default function ServiceEditPage() {
                       <option key={m} value={i + 1}>{m}</option>
                     ))}
                   </select>
+                  <label htmlFor="edit-end-year" className="sr-only">End year</label>
                   <select
+                    id="edit-end-year"
                     className={inputClass}
                     style={{ width: "100px" }}
                     value={semesterYearEnd}
@@ -429,13 +460,14 @@ export default function ServiceEditPage() {
           </div>
 
           <div className="flex items-center" style={rowStyle}>
-            <label className={labelClass}>Completed</label>
+            <label className={labelClass} htmlFor="completed">Completed</label>
             <div className="flex-1" style={{ marginLeft: "20px" }}>
               {loading ? (
                 <div style={skeletonStyle} aria-hidden />
               ) : (
                 <label className="flex items-center gap-2 font-roboto text-[14px] cursor-pointer">
                   <input
+                    id="completed"
                     type="checkbox"
                     checked={completed}
                     onChange={(e) => setCompleted(e.target.checked)}

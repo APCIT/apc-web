@@ -8,7 +8,7 @@ const ua = {
   color: {
     textDefault: '#35363B',
     textAlt: '#4A4C54',
-    textSubtle: '#757C88',
+    textSubtle: '#4A4C54',
     primary: '#9E1B32',
     primaryHover: '#70202C',
     surface: '#FFFFFF',

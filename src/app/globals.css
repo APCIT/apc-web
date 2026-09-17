@@ -102,6 +102,92 @@ div[tabindex="-1"] > div[aria-hidden="true"]:first-child {
 
 html { scroll-behavior: smooth; }
 
+#main-content:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: fixed;
+  left: 0.75rem;
+  top: 0.75rem;
+  z-index: 10000;
+  padding: 0.75rem 1.25rem;
+  background: #ffffff;
+  color: #9e1b32;
+  font-family: proxima-nova, "Roboto", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: underline;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid #9e1b32 !important;
+  outline-offset: 2px !important;
+}
+
+/* Visible keyboard focus — WCAG 2.4.7 */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[role="menuitem"]:focus-visible,
+[role="tab"]:focus-visible,
+summary:focus-visible {
+  outline: 2px solid #9e1b32 !important;
+  outline-offset: 2px !important;
+}
+
+.ua_brand-bar a:focus-visible,
+.ua_brand-footer a:focus-visible,
+header a:focus-visible,
+header button:focus-visible,
+.navbar-mobile-menu a:focus-visible,
+.navbar-mobile-menu button:focus-visible {
+  outline-color: #ffffff !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  #studentSide,
+  #companySide {
+    transition: none !important;
+  }
+}
+
+.internships-panel:focus {
+  outline: none;
+}
+
+.internships-panel:focus-visible {
+  outline: 2px solid #9e1b32 !important;
+  outline-offset: -2px !important;
+}
+
+.carousel-pause-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #000000;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000000;
+  cursor: pointer;
+  line-height: 0;
+}
+
 /* ===== Manage Page Styles ===== */
 
 /* Manage page link styling - prevent purple visited links */
@@ -382,13 +468,13 @@ html, body {
   background-color: transparent !important;
 }
 
-/* Remove outline from dropdown trigger button */
-button[data-slot="trigger"],
-button[data-slot="trigger"]:focus,
+button[data-slot="trigger"] {
+  box-shadow: none;
+}
+
 button[data-slot="trigger"]:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
+  outline: 2px solid #ffffff !important;
+  outline-offset: 2px !important;
 }
 
 /* Staff Member Styles */
@@ -784,7 +870,7 @@ textarea.form-control {
     width: 40px !important;
   }
   
-  .carousel-intro .carousel-indicators {
+  .carousel-intro .carousel-controls {
     bottom: 5px !important;
   }
   
@@ -848,7 +934,7 @@ textarea.form-control {
     width: 30px !important;
   }
   
-  .carousel-stories .carousel-indicators {
+  .carousel-stories .carousel-controls {
     bottom: 10px !important;
   }
   
@@ -1951,6 +2037,11 @@ textarea.form-control {
     margin-left: auto !important;
     z-index: 1050 !important;
   }
+
+  .navbar-hamburger:focus-visible {
+    outline: 2px solid #ffffff !important;
+    outline-offset: 2px !important;
+  }
   
   .hamburger-line {
     display: block !important;
@@ -1990,6 +2081,11 @@ textarea.form-control {
   .navbar-mobile-menu.open {
     max-height: calc(100vh - 100px) !important;
     overflow-y: auto !important;
+    visibility: visible !important;
+  }
+
+  .navbar-mobile-menu:not(.open) {
+    visibility: hidden !important;
   }
   
   .mobile-nav-list {
@@ -2290,6 +2386,21 @@ header nav button {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-label {
+  font-family: proxima-nova, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #35363B;
 }
 
 .contact-row {

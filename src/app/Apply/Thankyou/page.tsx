@@ -42,7 +42,7 @@ export default function ApplyThankyouPage() {
         <p
           style={{
             fontSize: "1rem",
-            color: "#666",
+            color: "#4A4C54",
             fontFamily: "Roboto, sans-serif",
             marginBottom: "2rem",
           }}

@@ -21,7 +21,7 @@ import {
 } from "@/lib/api";
 
 const selectClass =
-  "px-2 py-1 border border-[#999] rounded text-[14px] font-roboto text-[#333] bg-white focus:outline-none focus:border-[#666]";
+  "px-2 py-1 border border-[#999] rounded text-[14px] font-roboto text-[#333] bg-white focus:border-[#666]";
 const backButtonClass =
   "inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
 
@@ -29,7 +29,7 @@ const actionButtonClass =
   "inline-flex items-center px-[12px] py-[6px] border border-[#900] rounded-[10px] text-[#900] bg-gray-200 hover:bg-gray-300 hover:border-[#700] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
 
 const detailsInputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 
 const skeletonStyle = {
   backgroundColor: "rgb(209 213 219)",
@@ -653,18 +653,22 @@ function TimePageContent() {
           </ModalHeader>
           <ModalBody className="gap-4 flex flex-col items-center" style={{ paddingBottom: 24 }}>
             <div className="flex items-center font-roboto justify-center">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Home State/Country: </label>
+              <label htmlFor="hometown-state" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Home State/Country: </label>
               <input
+                id="hometown-state"
                 type="text"
                 className={detailsInputClass + " w-[200px] max-w-[200px]"}
                 style={{ marginLeft: 24 }}
                 value={hometownValue}
                 onChange={(e) => setHometownValue(e.target.value)}
-                aria-label="Home State/Country"
+                required
+                aria-required="true"
+                aria-invalid={!!hometownError}
+                aria-describedby={hometownError ? "hometown-error" : undefined}
               />
             </div>
             {hometownError && (
-              <p className="text-red-600 text-sm font-roboto text-center w-full">{hometownError}</p>
+              <p id="hometown-error" role="alert" className="text-red-600 text-sm font-roboto text-center w-full">{hometownError}</p>
             )}
           </ModalBody>
           <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>
@@ -722,7 +726,7 @@ function TimePageContent() {
               </div>
             ) : saveError ? (
               <>
-                <p className="text-center text-red-600 text-sm">{saveError}</p>
+                <p className="text-center text-red-600 text-sm" role="alert">{saveError}</p>
                 <button
                   type="button"
                   onClick={saveModalDisclosure.onClose}
@@ -762,52 +766,66 @@ function TimePageContent() {
           </ModalHeader>
           <ModalBody className="gap-4 flex flex-col items-center" style={{ paddingBottom: 24 }}>
             <div className="flex items-center font-roboto justify-center">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Name: </label>
+              <label htmlFor="mentor-name" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Name: </label>
               <input
+                id="mentor-name"
                 type="text"
                 className={detailsInputClass + " w-[200px] max-w-[200px]"}
                 style={{ marginLeft: 24 }}
                 value={mentorName}
                 onChange={(e) => setMentorName(e.target.value)}
-                aria-label="Mentor Name"
+                required
+                aria-required="true"
+                autoComplete="name"
               />
             </div>
             <div className="flex items-center font-roboto justify-center">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Job Title: </label>
+              <label htmlFor="mentor-title" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Job Title: </label>
               <input
+                id="mentor-title"
                 type="text"
                 className={detailsInputClass + " w-[200px] max-w-[200px]"}
                 style={{ marginLeft: 24 }}
                 value={mentorTitle}
                 onChange={(e) => setMentorTitle(e.target.value)}
-                aria-label="Job Title"
+                required
+                aria-required="true"
               />
             </div>
             <div className="flex items-center font-roboto justify-center">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Phone: </label>
+              <label htmlFor="mentor-phone" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Phone: </label>
               <input
-                type="text"
+                id="mentor-phone"
+                type="tel"
                 className={detailsInputClass + " w-[200px] max-w-[200px]"}
                 style={{ marginLeft: 24 }}
-                placeholder="Ex: (555) 555-5555"
                 value={mentorPhone}
                 onChange={(e) => setMentorPhone(e.target.value)}
-                aria-label="Phone"
+                required
+                aria-required="true"
+                autoComplete="tel"
+                aria-describedby="mentor-phone-help"
               />
             </div>
+            <p id="mentor-phone-help" className="text-[12px] font-roboto text-[#4A4C54] text-center w-full -mt-2">
+              Ex: (555) 555-5555
+            </p>
             <div className="flex items-center font-roboto justify-center">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Email: </label>
+              <label htmlFor="mentor-email" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Email: </label>
               <input
+                id="mentor-email"
                 type="email"
                 className={detailsInputClass + " w-[200px] max-w-[200px]"}
                 style={{ marginLeft: 24 }}
                 value={mentorEmail}
                 onChange={(e) => setMentorEmail(e.target.value)}
-                aria-label="Email"
+                required
+                aria-required="true"
+                autoComplete="email"
               />
             </div>
             {mentorError && (
-              <p className="text-red-600 text-sm font-roboto text-center w-full">{mentorError}</p>
+              <p id="mentor-error" role="alert" className="text-red-600 text-sm font-roboto text-center w-full">{mentorError}</p>
             )}
           </ModalBody>
           <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>

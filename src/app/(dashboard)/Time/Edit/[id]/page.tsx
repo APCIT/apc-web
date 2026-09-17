@@ -10,11 +10,13 @@ import {
 } from "@/lib/api";
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const selectClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px] bg-white";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px] bg-white";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold";
+const textareaClass =
+  "w-full max-w-[90ch] min-w-[400px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666]";
 const rowStyle = { marginBottom: "24px" };
 const backButtonClass =
   "inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
@@ -197,7 +199,7 @@ function TimeEditContent() {
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
           <div style={{ height: "20px" }} />
-          <div className="text-center mb-6" style={{ color: "#b91c1c" }}>{loadError}</div>
+          <div className="text-center mb-6" style={{ color: "#b91c1c" }} role="alert">{loadError}</div>
           <div>
             <Link
               href={`/Interns/Details/${encodeURIComponent(id)}`}
@@ -239,28 +241,34 @@ function TimeEditContent() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Edit timelog">
           {/* Date (read-only) */}
           <div className="flex items-center" style={rowStyle}>
-            <label className={labelClass}>Date</label>
+            <label htmlFor="timelog-date" className={labelClass}>Date</label>
             <div className="flex-1" style={{ marginLeft: "20px" }}>
               {loading ? (
                 <div style={skeletonStyle} aria-hidden />
               ) : (
                 <input
+                  id="timelog-date"
                   type="text"
                   value={formatDateDisplay(date)}
                   readOnly
                   disabled
-                  className={inputClass + " w-[220px] bg-gray-100 text-[#666]"}
+                  className={inputClass + " w-[220px] bg-gray-100 text-[#4A4C54]"}
                 />
               )}
             </div>
           </div>
 
           {/* Start Time: Hour + Minute */}
-          <div className="flex items-center" style={rowStyle}>
-            <label className={labelClass}>Start Time</label>
+          <div
+            className="flex items-center"
+            style={rowStyle}
+            role="group"
+            aria-labelledby="start-time-label"
+          >
+            <span id="start-time-label" className={labelClass}>Start Time</span>
             <div className="flex-1 flex items-center gap-2" style={{ marginLeft: "20px" }}>
               {loading ? (
                 <div style={skeletonStyle} aria-hidden />
@@ -272,18 +280,22 @@ function TimeEditContent() {
                     onChange={(e) => setStartHour(e.target.value)}
                     className={selectClass}
                     aria-label="Start hour"
+                    required
+                    aria-required="true"
                   >
                     {START_HOUR_OPTIONS.map((o) => (
                       <option key={o.value || "blank"} value={o.value}>{o.label || "Hour"}</option>
                     ))}
                   </select>
-                  <span className="text-[#666]">:</span>
+                  <span className="text-[#4A4C54]" aria-hidden="true">:</span>
                   <select
                     id="startMinute"
                     value={startMinute}
                     onChange={(e) => setStartMinute(e.target.value)}
                     className={selectClass}
                     aria-label="Start minute"
+                    required
+                    aria-required="true"
                   >
                     {MINUTE_OPTIONS.map((o) => (
                       <option key={o.value || "blank"} value={o.value}>{o.label || "Min"}</option>
@@ -295,8 +307,13 @@ function TimeEditContent() {
           </div>
 
           {/* End Time: Hour + Minute */}
-          <div className="flex items-center" style={rowStyle}>
-            <label className={labelClass}>End Time</label>
+          <div
+            className="flex items-center"
+            style={rowStyle}
+            role="group"
+            aria-labelledby="end-time-label"
+          >
+            <span id="end-time-label" className={labelClass}>End Time</span>
             <div className="flex-1 flex items-center gap-2" style={{ marginLeft: "20px" }}>
               {loading ? (
                 <div style={skeletonStyle} aria-hidden />
@@ -308,18 +325,22 @@ function TimeEditContent() {
                     onChange={(e) => setEndHour(e.target.value)}
                     className={selectClass}
                     aria-label="End hour"
+                    required
+                    aria-required="true"
                   >
                     {END_HOUR_OPTIONS.map((o) => (
                       <option key={o.value || "blank"} value={o.value}>{o.label || "Hour"}</option>
                     ))}
                   </select>
-                  <span className="text-[#666]">:</span>
+                  <span className="text-[#4A4C54]" aria-hidden="true">:</span>
                   <select
                     id="endMinute"
                     value={endMinute}
                     onChange={(e) => setEndMinute(e.target.value)}
                     className={selectClass}
                     aria-label="End minute"
+                    required
+                    aria-required="true"
                   >
                     {MINUTE_OPTIONS.map((o) => (
                       <option key={o.value || "blank"} value={o.value}>{o.label || "Min"}</option>
@@ -362,9 +383,12 @@ function TimeEditContent() {
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full max-w-[90ch] min-w-[400px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666]"
+                  className={textareaClass}
                   rows={7}
-                  placeholder="Description (required)"
+                  required
+                  aria-required="true"
+                  aria-invalid={!!error && !description.trim()}
+                  aria-describedby={error ? "timelog-error" : undefined}
                 />
               )}
             </div>
@@ -393,7 +417,14 @@ function TimeEditContent() {
                 {deleting ? "Deleting…" : "Delete Timelog"}
               </button>
               {error && (
-                <span className="p-3 rounded bg-red-50 text-sm" style={{ color: "#b91c1c" }}>{error}</span>
+                <span
+                  id="timelog-error"
+                  role="alert"
+                  className="p-3 rounded bg-red-50 text-sm"
+                  style={{ color: "#b91c1c" }}
+                >
+                  {error}
+                </span>
               )}
             </div>
           </div>

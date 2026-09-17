@@ -6,7 +6,7 @@ import Link from "next/link";
 import { CHANGE_PASSWORD_API, GET_ME_API } from "@/lib/api";
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold";
 const rowStyle = { marginBottom: "24px" };
@@ -84,9 +84,14 @@ export default function ChangePasswordPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Change password">
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-sm" style={{ color: "#900" }}>
+            <div
+              id="change-password-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-sm"
+              style={{ color: "#900" }}
+            >
               {error}
             </div>
           )}
@@ -103,6 +108,9 @@ export default function ChangePasswordPage() {
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className={inputClass}
                 required
+                aria-required="true"
+                aria-invalid={!!error}
+                aria-describedby={error ? "change-password-error" : undefined}
                 autoComplete="current-password"
               />
             </div>
@@ -120,6 +128,9 @@ export default function ChangePasswordPage() {
                 onChange={(e) => setNewPassword(e.target.value)}
                 className={inputClass}
                 required
+                aria-required="true"
+                aria-invalid={!!error}
+                aria-describedby={error ? "change-password-error" : undefined}
                 minLength={6}
                 autoComplete="new-password"
               />
@@ -138,6 +149,9 @@ export default function ChangePasswordPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className={inputClass}
                 required
+                aria-required="true"
+                aria-invalid={!!error}
+                aria-describedby={error ? "change-password-error" : undefined}
                 minLength={6}
                 autoComplete="new-password"
               />

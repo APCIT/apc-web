@@ -164,7 +164,7 @@ export default function PastInternsPage() {
 
         <div className="manage-accordion px-4 mt-8">
           {error && (
-            <p className="font-roboto text-red-600 mb-4">{error}</p>
+            <p className="font-roboto text-red-600 mb-4" role="alert">{error}</p>
           )}
           {!loading && semesters.length === 0 && (
             <p className="font-roboto text-[#666]">No past interns yet.</p>
@@ -197,16 +197,19 @@ export default function PastInternsPage() {
                 >
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse font-roboto text-sm">
+                      <caption className="sr-only">
+                        Past interns for {semesterLabel}
+                      </caption>
                       <thead>
                         <tr className="bg-[#9E1B32]">
-                          <th className={thClass}>Name</th>
-                          <th className={thClass}>Company</th>
-                          <th className={thClass}>School</th>
-                          <th className={thClass}>Mid-Sem Report</th>
-                          <th className={thClass}>Impact Calculator</th>
-                          <th className={thClass}>Presentation</th>
-                          <th className={thClass}>Details</th>
-                          <th className={thClass}>Delete</th>
+                          <th scope="col" className={thClass}>Name</th>
+                          <th scope="col" className={thClass}>Company</th>
+                          <th scope="col" className={thClass}>School</th>
+                          <th scope="col" className={thClass}>Mid-Sem Report</th>
+                          <th scope="col" className={thClass}>Impact Calculator</th>
+                          <th scope="col" className={thClass}>Presentation</th>
+                          <th scope="col" className={thClass}>Details</th>
+                          <th scope="col" className={thClass}>Delete</th>
                         </tr>
                       </thead>
                       <tbody>

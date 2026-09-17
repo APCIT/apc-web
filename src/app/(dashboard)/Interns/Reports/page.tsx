@@ -63,7 +63,7 @@ export default function InternsReportsPage() {
         </h2>
 
         {error && (
-          <p className="font-roboto text-red-600 mb-4">{error}</p>
+          <p className="font-roboto text-red-600 mb-4" role="alert">{error}</p>
         )}
 
         <div className="manage-accordion">
@@ -97,10 +97,11 @@ export default function InternsReportsPage() {
                         className="w-full border-collapse font-roboto text-sm table-fixed"
                         style={{ tableLayout: "fixed" }}
                       >
+                        <caption className="sr-only">{reportType} — interns without reports</caption>
                         <thead>
                           <tr className="bg-[#9E1B32]">
-                            <th className={thClass}>Name</th>
-                            <th className={thClass}>Company</th>
+                            <th scope="col" className={thClass}>Name</th>
+                            <th scope="col" className={thClass}>Company</th>
                           </tr>
                         </thead>
                         <tbody>

@@ -35,7 +35,7 @@ const accomplishments = [
 
 export default function EvonikSuccessStoryPage() {
   return (
-    <main
+    <div
       className="w-full overflow-x-hidden"
       style={{ backgroundColor: '#F2F3F4' }}
     >
@@ -263,7 +263,7 @@ export default function EvonikSuccessStoryPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

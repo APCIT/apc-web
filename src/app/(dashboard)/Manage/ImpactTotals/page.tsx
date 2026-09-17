@@ -123,19 +123,29 @@ export default function ImpactTotalsPage() {
           <p className="text-[#666666] font-roboto">Loading…</p>
         ) : (
           <>
-            {error && <p className="text-red-600 font-roboto mb-4">{error}</p>}
+            {error && (
+              <p id="impact-totals-error" className="text-red-600 font-roboto mb-4" role="alert">
+                {error}
+              </p>
+            )}
             {message && <p className="text-green-700 font-roboto mb-4">{message}</p>}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-[900px]">
               {fields.map((field) => (
-                <label key={field.name} className="flex flex-col gap-1 text-[#666666] font-roboto text-sm">
+                <label
+                  key={field.name}
+                  htmlFor={`impact-${field.name}`}
+                  className="flex flex-col gap-1 text-[#666666] font-roboto text-sm"
+                >
                   <span>{field.label}</span>
                   <input
+                    id={`impact-${field.name}`}
                     type="number"
                     step="any"
                     value={form[field.name]}
                     onChange={(e) => updateField(field.name, e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-2 text-[#333333]"
+                    className="border border-gray-300 rounded-md px-3 py-2 text-[#333333] focus:border-[#666]"
+                    aria-describedby={error ? "impact-totals-error" : undefined}
                   />
                 </label>
               ))}

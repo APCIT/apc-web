@@ -10,7 +10,7 @@ import {
 } from "@/lib/api";
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold";
 const rowStyle = { marginBottom: "24px" };
@@ -95,9 +95,13 @@ export default function CreateNewUserPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Create new user">
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">
+            <div
+              id="create-user-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm"
+            >
               {error}
             </div>
           )}
@@ -113,8 +117,10 @@ export default function CreateNewUserPage() {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 className={inputClass}
-                placeholder="First name"
                 required
+                aria-required="true"
+                aria-describedby={error ? "create-user-error" : undefined}
+                autoComplete="given-name"
               />
             </div>
           </div>
@@ -130,8 +136,10 @@ export default function CreateNewUserPage() {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 className={inputClass}
-                placeholder="Last name"
                 required
+                aria-required="true"
+                aria-describedby={error ? "create-user-error" : undefined}
+                autoComplete="family-name"
               />
             </div>
           </div>
@@ -147,8 +155,10 @@ export default function CreateNewUserPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={inputClass}
-                placeholder="Email"
                 required
+                aria-required="true"
+                aria-describedby={error ? "create-user-error" : undefined}
+                autoComplete="email"
               />
             </div>
           </div>
@@ -166,7 +176,9 @@ export default function CreateNewUserPage() {
                 }
                 className={inputClass}
                 required
+                aria-required="true"
                 disabled={loadingCompanies}
+                aria-describedby={error ? "create-user-error" : undefined}
               >
                 <option value="">Select company</option>
                 {companies.map((c) => (
@@ -189,6 +201,8 @@ export default function CreateNewUserPage() {
                 onChange={(e) => setRole(e.target.value)}
                 className={inputClass}
                 required
+                aria-required="true"
+                aria-describedby={error ? "create-user-error" : undefined}
               >
                 <option value="">Select role</option>
                 {CREATE_ROLES.map((r) => (

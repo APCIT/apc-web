@@ -24,7 +24,7 @@ const impacts = [
 
 export default function MothersonSuccessStoryPage() {
   return (
-    <main
+    <div
       className="w-full overflow-x-hidden"
       style={{ backgroundColor: '#F2F3F4' }}
     >
@@ -291,7 +291,7 @@ export default function MothersonSuccessStoryPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

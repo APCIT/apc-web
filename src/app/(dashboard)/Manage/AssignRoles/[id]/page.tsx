@@ -98,7 +98,7 @@ export default function AssignRolesPage() {
     return (
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
-          <p className="font-roboto text-red-600">Invalid user.</p>
+          <p className="font-roboto text-red-600" role="alert">Invalid user.</p>
           <Link href="/Manage/Users" className={backButtonClass + " mt-4 inline-block"}>
             Back to Users
           </Link>
@@ -140,9 +140,13 @@ export default function AssignRolesPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Assign user roles">
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">
+            <div
+              id="assign-roles-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm"
+            >
               {error}
             </div>
           )}

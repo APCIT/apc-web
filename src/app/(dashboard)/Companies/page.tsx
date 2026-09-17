@@ -35,7 +35,7 @@ export default function CompaniesPage() {
   if (data?.ok === false) {
     return (
       <div className="w-full bg-white">
-        <div className="py-8 px-[50px] text-center text-red-600">
+        <div className="py-8 px-[50px] text-center text-red-600" role="alert">
           {data.status === 403
             ? "You don't have permission to view companies."
             : data.error}
@@ -71,20 +71,34 @@ export default function CompaniesPage() {
         <div
           className="overflow-x-auto"
           style={{ marginTop: "20px", marginBottom: "48px" }}
+          aria-busy={loading}
         >
+          {loading && (
+            <p className="sr-only" aria-live="polite">
+              Loading companies
+            </p>
+          )}
           <table className="w-full border-collapse font-roboto text-sm">
+            <caption className="sr-only">Companies list</caption>
             <thead>
               <tr className="bg-[#9E1B32]">
                 <th
                   className="border border-[#7a0000] p-[10px] text-white font-normal text-center"
                   style={{ width: "55%" }}
+                  scope="col"
                 >
                   Name
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th
+                  className="border border-[#7a0000] p-[10px] text-white font-normal text-center"
+                  scope="col"
+                >
                   Abbreviation
                 </th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                <th
+                  className="border border-[#7a0000] p-[10px] text-white font-normal text-center"
+                  scope="col"
+                >
                   Actions
                 </th>
               </tr>
@@ -92,7 +106,7 @@ export default function CompaniesPage() {
             <tbody>
               {loading ? (
                 <tr className="bg-white">
-                  <td className="border border-[#ddd] p-[10px] text-left align-middle">
+                  <td className="border border-[#ddd] p-[10px] text-left align-middle" colSpan={3}>
                     <div
                       aria-hidden
                       style={{
@@ -104,71 +118,51 @@ export default function CompaniesPage() {
                       }}
                     />
                   </td>
-                  <td className="border border-[#ddd] p-[10px] text-left align-middle">
-                    <div
-                      aria-hidden
-                      style={{
-                        height: "16px",
-                        width: "60px",
-                        backgroundColor: "rgb(209 213 219)",
-                        borderRadius: "4px",
-                        animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-                      }}
-                    />
-                  </td>
-                  <td className="border border-[#ddd] p-[10px] text-center align-middle">
-                    <div
-                      aria-hidden
-                      style={{
-                        height: "16px",
-                        width: "80px",
-                        backgroundColor: "rgb(209 213 219)",
-                        borderRadius: "4px",
-                        animation: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-                        display: "inline-block",
-                      }}
-                    />
-                  </td>
                 </tr>
               ) : companies.length === 0 ? (
                 <tr className="bg-white hover:bg-[#f5f5f5]">
-                  <td className="border border-[#ddd] p-[10px] text-left align-middle text-[#666]">
-                    —
-                  </td>
-                  <td className="border border-[#ddd] p-[10px] text-left align-middle text-[#666]">
-                    —
-                  </td>
-                  <td className="border border-[#ddd] p-[10px] text-center align-middle">
-                    —
+                  <td
+                    className="border border-[#ddd] p-[10px] text-left align-middle text-[#666]"
+                    colSpan={3}
+                  >
+                    No companies found.
                   </td>
                 </tr>
               ) : (
-                companies.map((c) => (
-                  <tr key={c.id} className="bg-white hover:bg-[#f5f5f5]">
-                    <td className="border border-[#ddd] p-[10px] text-left align-middle text-[#666]">
-                      {c.name || "—"}
-                    </td>
-                    <td className="border border-[#ddd] p-[10px] text-left align-middle text-[#666]">
-                      {c.abbreviation || "—"}
-                    </td>
-                    <td className="border border-[#ddd] p-[10px] text-center align-middle">
-                      <Link
-                        href={`/Companies/Edit/${c.id}`}
-                        className="text-[#666] no-underline hover:underline text-sm"
-                      >
-                        Edit
-                      </Link>
-                      <span className="text-[#666] mx-1"> | </span>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(c)}
-                        className="bg-transparent border-0 p-0 text-[#666] cursor-pointer text-sm underline hover:no-underline"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                companies.map((c) => {
+                  const label = c.name?.trim() || c.abbreviation?.trim() || `company ${c.id}`;
+                  return (
+                    <tr key={c.id} className="bg-white hover:bg-[#f5f5f5]">
+                      <td className="border border-[#ddd] p-[10px] text-left align-middle text-[#666]">
+                        {c.name || "—"}
+                      </td>
+                      <td className="border border-[#ddd] p-[10px] text-left align-middle text-[#666]">
+                        {c.abbreviation || "—"}
+                      </td>
+                      <td className="border border-[#ddd] p-[10px] text-center align-middle">
+                        <Link
+                          href={`/Companies/Edit/${c.id}`}
+                          className="text-[#666] no-underline hover:underline text-sm"
+                          aria-label={`Edit ${label}`}
+                        >
+                          Edit
+                        </Link>
+                        <span className="text-[#666] mx-1" aria-hidden>
+                          {" "}
+                          |{" "}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(c)}
+                          className="bg-transparent border-0 p-0 text-[#666] cursor-pointer text-sm underline hover:no-underline"
+                          aria-label={`Delete ${label}`}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

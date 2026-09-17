@@ -5,7 +5,7 @@ import HeadingIntroBanner from '@/components/HeadingIntroBanner';
 
 export default function SterisSuccessStoryPage() {
   return (
-    <main
+    <div
       className="w-full overflow-x-hidden"
       style={{ backgroundColor: '#F2F3F4' }}
     >
@@ -216,7 +216,7 @@ export default function SterisSuccessStoryPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

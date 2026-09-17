@@ -6,7 +6,7 @@ import Link from "next/link";
 import { SET_PASSWORD_API } from "@/lib/api";
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold";
 const rowStyle = { marginBottom: "24px" };
@@ -59,9 +59,14 @@ export default function SetPasswordPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Set password">
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-sm" style={{ color: "#900" }}>
+            <div
+              id="set-password-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-sm"
+              style={{ color: "#900" }}
+            >
               {error}
             </div>
           )}
@@ -78,7 +83,11 @@ export default function SetPasswordPage() {
                 onChange={(e) => setNewPassword(e.target.value)}
                 className={inputClass}
                 required
+                aria-required="true"
+                aria-invalid={!!error}
+                aria-describedby={error ? "set-password-error" : undefined}
                 minLength={6}
+                autoComplete="new-password"
               />
             </div>
           </div>
@@ -95,7 +104,11 @@ export default function SetPasswordPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className={inputClass}
                 required
+                aria-required="true"
+                aria-invalid={!!error}
+                aria-describedby={error ? "set-password-error" : undefined}
                 minLength={6}
+                autoComplete="new-password"
               />
             </div>
           </div>
