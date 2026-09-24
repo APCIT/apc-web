@@ -846,16 +846,18 @@ textarea.form-control {
   /* Carousel Mobile - Intro variant */
   .carousel-intro {
     height: 120px !important;
-    background-color: transparent !important;
+    background-color: #000000 !important;
     width: 100vw !important;
     margin-left: calc(-50vw + 50%) !important;
     margin-right: calc(-50vw + 50%) !important;
   }
   
   .carousel-intro .carousel-slide-bg {
-    display: none !important;
+    display: block !important;
+    background-color: #000000 !important;
   }
   
+  /* Default full-bleed like other intro slides */
   .carousel-intro .carousel-slide-image {
     object-fit: cover !important;
   }

@@ -117,8 +117,12 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
 
   return (
     <div
-      className={`carousel-container relative w-full overflow-hidden isolate ${variant === 'intro' ? 'carousel-intro bg-black' : 'carousel-stories'}`}
-      style={{ height: variant === 'intro' ? 500 : 450, backgroundColor: 'transparent' }}
+      className={`carousel-container relative w-full overflow-hidden isolate ${variant === 'intro' ? 'carousel-intro' : 'carousel-stories'}`}
+      style={{
+        height: variant === 'intro' ? 500 : 450,
+        // Explicit hex — Tailwind `bg-black` is not emitted with this theme setup
+        backgroundColor: variant === 'intro' ? '#000000' : 'transparent',
+      }}
       role="region"
       aria-roledescription="carousel"
       aria-label={label}
@@ -158,7 +162,11 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
             {/* INTRO: present slide asset on black */}
             {variant === 'intro' && (
               <>
-                <div className="carousel-slide-bg absolute inset-0 bg-black" />
+                <div
+                  className="carousel-slide-bg absolute inset-0"
+                  style={{ backgroundColor: '#000000' }}
+                  aria-hidden="true"
+                />
                 {s.src && (
                   <Image
                     src={s.src}
