@@ -738,7 +738,7 @@ export default function InternDetailsPage() {
     return (
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
-          <p className="font-roboto text-red-600">{error}</p>
+          <p className="font-roboto text-red-600" role="alert">{error}</p>
           <Link href="/Interns" className={backButtonClass + " mt-4 inline-block"}>
             Back to Interns
           </Link>
@@ -968,6 +968,7 @@ export default function InternDetailsPage() {
                                       href={`/Time/Edit/${encodeURIComponent(id)}?date=${day.date}`}
                                       className="text-[#CC6600] no-underline hover:no-underline text-xl"
                                       title="Edit"
+                                      aria-label={`Edit timelog for ${day.date}`}
                                     >
                                       &#9998;
                                     </Link>
@@ -976,6 +977,7 @@ export default function InternDetailsPage() {
                                       href={`/Time/Create/${encodeURIComponent(id)}?date=${day.date}`}
                                       className="text-[#228B22] no-underline hover:no-underline text-xl font-bold"
                                       title="Add"
+                                      aria-label={`Add timelog for ${day.date}`}
                                     >
                                       +
                                     </Link>
@@ -1098,7 +1100,7 @@ export default function InternDetailsPage() {
                         />
                         <tr className="font-roboto text-[14px]">
                           <th className="text-left font-bold p-[10px] border border-[#7a0000] bg-[#900] w-[200px] align-top text-white">
-                            CWID
+                            <label htmlFor="intern-cwid">CWID</label>
                           </th>
                           <td className="p-[10px] border border-[#ddd] text-[#666] align-top">
                             {showSkeleton ? (
@@ -1115,11 +1117,12 @@ export default function InternDetailsPage() {
                             ) : (
                               <div className="flex flex-col gap-2 w-fit">
                                 <input
+                                  id="intern-cwid"
                                   type="text"
                                   value={cwidValue}
                                   onChange={(e) => setCwidValue(e.target.value)}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
-                                  aria-label="CWID"
+                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
+                                  aria-describedby={cwidError ? "intern-cwid-error" : undefined}
                                 />
                                 <button
                                   type="button"
@@ -1131,7 +1134,7 @@ export default function InternDetailsPage() {
                                   {cwidSaving ? "Saving…" : "Save"}
                                 </button>
                                 {cwidError && (
-                                  <span className="font-roboto text-red-600 text-sm">
+                                  <span id="intern-cwid-error" className="font-roboto text-red-600 text-sm" role="alert">
                                     {cwidError}
                                   </span>
                                 )}
@@ -1222,7 +1225,7 @@ export default function InternDetailsPage() {
                         {/* Company */}
                         <tr className="font-roboto text-[14px]">
                           <th className="text-left font-bold p-[10px] border border-[#7a0000] bg-[#900] w-[200px] align-top text-white">
-                            Company
+                            <label htmlFor="intern-company">Company</label>
                           </th>
                           <td className="p-[10px] border border-[#ddd] text-[#666] align-top">
                             {showSkeleton ? (
@@ -1232,10 +1235,10 @@ export default function InternDetailsPage() {
                             ) : (
                               <div className="flex flex-col gap-2 w-fit">
                                 <select
+                                  id="intern-company"
                                   value={empCompanyId || undefined}
                                   onChange={(e) => setEmpCompanyId(Number(e.target.value))}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px] bg-white"
-                                  aria-label="Company"
+                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px] bg-white"
                                 >
                                   {intern?.companyId != null && !companies.some((c) => c.id === intern.companyId) && (
                                     <option value={intern.companyId}>
@@ -1264,7 +1267,7 @@ export default function InternDetailsPage() {
                         {/* Department */}
                         <tr className="font-roboto text-[14px]">
                           <th className="text-left font-bold p-[10px] border border-[#7a0000] bg-[#900] w-[200px] align-top text-white">
-                            Department
+                            <label htmlFor="intern-department">Department</label>
                           </th>
                           <td className="p-[10px] border border-[#ddd] text-[#666] align-top">
                             {showSkeleton ? (
@@ -1272,11 +1275,11 @@ export default function InternDetailsPage() {
                             ) : (
                               <div className="flex flex-col gap-2 w-fit">
                                 <input
+                                  id="intern-department"
                                   type="text"
                                   value={empDepartment}
                                   onChange={(e) => setEmpDepartment(e.target.value)}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
-                                  aria-label="Department"
+                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
                                 />
                                 <button
                                   type="button"
@@ -1302,38 +1305,38 @@ export default function InternDetailsPage() {
                             ) : !intern?.mentorName?.trim() ? (
                               "None"
                             ) : (
-                              <div className="flex flex-col gap-2 w-fit">
-                                <span className="font-roboto text-[14px] text-[#666]">Name:</span>
+                              <div className="flex flex-col gap-2 w-fit" role="group" aria-label="Mentor">
+                                <label htmlFor="intern-mentor-name" className="font-roboto text-[14px] text-[#666]">Name:</label>
                                 <input
+                                  id="intern-mentor-name"
                                   type="text"
                                   value={empMentorName}
                                   onChange={(e) => setEmpMentorName(e.target.value)}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
-                                  aria-label="Mentor name"
+                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
                                 />
-                                <span className="font-roboto text-[14px] text-[#666]">Title:</span>
+                                <label htmlFor="intern-mentor-title" className="font-roboto text-[14px] text-[#666]">Title:</label>
                                 <input
+                                  id="intern-mentor-title"
                                   type="text"
                                   value={empMentorTitle}
                                   onChange={(e) => setEmpMentorTitle(e.target.value)}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
-                                  aria-label="Mentor title"
+                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
                                 />
-                                <span className="font-roboto text-[14px] text-[#666]">Phone:</span>
+                                <label htmlFor="intern-mentor-phone" className="font-roboto text-[14px] text-[#666]">Phone:</label>
                                 <input
+                                  id="intern-mentor-phone"
                                   type="text"
                                   value={empMentorPhone}
                                   onChange={(e) => setEmpMentorPhone(e.target.value)}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
-                                  aria-label="Mentor phone"
+                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
                                 />
-                                <span className="font-roboto text-[14px] text-[#666]">Email:</span>
+                                <label htmlFor="intern-mentor-email" className="font-roboto text-[14px] text-[#666]">Email:</label>
                                 <input
+                                  id="intern-mentor-email"
                                   type="text"
                                   value={empMentorEmail}
                                   onChange={(e) => setEmpMentorEmail(e.target.value)}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
-                                  aria-label="Mentor email"
+                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
                                 />
                                 <button
                                   type="button"
@@ -1351,7 +1354,10 @@ export default function InternDetailsPage() {
                         {/* Wage */}
                         <tr className="font-roboto text-[14px]">
                           <th className="text-left font-bold p-[10px] border border-[#7a0000] bg-[#900] w-[200px] align-top text-white">
-                            $
+                            <label htmlFor="intern-wage">
+                              <span aria-hidden>$</span>
+                              <span className="sr-only">Wage</span>
+                            </label>
                           </th>
                           <td className="p-[10px] border border-[#ddd] text-[#666] align-top">
                             {showSkeleton ? (
@@ -1359,12 +1365,12 @@ export default function InternDetailsPage() {
                             ) : (
                               <div className="flex flex-col gap-2 w-fit">
                                 <input
+                                  id="intern-wage"
                                   type="text"
                                   inputMode="decimal"
                                   value={empWage}
                                   onChange={(e) => setEmpWage(e.target.value)}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
-                                  aria-label="Wage"
+                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
                                 />
                                 <button
                                   type="button"
@@ -1382,7 +1388,7 @@ export default function InternDetailsPage() {
                         {/* Note */}
                         <tr className="font-roboto text-[14px]">
                           <th className="text-left font-bold p-[10px] border border-[#7a0000] bg-[#900] w-[200px] align-top text-white">
-                            Note
+                            <label htmlFor="intern-note">Note</label>
                           </th>
                           <td className="p-[10px] border border-[#ddd] text-[#666] align-top">
                             {showSkeleton ? (
@@ -1390,11 +1396,11 @@ export default function InternDetailsPage() {
                             ) : (
                               <div className="flex flex-col gap-2 w-fit">
                                 <input
+                                  id="intern-note"
                                   type="text"
                                   value={empNote}
                                   onChange={(e) => setEmpNote(e.target.value)}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
-                                  aria-label="Note"
+                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
                                 />
                                 <button
                                   type="button"
@@ -1411,7 +1417,7 @@ export default function InternDetailsPage() {
                         </tr>
                         {empError && (
                           <tr>
-                            <td colSpan={2} className="p-[10px] border border-[#ddd] text-red-600 text-sm">
+                            <td colSpan={2} className="p-[10px] border border-[#ddd] text-red-600 text-sm" role="alert">
                               {empError}
                             </td>
                           </tr>
@@ -1812,14 +1818,17 @@ export default function InternDetailsPage() {
               <ModalHeader>Update Resume</ModalHeader>
               <ModalBody>
                 <div>
+                  <label htmlFor="resume" className="font-roboto text-[14px] text-[#333] font-bold block mb-2">
+                    Resume file
+                  </label>
                   <input
                     ref={resumeFileInputRef}
                     type="file"
                     name="resume"
                     id="resume"
                     accept=".pdf,.doc,.docx"
-                    aria-label="Resume file"
                     className="font-roboto text-[14px]"
+                    aria-describedby={updateResumeError ? "intern-update-resume-error" : undefined}
                     onChange={(e) =>
                       setUpdateResumeSelectedFileName(e.target.files?.[0]?.name ?? null)
                     }
@@ -1834,7 +1843,9 @@ export default function InternDetailsPage() {
                     )}
                   </p>
                   {updateResumeError && (
-                    <p className="font-roboto text-sm text-red-600 mt-1">{updateResumeError}</p>
+                    <p id="intern-update-resume-error" className="font-roboto text-sm text-red-600 mt-1" role="alert">
+                      {updateResumeError}
+                    </p>
                   )}
                 </div>
               </ModalBody>
@@ -1868,12 +1879,16 @@ export default function InternDetailsPage() {
               <ModalHeader>Update Impact Calc</ModalHeader>
               <ModalBody>
                 <div>
+                  <label htmlFor="impactCalc" className="font-roboto text-[14px] text-[#333] font-bold block mb-2">
+                    Impact calculator file
+                  </label>
                   <input
                     ref={impactCalcFileInputRef}
                     type="file"
                     name="impactCalc"
-                    aria-label="Impact calculator file"
+                    id="impactCalc"
                     className="font-roboto text-[14px]"
+                    aria-describedby={updateImpactCalcError ? "intern-update-impact-error" : undefined}
                     onChange={(e) =>
                       setUpdateImpactCalcSelectedFileName(e.target.files?.[0]?.name ?? null)
                     }
@@ -1888,7 +1903,9 @@ export default function InternDetailsPage() {
                     )}
                   </p>
                   {updateImpactCalcError && (
-                    <p className="font-roboto text-sm text-red-600 mt-1">{updateImpactCalcError}</p>
+                    <p id="intern-update-impact-error" className="font-roboto text-sm text-red-600 mt-1" role="alert">
+                      {updateImpactCalcError}
+                    </p>
                   )}
                 </div>
               </ModalBody>
@@ -1922,12 +1939,16 @@ export default function InternDetailsPage() {
               <ModalHeader>Update Presentation</ModalHeader>
               <ModalBody>
                 <div>
+                  <label htmlFor="presentation" className="font-roboto text-[14px] text-[#333] font-bold block mb-2">
+                    Presentation file
+                  </label>
                   <input
                     ref={presentationFileInputRef}
                     type="file"
                     name="presentation"
-                    aria-label="Presentation file"
+                    id="presentation"
                     className="font-roboto text-[14px]"
+                    aria-describedby={updatePresentationError ? "intern-update-presentation-error" : undefined}
                     onChange={(e) =>
                       setUpdatePresentationSelectedFileName(e.target.files?.[0]?.name ?? null)
                     }
@@ -1942,7 +1963,9 @@ export default function InternDetailsPage() {
                     )}
                   </p>
                   {updatePresentationError && (
-                    <p className="font-roboto text-sm text-red-600 mt-1">{updatePresentationError}</p>
+                    <p id="intern-update-presentation-error" className="font-roboto text-sm text-red-600 mt-1" role="alert">
+                      {updatePresentationError}
+                    </p>
                   )}
                 </div>
               </ModalBody>

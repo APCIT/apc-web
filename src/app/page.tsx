@@ -45,8 +45,8 @@ export default function Home() {
             <div className="about-image-col w-1/2 px-4">
               <div className="w-auto flex items-center justify-center">
                 <img
-                  src="/images/Staff2023.jpg"
-                  alt="Staff Photo 2023"
+                  src="/images/Staff2026.jpg"
+                  alt="Staff Photo 2026"
                   className="about-image w-4/5 h-auto mx-auto block shadow-[0_3px_10px_rgba(0,0,0,0.7)]"
                 />
               </div>

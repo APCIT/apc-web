@@ -17,74 +17,87 @@ interface SuccessStory {
 const successStories: SuccessStory[] = [
   {
     id: 1,
+    image: '/images/Logos/commerce.png',
+    text: 'In August 2026, the Alabama Department of Commerce received "Unconditional Approval" to receive ISO 9001:2015 certification, making Alabama the only state in the United States with this distinction.',
+    link: '/Home/SuccessStories/Commerce'
+  },
+  {
+    id: 2,
+    image: '/images/Logos/stbunn.webp',
+    text: 'We believe this program has the potential to save our company money on hauling costs by allowing us to analyze trucking performance in ways that were not previously practical. It should help us compare costs, identify inefficiencies, evaluate truck usage and hauling times, and make better-informed operating decisions.',
+    attribution: '– Taylor Davis, Vice President, S T Bunn Construction',
+    link: '/Home/SuccessStories/STBunn'
+  },
+  {
+    id: 3,
     image: '/images/Backgrounds/Lear.jpg',
     text: 'Anabelle has been a vital member to the team. She has been responsible for the plant\'s change notification process, making sure that responsible parties acknowledge notification and submit documentation in a timely manner. Anabelle has led the team in AI integration for the automation of processes.',
     attribution: '– Konrad Piepke, Engineering Change Coordinator',
     link: '/Home/SuccessStories/Lear'
   },
   {
-    id: 2,
+    id: 4,
     image: '/images/Backgrounds/motherson_logo.jpg',
     text: 'For Motherson to be able to more accurately gauge improvement opportunities they partnered with APC to perform time studies throughout their facilities serving MBUSI. APC began this work by performing standard time-studies for each assembly line.',
     link: '/Home/SuccessStories/Motherson'
   },
   {
-    id: 3,
+    id: 5,
     image: '/images/Backgrounds/CapstoneA.CulvColl.AlProdCtr.png',
     text: 'Through the projects I completed at the APC, I was able to learn relevant programming skills that I am still able to apply today at other companies. Working at the APC will teach you more than just how to be a programmer. You will learn skills on how to be a database manager, a project manager, and how to deal with general business activities such as reviewing resumes, marketing the company, and helping improve the overall workflow of the system. I believe that the APC offers very rewarding experiences that a lot of students won\'t be able to find anywhere else during the school year.',
     attribution: '– Jared Waller, MIS Intern',
     link: '/Home/SuccessStories/APC'
   },
   {
-    id: 4,
+    id: 6,
     image: '/images/Backgrounds/SheltonState.png',
     text: 'A collaboration between the Alabama Productivity Center (APC) and Shelton State Community College (SSCC) supported the ARC Alabama STRONG Internship Program which was piloted to engage two students from each institution with industry during the Spring 2021 semester. Alabama STRONG student internships are designed to provide work-based learning experiences that complement the student\'s related education and training provided by the university/college. The experience also allows interns the opportunity to work with someone from a different institution and discipline.',
     link: '/Home/SuccessStories/SheltonState'
   },
   {
-    id: 5,
+    id: 7,
     image: '/images/Logos/toyotaalabamalogo.png',
     text: 'As a summer intern at Toyota Motor Manufacturing with the Alabama Productivity Center, I was able to gain a better understanding of the career field that I was preparing for. My experience at Toyota also connected me with great people who have played a big role in the start of my career.',
     attribution: '– Hayden D. Bevil, PC, PPM Specialist',
     link: '/Home/SuccessStories/Toyota'
   },
   {
-    id: 6,
+    id: 8,
     image: '/images/Logos/austal.png',
     imagePadding: '2%',
     text: 'Throughout Thomas\' internship, he produced around $80,000 in cost savings improvements just through additive manufacturing. Since he created the designs to 3D print that number of savings will continue to increase as more parts are printed.',
     link: '/Home/SuccessStories/Austal'
   },
   {
-    id: 7,
+    id: 9,
     image: '/images/Logos/precision.png',
     text: 'The University of Alabama ATN Center is a great resource for our business. They are quick to respond and provide the highest level of service. Their internship program has provided great young talent that are able to take on important projects needed to sustain our business. This is a great program for the manufacturing industry in our state.',
     attribution: '– Chase Fell, VP of Engineering',
     link: '/Home/SuccessStories/Precision'
   },
   {
-    id: 8,
+    id: 10,
     image: '/images/Logos/steris.png',
     text: 'The project that Olivia accomplished in Animal Health will have a lasting impact on our business. There was so much this summer that we needed help with, to take our business to the next level and I feel like we accomplished it. With Olivia\'s help on the tape characterization project we were able to un-quarantine $10,000 worth of products to use in production. There were tons more projects she helped us with as well this summer. Without her we would not have been able to make such huge strides. We are very lucky that you gave us the opportunity to meet and work Olivia.',
     attribution: '– Leigh Oncale, Director, Lean Operations',
     link: '/Home/SuccessStories/Steris'
   },
   {
-    id: 9,
+    id: 11,
     image: '/images/Logos/sheco.png',
     text: 'Our intern, Marcus Taylor, has been able to make excellent progress…better than we expected on the project to improve the engineering drawing production process. We are near the original schedule despite being able to expand the capabilities of the program significantly.',
     attribution: '– Jeremy Wolfe, Engineering Manager',
     link: '/Home/SuccessStories/SHECO'
   },
   {
-    id: 10,
+    id: 12,
     image: '/images/Logos/evonik.png',
     text: 'The Alabama Productivity Center intern routinely took initiative and found work by listening in meetings and asking questions. She demonstrated a sound technical background by accurately performing engineering calculations to estimate the time it would take to perform a liquid-liquid azeotropic distillation.',
     attribution: '– Randy Rogers, Director, Site Communications and Government Affairs',
     link: '/Home/SuccessStories/Evonik'
   },
   {
-    id: 11,
+    id: 13,
     image: '/images/Logos/MTM Logo.jpeg',
     text: 'Travis left a vital impact on the Accounting & Finance Department. His analytical skills were critical in creating new processes for improving forecasting metrics on the Treasury side. He also provided vital support in many Treasury activities critical to maintaining proper company standing.',
     attribution: '– Theodore Kubista, Financial Reporting, Insurance & Treasury Specialist',

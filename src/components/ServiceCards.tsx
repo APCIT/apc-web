@@ -20,7 +20,7 @@ export default function ServiceCards() {
   const cardsData: CardData[] = [
     {
       id: 1,
-      title: 'Client Services',
+      title: 'Professional Services',
       description:
         'View the professional services we provide for our clients.',
       image: '/images/HomepageButtons/servicesCard.jpg',

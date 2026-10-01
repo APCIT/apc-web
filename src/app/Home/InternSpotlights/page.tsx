@@ -61,7 +61,7 @@ const internSpotlights: InternSpotlight[] = [
 
 export default function InternSpotlightsPage() {
   return (
-    <main
+    <div
       className="w-full overflow-hidden"
       style={{
         backgroundColor: "#F2F3F4",
@@ -148,6 +148,6 @@ export default function InternSpotlightsPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

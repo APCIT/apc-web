@@ -80,13 +80,13 @@ const crimson = "#9E1B32";
 const crimsonDark = "#70202C";
 const text = "#35363B";
 const textAlt = "#4A4C54";
-const subtle = "#757C88";
+const subtle = "#4A4C54";
 const lightGray = "#F2F3F4";
 const border = "#DFE2E5";
 
 export default function Page() {
   return (
-    <main style={{ backgroundColor: "#FFFFFF", color: "white",  fontFamily: "proxima-nova, sans-serif",}}>
+    <div style={{ backgroundColor: "#FFFFFF", color: "white",  fontFamily: "proxima-nova, sans-serif",}}>
       <HeadingIntroBanner
         title="Contact Us"
         backgroundImage="/images/Contact-Banner.JPG"
@@ -370,6 +370,6 @@ export default function Page() {
     </div>
   </div>
 </section>
-    </main>
+    </div>
   );
 }

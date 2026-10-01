@@ -45,7 +45,7 @@ const testimonials = [
 
 export default function APCWebsiteRedesignPage() {
   return (
-    <main
+    <div
       className="w-full overflow-x-hidden"
       style={{ backgroundColor: '#F2F3F4' }}
     >
@@ -246,7 +246,7 @@ export default function APCWebsiteRedesignPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

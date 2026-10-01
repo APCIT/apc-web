@@ -18,7 +18,7 @@ import {
 } from "@/lib/api";
 
 const selectClass =
-  "px-1.5 py-1 min-h-[32px] border border-[#999] rounded text-[13px] font-roboto text-[#333] bg-white focus:outline-none focus:border-[#666]";
+  "px-1.5 py-1 min-h-[32px] border border-[#999] rounded text-[13px] font-roboto text-[#333] bg-white focus:border-[#666]";
 const backButtonClass =
   "inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
 const actionButtonClass =
@@ -166,7 +166,7 @@ export default function WorkSchedulePage() {
           </h2>
           {loadError && !data && (
             <>
-              <p className="text-red-600 font-roboto text-sm" style={{ marginTop: "2px" }}>
+              <p className="text-red-600 font-roboto text-sm" style={{ marginTop: "2px" }} role="alert">
                 {loadError}
               </p>
               <div style={{ marginTop: "2px" }} className="text-center">
@@ -196,18 +196,19 @@ export default function WorkSchedulePage() {
         <div className="mb-5">
           <div className="overflow-x-auto">
             <table className="w-full max-w-full border-collapse font-roboto text-sm">
+              <caption className="sr-only">Semester work schedule</caption>
               <thead>
                 <tr className="bg-[#9E1B32]">
-                  <th className="border border-[#7a0000] py-[10px] px-[5px] text-white font-normal text-center">
+                  <th scope="col" className="border border-[#7a0000] py-[10px] px-[5px] text-white font-normal text-center">
                     Day
                   </th>
-                  <th className="border border-[#7a0000] py-[10px] px-[5px] text-white font-normal text-center">
+                  <th scope="col" className="border border-[#7a0000] py-[10px] px-[5px] text-white font-normal text-center">
                     Start Time
                   </th>
-                  <th className="border border-[#7a0000] py-[10px] px-[5px] text-white font-normal text-center">
+                  <th scope="col" className="border border-[#7a0000] py-[10px] px-[5px] text-white font-normal text-center">
                     End Time
                   </th>
-                  <th className="border border-[#7a0000] py-[10px] px-[5px] text-white font-normal text-center">
+                  <th scope="col" className="border border-[#7a0000] py-[10px] px-[5px] text-white font-normal text-center">
                     Add
                   </th>
                 </tr>
@@ -241,11 +242,15 @@ export default function WorkSchedulePage() {
                 ) : (
                   rows.map((row, index) => (
                     <tr key={row.day} className="bg-white hover:bg-[#f5f5f5]">
-                      <td className="border border-[#ddd] py-[20px] px-[10px] text-center align-middle" style={{ verticalAlign: "middle" }}>
+                      <th
+                        scope="row"
+                        className="border border-[#ddd] py-[20px] px-[10px] text-center align-middle font-normal"
+                        style={{ verticalAlign: "middle" }}
+                      >
                         <div className="text-[18px] font-normal" style={{ color: "#000000" }}>
                           {row.dayName}
                         </div>
-                      </td>
+                      </th>
                       <td className="border border-[#ddd] py-[20px] px-[10px] text-center align-top">
                         <div className="flex flex-col items-center gap-5">
                           <div className="flex items-center justify-center gap-1">
@@ -417,14 +422,19 @@ export default function WorkSchedulePage() {
               </div>
             ) : saveError ? (
               <>
-                <p className="text-center text-red-600 text-sm">{saveError}</p>
+                <p className="text-center text-red-600 text-sm" role="alert">{saveError}</p>
                 <button type="button" onClick={saveModalDisclosure.onClose} className={actionButtonClass}>
                   Close
                 </button>
               </>
             ) : successMessage ? (
               <>
-                <p className="text-[#000000] font-bold text-center" style={{ fontSize: "22px" }}>
+                <p
+                  className="text-[#000000] font-bold text-center"
+                  style={{ fontSize: "22px" }}
+                  role="status"
+                  aria-live="polite"
+                >
                   Work Schedule saved!
                 </p>
                 <button type="button" onClick={saveModalDisclosure.onClose} className={actionButtonClass}>

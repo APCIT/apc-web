@@ -6,9 +6,9 @@ import Link from "next/link";
 import { GET_APPLICANT_API, UPDATE_APPLICANT_API, type ApplicantEditItem } from "@/lib/api";
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const textareaClass =
-  "w-full max-w-[400px] min-h-[80px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666]";
+  "w-full max-w-[400px] min-h-[80px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666]";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold";
 const displayClass = "text-[14px] font-roboto text-[#333]";
@@ -111,7 +111,7 @@ export default function ApplicantsEditPage() {
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
           <div style={{ height: "20px" }} />
-          <div className="text-center text-red-600 mb-6">{loadError}</div>
+          <div className="text-center text-red-600 mb-6" role="alert">{loadError}</div>
           <div>
             <Link href="/Applicants" className={backButtonClass} style={{ fontWeight: "normal", textDecoration: "none" }}>
               <span className="text-[14px] font-bold" style={{ marginRight: "10px" }}>&#10094;</span>
@@ -141,9 +141,14 @@ export default function ApplicantsEditPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Edit applicant">
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">
+            <div
+              id="applicant-edit-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-sm"
+              style={{ color: "#900" }}
+            >
               {error}
             </div>
           )}
@@ -292,7 +297,7 @@ export default function ApplicantsEditPage() {
 
           {/* 20. Interviewed (editable checkbox) */}
           <div className="flex items-center" style={rowStyle}>
-            <span className={labelClass}>Interviewed</span>
+            <label htmlFor="interviewed" className={labelClass}>Interviewed</label>
             <div className="flex-1 flex items-center" style={{ marginLeft: "20px" }}>
               {!loading && (
                 <input type="checkbox" id="interviewed" checked={interviewStatus} onChange={(e) => setInterviewStatus(e.target.checked)} className="h-4 w-4" />
@@ -302,7 +307,7 @@ export default function ApplicantsEditPage() {
 
           {/* 21. Call Back (editable checkbox) */}
           <div className="flex items-center" style={rowStyle}>
-            <span className={labelClass}>Call Back</span>
+            <label htmlFor="callBack" className={labelClass}>Call Back</label>
             <div className="flex-1 flex items-center" style={{ marginLeft: "20px" }}>
               {!loading && (
                 <input type="checkbox" id="callBack" checked={callBack} onChange={(e) => setCallBack(e.target.checked)} className="h-4 w-4" />
@@ -312,7 +317,7 @@ export default function ApplicantsEditPage() {
 
           {/* 22. Previous Intern (editable checkbox) */}
           <div className="flex items-center" style={rowStyle}>
-            <span className={labelClass}>Previous Intern</span>
+            <label htmlFor="prevIntern" className={labelClass}>Previous Intern</label>
             <div className="flex-1 flex items-center" style={{ marginLeft: "20px" }}>
               {!loading && (
                 <input type="checkbox" id="prevIntern" checked={prevIntern} onChange={(e) => setPrevIntern(e.target.checked)} className="h-4 w-4" />
@@ -322,7 +327,7 @@ export default function ApplicantsEditPage() {
 
           {/* Valid US Employee (editable checkbox) */}
           <div className="flex items-center" style={rowStyle}>
-            <span className={labelClass}>Valid US Employee</span>
+            <label htmlFor="validEmp" className={labelClass}>Valid US Employee</label>
             <div className="flex-1 flex items-center" style={{ marginLeft: "20px" }}>
               {!loading && (
                 <input type="checkbox" id="validEmp" checked={validEmp} onChange={(e) => setValidEmp(e.target.checked)} className="h-4 w-4" />

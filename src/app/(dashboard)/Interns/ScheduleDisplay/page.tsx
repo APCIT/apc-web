@@ -99,7 +99,7 @@ export default function ScheduleDisplayPage() {
 
         <div className="manage-accordion px-4 mt-8">
           {error && (
-            <p className="font-roboto text-red-600 mb-4">{error}</p>
+            <p className="font-roboto text-red-600 mb-4" role="alert">{error}</p>
           )}
           <Accordion
               disableIndicatorAnimation={false}
@@ -128,12 +128,13 @@ export default function ScheduleDisplayPage() {
                 >
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse font-roboto text-sm">
+                      <caption className="sr-only">{day} work schedules</caption>
                       <thead>
                         <tr className="bg-[#9E1B32]">
-                          <th className={thClass}>Name</th>
-                          <th className={thClass}>Company</th>
-                          <th className={thClass}>Start Time</th>
-                          <th className={thClass}>End Time</th>
+                          <th scope="col" className={thClass}>Name</th>
+                          <th scope="col" className={thClass}>Company</th>
+                          <th scope="col" className={thClass}>Start Time</th>
+                          <th scope="col" className={thClass}>End Time</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -145,10 +146,9 @@ export default function ScheduleDisplayPage() {
                           </tr>
                         ) : (schedulesByDay.get(day) ?? []).length === 0 ? (
                           <tr className="bg-white hover:bg-[#f5f5f5]">
-                            <td className="border border-[#ddd] p-[10px] text-[#666] text-center">—</td>
-                            <td className="border border-[#ddd] p-[10px] text-[#666] text-center">—</td>
-                            <td className="border border-[#ddd] p-[10px] text-[#666] text-center">—</td>
-                            <td className="border border-[#ddd] p-[10px] text-[#666] text-center">—</td>
+                            <td colSpan={4} className="border border-[#ddd] p-[10px] text-[#666] text-center">
+                              No schedules for {day}.
+                            </td>
                           </tr>
                         ) : (
                           (schedulesByDay.get(day) ?? []).map((row) => (
@@ -170,7 +170,7 @@ export default function ScheduleDisplayPage() {
             rel="noopener noreferrer"
             className="inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline"
           >
-            <span className="inline-flex items-center justify-center mr-[8px]">
+            <span className="inline-flex items-center justify-center mr-[8px]" aria-hidden>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"

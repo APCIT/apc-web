@@ -187,7 +187,7 @@ const MAJOR_PLACEHOLDER_VALUE = "__none__";
 
 function MajorSelect({ id, name, style, hasError }: { id: string; name: string; style: CSSProperties; hasError?: boolean }) {
   return (
-    <select id={id} name={name} style={{ ...style, ...(hasError ? errBorder : {}) }} defaultValue={MAJOR_PLACEHOLDER_VALUE}>
+    <select id={id} name={name} required aria-required="true" aria-invalid={!!hasError} aria-describedby={hasError ? "major-error" : undefined} style={{ ...style, ...(hasError ? errBorder : {}) }} defaultValue={MAJOR_PLACEHOLDER_VALUE}>
       <option value={MAJOR_PLACEHOLDER_VALUE}>Please select a major</option>
       {MAJOR_GROUPS.map((g) => (
         <Fragment key={g.divider}>
@@ -262,20 +262,20 @@ const sectionTitleStyle: CSSProperties = {
 
 const helperStyle: CSSProperties = {
   fontSize: "0.875rem",
-  color: "#88929a",
+  color: "#4A4C54",
   marginTop: "0.25rem",
   fontFamily: "Roboto, sans-serif",
 };
 
 const optionTextStyle: CSSProperties = {
-  color: "#88929a",
+  color: "#35363B",
   fontFamily: "Roboto, sans-serif",
   fontSize: "0.95rem",
 };
 
 const errBorder: CSSProperties = { borderColor: "#d32f2f" };
 const errTextStyle: CSSProperties = {
-  color: "#d32f2f",
+  color: "#b71c1c",
   fontSize: "0.8rem",
   marginTop: "0.25rem",
   fontFamily: "Roboto, sans-serif",
@@ -298,9 +298,13 @@ function FormRow({ label, children }: { label: ReactNode; children: ReactNode })
   );
 }
 
-function ErrMsg({ msg }: { msg?: string }) {
+function ErrMsg({ id, msg }: { id?: string; msg?: string }) {
   if (!msg) return null;
-  return <p style={errTextStyle}>{msg}</p>;
+  return (
+    <p id={id} style={errTextStyle} role="alert">
+      {msg}
+    </p>
+  );
 }
 
 function getSemesterLabels(): [string, string, string] {
@@ -378,6 +382,7 @@ export default function ApplyPage() {
       <div style={{ maxWidth: "960px", margin: "0 auto", padding: "1.5rem 1rem 3rem" }}>
         {globalError && (
           <div
+            role="alert"
             style={{
               background: "#fdecea",
               border: "1px solid #f5c6cb",
@@ -419,29 +424,29 @@ export default function ApplyPage() {
 
             <FormRow label={<label htmlFor="firstName">First Name</label>}>
               <div>
-                <input id="firstName" name="firstName" type="text" style={{ ...inputStyle, width: "100%", maxWidth: "420px", ...eb("firstName") }} autoComplete="given-name" />
-                <ErrMsg msg={e.firstName} />
+                <input id="firstName" name="firstName" type="text" required aria-required="true" aria-invalid={!!e.firstName} aria-describedby={e.firstName ? "firstName-error" : undefined} style={{ ...inputStyle, width: "100%", maxWidth: "420px", ...eb("firstName") }} autoComplete="given-name" />
+                <ErrMsg id="firstName-error" msg={e.firstName} />
               </div>
             </FormRow>
 
             <FormRow label={<label htmlFor="lastName">Last Name</label>}>
               <div>
-                <input id="lastName" name="lastName" type="text" style={{ ...inputStyle, width: "100%", maxWidth: "420px", ...eb("lastName") }} autoComplete="family-name" />
-                <ErrMsg msg={e.lastName} />
+                <input id="lastName" name="lastName" type="text" required aria-required="true" aria-invalid={!!e.lastName} aria-describedby={e.lastName ? "lastName-error" : undefined} style={{ ...inputStyle, width: "100%", maxWidth: "420px", ...eb("lastName") }} autoComplete="family-name" />
+                <ErrMsg id="lastName-error" msg={e.lastName} />
               </div>
             </FormRow>
 
-            <FormRow label="Birthday">
-              <div>
+            <FormRow label={<span id="dob-label">Birthday</span>}>
+              <div role="group" aria-labelledby="dob-label">
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                  <select id="dobMonth" name="DobMonth" style={{ ...selectStyle, ...eb("dob") }} defaultValue="">
+                  <select id="dobMonth" name="DobMonth" aria-label="Birth month" required aria-required="true" aria-invalid={!!e.dob} aria-describedby={e.dob ? "dob-error" : undefined} style={{ ...selectStyle, ...eb("dob") }} defaultValue="">
                     {MONTHS.map((o) => (
                       <option key={o.v || "m-empty"} value={o.v}>
                         {o.t}
                       </option>
                     ))}
                   </select>
-                  <select id="dobDay" name="DobDay" style={{ ...selectStyle, ...eb("dob") }} defaultValue="">
+                  <select id="dobDay" name="DobDay" aria-label="Birth day" required aria-required="true" aria-invalid={!!e.dob} aria-describedby={e.dob ? "dob-error" : undefined} style={{ ...selectStyle, ...eb("dob") }} defaultValue="">
                     {DAYS.map((o) => (
                       <option key={o.v || "d-empty"} value={o.v}>
                         {o.t}
@@ -449,35 +454,35 @@ export default function ApplyPage() {
                     ))}
                   </select>
                 </div>
-                <ErrMsg msg={e.dob} />
+                <ErrMsg id="dob-error" msg={e.dob} />
               </div>
             </FormRow>
 
             <FormRow label={<label htmlFor="email">Email</label>}>
               <div>
-                <input id="email" name="email" type="email" style={{ ...inputStyle, width: "100%", maxWidth: "420px", ...eb("email") }} autoComplete="email" />
-                <ErrMsg msg={e.email} />
+                <input id="email" name="email" type="email" required aria-required="true" aria-invalid={!!e.email} aria-describedby={e.email ? "email-error" : undefined} style={{ ...inputStyle, width: "100%", maxWidth: "420px", ...eb("email") }} autoComplete="email" />
+                <ErrMsg id="email-error" msg={e.email} />
               </div>
             </FormRow>
 
             <FormRow label={<label htmlFor="phone">Phone</label>}>
               <div>
-                <input id="phone" name="phone" type="tel" style={{ ...inputStyle, width: "220px", ...eb("phone") }} autoComplete="tel" />
-                <p style={helperStyle}>Ex: (555) 555-5555</p>
-                <ErrMsg msg={e.phone} />
+                <input id="phone" name="phone" type="tel" required aria-required="true" aria-invalid={!!e.phone} aria-describedby={e.phone ? "phone-help phone-error" : "phone-help"} style={{ ...inputStyle, width: "220px", ...eb("phone") }} autoComplete="tel" />
+                <p id="phone-help" style={helperStyle}>Ex: (555) 555-5555</p>
+                <ErrMsg id="phone-error" msg={e.phone} />
               </div>
             </FormRow>
 
-            <FormRow label="Permanent Address">
-              <div>
+            <FormRow label={<span id="address-label">Permanent Address</span>}>
+              <div role="group" aria-labelledby="address-label">
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                  <input id="street" name="street" type="text" placeholder="Street" style={{ ...inputStyle, width: "min(330px, 100%)", ...eb("street") }} autoComplete="street-address" />
-                  <input id="apt" name="apt" type="text" placeholder="Apt" style={{ ...inputStyle, width: "120px" }} />
+                  <input id="street" name="street" type="text" aria-label="Street address" required aria-required="true" aria-invalid={!!e.street} aria-describedby={e.street ? "street-error" : undefined} placeholder="Street" style={{ ...inputStyle, width: "min(330px, 100%)", ...eb("street") }} autoComplete="street-address" />
+                  <input id="apt" name="apt" type="text" aria-label="Apartment or unit (optional)" placeholder="Apt" style={{ ...inputStyle, width: "120px" }} />
                 </div>
-                <ErrMsg msg={e.street} />
+                <ErrMsg id="street-error" msg={e.street} />
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "0.5rem" }}>
-                  <input id="city" name="city" type="text" placeholder="City" style={{ ...inputStyle, width: "160px", ...eb("city") }} autoComplete="address-level2" />
-                  <select id="state" name="StateList" style={{ ...selectStyle, ...eb("state") }} defaultValue="">
+                  <input id="city" name="city" type="text" aria-label="City" required aria-required="true" aria-invalid={!!e.city} aria-describedby={e.city ? "city-error" : undefined} placeholder="City" style={{ ...inputStyle, width: "160px", ...eb("city") }} autoComplete="address-level2" />
+                  <select id="state" name="StateList" aria-label="State" required aria-required="true" aria-invalid={!!e.state} aria-describedby={e.state ? "state-error" : undefined} style={{ ...selectStyle, ...eb("state") }} defaultValue="">
                     {US_STATES.map((o) => (
                       <option key={o.v || "s-empty"} value={o.v}>
                         {o.t}
@@ -488,6 +493,11 @@ export default function ApplyPage() {
                     id="zip"
                     name="zip"
                     type="text"
+                    aria-label="ZIP code"
+                    required
+                    aria-required="true"
+                    aria-invalid={!!e.zip}
+                    aria-describedby={e.zip ? "zip-error" : undefined}
                     placeholder="ZIP"
                     style={{ ...inputStyle, width: "100px", ...eb("zip") }}
                     inputMode="numeric"
@@ -495,29 +505,34 @@ export default function ApplyPage() {
                     maxLength={5}
                   />
                 </div>
-                <ErrMsg msg={e.city} />
-                <ErrMsg msg={e.state} />
-                <ErrMsg msg={e.zip} />
+                <ErrMsg id="city-error" msg={e.city} />
+                <ErrMsg id="state-error" msg={e.state} />
+                <ErrMsg id="zip-error" msg={e.zip} />
               </div>
             </FormRow>
 
-            <FormRow label="Emergency Contact">
-              <div>
-                <input id="emergencyName" name="emergencyName" type="text" placeholder="Name" style={{ ...inputStyle, width: "min(330px, 100%)", ...eb("contactName") }} />
-                <ErrMsg msg={e.contactName} />
+            <FormRow label={<span id="emergency-label">Emergency Contact</span>}>
+              <div role="group" aria-labelledby="emergency-label">
+                <input id="emergencyName" name="emergencyName" type="text" aria-label="Emergency contact name" required aria-required="true" aria-invalid={!!e.contactName} aria-describedby={e.contactName ? "contactName-error" : undefined} placeholder="Name" style={{ ...inputStyle, width: "min(330px, 100%)", ...eb("contactName") }} />
+                <ErrMsg id="contactName-error" msg={e.contactName} />
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", alignItems: "center", marginTop: "0.5rem" }}>
-                  <input id="emergencyPhone" name="emergencyPhone" type="tel" placeholder="Phone" style={{ ...inputStyle, width: "220px", ...eb("contactPhone") }} />
-                  <span style={{ ...helperStyle, marginTop: 0 }}>Ex: (555) 555-5555</span>
+                  <input id="emergencyPhone" name="emergencyPhone" type="tel" aria-label="Emergency contact phone" required aria-required="true" aria-invalid={!!e.contactPhone} aria-describedby={e.contactPhone ? "emergency-phone-help contactPhone-error" : "emergency-phone-help"} placeholder="Phone" style={{ ...inputStyle, width: "220px", ...eb("contactPhone") }} />
+                  <span id="emergency-phone-help" style={{ ...helperStyle, marginTop: 0 }}>Ex: (555) 555-5555</span>
                 </div>
-                <ErrMsg msg={e.contactPhone} />
+                <ErrMsg id="contactPhone-error" msg={e.contactPhone} />
                 <input
                   id="emergencyRelationship"
                   name="emergencyRelationship"
                   type="text"
+                  aria-label="Emergency contact relationship"
+                  required
+                  aria-required="true"
+                  aria-invalid={!!e.contactRelationship}
+                  aria-describedby={e.contactRelationship ? "contactRelationship-error" : undefined}
                   placeholder="Relationship"
                   style={{ ...inputStyle, width: "min(330px, 100%)", marginTop: "0.5rem", ...eb("contactRelationship") }}
                 />
-                <ErrMsg msg={e.contactRelationship} />
+                <ErrMsg id="contactRelationship-error" msg={e.contactRelationship} />
               </div>
             </FormRow>
           </section>
@@ -528,21 +543,21 @@ export default function ApplyPage() {
 
             <FormRow label={<label htmlFor="school">School</label>}>
               <div>
-                <select id="school" name="SchoolList" style={{ ...selectStyle, width: "100%", maxWidth: "420px", ...eb("school") }} defaultValue="">
+                <select id="school" name="SchoolList" required aria-required="true" aria-invalid={!!e.school} aria-describedby={e.school ? "school-error" : undefined} style={{ ...selectStyle, width: "100%", maxWidth: "420px", ...eb("school") }} defaultValue="">
                   {SCHOOLS.map((o) => (
                     <option key={o.v || "sch-empty"} value={o.v}>
                       {o.t}
                     </option>
                   ))}
                 </select>
-                <ErrMsg msg={e.school} />
+                <ErrMsg id="school-error" msg={e.school} />
               </div>
             </FormRow>
 
             <FormRow label={<label htmlFor="major">Major</label>}>
               <div>
                 <MajorSelect id="major" name="MajorList" style={{ ...selectStyle, width: "100%", maxWidth: "420px" }} hasError={!!e.major} />
-                <ErrMsg msg={e.major} />
+                <ErrMsg id="major-error" msg={e.major} />
               </div>
             </FormRow>
 
@@ -552,28 +567,28 @@ export default function ApplyPage() {
 
             <FormRow label={<label htmlFor="level">Level</label>}>
               <div>
-                <select id="level" name="LevelList" style={{ ...selectStyle, width: "100%", maxWidth: "420px", ...eb("level") }} defaultValue="">
+                <select id="level" name="LevelList" required aria-required="true" aria-invalid={!!e.level} aria-describedby={e.level ? "level-error" : undefined} style={{ ...selectStyle, width: "100%", maxWidth: "420px", ...eb("level") }} defaultValue="">
                   {LEVELS.map((o) => (
                     <option key={o.v || "lvl-empty"} value={o.v}>
                       {o.t}
                     </option>
                   ))}
                 </select>
-                <ErrMsg msg={e.level} />
+                <ErrMsg id="level-error" msg={e.level} />
               </div>
             </FormRow>
 
-            <FormRow label="Graduation">
-              <div>
+            <FormRow label={<span id="grad-label">Graduation</span>}>
+              <div role="group" aria-labelledby="grad-label">
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                  <select id="gradMonth" name="GradMonth" style={{ ...selectStyle, ...eb("gradDate") }} defaultValue="">
+                  <select id="gradMonth" name="GradMonth" aria-label="Graduation month" required aria-required="true" aria-invalid={!!e.gradDate} aria-describedby={e.gradDate ? "gradDate-error" : undefined} style={{ ...selectStyle, ...eb("gradDate") }} defaultValue="">
                     {GRAD_MONTHS.map((o) => (
                       <option key={o.v || "gm-empty"} value={o.v}>
                         {o.t}
                       </option>
                     ))}
                   </select>
-                  <select id="gradYear" name="GradYear" style={{ ...selectStyle, ...eb("gradDate") }} defaultValue="">
+                  <select id="gradYear" name="GradYear" aria-label="Graduation year" required aria-required="true" aria-invalid={!!e.gradDate} aria-describedby={e.gradDate ? "gradDate-error" : undefined} style={{ ...selectStyle, ...eb("gradDate") }} defaultValue="">
                     {gradYearOptions.map((o) => (
                       <option key={o.v || "gy-empty"} value={o.v}>
                         {o.t}
@@ -581,7 +596,7 @@ export default function ApplyPage() {
                     ))}
                   </select>
                 </div>
-                <ErrMsg msg={e.gradDate} />
+                <ErrMsg id="gradDate-error" msg={e.gradDate} />
               </div>
             </FormRow>
 
@@ -597,8 +612,8 @@ export default function ApplyPage() {
 
             <FormRow label={<label htmlFor="skills">Skills</label>}>
               <div>
-                <input id="skills" name="skills" type="text" placeholder="Optional" style={{ ...inputStyle, width: "100%", maxWidth: "420px" }} />
-                <p style={helperStyle}>Examples: Excel Macros, AutoCad, SAP, C#</p>
+                <input id="skills" name="skills" type="text" aria-describedby="skills-help" placeholder="Optional" style={{ ...inputStyle, width: "100%", maxWidth: "420px" }} />
+                <p id="skills-help" style={helperStyle}>Examples: Excel Macros, AutoCad, SAP, C#</p>
               </div>
             </FormRow>
           </section>
@@ -609,27 +624,27 @@ export default function ApplyPage() {
 
             <FormRow label="Are you legally authorized to work in the U.S.?">
               <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", ...optionTextStyle }}>
-                <input id="validEmp" name="validEmp" type="checkbox" />
+                <input id="validEmp" name="validEmp" type="checkbox" aria-label="Yes, I am legally authorized to work in the U.S." />
                 <span>Yes</span>
               </label>
             </FormRow>
 
             <FormRow label="Have you previously interned with APC?">
               <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", ...optionTextStyle }}>
-                <input id="prevIntern" name="prevIntern" type="checkbox" />
+                <input id="prevIntern" name="prevIntern" type="checkbox" aria-label="Yes, I have previously interned with APC" />
                 <span>Yes</span>
               </label>
             </FormRow>
 
             <FormRow label={<label htmlFor="preference">Preference</label>}>
               <div>
-                <input id="preference" name="preference" type="text" placeholder="Optional" style={{ ...inputStyle, width: "100%", maxWidth: "420px" }} />
-                <p style={helperStyle}>Use this space to record company or job type preferences</p>
+                <input id="preference" name="preference" type="text" aria-describedby="preference-help" placeholder="Optional" style={{ ...inputStyle, width: "100%", maxWidth: "420px" }} />
+                <p id="preference-help" style={helperStyle}>Use this space to record company or job type preferences</p>
               </div>
             </FormRow>
 
-            <FormRow label="Availability">
-              <div>
+            <FormRow label={<span id="availability-label">Availability</span>}>
+              <div role="group" aria-labelledby="availability-label" aria-required="true" aria-describedby={e.semester ? "semester-error" : undefined}>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
                   <label style={{ display: "flex", alignItems: "center", gap: "0.35rem", ...optionTextStyle }}>
                     <input id="thisSemester" name="thisSemester" type="checkbox" />
@@ -644,12 +659,12 @@ export default function ApplyPage() {
                     <span>{semThird}</span>
                   </label>
                 </div>
-                <ErrMsg msg={e.semester} />
+                <ErrMsg id="semester-error" msg={e.semester} />
               </div>
             </FormRow>
 
-            <FormRow label="Location(s)">
-              <div>
+            <FormRow label={<span id="locations-label">Location(s)</span>}>
+              <div role="group" aria-labelledby="locations-label" aria-required="true" aria-describedby={e.locations ? "locations-error" : undefined}>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem 1.25rem" }}>
                   {LOCATION_OPTIONS.map((loc) => {
                     const locId = `loc-${loc.replace(/[^\w]+/g, "-").toLowerCase()}`;
@@ -661,7 +676,7 @@ export default function ApplyPage() {
                     );
                   })}
                 </div>
-                <ErrMsg msg={e.locations} />
+                <ErrMsg id="locations-error" msg={e.locations} />
               </div>
             </FormRow>
 
@@ -671,13 +686,17 @@ export default function ApplyPage() {
                   id="resume"
                   name="resume"
                   type="file"
+                  required
+                  aria-required="true"
+                  aria-invalid={!!e.resume}
+                  aria-describedby={e.resume ? "resume-error" : undefined}
                   style={{
                     fontFamily: "Roboto, sans-serif",
                     fontSize: "0.95rem",
                     color: "#000",
                   }}
                 />
-                <ErrMsg msg={e.resume} />
+                <ErrMsg id="resume-error" msg={e.resume} />
               </div>
             </FormRow>
 

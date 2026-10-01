@@ -20,7 +20,7 @@ const impacts = [
 
 export default function ToyotaSuccessStoryPage() {
   return (
-    <main
+    <div
       className="w-full overflow-x-hidden"
       style={{ backgroundColor: '#F2F3F4' }}
     >
@@ -252,7 +252,7 @@ export default function ToyotaSuccessStoryPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

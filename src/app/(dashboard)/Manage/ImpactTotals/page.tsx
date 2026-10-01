@@ -165,7 +165,11 @@ export default function ImpactTotalsPage() {
           <p className="text-[#666666] font-roboto">Loading…</p>
         ) : (
           <>
-            {error && <p className="text-red-600 font-roboto mb-4">{error}</p>}
+            {error && (
+              <p id="impact-totals-error" className="text-red-600 font-roboto mb-4" role="alert">
+                {error}
+              </p>
+            )}
             {message && <p className="text-green-700 font-roboto mb-4">{message}</p>}
 
             {prefilled && (
@@ -195,17 +199,23 @@ export default function ImpactTotalsPage() {
               {fields.map((field) => {
                 const calcValue = calcValues?.[field.name] ?? null;
                 const differs = differsFromCalc(String(form[field.name]), calcValue);
+                const inputId = `impact-${field.name}`;
 
                 return (
                   <div key={field.name} className="flex flex-col gap-1">
-                    <label className="flex flex-col gap-1 text-[#666666] font-roboto text-sm">
+                    <label
+                      htmlFor={inputId}
+                      className="flex flex-col gap-1 text-[#666666] font-roboto text-sm"
+                    >
                       <span>{field.label}</span>
                       <input
+                        id={inputId}
                         type="number"
                         step="any"
                         value={form[field.name]}
                         onChange={(e) => updateField(field.name, e.target.value)}
-                        className="border border-gray-300 rounded-md px-3 py-2 text-[#333333]"
+                        className="border border-gray-300 rounded-md px-3 py-2 text-[#333333] focus:border-[#666]"
+                        aria-describedby={error ? "impact-totals-error" : undefined}
                       />
                     </label>
                     {differs && calcValue !== null && (

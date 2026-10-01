@@ -190,27 +190,28 @@ export default function ToDoListPage() {
         <hr className="border-t border-[#ccc] mb-6" />
 
         {error && (
-          <p className="mb-4 font-roboto text-red-600 text-[14px]">{error}</p>
+          <p className="mb-4 font-roboto text-red-600 text-[14px]" role="alert">{error}</p>
         )}
 
-        <form onSubmit={handleSave}>
+        <form onSubmit={handleSave} aria-label="To-do list uploads">
           <div className="overflow-x-auto mb-5">
             <table className="w-full max-w-full border-collapse font-roboto text-sm">
+              <caption className="sr-only">Intern to-do list checklist</caption>
               <thead>
                 <tr className="bg-[#9E1B32]">
-                  <th className="border border-[#7a0000] p-[10px] text-white font-normal text-left w-[80px]">
+                  <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-left w-[80px]">
                     Checkbox
                   </th>
-                  <th className="border border-[#7a0000] p-[10px] text-white font-normal text-left">
+                  <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-left">
                     Name
                   </th>
-                  <th className="border border-[#7a0000] p-[10px] text-white font-normal text-left">
+                  <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-left">
                     Form
                   </th>
-                  <th className="border border-[#7a0000] p-[10px] text-white font-normal text-left">
+                  <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-left">
                     Upload
                   </th>
-                  <th className="border border-[#7a0000] p-[10px] text-white font-normal text-left w-[120px]">
+                  <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-left w-[120px]">
                     Date
                   </th>
                 </tr>
@@ -223,6 +224,7 @@ export default function ToDoListPage() {
                       className="w-4 h-4"
                       checked={impactCompleted}
                       readOnly
+                      aria-label="Impact Calculator completed"
                     />
                   </td>
                   <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
@@ -261,10 +263,12 @@ export default function ToDoListPage() {
                           type="button"
                           className="px-3 py-1 border border-[#767676] bg-white text-[#333] text-sm rounded hover:bg-gray-100"
                           onClick={() => impactFileInputRef.current?.click()}
+                          aria-controls="todo-impact-calc-file"
                         >
                           Choose File
                         </button>
                         <span
+                          id="todo-impact-file-status"
                           className="font-roboto text-[14px]"
                           style={{ color: '#000000' }}
                         >
@@ -282,10 +286,13 @@ export default function ToDoListPage() {
                         </a>
                       )}
                       <input
+                        id="todo-impact-calc-file"
                         ref={impactFileInputRef}
                         type="file"
                         name="impactCalc"
                         className="hidden"
+                        aria-label="Upload Impact Calculator file"
+                        aria-describedby="todo-impact-file-status"
                         onChange={(e) => {
                           const file = e.target.files?.[0] ?? null;
                           setImpactFile(file);
@@ -308,6 +315,7 @@ export default function ToDoListPage() {
                       className="w-4 h-4"
                       checked={presCompleted}
                       readOnly
+                      aria-label="Presentation or Poster completed"
                     />
                   </td>
                   <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
@@ -358,10 +366,12 @@ export default function ToDoListPage() {
                           type="button"
                           className="px-3 py-1 border border-[#767676] bg-white text-[#333] text-sm rounded hover:bg-gray-100"
                           onClick={() => presFileInputRef.current?.click()}
+                          aria-controls="todo-presentation-file"
                         >
                           Choose File
                         </button>
                         <span
+                          id="todo-pres-file-status"
                           className="font-roboto text-[14px]"
                           style={{ color: '#000000' }}
                         >
@@ -379,10 +389,13 @@ export default function ToDoListPage() {
                         </a>
                       )}
                       <input
+                        id="todo-presentation-file"
                         ref={presFileInputRef}
                         type="file"
                         name="presentation"
                         className="hidden"
+                        aria-label="Upload Presentation or Poster file"
+                        aria-describedby="todo-pres-file-status"
                         onChange={(e) => {
                           const file = e.target.files?.[0] ?? null;
                           setPresFile(file);
@@ -437,7 +450,7 @@ export default function ToDoListPage() {
           </div>
 
           {saveError && (
-            <p className="mb-3 font-roboto text-[14px] text-red-600">{saveError}</p>
+            <p id="todo-save-error" className="mb-3 font-roboto text-[14px] text-red-600" role="alert">{saveError}</p>
           )}
           {saveSuccess && (
             <p className="mb-3 font-roboto text-[14px] text-green-700">

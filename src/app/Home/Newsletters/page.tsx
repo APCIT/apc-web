@@ -8,7 +8,7 @@ const ua = {
   color: {
     textDefault: '#35363B',
     textAlt: '#4A4C54',
-    textSubtle: '#757C88',
+    textSubtle: '#4A4C54',
     primary: '#9E1B32',
     primaryHover: '#70202C',
     surface: '#FFFFFF',
@@ -43,6 +43,12 @@ type NewsArticle = {
 
 const newsletterEntries: NewsletterEntry[] = [
   {
+    title: 'August 2026',
+    href: 'https://t.e2ma.net/webview/th6r0r/207a7cbe73ea9c7bb8f43a7a6ad009fd',
+    cta: 'View Newsletter',
+    isExternal: true,
+  },
+  {
     title: 'July 2026',
     href: 'https://t.e2ma.net/webview/1zxrzr/4694f140233ca30bde0184477107f027',
     cta: 'View Newsletter',
@@ -69,36 +75,6 @@ const newsletterEntries: NewsletterEntry[] = [
   {
     title: 'Fall 2023',
     href: 'https://myemail.constantcontact.com/Alabama-Productivity-Center-2023-Fall-Newsletter.html?soid=1127193424690&aid=5J0Jh5gn764',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
-    title: 'Spring 2023',
-    href: 'https://conta.cc/3WU74Ad',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
-    title: 'Summer 2022',
-    href: 'https://conta.cc/3qvnnYa',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
-    title: 'Spring 2022',
-    href: 'https://conta.cc/3hM8w41',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
-    title: 'Fall 2021',
-    href: 'https://conta.cc/3i6enSp',
-    cta: 'View Newsletter',
-    isExternal: true
-  },
-  {
-    title: 'Spring 2021',
-    href: 'https://conta.cc/397VzgY',
     cta: 'View Newsletter',
     isExternal: true
   },
@@ -331,7 +307,7 @@ export default function NewslettersPage() {
             paddingRight: ua.space[4],
           }}
         >
-          {newsArticles.slice(0, newsletterEntries.length).map((article) => (
+          {newsArticles.map((article) => (
             <div key={article.title} className="news-article-row" style={newsArticleContainerStyle}>
               <div style={buttonSectionStyle}>
                 <a

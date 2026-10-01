@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import HeadingIntroBanner from '@/components/HeadingIntroBanner';
 
 type ViewState = 'split' | 'studentExpanded' | 'companyExpanded';
@@ -8,6 +8,11 @@ type ViewState = 'split' | 'studentExpanded' | 'companyExpanded';
 export default function InternshipsClient() {
   const [viewState, setViewState] = useState<ViewState>('split');
   const [showContactForm, setShowContactForm] = useState(false);
+  const studentButtonRef = useRef<HTMLButtonElement>(null);
+  const companyButtonRef = useRef<HTMLButtonElement>(null);
+  const studentPanelRef = useRef<HTMLDivElement>(null);
+  const companyPanelRef = useRef<HTMLDivElement>(null);
+  const restoreFocusRef = useRef<'student' | 'company' | null>(null);
 
   const isSplit = viewState === 'split';
   const isStudentExpanded = viewState === 'studentExpanded';
@@ -35,6 +40,39 @@ export default function InternshipsClient() {
     }
   }, []);
 
+  useEffect(() => {
+    if (viewState === 'studentExpanded') {
+      studentPanelRef.current?.scrollTo(0, 0);
+      studentPanelRef.current?.focus();
+      return;
+    }
+    if (viewState === 'companyExpanded') {
+      companyPanelRef.current?.scrollTo(0, 0);
+      companyPanelRef.current?.focus();
+      return;
+    }
+    if (restoreFocusRef.current === 'student') {
+      restoreFocusRef.current = null;
+      studentButtonRef.current?.focus();
+    } else if (restoreFocusRef.current === 'company') {
+      restoreFocusRef.current = null;
+      companyButtonRef.current?.focus();
+    }
+  }, [viewState]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || viewState === 'split') return;
+      event.preventDefault();
+      restoreFocusRef.current = viewState === 'studentExpanded' ? 'student' : 'company';
+      setShowContactForm(false);
+      setViewState('split');
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [viewState]);
+
   const studentWidth = useMemo(() => {
     if (isSplit) return '50%';
     if (isStudentExpanded) return '75%';
@@ -49,6 +87,12 @@ export default function InternshipsClient() {
 
   return (
     <div className="relative w-full overflow-x-hidden">
+      <a href="#studentSide" className="skip-link">
+        Skip to student internships
+      </a>
+      <a href="#companySide" className="skip-link">
+        Skip to hiring an intern
+      </a>
       {/* Mobile Banner - Only visible on mobile */}
       <div className="internships-mobile-banner-wrapper">
         <HeadingIntroBanner
@@ -61,8 +105,12 @@ export default function InternshipsClient() {
       {/* Student Side */}
       <div
         id="studentSide"
-        className="fixed top-0 z-[1] overflow-x-hidden overflow-y-auto transition-[width] duration-[1500ms] ease-in-out"
+        ref={studentPanelRef}
+        className="internships-panel fixed top-0 z-[1] overflow-x-hidden overflow-y-auto transition-[width] duration-[1500ms] ease-in-out"
         style={{ width: studentWidth, left: 0, height: '100vh', backgroundColor: isStudentExpanded ? '#ffffff' : '#920905' }}
+        role="region"
+        aria-label="Student internships"
+        tabIndex={-1}
       >
         {/* Background image: visible when this side is collapsed */}
         {!isStudentExpanded && (
@@ -104,7 +152,11 @@ export default function InternshipsClient() {
 
               <button
                 id="studentButton"
+                ref={studentButtonRef}
+                type="button"
                 onClick={spread_right}
+                aria-expanded={isStudentExpanded}
+                aria-label="Learn more about student internships"
                 style={{ marginTop: '30px', width: '100%', maxWidth: '450px' }}
                 className={`
                   bg-white
@@ -296,7 +348,7 @@ export default function InternshipsClient() {
               <iframe
                 width="650"
                 height="350"
-                src="https://www.youtube.com/embed/6cxKX2EI3Ps"
+                src="https://www.youtube.com/embed/6cxKX2EI3Ps?cc_load_policy=1&cc_lang_pref=en"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -311,8 +363,12 @@ export default function InternshipsClient() {
       {/* Company Side */}
       <div
         id="companySide"
-        className="fixed top-0 z-[1] overflow-x-hidden overflow-y-auto transition-[width] duration-[1500ms] ease-in-out"
+        ref={companyPanelRef}
+        className="internships-panel fixed top-0 z-[1] overflow-x-hidden overflow-y-auto transition-[width] duration-[1500ms] ease-in-out"
         style={{ width: companyWidth, right: 0, height: '100vh', backgroundColor: isCompanyExpanded ? '#ffffff' : 'rgb(75,85,99)' }}
+        role="region"
+        aria-label="Hiring an intern"
+        tabIndex={-1}
       >
         {/* Background image: visible when this side is collapsed */}
         {!isCompanyExpanded && (
@@ -344,7 +400,11 @@ export default function InternshipsClient() {
 
               <button
                 id="companyButton"
+                ref={companyButtonRef}
+                type="button"
                 onClick={spread_left}
+                aria-expanded={isCompanyExpanded}
+                aria-label="Learn more about hiring an intern"
                 style={{ marginTop: '30px', width: '100%', maxWidth: '450px', color: '#000000' }}
                 className={`
                   bg-white
@@ -408,6 +468,7 @@ export default function InternshipsClient() {
                   <div className="text-center mt-6">
                     <button
                       id="applyNow"
+                      type="button"
                       onClick={() => setShowContactForm(true)}
                       className={`
                         w-[50%]
@@ -434,36 +495,49 @@ export default function InternshipsClient() {
                     <div id="contactForm" className="mt-8 text-center">
                       <div className="text-black">
                         <p className="mb-4">Contact us using this form!<br /></p>
-                        <form className="space-y-4 max-w-md mx-auto">
+                        <form className="space-y-4 max-w-md mx-auto text-left" aria-label="Company contact form">
                           <div>
-                            <label className="block text-left mb-1">Name</label>
+                            <label htmlFor="company-contact-name" className="block mb-1 text-[#35363B] font-medium">
+                              Name
+                            </label>
                             <input
+                              id="company-contact-name"
+                              name="name"
                               type="text"
-                              className="w-full px-3 py-2 border border-gray-300 rounded"
-                              placeholder="Name"
+                              required
+                              autoComplete="name"
+                              className="w-full px-3 py-2 border border-gray-300 rounded text-[#35363B]"
                             />
                           </div>
                           <div>
-                            <label className="block text-left mb-1">Email</label>
+                            <label htmlFor="company-contact-email" className="block mb-1 text-[#35363B] font-medium">
+                              Email
+                            </label>
                             <input
+                              id="company-contact-email"
+                              name="email"
                               type="email"
-                              className="w-full px-3 py-2 border border-gray-300 rounded"
-                              placeholder="Email"
+                              required
+                              autoComplete="email"
+                              className="w-full px-3 py-2 border border-gray-300 rounded text-[#35363B]"
                             />
                           </div>
                           <div>
-                            <label className="block text-left mb-1">Message</label>
+                            <label htmlFor="company-contact-message" className="block mb-1 text-[#35363B] font-medium">
+                              Message
+                            </label>
                             <textarea
-                              className="w-full px-3 py-2 border border-gray-300 rounded"
+                              id="company-contact-message"
+                              name="message"
+                              required
+                              className="w-full px-3 py-2 border border-gray-300 rounded text-[#35363B]"
                               rows={4}
-                              placeholder="Message"
                             />
                           </div>
                           <div>
                             <button
                               type="submit"
                               className="bg-[#9E1B32] text-white px-6 py-2 rounded"
-                              style={{ marginLeft: '22em' }}
                             >
                               Send
                             </button>
@@ -530,7 +604,7 @@ export default function InternshipsClient() {
               <iframe
                 width="650"
                 height="350"
-                src="https://www.youtube.com/embed/nIVTVwzPuJQ"
+                src="https://www.youtube.com/embed/nIVTVwzPuJQ?cc_load_policy=1&cc_lang_pref=en"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

@@ -113,18 +113,19 @@ export default function ClassRegistrantsPage() {
           style={{ marginTop: "20px", marginBottom: "48px" }}
         >
           {error && (
-            <p className="font-roboto text-red-600 mb-4">{error}</p>
+            <p className="font-roboto text-red-600 mb-4" role="alert">{error}</p>
           )}
           <table className="w-full border-collapse font-roboto text-sm">
+            <caption className="sr-only">Class registrants</caption>
             <thead>
               <tr className="bg-[#9E1B32]">
-                <th className={`${thClass} ${dateStyle}`}>Date Registered</th>
-                <th className={`${thClass} ${classStyle}`}>Class</th>
-                <th className={`${thClass} ${lastNameStyle}`}>Name</th>
-                <th className={thClass}>Email</th>
-                <th className={thClass}>Phone</th>
-                <th className={`${thClass} ${companyStyle}`}>Company</th>
-                <th className={thClass}>Job Title</th>
+                <th scope="col" className={`${thClass} ${dateStyle}`}>Date Registered</th>
+                <th scope="col" className={`${thClass} ${classStyle}`}>Class</th>
+                <th scope="col" className={`${thClass} ${lastNameStyle}`}>Name</th>
+                <th scope="col" className={thClass}>Email</th>
+                <th scope="col" className={thClass}>Phone</th>
+                <th scope="col" className={`${thClass} ${companyStyle}`}>Company</th>
+                <th scope="col" className={thClass}>Job Title</th>
               </tr>
             </thead>
             <tbody>

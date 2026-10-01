@@ -76,6 +76,13 @@ function getYearOptions(): number[] {
 /** Initial accordion section shown until API semesters are loaded. */
 const INITIAL_SEMESTER_LABEL = `Semester ${new Date().getFullYear()}`;
 
+const inputClass =
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto text-[#000000] focus:border-[#666] h-[40px]";
+const selectClass =
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto text-[#000000] bg-white focus:border-[#666] h-[40px]";
+const labelClass =
+  "w-[180px] text-right font-roboto text-[14px] text-[#000000] font-bold";
+
 export default function PresentationsPage() {
   const [presentations, setPresentations] = useState<PresentationItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -229,30 +236,34 @@ export default function PresentationsPage() {
               </h2>
             </div>
 
-            <form ref={formRef} className="max-w-4xl">
+            <form ref={formRef} className="max-w-4xl" aria-label="Upload presentation">
               {/* Name(s) */}
               <div className="flex items-center" style={{ marginBottom: '24px' }}>
-                <label className="w-[180px] text-right font-roboto text-[14px] text-[#000000] font-bold">
+                <label htmlFor="presentation-name" className={labelClass}>
                   Name(s)
                 </label>
                 <div className="flex-1" style={{ marginLeft: '20px' }}>
                   <input
+                    id="presentation-name"
                     type="text"
                     name="presentationName"
-                    className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto text-[#000000] focus:outline-none focus:border-[#666] h-[40px]"
+                    className={inputClass}
+                    aria-describedby={uploadError ? "presentation-upload-error" : undefined}
                   />
                 </div>
               </div>
 
               {/* Company */}
               <div className="flex items-center" style={{ marginBottom: '24px' }}>
-                <label className="w-[180px] text-right font-roboto text-[14px] text-[#000000] font-bold">
+                <label htmlFor="presentation-company" className={labelClass}>
                   Company
                 </label>
                 <div className="flex-1" style={{ marginLeft: '20px' }}>
                   <select
+                    id="presentation-company"
                     name="companyId"
-                    className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto text-[#000000] bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                    className={selectClass}
+                    aria-describedby={uploadError ? "presentation-upload-error" : undefined}
                   >
                     <option value="">Select company</option>
                     {companies.map((c) => (
@@ -264,23 +275,38 @@ export default function PresentationsPage() {
 
               {/* Semester */}
               <div className="flex items-center" style={{ marginBottom: '24px' }}>
-                <label className="w-[180px] text-right font-roboto text-[14px] text-[#000000] font-bold">
+                <span id="presentation-semester-label" className={labelClass}>
                   Semester
-                </label>
-                <div className="flex-1 flex" style={{ marginLeft: '20px' }}>
+                </span>
+                <div
+                  className="flex-1 flex"
+                  style={{ marginLeft: '20px' }}
+                  role="group"
+                  aria-labelledby="presentation-semester-label"
+                >
+                  <label htmlFor="presentation-season" className="sr-only">
+                    Season
+                  </label>
                   <select
+                    id="presentation-season"
                     name="presentationSeason"
-                    className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto text-[#000000] bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                    className={selectClass}
+                    aria-describedby={uploadError ? "presentation-upload-error" : undefined}
                   >
                     <option value="">Season</option>
                     {SEASONS.map((s) => (
                       <option key={s} value={s}>{s}</option>
                     ))}
                   </select>
+                  <label htmlFor="presentation-year" className="sr-only">
+                    Year
+                  </label>
                   <select
+                    id="presentation-year"
                     name="presentationYear"
-                    className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto text-[#000000] bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                    className={selectClass}
                     style={{ marginLeft: '20px' }}
+                    aria-describedby={uploadError ? "presentation-upload-error" : undefined}
                   >
                     <option value="">Year</option>
                     {yearOptions.map((y) => (
@@ -295,13 +321,16 @@ export default function PresentationsPage() {
                 <div className="w-[180px]"></div>
                 <div className="flex-1" style={{ marginLeft: '20px' }}>
                   <input
+                    id="presentation-file"
                     ref={fileInputRef}
                     type="file"
                     name="presentationFile"
                     className="font-roboto text-[14px]"
+                    aria-label="Presentation file"
+                    aria-describedby="presentation-file-status"
                     onChange={(e) => setSelectedFileName(e.target.files?.[0]?.name ?? null)}
                   />
-                  <p className="font-roboto text-[14px] text-[#666] mt-1">
+                  <p id="presentation-file-status" className="font-roboto text-[14px] text-[#666] mt-1">
                     {selectedFileName ? (
                       <span className="text-green-700">File chosen: {selectedFileName}</span>
                     ) : (
@@ -314,7 +343,14 @@ export default function PresentationsPage() {
               {uploadError && (
                 <div className="flex items-center" style={{ marginBottom: '12px' }}>
                   <div className="w-[180px]"></div>
-                  <div className="flex-1 font-roboto text-red-600 text-sm" style={{ marginLeft: '20px' }}>{uploadError}</div>
+                  <div
+                    id="presentation-upload-error"
+                    role="alert"
+                    className="flex-1 font-roboto text-red-600 text-sm"
+                    style={{ marginLeft: '20px' }}
+                  >
+                    {uploadError}
+                  </div>
                 </div>
               )}
               {uploadSuccess && (
@@ -337,7 +373,7 @@ export default function PresentationsPage() {
                     {uploadLoading ? "Uploading…" : "Upload"}
                   </button>
                   {uploadError === "Please select a file to upload." && (
-                    <span className="font-roboto text-sm text-red-600">No file was uploaded. Try again.</span>
+                    <span className="font-roboto text-sm text-red-600" role="alert">No file was uploaded. Try again.</span>
                   )}
                 </div>
               </div>
@@ -357,7 +393,7 @@ export default function PresentationsPage() {
 
           <div className="manage-accordion px-4 mt-8">
             {error && (
-              <p className="font-roboto text-red-600 mb-4">{error}</p>
+              <p className="font-roboto text-red-600 mb-4" role="alert">{error}</p>
             )}
             {!loading && displaySemesters.length === 0 && (
               <p className="font-roboto text-[#666]">No presentations yet. Upload one to see semester sections here.</p>
@@ -386,21 +422,24 @@ export default function PresentationsPage() {
                 >
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse font-roboto text-sm">
+                      <caption className="sr-only">
+                        Presentations for {semesterLabel}
+                      </caption>
                       <thead>
                         <tr className="bg-[#9E1B32]">
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Name(s)
                           </th>
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Company
                           </th>
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Upload Date
                           </th>
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Uploaded By
                           </th>
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Actions
                           </th>
                         </tr>
@@ -468,4 +507,3 @@ export default function PresentationsPage() {
     </div>
   );
 }
-

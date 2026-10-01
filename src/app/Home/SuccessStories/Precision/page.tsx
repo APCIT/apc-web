@@ -4,7 +4,7 @@ import HeadingIntroBanner from '@/components/HeadingIntroBanner';
 
 export default function PrecisionSuccessStoryPage() {
   return (
-    <main
+    <div
       className="w-full overflow-x-hidden"
       style={{ backgroundColor: '#F2F3F4' }}
     >
@@ -148,11 +148,11 @@ export default function PrecisionSuccessStoryPage() {
           </Link>
 
           <Link href="/Home/Services" style={secondaryButtonStyle}>
-            Explore Client Services
+            Explore Professional Services
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

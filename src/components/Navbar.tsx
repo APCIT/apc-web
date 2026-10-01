@@ -81,6 +81,8 @@ function getMenuLinksForRoles(roles: string[]): MenuLink[] {
 
 const CaretSvg = ({ open }: { open: boolean }) => (
   <svg
+    aria-hidden="true"
+    focusable="false"
     className="transition-transform duration-300"
     style={{
       transform: open ? "rotate(180deg)" : "rotate(0deg)",
@@ -107,7 +109,6 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
   const router = useRouter();
   const pathname = usePathname();
   const [isAboutOpen, setIsAboutOpen] = useState(false);
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
   const [isSuccessStoriesOpen, setIsSuccessStoriesOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -125,6 +126,15 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
       }
     });
   }, [pathname]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isMobileMenuOpen]);
 
   const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -196,7 +206,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
 
   return (
     <header className="sticky inset-x-0 top-0 z-[1030] w-full bg-[#4A4C54] border-b border-[#35363B] transition-[background,padding] duration-500 ease-in-out">
-      <nav className="mx-auto flex h-[96px] w-full max-w-[77rem] items-center gap-6 px-4">
+      <nav className="mx-auto flex h-[96px] w-full max-w-[77rem] items-center gap-3 px-4" aria-label="Primary">
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2 pl-2">
             <Image
@@ -213,13 +223,16 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
 
         {/* Hamburger Button - Mobile Only */}
         <button
+          type="button"
           className="navbar-hamburger"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-nav"
         >
-          <span className={`hamburger-line ${isMobileMenuOpen ? 'open' : ''}`}></span>
-          <span className={`hamburger-line ${isMobileMenuOpen ? 'open' : ''}`}></span>
-          <span className={`hamburger-line ${isMobileMenuOpen ? 'open' : ''}`}></span>
+          <span className={`hamburger-line ${isMobileMenuOpen ? 'open' : ''}`} aria-hidden="true"></span>
+          <span className={`hamburger-line ${isMobileMenuOpen ? 'open' : ''}`} aria-hidden="true"></span>
+          <span className={`hamburger-line ${isMobileMenuOpen ? 'open' : ''}`} aria-hidden="true"></span>
         </button>
 
         {/* Desktop Navigation */}
@@ -234,26 +247,12 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
             >
               <DropdownTrigger>
                 <button
-                  className="nav-link block whitespace-nowrap roundedpx-[10px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
+                  type="button"
+                  className="nav-link block whitespace-nowrap rounded px-[10px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 border-0 flex items-center gap-2"
                   style={{color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '400', letterSpacing: '0', backgroundColor: 'transparent', boxShadow: 'none'}}
                 >
                   About
-                  <svg
-                    className="transition-transform duration-300"
-                    style={{
-                      transform: isAboutOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                      width: '16px',
-                      height: '16px',
-                    }}
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <CaretSvg open={isAboutOpen} />
                 </button>
               </DropdownTrigger>
               <DropdownMenu 
@@ -290,63 +289,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
           </li>
           <NavItem href="/Home/Internships">Internships</NavItem>
           <NavItem href="/Apply">Apply</NavItem>
-          <li className="leading-none list-none">
-            <Dropdown 
-              classNames={{
-                content: "bg-white p-0 border-0 shadow-lg min-w-[180px] overflow-hidden",
-              }}
-              onOpenChange={(open) => setIsServicesOpen(open)}
-            >
-              <DropdownTrigger>
-                <button
-                  className="nav-link block rounded px-[10px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
-                  style={{color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '400', letterSpacing: '0', backgroundColor: 'transparent', boxShadow: 'none'}}
-                >
-                  Client Services
-                  <svg
-                    className="transition-transform duration-300"
-                    style={{
-                      transform: isServicesOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                      width: '16px',
-                      height: '16px',
-                    }}
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </DropdownTrigger>
-              <DropdownMenu 
-                aria-label="Client Services menu"
-                className="p-0 bg-white"
-                itemClasses={{
-                  base: "dropdown-item text-black data-[hover=true]:bg-transparent rounded-none px-4 py-[3px] m-0 text-center justify-center relative",
-                }}
-              >
-                <DropdownItem 
-                  key="our-services"
-                  as={Link}
-                  href="/Home/Services"
-                  style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
-                >
-                  Our Services
-                </DropdownItem>
-                <DropdownItem 
-                  key="class-registration"
-                  as={Link}
-                  href="/Home/Classes"
-                  style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
-                >
-                  Class Registration
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </li>
+          <NavItem href="/Home/Services">Professional Services</NavItem>
 
           <li className="leading-none list-none">
             <Dropdown
@@ -358,7 +301,8 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
             >
               <DropdownTrigger>
                 <button
-                  className="nav-link block rounded px-[8px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
+                  type="button"
+                  className="nav-link block whitespace-nowrap rounded px-[10px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 border-0 flex items-center gap-2"
                   style={{
                     color: "white",
                     fontSize: "1rem",
@@ -369,16 +313,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                     boxShadow: "none",
                   }}
                 >
-                  <span
-                    style={{
-                      width: "90px",
-                      textAlign: "center",
-                      whiteSpace: "normal",
-                    }}
-                  >
-                    Success Stories
-                  </span>
-
+                  Success Stories
                   <CaretSvg open={isSuccessStoriesOpen} />
                 </button>
               </DropdownTrigger>
@@ -423,7 +358,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
           <li className="leading-none list-none">
           <Link
               href="/Home/Contact"
-              className="nav-link flex flex-col items-center justify-center rounded px-[15px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white cursor-pointer"
+              className="nav-link flex whitespace-nowrap items-center justify-center rounded px-[10px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white cursor-pointer"
               style={{ color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '300' }}
               >
             Contact
@@ -442,7 +377,8 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
               >
                 <DropdownTrigger>
                   <button
-                    className="nav-link block rounded px-[10px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent outline-none focus:outline-none focus-visible:outline-none border-0 flex items-center gap-2"
+                    type="button"
+                    className="nav-link block rounded px-[10px] py-[8px] font-normal text-white hover:text-white/80 no-underline !text-white cursor-pointer bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 border-0 flex items-center gap-2"
                     style={{ color: "white", fontSize: "1rem", lineHeight: "50px", fontWeight: "300", backgroundColor: "transparent", boxShadow: "none" }}
                   >
                     {user.userName}
@@ -497,7 +433,12 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
         </ul>
 
         {/* Mobile Menu */}
-        <div className={`navbar-mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+        <div
+          id="mobile-nav"
+          className={`navbar-mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}
+          aria-hidden={!isMobileMenuOpen}
+          inert={!isMobileMenuOpen ? true : undefined}
+        >
           <ul className="mobile-nav-list" style={{fontFamily: 'var(--font-sans)'}}>
             <li><Link href="/" onClick={closeMobileMenu}>Home</Link></li>
             <li className="mobile-dropdown">
@@ -508,24 +449,9 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                 onOpenChange={(open) => setIsAboutOpen(open)}
               >
                 <DropdownTrigger>
-                  <button className="mobile-dropdown-trigger">
+                  <button type="button" className="mobile-dropdown-trigger">
                     About
-                    <svg
-                      className="transition-transform duration-300"
-                      style={{
-                        transform: isAboutOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                        width: '16px',
-                        height: '16px',
-                      }}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <CaretSvg open={isAboutOpen} />
                   </button>
                 </DropdownTrigger>
                 <DropdownMenu 
@@ -567,61 +493,10 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                 Apply
               </Link>
             </li>
-            <li className="mobile-dropdown">
-              <Dropdown 
-                classNames={{
-                  content: "bg-white p-0 border-0 shadow-lg min-w-[180px] overflow-hidden",
-                }}
-                onOpenChange={(open) => setIsServicesOpen(open)}
-              >
-                <DropdownTrigger>
-                  <button className="mobile-dropdown-trigger">
-                    Client Services
-                    <svg
-                      className="transition-transform duration-300"
-                      style={{
-                        transform: isServicesOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                        width: '16px',
-                        height: '16px',
-                      }}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </DropdownTrigger>
-                <DropdownMenu 
-                  aria-label="Client Services menu"
-                  className="p-0 bg-white"
-                  itemClasses={{
-                    base: "dropdown-item text-black data-[hover=true]:bg-transparent rounded-none px-4 py-[3px] m-0 text-center justify-center relative",
-                  }}
-                >
-                  <DropdownItem 
-                    key="our-services-mobile"
-                    as={Link}
-                    href="/Home/Services"
-                    onClick={closeMobileMenu}
-                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
-                  >
-                    Our Services
-                  </DropdownItem>
-                  <DropdownItem 
-                    key="class-registration-mobile"
-                    as={Link}
-                    href="/Home/Classes"
-                    onClick={closeMobileMenu}
-                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
-                  >
-                    Class Registration
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+            <li>
+              <Link href="/Home/Services" onClick={closeMobileMenu}>
+                Professional Services
+              </Link>
             </li>
             <li className="mobile-dropdown">
               <Dropdown
@@ -631,7 +506,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                 onOpenChange={(open) => setIsSuccessStoriesOpen(open)}
               >
                 <DropdownTrigger>
-                  <button className="mobile-dropdown-trigger">
+                  <button type="button" className="mobile-dropdown-trigger">
                     Success Stories
                     <CaretSvg open={isSuccessStoriesOpen} />
                   </button>
@@ -695,7 +570,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
                     onOpenChange={(open) => setIsUserOpen(open)}
                   >
                     <DropdownTrigger>
-                      <button className="mobile-dropdown-trigger">
+                      <button type="button" className="mobile-dropdown-trigger">
                         {user.userName}
                         <CaretSvg open={isUserOpen} />
                       </button>
@@ -755,7 +630,7 @@ function NavItem({ href, children }: { href: string; children: React.ReactNode }
     <li className="leading-none list-none">
         <Link
           href={href}
-          className="nav-link block rounded px-[15px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white"
+          className="nav-link block whitespace-nowrap rounded px-[10px] py-[8px] font-normal text-white hover:text-white/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50 no-underline !text-white"
           style={{color: 'white', fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '400'}}
         >
         { children }

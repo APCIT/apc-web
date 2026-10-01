@@ -56,18 +56,21 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
   const baseSlides = variant === 'intro' ? introSlides : storiesSlides;
   const slides = [baseSlides[baseSlides.length - 1], ...baseSlides, baseSlides[0]];
   const [index, setIndex] = useState(1);
-  const [isAuto, setIsAuto] = useState(true);
+  const [userPaused, setUserPaused] = useState(false);
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [transition, setTransition] = useState(true);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    if (!isAuto) return;
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => next(), 5000);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [isAuto, index]);
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncPreference = () => setPrefersReducedMotion(media.matches);
+    syncPreference();
+    media.addEventListener('change', syncPreference);
+    return () => media.removeEventListener('change', syncPreference);
+  }, []);
+
+  const shouldAutoplay = !userPaused && !hoverPaused && !prefersReducedMotion;
 
   const next = () => {
     setIndex((i) => {
@@ -85,6 +88,15 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
     });
   };
 
+  useEffect(() => {
+    if (!shouldAutoplay) return;
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => next(), 5000);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [shouldAutoplay, index]);
+
   const onTransitionEnd = () => {
     if (index === slides.length - 1) {
       setTransition(false);
@@ -100,21 +112,36 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
 
   const goToReal = (realIdx: number) => setIndex(realIdx + 1);
   const real = (index - 1 + baseSlides.length) % baseSlides.length;
+  const animate = transition && !prefersReducedMotion;
+  const label = variant === 'intro' ? 'Featured slides' : 'Success story slides';
 
   return (
     <div
-      className={`carousel-container relative w-full overflow-hidden isolate ${variant === 'intro' ? 'carousel-intro bg-black' : 'carousel-stories'}`}
-      style={{ height: variant === 'intro' ? 500 : 450, backgroundColor: 'transparent' }}
-      onMouseEnter={() => setIsAuto(false)}
-      onMouseLeave={() => setIsAuto(true)}
+      className={`carousel-container relative w-full overflow-hidden isolate ${variant === 'intro' ? 'carousel-intro' : 'carousel-stories'}`}
+      style={{
+        height: variant === 'intro' ? 500 : 450,
+        // Explicit hex — Tailwind `bg-black` is not emitted with this theme setup
+        backgroundColor: variant === 'intro' ? '#000000' : 'transparent',
+      }}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={label}
+      onMouseEnter={() => setHoverPaused(true)}
+      onMouseLeave={() => setHoverPaused(false)}
+      onFocus={() => setHoverPaused(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setHoverPaused(false);
+        }
+      }}
     >
       {/* FIXED BACKGROUND (stories): factory3 across entire carousel */}
       {variant === 'stories' && (
         <>
-          <div className="absolute inset-0 bg-black" />
+          <div className="absolute inset-0 bg-black" aria-hidden="true" />
           <Image
             src="/images/factory3.jpg"
-            alt="Factory background"
+            alt=""
             fill
             priority
             sizes="100vw"
@@ -125,16 +152,21 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
 
       {/* Sliding track */}
       <div
-        className={`flex h-full z-10 ${transition ? 'transition-transform duration-700 ease-in-out' : ''}`}
+        className={`flex h-full z-10 ${animate ? 'transition-transform duration-700 ease-in-out' : ''}`}
         style={{ transform: `translateX(-${index * 100}%)` }}
         onTransitionEnd={onTransitionEnd}
+        aria-live={shouldAutoplay ? 'off' : 'polite'}
       >
         {slides.map((s, idx) => (
           <div key={`${s.id}-${idx}`} className="relative min-w-full h-full flex-shrink-0">
             {/* INTRO: present slide asset on black */}
             {variant === 'intro' && (
               <>
-                <div className="carousel-slide-bg absolute inset-0 bg-black" />
+                <div
+                  className="carousel-slide-bg absolute inset-0"
+                  style={{ backgroundColor: '#000000' }}
+                  aria-hidden="true"
+                />
                 {s.src && (
                   <Image
                     src={s.src}
@@ -160,7 +192,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
                         <div className="stories-logo-container relative" style={{ width: '80%', height: '120px' }}>
                           <Image 
                             src={logoSrc} 
-                            alt={`logo ${i + 1}`} 
+                            alt="" 
                             fill 
                             className="object-contain" 
                           />
@@ -193,6 +225,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
 
       {/* Nav buttons (white over dark) */}
       <button
+        type="button"
         onClick={prev}
         aria-label="Previous slide"
         className="carousel-prev-btn absolute left-0 top-0 h-full w-16 flex items-center justify-center text-white z-50"
@@ -208,7 +241,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
           cursor: 'pointer',
         }}
       >
-        <svg className="w-8 h-8" viewBox="0 0 20 20" fill="currentColor">
+        <svg className="w-8 h-8" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false">
           <path
             fillRule="evenodd"
             d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -218,6 +251,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
       </button>
 
       <button
+        type="button"
         onClick={next}
         aria-label="Next slide"
         className="carousel-next-btn absolute right-0 top-0 h-full w-16 flex items-center justify-center text-white z-50"
@@ -233,7 +267,7 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
           cursor: 'pointer',
         }}
       >
-        <svg className="w-8 h-8" viewBox="0 0 20 20" fill="currentColor">
+        <svg className="w-8 h-8" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false">
           <path
             fillRule="evenodd"
             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -242,37 +276,60 @@ export default function Carousel({ variant = 'intro' }: { variant?: 'intro' | 's
         </svg>
       </button>
 
-      {/* Indicators — black theme */}
       <div
-        className="carousel-indicators"
+        className="carousel-controls"
         style={{
           position: 'absolute',
           bottom: variant === 'intro' ? '50px' : '24px',
           left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex',
-          gap: '8px',
+          alignItems: 'center',
+          gap: '12px',
           zIndex: 9999,
         }}
       >
-        {baseSlides.map((_, i) => (
+        {!prefersReducedMotion && (
           <button
-            key={i}
-            onClick={() => goToReal(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            style={{
-              width: '10px',
-              height: '10px',
-              backgroundColor: i === real ? '#000000' : 'transparent',
-              border: '1px solid #000000',
-              borderRadius: '50%',
-              cursor: 'pointer',
-              padding: 0,
-              margin: 0,
-              display: 'block',
-            }}
-          />
-        ))}
+            type="button"
+            className="carousel-pause-btn"
+            onClick={() => setUserPaused((paused) => !paused)}
+            aria-label={userPaused ? 'Play slideshow' : 'Pause slideshow'}
+          >
+            {userPaused ? (
+              <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" focusable="false" fill="currentColor">
+                <path d="M6.3 3.2a1 1 0 0 0-1.5.86v11.88a1 1 0 0 0 1.5.86l9.5-5.94a1 1 0 0 0 0-1.72L6.3 3.2z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" focusable="false" fill="currentColor">
+                <rect x="4.5" y="3.5" width="3.5" height="13" rx="0.75" />
+                <rect x="12" y="3.5" width="3.5" height="13" rx="0.75" />
+              </svg>
+            )}
+          </button>
+        )}
+        <div className="carousel-indicators" style={{ display: 'flex', gap: '8px' }}>
+          {baseSlides.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => goToReal(i)}
+              aria-label={`Go to slide ${i + 1} of ${baseSlides.length}`}
+              aria-current={i === real ? 'true' : undefined}
+              style={{
+                width: '10px',
+                height: '10px',
+                backgroundColor: i === real ? '#000000' : 'transparent',
+                border: '1px solid #000000',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                padding: 0,
+                margin: 0,
+                display: 'block',
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

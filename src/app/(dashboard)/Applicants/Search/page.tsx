@@ -8,6 +8,14 @@ const GRAD_YEARS = (() => {
   return [y, y + 1, y + 2, y + 3, y + 4];
 })();
 
+const inputClass =
+  'w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]';
+const selectClass =
+  'w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:border-[#666] h-[40px]';
+const labelClass =
+  'w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold';
+const rowStyle = { marginBottom: '24px' };
+
 export default function ApplicantSearchPage() {
   const router = useRouter();
 
@@ -72,44 +80,49 @@ export default function ApplicantSearchPage() {
         <hr className="border-t border-[#ccc] mb-6" />
 
         {/* Search Form - POST semantics: submit redirects to SearchResults with query params */}
-        <form className="max-w-4xl" onSubmit={handleSubmit}>
+        <form className="max-w-4xl" onSubmit={handleSubmit} aria-label="Applicant search">
           {/* First Name */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-firstName" className={labelClass}>
               First Name
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <input
+                id="search-firstName"
                 type="text"
                 name="firstName"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
+                className={inputClass}
+                autoComplete="given-name"
               />
             </div>
           </div>
 
           {/* Last Name */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-lastName" className={labelClass}>
               Last Name
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <input
+                id="search-lastName"
                 type="text"
                 name="lastName"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
+                className={inputClass}
+                autoComplete="family-name"
               />
             </div>
           </div>
 
           {/* School */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-school" className={labelClass}>
               School
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <select
+                id="search-school"
                 name="school"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                className={selectClass}
               >
                 <option value="">Please select your school</option>
                 <option value="AAM">AAM - Alabama A&amp;M</option>
@@ -139,14 +152,15 @@ export default function ApplicantSearchPage() {
           </div>
 
           {/* Major */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-major" className={labelClass}>
               Major
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <select
+                id="search-major"
                 name="major"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                className={selectClass}
               >
                 <option value="">Select a Major</option>
                 {/* Arts & Sciences */}
@@ -204,28 +218,30 @@ export default function ApplicantSearchPage() {
           </div>
 
           {/* Minor */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-minor" className={labelClass}>
               Minor
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <input
+                id="search-minor"
                 type="text"
                 name="minor"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
+                className={inputClass}
               />
             </div>
           </div>
 
           {/* Level */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-level" className={labelClass}>
               Level
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <select
+                id="search-level"
                 name="level"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                className={selectClass}
               >
                 <option value="">Select a Level</option>
                 <option value="UG">UG</option>
@@ -236,28 +252,30 @@ export default function ApplicantSearchPage() {
           </div>
 
           {/* Skills */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-skills" className={labelClass}>
               Skills
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <input
+                id="search-skills"
                 type="text"
                 name="skills"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]"
+                className={inputClass}
               />
             </div>
           </div>
 
           {/* Foreign Language */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-foreignLanguage" className={labelClass}>
               Foreign Language
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <select
+                id="search-foreignLanguage"
                 name="foreignLanguage"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                className={selectClass}
               >
                 <option value="">Select Language</option>
                 <option value="Arabic">Arabic</option>
@@ -273,14 +291,15 @@ export default function ApplicantSearchPage() {
           </div>
 
           {/* Semester */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-semester" className={labelClass}>
               Semester
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <select
+                id="search-semester"
                 name="semester"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                className={selectClass}
               >
                 <option value="">Select Semester</option>
                 <option value="Fall">Fall</option>
@@ -291,14 +310,15 @@ export default function ApplicantSearchPage() {
           </div>
 
           {/* City */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <label htmlFor="search-city" className={labelClass}>
               City
             </label>
             <div className="flex-1" style={{ marginLeft: '20px' }}>
               <select
+                id="search-city"
                 name="city"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                className={selectClass}
               >
                 <option value="">Select City</option>
                 <option value="Birmingham">Birmingham</option>
@@ -314,23 +334,36 @@ export default function ApplicantSearchPage() {
           </div>
 
           {/* Graduation */}
-          <div className="flex items-center" style={{ marginBottom: '24px' }}>
-            <label className="w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold">
+          <div className="flex items-center" style={rowStyle}>
+            <span className={labelClass} id="search-graduation-label">
               Graduation
-            </label>
-            <div className="flex-1 flex" style={{ marginLeft: '20px' }}>
+            </span>
+            <div
+              className="flex-1 flex"
+              style={{ marginLeft: '20px' }}
+              role="group"
+              aria-labelledby="search-graduation-label"
+            >
+              <label htmlFor="search-gradMonth" className="sr-only">
+                Graduation month
+              </label>
               <select
+                id="search-gradMonth"
                 name="gradMonth"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                className={selectClass}
               >
                 <option value="">Month</option>
                 <option value="05">May</option>
                 <option value="08">August</option>
                 <option value="12">December</option>
               </select>
+              <label htmlFor="search-gradYear" className="sr-only">
+                Graduation year
+              </label>
               <select
+                id="search-gradYear"
                 name="gradYear"
-                className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto bg-white focus:outline-none focus:border-[#666] h-[40px]"
+                className={selectClass}
                 style={{ marginLeft: '20px' }}
               >
                 <option value="">Year</option>

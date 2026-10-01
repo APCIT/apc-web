@@ -32,7 +32,7 @@ function getYearOptions(): number[] {
 }
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold";
 const rowStyle = { marginBottom: "24px" };
@@ -114,7 +114,7 @@ export default function ServiceCreatePage() {
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
           <div style={{ height: "20px" }} />
-          <div className="text-center text-red-600 mb-6">{error}</div>
+          <div className="text-center text-red-600 mb-6" role="alert">{error}</div>
           <div>
             <Link href="/Services" className={backButtonClass} style={{ fontWeight: "normal", textDecoration: "none" }}>
               <span className="text-[14px] font-bold" style={{ marginRight: "10px" }}>&#10094;</span>
@@ -139,9 +139,13 @@ export default function ServiceCreatePage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Create service record">
           {submitError && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm">
+            <div
+              id="service-create-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm"
+            >
               {submitError}
             </div>
           )}
@@ -156,8 +160,9 @@ export default function ServiceCreatePage() {
                 onChange={(e) => setTypeOfService(e.target.value)}
                 className={inputClass}
                 required
+                aria-required="true"
                 minLength={3}
-                placeholder="Type of Service"
+                aria-describedby={submitError ? "service-create-error" : undefined}
               />
             </div>
           </div>
@@ -172,8 +177,9 @@ export default function ServiceCreatePage() {
                 onChange={(e) => setStaffMember(e.target.value)}
                 className={inputClass}
                 required
+                aria-required="true"
                 minLength={3}
-                placeholder="Staff Member"
+                aria-describedby={submitError ? "service-create-error" : undefined}
               />
             </div>
           </div>
@@ -201,7 +207,9 @@ export default function ServiceCreatePage() {
                 value={companyId === "" ? "" : String(companyId)}
                 onChange={(e) => setCompanyId(e.target.value === "" ? "" : Number(e.target.value))}
                 required
+                aria-required="true"
                 disabled={loading}
+                aria-describedby={submitError ? "service-create-error" : undefined}
               >
                 <option value="">Companies</option>
                 {companies.map((c) => (
@@ -220,7 +228,9 @@ export default function ServiceCreatePage() {
                 value={county}
                 onChange={(e) => setCounty(e.target.value)}
                 required
+                aria-required="true"
                 disabled={loading}
+                aria-describedby={submitError ? "service-create-error" : undefined}
               >
                 <option value="">Counties</option>
                 {ALABAMA_COUNTIES.map((c) => (
@@ -259,9 +269,16 @@ export default function ServiceCreatePage() {
           </div>
 
           <div className="flex items-center" style={rowStyle}>
-            <label className={labelClass}>Project Start</label>
-            <div className="flex-1 flex gap-2" style={{ marginLeft: "20px" }}>
+            <span id="project-start-label" className={labelClass}>Project Start</span>
+            <div
+              className="flex-1 flex gap-2"
+              style={{ marginLeft: "20px" }}
+              role="group"
+              aria-labelledby="project-start-label"
+            >
+              <label htmlFor="start-date-month" className="sr-only">Start month</label>
               <select
+                id="start-date-month"
                 className={inputClass}
                 style={{ width: "140px" }}
                 value={startDateMonth}
@@ -271,7 +288,9 @@ export default function ServiceCreatePage() {
                   <option key={m} value={i + 1}>{m}</option>
                 ))}
               </select>
+              <label htmlFor="start-date-year" className="sr-only">Start year</label>
               <select
+                id="start-date-year"
                 className={inputClass}
                 style={{ width: "100px" }}
                 value={semesterYear}
@@ -285,9 +304,16 @@ export default function ServiceCreatePage() {
           </div>
 
           <div className="flex items-center" style={rowStyle}>
-            <label className={labelClass}>Project End</label>
-            <div className="flex-1 flex gap-2" style={{ marginLeft: "20px" }}>
+            <span id="project-end-label" className={labelClass}>Project End</span>
+            <div
+              className="flex-1 flex gap-2"
+              style={{ marginLeft: "20px" }}
+              role="group"
+              aria-labelledby="project-end-label"
+            >
+              <label htmlFor="end-date-month" className="sr-only">End month</label>
               <select
+                id="end-date-month"
                 className={inputClass}
                 style={{ width: "140px" }}
                 value={endDateMonth}
@@ -297,7 +323,9 @@ export default function ServiceCreatePage() {
                   <option key={m} value={i + 1}>{m}</option>
                 ))}
               </select>
+              <label htmlFor="end-date-year" className="sr-only">End year</label>
               <select
+                id="end-date-year"
                 className={inputClass}
                 style={{ width: "100px" }}
                 value={semesterYearEnd}

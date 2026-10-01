@@ -202,11 +202,15 @@ export default function ApplicantSearchResultsPage() {
         <h2 className="text-[24px] font-roboto mb-2" style={{ fontWeight: "normal", color: "#900" }}>
           Search Results
         </h2>
-        <p className="font-roboto text-[#333] mb-4">
+        <p className="font-roboto text-[#333] mb-4" aria-live="polite">
           {loading ? "Loading…" : `Your search returned ${count} result(s).`}
         </p>
         <p className="font-roboto text-sm text-[#666] mb-4">Sort by clicking the column header.</p>
-        {error && <p className="font-roboto text-red-600 mb-4">{error}</p>}
+        {error && (
+          <p className="font-roboto text-red-600 mb-4" role="alert">
+            {error}
+          </p>
+        )}
         <div className="mb-4">
           <button
             type="button"
@@ -216,15 +220,35 @@ export default function ApplicantSearchResultsPage() {
             Export Results
           </button>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" aria-busy={loading}>
           <table id="results" className="w-full border-collapse font-roboto text-sm table table-bordered">
+            <caption className="sr-only">Applicant search results</caption>
             <thead>
               <tr className="bg-[#9E1B32]">
-                <th className={`${thClass} w-[40px]`} style={getThStyle(0)} onClick={() => handleSort(0)} title="Sort">
+                <th
+                  scope="col"
+                  className={`${thClass} w-[40px]`}
+                  style={getThStyle(0)}
+                  onClick={() => handleSort(0)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(0);
+                    }
+                  }}
+                  tabIndex={0}
+                  title="Sort"
+                  aria-sort={sortCol === 0 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
                   <Popover placement="right">
                     <PopoverTrigger>
-                      <button className="cursor-pointer bg-transparent border-none p-0 text-white hover:opacity-80" type="button" onClick={(e) => e.stopPropagation()}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <button
+                        className="cursor-pointer bg-transparent border-none p-0 text-white hover:opacity-80"
+                        type="button"
+                        aria-label="Status symbol legend"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
                           <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                           <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
                         </svg>
@@ -257,21 +281,233 @@ export default function ApplicantSearchResultsPage() {
                     </PopoverContent>
                   </Popover>
                 </th>
-                <th className={thClass} style={getThStyle(1)} onClick={() => handleSort(1)}>Previous Intern</th>
-                <th className={thClass} style={getThStyle(2)} onClick={() => handleSort(2)}>Date Applied</th>
-                <th className={thClass} style={getThStyle(3)} onClick={() => handleSort(3)}>First Name</th>
-                <th className={thClass} style={getThStyle(4)} onClick={() => handleSort(4)}>Last Name</th>
-                <th className={thClass} style={getThStyle(5)} onClick={() => handleSort(5)}>School</th>
-                <th className={thClass} style={getThStyle(6)} onClick={() => handleSort(6)}>Major</th>
-                <th className={thClass} style={getThStyle(7)} onClick={() => handleSort(7)}>City</th>
-                <th className={thClass} style={getThStyle(8)} onClick={() => handleSort(8)}>Minor</th>
-                <th className={thClass} style={getThStyle(9)} onClick={() => handleSort(9)}>Level</th>
-                <th className={thClass} style={getThStyle(10)} onClick={() => handleSort(10)}>Grad Date</th>
-                <th className={thClass} style={getThStyle(11)} onClick={() => handleSort(11)}>Semester</th>
-                <th className={thClass} style={getThStyle(12)} onClick={() => handleSort(12)}>E-Mail</th>
-                <th className={thClass} style={{ ...getThStyle(13), minWidth: "120px" }} onClick={() => handleSort(13)}>Skills</th>
-                <th className={thClass} style={getThStyle(14)} onClick={() => handleSort(14)}>Foreign Language</th>
-                <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">Actions</th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(1)}
+                  onClick={() => handleSort(1)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(1);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 1 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Previous Intern
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(2)}
+                  onClick={() => handleSort(2)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(2);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 2 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Date Applied
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(3)}
+                  onClick={() => handleSort(3)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(3);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 3 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  First Name
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(4)}
+                  onClick={() => handleSort(4)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(4);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 4 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Last Name
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(5)}
+                  onClick={() => handleSort(5)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(5);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 5 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  School
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(6)}
+                  onClick={() => handleSort(6)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(6);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 6 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Major
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(7)}
+                  onClick={() => handleSort(7)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(7);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 7 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  City
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(8)}
+                  onClick={() => handleSort(8)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(8);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 8 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Minor
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(9)}
+                  onClick={() => handleSort(9)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(9);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 9 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Level
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(10)}
+                  onClick={() => handleSort(10)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(10);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 10 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Grad Date
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(11)}
+                  onClick={() => handleSort(11)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(11);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 11 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Semester
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(12)}
+                  onClick={() => handleSort(12)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(12);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 12 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  E-Mail
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={{ ...getThStyle(13), minWidth: "120px" }}
+                  onClick={() => handleSort(13)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(13);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 13 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Skills
+                </th>
+                <th
+                  scope="col"
+                  className={thClass}
+                  style={getThStyle(14)}
+                  onClick={() => handleSort(14)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(14);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-sort={sortCol === 14 ? (sortAsc ? "ascending" : "descending") : "none"}
+                >
+                  Foreign Language
+                </th>
+                <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -286,15 +522,21 @@ export default function ApplicantSearchResultsPage() {
               ) : (
                 sortedApplicants.map((app) => {
                   const symbol = getSymbol(app);
+                  const personName =
+                    [app.firstName, app.lastName].filter(Boolean).join(" ").trim() || `applicant ${app.id}`;
                   return (
                     <tr key={app.id} className="bg-white hover:bg-[#f5f5f5]">
                       <td className={tdClass} style={getTdStyle(0)}>
-                        {symbol.type === "check" && <span className="text-[#228B22] font-bold">✔</span>}
+                        {symbol.type === "check" && (
+                          <span className="text-[#228B22] font-bold" aria-label="Interviewed">
+                            ✔
+                          </span>
+                        )}
                         {symbol.type === "phone" && (
                           <Popover placement="right">
                             <PopoverTrigger>
                               <button type="button" className="cursor-pointer bg-transparent border-none p-0 inline-flex align-middle text-[#333] hover:opacity-80" aria-label="Called back details">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1" className="inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1" className="inline-block" aria-hidden>
                                   <rect x="4" y="1" width="8" height="14" rx="1" ry="1" />
                                   <line x1="6" y1="12" x2="10" y2="12" />
                                 </svg>
@@ -311,8 +553,16 @@ export default function ApplicantSearchResultsPage() {
                             </PopoverContent>
                           </Popover>
                         )}
-                        {symbol.type === "star" && <span className="text-[#DAA520]" style={{ fontFamily: "serif" }}>★</span>}
-                        {symbol.type === "asterisk" && <span className="text-[#DC143C] font-bold">✱</span>}
+                        {symbol.type === "star" && (
+                          <span className="text-[#DAA520]" style={{ fontFamily: "serif" }} aria-label="Previous intern">
+                            ★
+                          </span>
+                        )}
+                        {symbol.type === "asterisk" && (
+                          <span className="text-[#DC143C] font-bold" aria-label="Has note">
+                            ✱
+                          </span>
+                        )}
                         {symbol.type === "none" && ""}
                       </td>
                       <td className={tdClass} style={getTdStyle(1)}>{app.prevIntern ? "Yes" : "No"}</td>
@@ -332,14 +582,34 @@ export default function ApplicantSearchResultsPage() {
                       <td className={`${tdClass} text-left`}>
                         <div className="flex flex-col gap-1 text-sm text-[#909090]">
                           {app.resumeId && app.resumeId.length > 15 ? (
-                            <a href={`https://apcstorage.blob.core.windows.net/resumes/${app.resumeId}`} target="_blank" rel="noopener noreferrer" className="text-[#909090] no-underline hover:underline">Resume</a>
+                            <a
+                              href={`https://apcstorage.blob.core.windows.net/resumes/${app.resumeId}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#909090] no-underline hover:underline"
+                              aria-label={`Resume for ${personName}`}
+                            >
+                              Resume
+                            </a>
                           ) : (
                             <span>Resume</span>
                           )}
                           {canEditApplicant && (
-                            <Link href={`/Applicants/Edit/${app.id}`} className="text-[#909090] no-underline hover:underline">Edit</Link>
+                            <Link
+                              href={`/Applicants/Edit/${app.id}`}
+                              className="text-[#909090] no-underline hover:underline"
+                              aria-label={`Edit ${personName}`}
+                            >
+                              Edit
+                            </Link>
                           )}
-                          <Link href={`/Applicants/Details/${app.id}`} className="text-[#909090] no-underline hover:underline">Details</Link>
+                          <Link
+                            href={`/Applicants/Details/${app.id}`}
+                            className="text-[#909090] no-underline hover:underline"
+                            aria-label={`Details for ${personName}`}
+                          >
+                            Details
+                          </Link>
                           {canEditApplicant && (
                             deletingId === app.id ? (
                               <span>Deleting…</span>
@@ -364,6 +634,7 @@ export default function ApplicantSearchResultsPage() {
                                   lineHeight: "inherit",
                                   fontFamily: "inherit",
                                 }}
+                                aria-label={`Delete ${personName}`}
                               >
                                 Delete
                               </button>

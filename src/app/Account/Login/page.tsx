@@ -75,7 +75,6 @@ export default function LoginPage() {
       color: '#35363B',
       backgroundColor: '#ffffff',
       border: '2px solid #9E1B32',
-      outline: 'none',
     };
 
     const errorTextStyle: React.CSSProperties = {
@@ -86,7 +85,7 @@ export default function LoginPage() {
     };
 
       return (
-        <main style={{ backgroundColor: '#A7ABA9', padding: '4rem 1.5rem 5rem' }}>
+        <div style={{ backgroundColor: '#A7ABA9', padding: '4rem 1.5rem 5rem' }}>
           <section
             style={{
               maxWidth: '900px',
@@ -129,6 +128,7 @@ export default function LoginPage() {
               <form onSubmit={handleSubmit} style={{fontFamily: 'proxima-nova, sans-serif', textAlign: 'left' }}>
                 {errors.general && (
                   <div
+                    role="alert"
                     style={{
                       marginBottom: '1rem',
                       padding: '0.75rem',
@@ -148,6 +148,12 @@ export default function LoginPage() {
                 <input
                   type="text"
                   id="username"
+                  name="username"
+                  autoComplete="username"
+                  required
+                  aria-required="true"
+                  aria-invalid={!!errors.username}
+                  aria-describedby={errors.username ? "username-error" : undefined}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   style={{
@@ -156,7 +162,7 @@ export default function LoginPage() {
                   }}
                 />
 
-                {errors.username && <p style={errorTextStyle}>{errors.username}</p>}
+                {errors.username && <p id="username-error" role="alert" style={errorTextStyle}>{errors.username}</p>}
 
                 <label htmlFor="password" style={labelStyle}>
                   Password
@@ -164,6 +170,12 @@ export default function LoginPage() {
                 <input
                   type="password"
                   id="password"
+                  name="password"
+                  autoComplete="current-password"
+                  required
+                  aria-required="true"
+                  aria-invalid={!!errors.password}
+                  aria-describedby={errors.password ? "password-error" : undefined}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   style={{
@@ -172,9 +184,10 @@ export default function LoginPage() {
                   }}
                 />
 
-                {errors.password && <p style={errorTextStyle}>{errors.password}</p>}
+                {errors.password && <p id="password-error" role="alert" style={errorTextStyle}>{errors.password}</p>}
 
                 <label
+                  htmlFor="rememberMe"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -187,6 +200,7 @@ export default function LoginPage() {
                   }}
                 >
                   <input
+                    id="rememberMe"
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
@@ -234,6 +248,6 @@ export default function LoginPage() {
               </p>
             </div>
           </section>
-        </main>
+        </div>
       );
   }

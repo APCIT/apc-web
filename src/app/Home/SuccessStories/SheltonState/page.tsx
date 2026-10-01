@@ -24,7 +24,7 @@ const impacts = [
 
 export default function AlabamaStrongSuccessStoryPage() {
   return (
-    <main
+    <div
       className="w-full overflow-x-hidden"
       style={{ backgroundColor: '#F2F3F4' }}
     >
@@ -325,7 +325,7 @@ export default function AlabamaStrongSuccessStoryPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

@@ -11,9 +11,9 @@ import {
 } from "@/lib/api";
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const selectClass =
-  "min-w-[140px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px] bg-white";
+  "min-w-[140px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px] bg-white";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold pr-5";
 const rowStyle = { marginBottom: "24px" };
@@ -21,7 +21,7 @@ const backButtonClass =
   "inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
 const actionButtonClass =
   "inline-flex items-center px-[16px] py-[8px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none";
-const helperClass = "text-[12px] font-roboto text-[#666] mt-1";
+const helperClass = "text-[12px] font-roboto text-[#4A4C54] mt-1";
 
 const skeletonStyle = {
   height: "40px",
@@ -326,7 +326,7 @@ export default function EditInfoPage() {
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
           <div style={{ height: "20px" }} />
-          <div className="text-center text-red-600 mb-6">{loadError}</div>
+          <div className="text-center text-red-600 mb-6" role="alert">{loadError}</div>
           <div>
             <Link href="/Manage" className={backButtonClass} style={{ fontWeight: "normal", textDecoration: "none" }}>
               <span className="text-[14px] font-bold" style={{ marginRight: "10px" }}>&#10094;</span>
@@ -358,9 +358,14 @@ export default function EditInfoPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Edit information">
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-sm" style={{ color: "#900" }}>
+            <div
+              id="edit-info-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-sm"
+              style={{ color: "#900" }}
+            >
               {error}
             </div>
           )}
@@ -370,7 +375,14 @@ export default function EditInfoPage() {
             <label htmlFor="firstName" className={labelClass}>First Name</label>
             <div className="flex-1" style={{ marginLeft: "20px" }}>
               {loading ? <div style={skeletonStyle} aria-hidden /> : (
-                <input id="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} className={inputClass} />
+                <input
+                  id="firstName"
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className={inputClass}
+                  autoComplete="given-name"
+                />
               )}
             </div>
           </div>
@@ -380,24 +392,48 @@ export default function EditInfoPage() {
             <label htmlFor="lastName" className={labelClass}>Last Name</label>
             <div className="flex-1" style={{ marginLeft: "20px" }}>
               {loading ? <div style={skeletonStyle} aria-hidden /> : (
-                <input id="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} className={inputClass} />
+                <input
+                  id="lastName"
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className={inputClass}
+                  autoComplete="family-name"
+                />
               )}
             </div>
           </div>
 
           {/* 3. Birthday */}
-          <div className="flex items-center" style={rowStyle}>
-            <span className={labelClass}>Birthday</span>
+          <div
+            className="flex items-center"
+            style={rowStyle}
+            role="group"
+            aria-labelledby="edit-info-birthday-label"
+          >
+            <span id="edit-info-birthday-label" className={labelClass}>Birthday</span>
             <div className="flex-1 flex items-center gap-2" style={{ marginLeft: "20px" }}>
               {loading ? <div style={skeletonStyle} aria-hidden /> : (
                 <>
-                  <select value={dobMonth} onChange={(e) => setDobMonth(e.target.value)} className={selectClass} aria-label="Birth month">
+                  <select
+                    id="dobMonth"
+                    value={dobMonth}
+                    onChange={(e) => setDobMonth(e.target.value)}
+                    className={selectClass}
+                    aria-label="Birth month"
+                  >
                     <option value="">Month</option>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((m) => (
                       <option key={m} value={m}>{DOB_MONTH_NAMES[m]}</option>
                     ))}
                   </select>
-                  <select value={dobDay} onChange={(e) => setDobDay(e.target.value)} className={selectClass} aria-label="Birth day">
+                  <select
+                    id="dobDay"
+                    value={dobDay}
+                    onChange={(e) => setDobDay(e.target.value)}
+                    className={selectClass}
+                    aria-label="Birth day"
+                  >
                     <option value="">Day</option>
                     {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
                       <option key={d} value={d}>{d}</option>
@@ -413,7 +449,14 @@ export default function EditInfoPage() {
             <label htmlFor="email" className={labelClass}>Email</label>
             <div className="flex-1" style={{ marginLeft: "20px" }}>
               {loading ? <div style={skeletonStyle} aria-hidden /> : (
-                <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={inputClass}
+                  autoComplete="email"
+                />
               )}
             </div>
           </div>
@@ -424,32 +467,87 @@ export default function EditInfoPage() {
             <div className="flex-1" style={{ marginLeft: "20px" }}>
               {loading ? <div style={skeletonStyle} aria-hidden /> : (
                 <>
-                  <input id="phone" type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} placeholder="(555) 555-5555" />
-                  <p className={helperClass}>Ex: (555) 555-5555</p>
+                  <input
+                    id="phone"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className={inputClass}
+                    autoComplete="tel"
+                    aria-describedby="phone-help"
+                  />
+                  <p id="phone-help" className={helperClass}>Ex: (555) 555-5555</p>
                 </>
               )}
             </div>
           </div>
 
           {/* 6. Permanent Address */}
-          <div className="flex items-start" style={rowStyle}>
-            <span className={labelClass} style={{ paddingTop: "10px" }}>Permanent Address</span>
+          <div
+            className="flex items-start"
+            style={rowStyle}
+            role="group"
+            aria-labelledby="edit-info-address-label"
+          >
+            <span id="edit-info-address-label" className={labelClass} style={{ paddingTop: "10px" }}>Permanent Address</span>
             <div className="flex-1 flex flex-col gap-2" style={{ marginLeft: "20px" }}>
               {loading ? <div style={skeletonStyle} aria-hidden /> : (
                 <>
                   <div className="flex gap-3 flex-wrap">
-                    <input id="street" type="text" value={street} onChange={(e) => setStreet(e.target.value)} className={inputClass} placeholder="Street" />
-                    <input id="apt" type="text" value={apt} onChange={(e) => setApt(e.target.value)} className={inputClass} placeholder="Apt" />
+                    <input
+                      id="street"
+                      type="text"
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                      className={inputClass}
+                      placeholder="Street"
+                      aria-label="Street address"
+                      autoComplete="street-address"
+                    />
+                    <input
+                      id="apt"
+                      type="text"
+                      value={apt}
+                      onChange={(e) => setApt(e.target.value)}
+                      className={inputClass}
+                      placeholder="Apt"
+                      aria-label="Apartment or unit (optional)"
+                    />
                   </div>
                   <div className="flex gap-3 flex-wrap">
-                    <input id="city" type="text" value={city} onChange={(e) => setCity(e.target.value)} className={inputClass} placeholder="City" />
-                    <select value={state} onChange={(e) => setState(e.target.value)} className={selectClass} aria-label="State">
+                    <input
+                      id="city"
+                      type="text"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      className={inputClass}
+                      placeholder="City"
+                      aria-label="City"
+                      autoComplete="address-level2"
+                    />
+                    <select
+                      id="state"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                      className={selectClass}
+                      aria-label="State"
+                      autoComplete="address-level1"
+                    >
                       <option value="">State</option>
                       {US_STATE_ABBREVS.map((abbrev) => (
                         <option key={abbrev} value={abbrev}>{abbrev}</option>
                       ))}
                     </select>
-                    <input id="zip" type="text" value={zip} onChange={(e) => setZip(e.target.value)} className={inputClass} placeholder="ZIP" />
+                    <input
+                      id="zip"
+                      type="text"
+                      value={zip}
+                      onChange={(e) => setZip(e.target.value)}
+                      className={inputClass}
+                      placeholder="ZIP"
+                      aria-label="ZIP code"
+                      autoComplete="postal-code"
+                    />
                   </div>
                 </>
               )}
@@ -457,17 +555,47 @@ export default function EditInfoPage() {
           </div>
 
           {/* 7. Emergency Contact */}
-          <div className="flex items-start" style={rowStyle}>
-            <span className={labelClass} style={{ paddingTop: "10px" }}>Emergency Contact</span>
+          <div
+            className="flex items-start"
+            style={rowStyle}
+            role="group"
+            aria-labelledby="edit-info-emergency-label"
+          >
+            <span id="edit-info-emergency-label" className={labelClass} style={{ paddingTop: "10px" }}>Emergency Contact</span>
             <div className="flex-1 flex flex-col gap-2" style={{ marginLeft: "20px" }}>
               {loading ? <div style={skeletonStyle} aria-hidden /> : (
                 <>
-                  <input id="contactName" type="text" value={contactName} onChange={(e) => setContactName(e.target.value)} className={inputClass} placeholder="Name" />
+                  <input
+                    id="contactName"
+                    type="text"
+                    value={contactName}
+                    onChange={(e) => setContactName(e.target.value)}
+                    className={inputClass}
+                    placeholder="Name"
+                    aria-label="Emergency contact name"
+                  />
                   <div>
-                    <input id="contactPhone" type="text" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} className={inputClass} placeholder="(555) 555-5555" />
-                    <p className={helperClass}>Ex: (555) 555-5555</p>
+                    <input
+                      id="contactPhone"
+                      type="tel"
+                      value={contactPhone}
+                      onChange={(e) => setContactPhone(e.target.value)}
+                      className={inputClass}
+                      placeholder="(555) 555-5555"
+                      aria-label="Emergency contact phone"
+                      aria-describedby="contact-phone-help"
+                    />
+                    <p id="contact-phone-help" className={helperClass}>Ex: (555) 555-5555</p>
                   </div>
-                  <input id="contactRelationship" type="text" value={contactRelationship} onChange={(e) => setContactRelationship(e.target.value)} className={inputClass} placeholder="Relationship" />
+                  <input
+                    id="contactRelationship"
+                    type="text"
+                    value={contactRelationship}
+                    onChange={(e) => setContactRelationship(e.target.value)}
+                    className={inputClass}
+                    placeholder="Relationship"
+                    aria-label="Emergency contact relationship"
+                  />
                 </>
               )}
             </div>
@@ -513,7 +641,15 @@ export default function EditInfoPage() {
             <label htmlFor="minor" className={labelClass}>Minor</label>
             <div className="flex-1" style={{ marginLeft: "20px" }}>
               {loading ? <div style={skeletonStyle} aria-hidden /> : (
-                <input id="minor" type="text" value={minor} onChange={(e) => setMinor(e.target.value)} className={inputClass} placeholder="Optional" />
+                <input
+                  id="minor"
+                  type="text"
+                  value={minor}
+                  onChange={(e) => setMinor(e.target.value)}
+                  className={inputClass}
+                  placeholder="Optional"
+                  aria-label="Minor (optional)"
+                />
               )}
             </div>
           </div>
@@ -534,18 +670,35 @@ export default function EditInfoPage() {
           </div>
 
           {/* 12. Graduation */}
-          <div className="flex items-center" style={rowStyle}>
-            <span className={labelClass}>Graduation</span>
+          <div
+            className="flex items-center"
+            style={rowStyle}
+            role="group"
+            aria-labelledby="edit-info-graduation-label"
+          >
+            <span id="edit-info-graduation-label" className={labelClass}>Graduation</span>
             <div className="flex-1 flex items-center gap-2" style={{ marginLeft: "20px" }}>
               {loading ? <div style={skeletonStyle} aria-hidden /> : (
                 <>
-                  <select value={gradMonth} onChange={(e) => setGradMonth(e.target.value)} className={selectClass} aria-label="Graduation month">
+                  <select
+                    id="gradMonth"
+                    value={gradMonth}
+                    onChange={(e) => setGradMonth(e.target.value)}
+                    className={selectClass}
+                    aria-label="Graduation month"
+                  >
                     <option value="">Month</option>
                     {GRAD_MONTH_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
                     ))}
                   </select>
-                  <select value={gradYear} onChange={(e) => setGradYear(e.target.value)} className={selectClass} aria-label="Graduation year">
+                  <select
+                    id="gradYear"
+                    value={gradYear}
+                    onChange={(e) => setGradYear(e.target.value)}
+                    className={selectClass}
+                    aria-label="Graduation year"
+                  >
                     <option value="">Year</option>
                     {GRAD_YEAR_OPTIONS.map((y) => (
                       <option key={y} value={y}>{y}</option>
@@ -558,7 +711,7 @@ export default function EditInfoPage() {
 
           {/* 13. Resume */}
           <div className="flex items-start" style={rowStyle}>
-            <span className={labelClass}>Resume</span>
+            <label htmlFor="resumeFile" className={labelClass}>Resume</label>
             <div className="flex-1 flex flex-col gap-2" style={{ marginLeft: "20px" }}>
               {!loading && (
                 <>
@@ -575,7 +728,7 @@ export default function EditInfoPage() {
                       </a>
                     </p>
                   ) : (
-                    <p className="text-[14px] font-roboto text-[#666] m-0">No resume on file.</p>
+                    <p className="text-[14px] font-roboto text-[#4A4C54] m-0">No resume on file.</p>
                   )}
                   <div className="flex items-center gap-3">
                     <button
@@ -585,19 +738,21 @@ export default function EditInfoPage() {
                     >
                       Choose File
                     </button>
-                    <span className="text-[14px] font-roboto text-[#333]">
+                    <span className="text-[14px] font-roboto text-[#333]" aria-live="polite">
                       {resumeFile ? resumeFile.name : "No file chosen"}
                     </span>
                     <input
                       ref={resumeInputRef}
+                      id="resumeFile"
                       type="file"
                       name="resume"
                       className="hidden"
                       accept=".pdf,.doc,.docx"
+                      aria-describedby="resume-help"
                       onChange={(e) => setResumeFile(e.target.files?.[0] ?? null)}
                     />
                   </div>
-                  <span className={helperClass}>Choose a file to upload or replace your resume. Leave empty to keep your current resume.</span>
+                  <span id="resume-help" className={helperClass}>Choose a file to upload or replace your resume. Leave empty to keep your current resume.</span>
                 </>
               )}
             </div>

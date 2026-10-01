@@ -110,7 +110,7 @@ const actionButtonClass =
 
 /** Input/select style for Promote modal – same height for text inputs and dropdowns. */
 const promoteInputClass =
-  "w-[200px] max-w-[200px] min-h-[40px] h-[40px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] box-border";
+  "w-[200px] max-w-[200px] min-h-[40px] h-[40px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] box-border";
 
 /** Modal footer buttons – same as Time page (Hometown/Mentor). */
 const modalButtonClass =
@@ -399,7 +399,7 @@ export default function ApplicantsDetailsPage() {
       <div className="w-full bg-white">
         <div className="py-8 px-[50px]">
           <div style={{ height: "20px" }} />
-          <div className="text-center text-red-600 mb-6">{loadError}</div>
+          <div className="text-center text-red-600 mb-6" role="alert">{loadError}</div>
           <div>
             <Link href="/Applicants" className={backButtonClass} style={{ fontWeight: "normal", textDecoration: "none" }}>
               <span className="text-[14px] font-bold" style={{ marginRight: "10px" }}>&#10094;</span>
@@ -532,15 +532,16 @@ export default function ApplicantsDetailsPage() {
                         />
                         <tr className="font-roboto text-[14px]">
                           <th className="text-left font-bold p-[10px] border border-[#7a0000] bg-[#900] w-[200px] align-top text-white">
-                            Interview Comment
+                            <label htmlFor="applicant-interview-comment">Interview Comment</label>
                           </th>
                           <td className="p-[10px] border border-[#ddd] text-[#666] align-top">
                             <div className="flex flex-col gap-2 w-full max-w-md">
                               <textarea
+                                id="applicant-interview-comment"
                                 value={commentValue}
                                 onChange={(e) => setCommentValue(e.target.value)}
-                                className="w-full min-h-[80px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666]"
-                                aria-label="Interview Comment"
+                                className="w-full min-h-[80px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666]"
+                                aria-describedby={commentError ? "applicant-comment-error" : undefined}
                               />
                               <div className="flex items-center gap-2 flex-wrap">
                                 <button
@@ -551,22 +552,27 @@ export default function ApplicantsDetailsPage() {
                                 >
                                   {commentSaving ? "Saving…" : "Save"}
                                 </button>
-                                {commentError && <span className="text-red-600 text-sm">{commentError}</span>}
+                                {commentError && (
+                                  <span id="applicant-comment-error" className="text-red-600 text-sm" role="alert">
+                                    {commentError}
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </td>
                         </tr>
                         <tr className="font-roboto text-[14px]">
                           <th className="text-left font-bold p-[10px] border border-[#7a0000] bg-[#900] w-[200px] align-top text-white">
-                            Note
+                            <label htmlFor="applicant-note">Note</label>
                           </th>
                           <td className="p-[10px] border border-[#ddd] text-[#666] align-top">
                             <div className="flex flex-col gap-2 w-full max-w-md">
                               <textarea
+                                id="applicant-note"
                                 value={noteValue}
                                 onChange={(e) => setNoteValue(e.target.value)}
-                                className="w-full min-h-[80px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666]"
-                                aria-label="Note"
+                                className="w-full min-h-[80px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666]"
+                                aria-describedby={noteError ? "applicant-note-error" : undefined}
                               />
                               <div className="flex items-center gap-2 flex-wrap">
                                 <button
@@ -577,7 +583,11 @@ export default function ApplicantsDetailsPage() {
                                 >
                                   {noteSaving ? "Saving…" : "Save"}
                                 </button>
-                                {noteError && <span className="text-red-600 text-sm">{noteError}</span>}
+                                {noteError && (
+                                  <span id="applicant-note-error" className="text-red-600 text-sm" role="alert">
+                                    {noteError}
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </td>
@@ -764,9 +774,9 @@ export default function ApplicantsDetailsPage() {
                 name="resume"
                 id="updateApplicantResumeFile"
                 accept=".pdf,.doc,.docx"
-                aria-label="Resume file"
                 className="font-roboto text-[14px] w-[200px] max-w-[200px]"
                 style={{ marginLeft: 24 }}
+                aria-describedby={updateResumeError ? "update-resume-error" : undefined}
                 onChange={(e) =>
                   setUpdateResumeSelectedFileName(e.target.files?.[0]?.name ?? null)
                 }
@@ -780,7 +790,9 @@ export default function ApplicantsDetailsPage() {
               )}
             </p>
             {updateResumeError && (
-              <p className="text-red-600 text-sm font-roboto text-center w-full">{updateResumeError}</p>
+              <p id="update-resume-error" className="text-red-600 text-sm font-roboto text-center w-full" role="alert">
+                {updateResumeError}
+              </p>
             )}
           </ModalBody>
           <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>
@@ -823,32 +835,46 @@ export default function ApplicantsDetailsPage() {
             <h3 className="font-roboto font-bold text-[#000000] text-center w-full">
               Promote {applicant ? [applicant.firstName, applicant.lastName].filter(Boolean).join(" ") : "Applicant"} to Intern
             </h3>
-            <p className="font-roboto font-normal text-[#000000] text-center mt-1" style={{ fontSize: "11px" }}>
+            <p id="promote-required-help" className="font-roboto font-normal text-[#000000] text-center mt-1" style={{ fontSize: "11px" }}>
               *All fields are required and must be valid, or data will not be saved.
             </p>
           </ModalHeader>
           <ModalBody className="flex flex-col items-center" style={{ paddingBottom: 24 }}>
             <div className="flex items-center font-roboto justify-center mb-4">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">CWID: </label>
+              <label htmlFor="promote-cwid" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">CWID: </label>
               <input
+                id="promote-cwid"
                 type="text"
                 maxLength={8}
                 className={promoteInputClass}
                 style={{ marginLeft: 24 }}
                 value={promoteCwid}
                 onChange={(e) => setPromoteCwid(e.target.value.slice(0, 8))}
-                aria-label="CWID"
-                placeholder="8 characters"
+                required
+                aria-required="true"
+                aria-invalid={!!promoteError && promoteCwid.trim().length !== 8}
+                aria-describedby={
+                  promoteError
+                    ? "promote-error promote-cwid-help promote-required-help"
+                    : "promote-cwid-help promote-required-help"
+                }
               />
             </div>
+            <p id="promote-cwid-help" className="text-[12px] font-roboto text-[#4A4C54] text-center w-full mb-4 -mt-2">
+              Exactly 8 characters.
+            </p>
             <div className="flex items-center font-roboto justify-center mb-4">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Company: </label>
+              <label htmlFor="promote-company" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Company: </label>
               <select
+                id="promote-company"
                 className={promoteInputClass}
                 style={{ marginLeft: 24 }}
                 value={promoteCompanyId || ""}
                 onChange={(e) => setPromoteCompanyId(Number(e.target.value))}
-                aria-label="Company"
+                required
+                aria-required="true"
+                aria-invalid={!!promoteError && !promoteCompanyId}
+                aria-describedby={promoteError ? "promote-error promote-required-help" : "promote-required-help"}
               >
                 <option value="">Company</option>
                 {companies.map((c) => (
@@ -859,26 +885,40 @@ export default function ApplicantsDetailsPage() {
               </select>
             </div>
             <div className="flex items-center font-roboto justify-center mb-4">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Wage: </label>
+              <label htmlFor="promote-wage" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Wage: </label>
               <input
+                id="promote-wage"
                 type="text"
                 inputMode="decimal"
                 className={promoteInputClass}
                 style={{ marginLeft: 24 }}
                 value={promoteWage}
                 onChange={(e) => setPromoteWage(e.target.value)}
-                aria-label="Wage"
-                placeholder="Min 7.25"
+                required
+                aria-required="true"
+                aria-invalid={!!promoteError && (Number.isNaN(parseFloat(promoteWage)) || parseFloat(promoteWage) < 7.25)}
+                aria-describedby={
+                  promoteError
+                    ? "promote-error promote-wage-help promote-required-help"
+                    : "promote-wage-help promote-required-help"
+                }
               />
             </div>
+            <p id="promote-wage-help" className="text-[12px] font-roboto text-[#4A4C54] text-center w-full mb-4 -mt-2">
+              Minimum $7.25.
+            </p>
             <div className="flex items-center font-roboto justify-center mb-4">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Semester: </label>
+              <label htmlFor="promote-semester-season" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Semester: </label>
               <select
+                id="promote-semester-season"
                 className={promoteInputClass}
                 style={{ marginLeft: 24 }}
                 value={promoteSemesterSeason}
                 onChange={(e) => setPromoteSemesterSeason(e.target.value)}
-                aria-label="Semester season"
+                required
+                aria-required="true"
+                aria-invalid={!!promoteError && !promoteSemesterSeason}
+                aria-describedby={promoteError ? "promote-error promote-required-help" : "promote-required-help"}
               >
                 <option value="">Season</option>
                 <option value="Spring">Spring</option>
@@ -887,13 +927,17 @@ export default function ApplicantsDetailsPage() {
               </select>
             </div>
             <div className="flex items-center font-roboto justify-center mb-4">
-              <label className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Year: </label>
+              <label htmlFor="promote-semester-year" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Year: </label>
               <select
+                id="promote-semester-year"
                 className={promoteInputClass}
                 style={{ marginLeft: 24 }}
                 value={promoteSemesterYear}
                 onChange={(e) => setPromoteSemesterYear(e.target.value)}
-                aria-label="Semester year"
+                required
+                aria-required="true"
+                aria-invalid={!!promoteError && !promoteSemesterYear}
+                aria-describedby={promoteError ? "promote-error promote-required-help" : "promote-required-help"}
               >
                 <option value="">Year</option>
                 <option value={new Date().getFullYear()}>{new Date().getFullYear()}</option>
@@ -901,7 +945,9 @@ export default function ApplicantsDetailsPage() {
               </select>
             </div>
             {promoteError && (
-              <p className="text-red-600 text-sm font-roboto text-center w-full">{promoteError}</p>
+              <p id="promote-error" className="text-red-600 text-sm font-roboto text-center w-full" role="alert">
+                {promoteError}
+              </p>
             )}
           </ModalBody>
           <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>

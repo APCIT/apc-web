@@ -269,6 +269,7 @@ export default function AboutPage() {
                     className="staff-photo" 
                     src="/images/StaffProfilePics/AshleyDoddsHeadshot.jpg" 
                     alt="Ashley Dodds"
+                    style={{ objectPosition: 'center 35%' }}
                   />
                 </a>
               </div>

@@ -61,25 +61,29 @@ function UserTable({
   onResetPassword?: (userId: string) => void;
   onDeleteUser?: (userId: string) => void;
 }) {
+  const thClass =
+    "border border-[#7a0000] p-[10px] text-white font-normal text-center";
+
   if (loading) {
     return (
       <div className="overflow-x-auto">
         <table className="w-full border-collapse font-roboto text-sm">
+          <caption className="sr-only">Users</caption>
           <thead>
             <tr className="bg-[#9E1B32]">
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 UserName
               </th>
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 Name
               </th>
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 Email
               </th>
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 Company
               </th>
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 Actions
               </th>
             </tr>
@@ -124,21 +128,22 @@ function UserTable({
     return (
       <div className="overflow-x-auto">
         <table className="w-full border-collapse font-roboto text-sm">
+          <caption className="sr-only">Users</caption>
           <thead>
             <tr className="bg-[#9E1B32]">
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 UserName
               </th>
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 Name
               </th>
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 Email
               </th>
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 Company
               </th>
-              <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+              <th scope="col" className={thClass}>
                 Actions
               </th>
             </tr>
@@ -161,21 +166,22 @@ function UserTable({
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse font-roboto text-sm">
+        <caption className="sr-only">Users</caption>
         <thead>
           <tr className="bg-[#9E1B32]">
-            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+            <th scope="col" className={thClass}>
               UserName
             </th>
-            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+            <th scope="col" className={thClass}>
               Name
             </th>
-            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+            <th scope="col" className={thClass}>
               Email
             </th>
-            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+            <th scope="col" className={thClass}>
               Company
             </th>
-            <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+            <th scope="col" className={thClass}>
               Actions
             </th>
           </tr>
@@ -300,7 +306,7 @@ export default function UsersPage() {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm font-roboto">
+          <div className="mb-4 p-3 rounded bg-red-50 text-red-700 text-sm font-roboto" role="alert">
             {error}
           </div>
         )}

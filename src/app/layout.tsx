@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import PartnerFooter from "@/components/PartnerFooter";
 import RouteTitle from "@/components/RouteTitle";
 import { Providers } from "./providers";
 import { getSession } from "@/lib/auth";
+
+export const metadata: Metadata = {
+  title: "APC",
+};
 
 function UniversityBrandBar() {
   return (
@@ -52,10 +57,13 @@ export default async function RootLayout({
       </head>
       <body className="antialiased">
         <Providers>
+          <a href="#main-content" className="skip-link">
+            Skip to main content
+          </a>
           <UniversityBrandBar/>
           <RouteTitle />
           <Navbar initialUser={initialUser} initialRoles={initialRoles} />
-          <main>
+          <main id="main-content" tabIndex={-1}>
             {children}
           </main>
           <PartnerFooter />

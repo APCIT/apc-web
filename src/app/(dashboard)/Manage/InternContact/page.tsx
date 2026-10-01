@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import { SUBMIT_INTERN_CONTACT_API } from "@/lib/api";
 
 const inputClass =
-  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] h-[40px]";
+  "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
 const textareaClass =
-  "w-full max-w-[400px] min-w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:outline-none focus:border-[#666] min-h-[120px] resize-y";
+  "w-full max-w-[400px] min-w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] min-h-[120px] resize-y";
 const labelClass =
   "w-[180px] text-right font-roboto text-[14px] text-[#333] font-bold pr-5";
 const rowStyle = { marginBottom: "24px" };
@@ -88,9 +88,14 @@ export default function InternContactPage() {
 
         <hr className="border-t border-[#ccc] mb-6" />
 
-        <form onSubmit={handleSubmit} className="max-w-4xl">
+        <form onSubmit={handleSubmit} className="max-w-4xl" aria-label="Help request">
           {error && (
-            <div className="mb-4 p-3 rounded bg-red-50 text-sm" style={{ color: "#900" }}>
+            <div
+              id="intern-contact-error"
+              role="alert"
+              className="mb-4 p-3 rounded bg-red-50 text-sm"
+              style={{ color: "#900" }}
+            >
               {error}
             </div>
           )}
@@ -104,11 +109,14 @@ export default function InternContactPage() {
               <input
                 id="intern-contact-name"
                 type="text"
-                placeholder="Your Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className={inputClass}
                 disabled={submitting}
+                required
+                aria-required="true"
+                aria-invalid={!!error && !name.trim()}
+                aria-describedby={error ? "intern-contact-error" : undefined}
                 autoComplete="name"
               />
             </div>
@@ -123,11 +131,14 @@ export default function InternContactPage() {
               <input
                 id="intern-contact-email"
                 type="email"
-                placeholder="Your Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className={inputClass}
                 disabled={submitting}
+                required
+                aria-required="true"
+                aria-invalid={!!error && (!email.trim() || error.toLowerCase().includes("email"))}
+                aria-describedby={error ? "intern-contact-error" : undefined}
                 autoComplete="email"
               />
             </div>
@@ -141,13 +152,21 @@ export default function InternContactPage() {
             <div className="flex-1" style={{ marginLeft: "20px" }}>
               <textarea
                 id="intern-contact-message"
-                placeholder="Please Explain the issue you are having and how we can help."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className={textareaClass}
                 rows={5}
                 disabled={submitting}
+                required
+                aria-required="true"
+                aria-invalid={!!error && !message.trim()}
+                aria-describedby={
+                  error ? "intern-contact-error intern-contact-message-help" : "intern-contact-message-help"
+                }
               />
+              <p id="intern-contact-message-help" className="text-[12px] font-roboto text-[#4A4C54] mt-1">
+                Please explain the issue you are having and how we can help.
+              </p>
             </div>
           </div>
 

@@ -4,7 +4,7 @@ import HeadingIntroBanner from '@/components/HeadingIntroBanner';
 
 export default function MTMSuccessStoryPage() {
   return (
-    <main
+    <div
       className="w-full overflow-x-hidden"
       style={{ backgroundColor: '#F2F3F4' }}
     >
@@ -192,7 +192,7 @@ export default function MTMSuccessStoryPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

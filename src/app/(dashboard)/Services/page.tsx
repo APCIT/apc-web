@@ -154,7 +154,7 @@ export default function ServicesPage() {
 
         <div className="manage-accordion px-4 mt-8" style={{ marginTop: "48px" }}>
           {error && (
-            <p className="font-roboto text-red-600 mb-4">{error}</p>
+            <p className="font-roboto text-red-600 mb-4" role="alert">{error}</p>
           )}
           {!loading && seasons.length === 0 && (
             <p className="font-roboto text-[#666]">No services yet.</p>
@@ -187,24 +187,27 @@ export default function ServicesPage() {
                 >
                   <div className="overflow-x-auto">
                     <table className="w-full border-collapse font-roboto text-sm">
+                      <caption className="sr-only">
+                        Services for {seasonLabel}
+                      </caption>
                       <thead>
                         <tr className="bg-[#9E1B32]">
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Type of Service
                           </th>
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Company
                           </th>
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Staff Member
                           </th>
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Completed?
                           </th>
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Certificate(s) Awarded?
                           </th>
-                          <th className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
+                          <th scope="col" className="border border-[#7a0000] p-[10px] text-white font-normal text-center">
                             Actions
                           </th>
                         </tr>
