@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import { getSession } from "@/lib/auth";
 
-const ROLES = ["IT", "admin", "staff", "reception", "client", "accountant"];
+// Temporarily no "client" — restore when clients may view Interns again
+const ROLES = ["IT", "admin", "staff", "reception", "accountant"];
 
 async function requireAccess(): Promise<
   | { error: NextResponse }

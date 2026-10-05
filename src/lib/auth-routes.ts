@@ -20,7 +20,8 @@ const ROUTE_ROLES: { path: string; roles: string[] | null; exact?: boolean }[] =
   // IT, admin, staff (no Users for staff, no Charts/reception/advisor for reception/advisor)
   { path: "/Charts", roles: ["IT", "admin", "staff"], exact: false },
   { path: "/Applicants", roles: ["IT", "admin", "staff", "reception"], exact: false },
-  { path: "/Interns", roles: ["IT", "admin", "staff", "reception", "client", "accountant"], exact: false },
+  // Temporarily no "client" — restore when clients may view Interns again
+  { path: "/Interns", roles: ["IT", "admin", "staff", "reception", "accountant"], exact: false },
   { path: "/PastInterns", roles: ["IT", "admin", "staff", "reception"], exact: false },
   { path: "/Presentations", roles: ["IT", "admin", "staff", "advisor", "reception"], exact: false },
   { path: "/Classes/Registrants", roles: ["IT", "admin", "staff", "reception"], exact: false },

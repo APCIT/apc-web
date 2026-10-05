@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 
 /** Roles that can see the Interns list. Client sees only their company's interns. */
-const ROLES = ["IT", "admin", "staff", "reception", "client", "accountant"];
+// Temporarily no "client" — restore when clients may view Interns again
+const ROLES = ["IT", "admin", "staff", "reception", "accountant"];
 
 async function requireAccess(): Promise<
   | { error: NextResponse }

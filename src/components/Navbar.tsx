@@ -70,9 +70,10 @@ function getMenuLinksForRoles(roles: string[]): MenuLink[] {
   if (r("advisor") && !r("IT") && !r("admin") && !r("staff")) {
     add("presentations", "Presentations", "/Presentations");
   }
-  if (r("client") && !r("IT") && !r("admin") && !r("staff") && !r("reception")) {
-    add("interns", "Interns", "/Interns");
-  }
+  // Temporarily hide Interns for clients — restore with auth-routes / API roles when ready
+  // if (r("client") && !r("IT") && !r("admin") && !r("staff") && !r("reception")) {
+  //   add("interns", "Interns", "/Interns");
+  // }
   if (r("accountant") && !r("IT") && !r("admin") && !r("staff") && !r("reception")) {
     add("interns", "Interns", "/Interns");
   }

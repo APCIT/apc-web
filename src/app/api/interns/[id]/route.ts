@@ -4,7 +4,8 @@ import { getSession } from "@/lib/auth";
 import { formatScheduleTime, isScheduleMidnight } from "@/lib/schedule-time";
 
 /** Same roles as Interns list. Staff may view interns (company rules apply); interns may GET only their own id. */
-const ROLES = ["IT", "admin", "staff", "reception", "client", "accountant"];
+// Temporarily no "client" — restore when clients may view Interns again
+const ROLES = ["IT", "admin", "staff", "reception", "accountant"];
 
 /** Sunday at 00:00:00 local. */
 function startOfWeek(d: Date): Date {
