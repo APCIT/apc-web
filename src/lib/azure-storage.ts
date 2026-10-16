@@ -67,3 +67,12 @@ export async function uploadChecklistPresentationBlob(
   const blockBlob = container.getBlockBlobClient(blobName);
   await blockBlob.uploadData(data);
 }
+
+export async function downloadChecklistPresentationBlob(
+  blobName: string
+): Promise<Buffer> {
+  const client = getClient();
+  const container = client.getContainerClient(CONTAINER_CHECKLIST_PRESENTATION);
+  const blockBlob = container.getBlockBlobClient(blobName);
+  return blockBlob.downloadToBuffer();
+}

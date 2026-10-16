@@ -1603,7 +1603,7 @@ export async function DELETE_PAST_INTERN_API(id: number): Promise<
 }
 
 /** Impact calculator download for a current intern. Served through the app so
- *  the file arrives named after the intern rather than its stored blob GUID. */
+ *  the file arrives named after the intern and semester rather than its stored blob GUID. */
 export function getInternImpactCalcDownloadUrl(internId: string): string {
   return `${API.interns}/${encodeURIComponent(internId)}/impact-calc/download`;
 }
@@ -1611,6 +1611,16 @@ export function getInternImpactCalcDownloadUrl(internId: string): string {
 /** Impact calculator download for a past intern. */
 export function getPastInternImpactCalcDownloadUrl(pastInternId: number | string): string {
   return `${API.pastInterns}/${encodeURIComponent(String(pastInternId))}/impact-calc/download`;
+}
+
+/** Presentation/poster download for a current intern. */
+export function getInternPresentationDownloadUrl(internId: string): string {
+  return `${API.interns}/${encodeURIComponent(internId)}/presentation/download`;
+}
+
+/** Presentation/poster download for a past intern. */
+export function getPastInternPresentationDownloadUrl(pastInternId: number | string): string {
+  return `${API.pastInterns}/${encodeURIComponent(String(pastInternId))}/presentation/download`;
 }
 
 /** Build Intern Profile Report URL for a semester (date as yyyy-MM-dd). */

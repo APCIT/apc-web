@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 import {
   GET_PAST_INTERN_BY_ID_API,
   getPastInternImpactCalcDownloadUrl,
+  getPastInternPresentationDownloadUrl,
   type PastInternDetailItem,
 } from "@/lib/api";
 
 const BLOB_BASE = "https://apcstorage.blob.core.windows.net";
 const CONTAINER_MID_SEM = "intern-reports";
-const CONTAINER_PRESENTATION = "checklist-presentation";
 
 const backButtonClass =
   "inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline";
@@ -189,7 +189,7 @@ export default function PastInternDetailsPage() {
       : null;
   const presHref =
     p?.presentationId && p.presentationId.length > 15
-      ? `${BLOB_BASE}/${CONTAINER_PRESENTATION}/${encodeURIComponent(p.presentationId)}`
+      ? getPastInternPresentationDownloadUrl(p.id)
       : null;
 
   return (

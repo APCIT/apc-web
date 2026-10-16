@@ -8,11 +8,9 @@ import {
   UPDATE_INTERN_IMPACT_CALC_API,
   UPDATE_INTERN_PRESENTATION_API,
   getInternImpactCalcDownloadUrl,
+  getInternPresentationDownloadUrl,
   type TodoListResponse,
 } from '@/lib/api';
-
-const BLOB_BASE = 'https://apcstorage.blob.core.windows.net';
-const CONTAINER_PRESENTATION = 'checklist-presentation';
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -87,8 +85,8 @@ export default function ToDoListPage() {
       : null;
 
   const presHref =
-    presCompleted && data?.presentationId
-      ? `${BLOB_BASE}/${CONTAINER_PRESENTATION}/${encodeURIComponent(data.presentationId)}`
+    presCompleted && data?.internId
+      ? getInternPresentationDownloadUrl(data.internId)
       : null;
 
   const handleSave = useCallback(

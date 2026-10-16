@@ -59,6 +59,7 @@ export async function GET(
       blobName,
       firstName: pastIntern.FirstName ?? "",
       lastName: pastIntern.LastName ?? "",
+      semester: pastIntern.Semester,
     });
   } catch (e) {
     console.error(e);

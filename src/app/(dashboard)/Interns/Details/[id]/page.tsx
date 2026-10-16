@@ -29,6 +29,7 @@ import {
   GET_IMPACT_TOTALS_API,
   GET_IMPACT_CALC_TOTALS_API,
   getInternImpactCalcDownloadUrl,
+  getInternPresentationDownloadUrl,
   type InternDetailItem,
   type ImpactTotalsResponse,
   type CompanyItem,
@@ -183,8 +184,6 @@ const RIGHT_ACTIONS: { label: string; icon?: React.ReactNode }[] = [
 ];
 
 const RESUME_BLOB_BASE = "https://apcstorage.blob.core.windows.net/resumes";
-const PRESENTATION_BLOB_BASE = "https://apcstorage.blob.core.windows.net/checklist-presentation";
-
 /** Left/right table row – same style as PastInterns Details. */
 function TableRow({
   label,
@@ -1727,7 +1726,7 @@ export default function InternDetailsPage() {
                       if (canViewPresentation && hasValid) {
                         return (
                           <a
-                            href={`${PRESENTATION_BLOB_BASE}/${encodeURIComponent(pId)}`}
+                            href={getInternPresentationDownloadUrl(id)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={actionButtonClass}

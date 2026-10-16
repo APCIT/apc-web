@@ -75,6 +75,7 @@ export async function GET(
       blobName,
       firstName: intern.AspNetUsers?.FirstName ?? "",
       lastName: intern.AspNetUsers?.LastName ?? "",
+      semester: intern.Semester,
     });
   } catch (e) {
     console.error(e);
