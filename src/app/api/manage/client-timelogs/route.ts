@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
+  formatCumulativeRangeLabel,
   formatPeriodLabel,
   getClientTimelogConfig,
-  getPreviousPayPeriod,
+  getCumulativeRangeEnd,
+  getLastCompletedSaturday,
   parseInternIdsJson,
+  startOfLocalDay,
 } from "@/lib/client-timelogs";
 
 const ALLOWED = ["IT", "admin", "staff"];
@@ -26,7 +29,7 @@ async function requireAccess() {
   return { ok: true as const, userId: session.userId };
 }
 
-/** GET: clients + settings + company interns + recent send log + current previous pay period. */
+/** GET: clients + settings + company interns + recent send log + cumulative date range. */
 export async function GET() {
   try {
     const access = await requireAccess();
@@ -80,7 +83,9 @@ export async function GET() {
       });
     }
 
-    const { periodStart, periodEnd } = getPreviousPayPeriod();
+    const asOf = new Date();
+    const throughSaturday = getLastCompletedSaturday(asOf);
+    const rangeEnd = getCumulativeRangeEnd(asOf);
     const config = await getClientTimelogConfig();
 
     const recentLogs = await prisma.clientTimelogSendLog.findMany({
@@ -90,9 +95,10 @@ export async function GET() {
 
     return NextResponse.json({
       period: {
-        start: periodStart.toISOString(),
-        end: periodEnd.toISOString(),
-        label: formatPeriodLabel(periodStart, periodEnd),
+        start: startOfLocalDay(throughSaturday).toISOString(),
+        end: rangeEnd.toISOString(),
+        throughSaturday: throughSaturday.toISOString(),
+        label: formatCumulativeRangeLabel(asOf),
       },
       config: {
         semesterLabel: config.semesterLabel,

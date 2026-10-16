@@ -2,38 +2,93 @@ import { prisma } from "@/lib/prisma";
 import { formatScheduleTime } from "@/lib/schedule-time";
 import { sendMail } from "@/lib/mail";
 
-/** Sunday 00:00 local — same week boundary as Interns list / period hours. */
-export function startOfWeek(d: Date): Date {
+/** Org timezone for Monday auto-send day checks. */
+export const CLIENT_TIMELOG_TZ = "America/Chicago";
+
+export function startOfLocalDay(d: Date): Date {
   const result = new Date(d);
-  const day = result.getDay();
-  result.setDate(result.getDate() - day);
   result.setHours(0, 0, 0, 0);
   return result;
 }
 
-/**
- * Previous completed 2-week pay cycle (pay lag).
- * Current cycle = last week + this week; payday pays the cycle before that.
- */
-export function getPreviousPayPeriod(now = new Date()): {
-  periodStart: Date;
-  periodEnd: Date;
-} {
-  const weekStart = startOfWeek(now);
-  const periodEnd = new Date(weekStart);
-  periodEnd.setDate(periodEnd.getDate() - 7);
-  const periodStart = new Date(weekStart);
-  periodStart.setDate(periodStart.getDate() - 21);
-  return { periodStart, periodEnd };
+/** Sunday 00:00 local — Sun–Sat week (same as Interns list). */
+export function startOfWeekSunday(d: Date): Date {
+  const result = startOfLocalDay(d);
+  result.setDate(result.getDate() - result.getDay());
+  return result;
 }
 
-export function formatPeriodLabel(start: Date, end: Date): string {
+/**
+ * Exclusive end for client emails: start of the current Sun–Sat week.
+ * Includes entries through last Saturday (e.g. Mon Oct 19 → through Sat Oct 17).
+ */
+export function getCumulativeRangeEnd(now = new Date()): Date {
+  return startOfWeekSunday(now);
+}
+
+/** Last Saturday included in the cumulative send (local midnight of that day). */
+export function getLastCompletedSaturday(now = new Date()): Date {
+  const weekStart = getCumulativeRangeEnd(now);
+  const saturday = new Date(weekStart);
+  saturday.setDate(saturday.getDate() - 1);
+  return saturday;
+}
+
+/**
+ * Internship start from Interns.Semester (same anchors as work-schedule):
+ * April → mid Jan, July → mid May, November → mid Aug.
+ */
+export function getInternshipStartFromSemester(semester: Date): Date {
+  const d = semester instanceof Date ? semester : new Date(semester);
+  const month = d.getUTCMonth() + 1;
+  const year = d.getUTCFullYear();
+  let anchor: Date;
+  if (month === 4) {
+    anchor = new Date(year, 0, 15);
+  } else if (month === 7) {
+    anchor = new Date(year, 4, 15);
+  } else if (month === 11) {
+    anchor = new Date(year, 7, 15);
+  } else {
+    anchor = new Date(year, 0, 15);
+  }
+  return startOfLocalDay(anchor);
+}
+
+/** Label for [start, endExclusive). */
+export function formatPeriodLabel(start: Date, endExclusive: Date): string {
   const fmt = (d: Date) =>
     `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
-  // periodEnd is exclusive (start of week after period); show last included day
-  const lastDay = new Date(end);
+  const lastDay = new Date(endExclusive);
   lastDay.setDate(lastDay.getDate() - 1);
   return `${fmt(start)} - ${fmt(lastDay)}`;
+}
+
+export function formatCumulativeRangeLabel(asOf = new Date()): string {
+  const sat = getLastCompletedSaturday(asOf);
+  return `each intern's start through ${sat.getMonth() + 1}/${sat.getDate()}/${sat.getFullYear()} (last Saturday)`;
+}
+
+/** Weekday in America/Chicago: 0 = Sunday … 6 = Saturday. */
+export function getWeekdayInOrgTz(now = new Date()): number {
+  const weekday = new Intl.DateTimeFormat("en-US", {
+    timeZone: CLIENT_TIMELOG_TZ,
+    weekday: "short",
+  }).format(now);
+  const map: Record<string, number> = {
+    Sun: 0,
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+  };
+  return map[weekday] ?? now.getDay();
+}
+
+export function isMondayInOrgTz(now = new Date()): boolean {
+  return getWeekdayInOrgTz(now) === 1;
 }
 
 function escapeHtml(s: string): string {
@@ -70,25 +125,53 @@ export type ClientTimelogXls = {
   rowCount: number;
 };
 
-/** Client-safe Excel HTML (no CWID) for intern Ids in [periodStart, periodEnd). */
+export type ClientTimelogXlsBuild = ClientTimelogXls & {
+  /** Earliest internship start among selected interns (local). */
+  rangeStart: Date;
+  /** Exclusive end (current week Sunday) — through last Saturday. */
+  rangeEnd: Date;
+};
+
+/**
+ * Client-safe Excel HTML (no CWID): each intern from their semester start
+ * through last Saturday relative to asOf (Sun–Sat weeks).
+ */
 export async function buildClientTimelogXls(options: {
   internIds: string[];
-  periodStart: Date;
-  periodEnd: Date;
-}): Promise<ClientTimelogXls> {
-  const { internIds, periodStart, periodEnd } = options;
+  asOf?: Date;
+}): Promise<ClientTimelogXlsBuild> {
+  const asOf = options.asOf ?? new Date();
+  const rangeEnd = getCumulativeRangeEnd(asOf);
+  const { internIds } = options;
+
   if (internIds.length === 0) {
+    const rangeStart = startOfLocalDay(asOf);
     return {
       html: emptyTable(),
-      filename: filenameFor(periodStart, periodEnd),
+      filename: filenameFor(rangeStart, rangeEnd),
       rowCount: 0,
+      rangeStart,
+      rangeEnd,
     };
   }
+
+  const interns = await prisma.interns.findMany({
+    where: { Id: { in: internIds } },
+    select: { Id: true, Semester: true },
+  });
+  const startByIntern = new Map(
+    interns.map((i) => [i.Id, getInternshipStartFromSemester(i.Semester)])
+  );
+  const starts = [...startByIntern.values()];
+  const rangeStart =
+    starts.length > 0
+      ? new Date(Math.min(...starts.map((d) => d.getTime())))
+      : startOfLocalDay(asOf);
 
   const timelogs = await prisma.timelogs.findMany({
     where: {
       Intern_Id: { in: internIds },
-      Start: { gte: periodStart, lt: periodEnd },
+      Start: { lt: rangeEnd },
     },
     include: {
       Interns: {
@@ -101,7 +184,13 @@ export async function buildClientTimelogXls(options: {
 
   type Row = (typeof timelogs)[0];
   const rows = timelogs
-    .filter((t): t is Row & { Interns: NonNullable<Row["Interns"]> } => t.Interns != null)
+    .filter((t): t is Row & { Interns: NonNullable<Row["Interns"]> } => {
+      if (t.Interns == null || !t.Intern_Id) return false;
+      const internStart = startByIntern.get(t.Intern_Id);
+      if (!internStart) return false;
+      const start = t.Start instanceof Date ? t.Start : new Date(t.Start);
+      return start.getTime() >= internStart.getTime();
+    })
     .map((t) => ({
       timelog: t,
       lastName: t.Interns.AspNetUsers?.LastName ?? "",
@@ -161,8 +250,10 @@ export async function buildClientTimelogXls(options: {
 
   return {
     html,
-    filename: filenameFor(periodStart, periodEnd),
+    filename: filenameFor(rangeStart, rangeEnd),
     rowCount: rows.length,
+    rangeStart,
+    rangeEnd,
   };
 }
 
@@ -177,10 +268,10 @@ function emptyTable(): string {
   ].join("");
 }
 
-function filenameFor(periodStart: Date, periodEnd: Date): string {
-  const lastDay = new Date(periodEnd);
+function filenameFor(rangeStart: Date, rangeEndExclusive: Date): string {
+  const lastDay = new Date(rangeEndExclusive);
   lastDay.setDate(lastDay.getDate() - 1);
-  const a = `${periodStart.getFullYear()}${String(periodStart.getMonth() + 1).padStart(2, "0")}${String(periodStart.getDate()).padStart(2, "0")}`;
+  const a = `${rangeStart.getFullYear()}${String(rangeStart.getMonth() + 1).padStart(2, "0")}${String(rangeStart.getDate()).padStart(2, "0")}`;
   const b = `${lastDay.getFullYear()}${String(lastDay.getMonth() + 1).padStart(2, "0")}${String(lastDay.getDate()).padStart(2, "0")}`;
   return `Client-Timelogs-${a}-${b}.xls`;
 }
@@ -253,17 +344,12 @@ export async function getClientTimelogConfig(): Promise<{
 export async function sendClientTimelogEmail(options: {
   clientUserId: string;
   sentByUserId: string | null;
-  periodStart?: Date;
-  periodEnd?: Date;
+  /** As-of date; cutoff is last Saturday before this date's current week. */
+  asOf?: Date;
   /** If false, still builds/logs but skips inactive clients. Default true = respect Active flag. */
   requireActive?: boolean;
 }): Promise<SendClientTimelogResult> {
-  const { periodStart, periodEnd } = options.periodStart
-    ? {
-        periodStart: options.periodStart,
-        periodEnd: options.periodEnd ?? getPreviousPayPeriod().periodEnd,
-      }
-    : getPreviousPayPeriod();
+  const asOf = options.asOf ?? new Date();
 
   const client = await prisma.aspNetUsers.findUnique({
     where: { Id: options.clientUserId },
@@ -346,15 +432,12 @@ export async function sendClientTimelogEmail(options: {
     })
     .sort((a, b) => a.localeCompare(b));
 
-  const xls = await buildClientTimelogXls({
-    internIds,
-    periodStart,
-    periodEnd,
-  });
+  const xls = await buildClientTimelogXls({ internIds, asOf });
+  const periodStart = xls.rangeStart;
+  const periodEnd = xls.rangeEnd;
 
   const clientName = [client.FirstName, client.LastName].filter(Boolean).join(" ") || client.UserName;
   const companyName = client.Companies?.Name ?? null;
-  const periodLabel = formatPeriodLabel(periodStart, periodEnd);
 
   const namesHtml =
     internNames.length === 0
@@ -363,15 +446,18 @@ export async function sendClientTimelogEmail(options: {
         ? `<strong>${escapeHtml(internNames[0])}</strong>`
         : internNames.map((n) => `<strong>${escapeHtml(n)}</strong>`).join(", ");
 
+  const throughSat = getLastCompletedSaturday(asOf);
+  const throughLabel = `${throughSat.getMonth() + 1}/${throughSat.getDate()}/${throughSat.getFullYear()}`;
+
   const bodyHtml =
     xls.rowCount > 0
       ? `<p>Hello ${escapeHtml(clientName)},</p>
-<p>Attached are the Alabama Productivity Center intern timelogs for <strong>${escapeHtml(periodLabel)}</strong>${companyName ? ` (${escapeHtml(companyName)})` : ""}.</p>
+<p>Attached are the Alabama Productivity Center intern timelogs from each intern's start date through <strong>${escapeHtml(throughLabel)}</strong>${companyName ? ` (${escapeHtml(companyName)})` : ""}.</p>
 <p>${xls.rowCount} timelog row(s) · ${internIds.length} intern(s).</p>
 <p>- Alabama Productivity Center</p>`
       : `<p>Hello ${escapeHtml(clientName)},</p>
-<p>There was nothing reported for ${namesHtml} for the pay period <strong>${escapeHtml(periodLabel)}</strong>${companyName ? ` (${escapeHtml(companyName)})` : ""}.</p>
-<p>No timelog entries were recorded for the selected intern(s) in that period.</p>
+<p>There was nothing reported for ${namesHtml} from internship start through <strong>${escapeHtml(throughLabel)}</strong>${companyName ? ` (${escapeHtml(companyName)})` : ""}.</p>
+<p>No timelog entries were recorded for the selected intern(s) in that range.</p>
 <p>- Alabama Productivity Center</p>`;
 
   try {
@@ -379,8 +465,8 @@ export async function sendClientTimelogEmail(options: {
       to: email,
       subject:
         xls.rowCount > 0
-          ? `APC Intern Timelogs ${periodLabel}`
-          : `APC Intern Timelogs ${periodLabel} - nothing reported`,
+          ? `APC Intern Timelogs through ${throughLabel}`
+          : `APC Intern Timelogs - nothing reported through ${throughLabel}`,
       html: bodyHtml,
       attachments:
         xls.rowCount > 0
@@ -442,4 +528,42 @@ export async function sendClientTimelogEmail(options: {
       error: msg,
     };
   }
+}
+
+/** Send cumulative timelogs to every active client (for bulk / Monday cron). */
+export async function sendAllActiveClientTimelogEmails(options: {
+  sentByUserId: string | null;
+  asOf?: Date;
+}): Promise<{
+  sent: number;
+  failed: number;
+  results: SendClientTimelogResult[];
+}> {
+  const asOf = options.asOf ?? new Date();
+  const clientRole = await prisma.aspNetRoles.findFirst({
+    where: { Name: "client" },
+  });
+  if (!clientRole) {
+    return { sent: 0, failed: 0, results: [] };
+  }
+  const clients = await prisma.aspNetUsers.findMany({
+    where: { AspNetUserRoles: { some: { RoleId: clientRole.Id } } },
+    select: { Id: true },
+  });
+  const results: SendClientTimelogResult[] = [];
+  for (const c of clients) {
+    results.push(
+      await sendClientTimelogEmail({
+        clientUserId: c.Id,
+        sentByUserId: options.sentByUserId,
+        asOf,
+        requireActive: true,
+      })
+    );
+  }
+  return {
+    sent: results.filter((r) => r.ok).length,
+    failed: results.filter((r) => !r.ok).length,
+    results,
+  };
 }

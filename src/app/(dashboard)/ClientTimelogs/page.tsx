@@ -191,7 +191,12 @@ export default function ClientTimelogsPage() {
       setError("Semester ended — update the semester end date before bulk send.");
       return;
     }
-    if (!confirm("Send previous pay-period timelogs to all active clients?")) return;
+    if (
+      !confirm(
+        "Send all active clients timelogs from each intern's start through last Saturday?"
+      )
+    )
+      return;
     setSendingAll(true);
     setError(null);
     setInfo(null);
@@ -288,8 +293,9 @@ export default function ClientTimelogsPage() {
         </div>
 
         <p className="font-roboto text-[14px] text-[#666] mb-4 max-w-3xl">
-          Email each client a privacy-safe timesheet (no CWID) for the previous 2-week pay
-          period. Add clients under{" "}
+          Email each client a privacy-safe timesheet (no CWID) with every entry from each
+          intern&apos;s start date through last Saturday. Auto-send runs Mondays (after
+          Saturday noon due). Add clients under{" "}
           <Link href="/Manage/Users" className="text-[#337ab7] hover:underline">
             Users
           </Link>{" "}
@@ -301,7 +307,7 @@ export default function ClientTimelogsPage() {
         </p>
 
         <p className="font-roboto text-[14px] text-[#333] mb-4">
-          <span className="font-bold">Previous pay period:</span>{" "}
+          <span className="font-bold">Date range:</span>{" "}
           {data?.period.label ?? (loading ? "…" : "—")}
         </p>
 
@@ -594,7 +600,7 @@ export default function ClientTimelogsPage() {
                 <th className={thClass}>When</th>
                 <th className={thClass}>To</th>
                 <th className={thClass}>Client</th>
-                <th className={thClass}>Period</th>
+                <th className={thClass}>Range</th>
                 <th className={thClass}>Rows</th>
                 <th className={thClass}>Status</th>
               </tr>
