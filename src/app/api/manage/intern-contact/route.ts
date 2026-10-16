@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
+import { getMailProvider, isMailConfigured, sendMail } from "@/lib/mail";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -24,16 +25,10 @@ export async function POST(request: Request) {
     const message = typeof body.message === "string" ? body.message.trim() : "";
 
     if (!name) {
-      return NextResponse.json(
-        { error: "Name is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Name is required." }, { status: 400 });
     }
     if (!email) {
-      return NextResponse.json(
-        { error: "Email is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email is required." }, { status: 400 });
     }
     if (!EMAIL_REGEX.test(email)) {
       return NextResponse.json(
@@ -42,87 +37,41 @@ export async function POST(request: Request) {
       );
     }
     if (!message) {
+      return NextResponse.json({ error: "Message is required." }, { status: 400 });
+    }
+
+    if (!(await isMailConfigured())) {
+      console.warn("[intern-contact] Email not configured / Outlook not connected.");
       return NextResponse.json(
-        { error: "Message is required." },
-        { status: 400 }
+        {
+          error:
+            "Email is not configured. Connect Outlook under Manage → Outlook Mail, or set RESEND_API_KEY.",
+        },
+        { status: 500 }
       );
     }
 
     const toEmail = process.env.INTERN_CONTACT_TO_EMAIL ?? "enstanko@cba.ua.edu";
     const subject = `${name}'s Help Request ${formatSubjectDate(new Date())}`;
     const html = `<p><strong>From:</strong> ${escapeHtml(name)} (${escapeHtml(email)})</p><p><strong>Message:</strong></p><p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>`;
-    const tenantId = process.env.MS_GRAPH_TENANT_ID;
-    const clientId = process.env.MS_GRAPH_CLIENT_ID;
-    const clientSecret = process.env.MS_GRAPH_CLIENT_SECRET;
-    const senderEmail = process.env.MS_GRAPH_SENDER_EMAIL ?? "apc-ua@outlook.com";
 
-    if (!tenantId || !clientId || !clientSecret || !senderEmail) {
-      console.warn("[intern-contact] Microsoft Graph email not configured.");
+    try {
+      await sendMail({
+        to: toEmail,
+        subject,
+        html,
+        replyTo: email,
+      });
+    } catch (err) {
+      const provider = await getMailProvider();
+      console.error(`[intern-contact] Failed to send email via ${provider}:`, err);
       return NextResponse.json(
         {
           error:
-            "Email is not configured on the server. Please set MS_GRAPH_TENANT_ID, MS_GRAPH_CLIENT_ID, MS_GRAPH_CLIENT_SECRET, and MS_GRAPH_SENDER_EMAIL.",
+            err instanceof Error
+              ? err.message
+              : "Failed to send email. Check Outlook connection or Resend config.",
         },
-        { status: 500 }
-      );
-    }
-
-    try {
-      const tokenResponse = await fetch(`https://login.microsoftonline.com/${encodeURIComponent(tenantId)}/oauth2/v2.0/token`, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          client_id: clientId,
-          client_secret: clientSecret,
-          scope: "https://graph.microsoft.com/.default",
-          grant_type: "client_credentials",
-        }),
-      });
-
-      const tokenPayload = (await tokenResponse.json().catch(() => ({}))) as {
-        access_token?: string;
-      };
-      const accessToken = tokenPayload.access_token;
-      if (!tokenResponse.ok || !accessToken) {
-        console.error("[intern-contact] Failed to acquire Microsoft Graph token:", tokenPayload);
-        return NextResponse.json(
-          { error: "Failed to authenticate with Microsoft Graph. Check Graph app credentials." },
-          { status: 502 }
-        );
-      }
-
-      const sendResponse = await fetch(`https://graph.microsoft.com/v1.0/users/${encodeURIComponent(senderEmail)}/sendMail`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: {
-            subject,
-            body: {
-              contentType: "HTML",
-              content: html,
-            },
-            toRecipients: [{ emailAddress: { address: toEmail } }],
-            replyTo: [{ emailAddress: { address: email } }],
-          },
-          saveToSentItems: true,
-        }),
-      });
-
-      if (!sendResponse.ok) {
-        const sendPayload = await sendResponse.json().catch(() => ({}));
-        console.error("[intern-contact] Failed to send Graph email:", sendPayload);
-        return NextResponse.json(
-          { error: "Failed to send email via Microsoft Graph. Check app permissions/mailbox access." },
-          { status: 502 }
-        );
-      }
-    } catch (err) {
-      console.error("[intern-contact] Failed to send email:", err);
-      return NextResponse.json(
-        { error: "Failed to send email. Check Microsoft Graph configuration and server logs." },
         { status: 502 }
       );
     }
