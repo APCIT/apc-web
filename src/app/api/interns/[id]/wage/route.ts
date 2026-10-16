@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 
-const ROLES = ["IT", "admin", "staff", "reception", "client", "accountant"];
+// Temporarily no "client" — restore when clients may view Interns again
+const ROLES = ["IT", "admin", "staff", "reception", "accountant"];
 
 async function requireAccess(): Promise<
   | { error: NextResponse }

@@ -5,15 +5,8 @@ import { hashIdentityV2 } from "@/lib/password-identity-v2";
 
 /** Promote to Intern: admin and IT only. */
 const ROLES = ["admin", "IT"];
-
-function randomUpperAlphaNum(length: number): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let out = "";
-  for (let i = 0; i < length; i++) {
-    out += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return out;
-}
+/** Same default as Create User / Reset Password. */
+const DEFAULT_PASSWORD = "Alabama2025!";
 
 async function requireAccess(): Promise<
   | { error: NextResponse }
@@ -125,8 +118,7 @@ export async function POST(
       username = baseUsername + suffix;
     }
 
-    const plainPassword = randomUpperAlphaNum(12);
-    const passwordHash = await hashIdentityV2(plainPassword);
+    const passwordHash = await hashIdentityV2(DEFAULT_PASSWORD);
 
     const userId = crypto.randomUUID();
 
