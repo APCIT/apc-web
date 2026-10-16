@@ -3,8 +3,6 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 
-const backButtonClass =
-  "inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline";
 const actionButtonClass =
   "inline-flex items-center justify-center gap-2 px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none disabled:opacity-50";
 /** Same as Time page Hometown / Mentor Info buttons. */
@@ -280,36 +278,26 @@ export default function ClientTimelogsPage() {
   return (
     <div className="w-full bg-white">
       <div className="py-8 px-[50px]">
-        <div style={{ height: "20px" }} />
-
-        <div className="mb-6">
-          <Link
-            href="/Manage"
-            className={backButtonClass}
-            style={{ fontWeight: "normal", textDecoration: "none" }}
-          >
-            <span className="text-[14px] font-bold" style={{ marginRight: "10px" }}>
-              &#10094;
-            </span>
-            Back to Account
-          </Link>
-        </div>
-
-        <div className="mb-4 text-left">
+        <div className="mb-6 text-center">
           <h2
             className="text-[24px] font-roboto"
-            style={{ fontWeight: "normal", color: "#000000" }}
+            style={{ fontWeight: "normal", color: "#900" }}
           >
             Client Timelogs
           </h2>
         </div>
 
-        <hr className="border-t border-[#ccc] mb-6" />
-
         <p className="font-roboto text-[14px] text-[#666] mb-4 max-w-3xl">
           Email each client a privacy-safe timesheet (no CWID) for the previous 2-week pay
-          period. Add clients under Manage → Users (role Client). Outlook Mail must be connected
-          to send.
+          period. Add clients under{" "}
+          <Link href="/Manage/Users" className="text-[#337ab7] hover:underline">
+            Users
+          </Link>{" "}
+          (role Client). Connect Outlook under{" "}
+          <Link href="/Manage/OutlookMail" className="text-[#337ab7] hover:underline">
+            My Account → Outlook Mail
+          </Link>{" "}
+          (IT/admin) before sending.
         </p>
 
         <p className="font-roboto text-[14px] text-[#333] mb-4">

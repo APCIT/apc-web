@@ -27,6 +27,10 @@ const ROUTE_ROLES: { path: string; roles: string[] | null; exact?: boolean }[] =
   { path: "/Classes/Registrants", roles: ["IT", "admin", "staff", "reception"], exact: false },
   { path: "/Companies", roles: ["IT", "admin", "staff", "reception"], exact: false },
   { path: "/Services", roles: ["IT", "admin", "staff", "reception"], exact: false },
+  // Client payday timelog emails — IT, admin, staff
+  { path: "/ClientTimelogs", roles: ["IT", "admin", "staff"], exact: false },
+  // Outlook Mail connect — IT, admin (must be before /Manage)
+  { path: "/Manage/OutlookMail", roles: ["IT", "admin"], exact: false },
   // My Account — everyone
   { path: "/Manage", roles: null, exact: false },
   // Log Time — intern only

@@ -145,9 +145,6 @@ export default function ManagePage() {
               {(isIT || isAdmin) && (
                 <Link href="/Manage/OutlookMail" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]">Outlook Mail (send setup)</Link>
               )}
-              {(isIT || isAdmin || isStaff) && (
-                <Link href="/Manage/ClientTimelogs" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]">Client Timelogs</Link>
-              )}
               <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Intern-Handbook-Revision-13-01132025.docx" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Intern Handbook</a>
             </div>
 

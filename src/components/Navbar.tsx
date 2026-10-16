@@ -28,6 +28,7 @@ function getMenuLinksForRoles(roles: string[]): MenuLink[] {
     add("interns", "Interns", "/Interns");
     add("schedule-display", "Intern Schedules", "/Interns/ScheduleDisplay");
     add("past-interns", "Past Interns", "/PastInterns");
+    add("client-timelogs", "Client Timelogs", "/ClientTimelogs");
     add("presentations", "Presentations", "/Presentations");
     add("charts", "Charts", "/Charts");
     add("registrants", "Class Registrants", "/Classes/Registrants");
@@ -40,6 +41,7 @@ function getMenuLinksForRoles(roles: string[]): MenuLink[] {
     add("interns", "Interns", "/Interns");
     add("schedule-display", "Intern Schedules", "/Interns/ScheduleDisplay");
     add("past-interns", "Past Interns", "/PastInterns");
+    add("client-timelogs", "Client Timelogs", "/ClientTimelogs");
     add("presentations", "Presentations", "/Presentations");
     add("charts", "Charts", "/Charts");
     add("registrants", "Class Registrants", "/Classes/Registrants");
@@ -52,6 +54,7 @@ function getMenuLinksForRoles(roles: string[]): MenuLink[] {
     add("interns", "Interns", "/Interns");
     add("schedule-display", "Intern Schedules", "/Interns/ScheduleDisplay");
     add("past-interns", "Past Interns", "/PastInterns");
+    add("client-timelogs", "Client Timelogs", "/ClientTimelogs");
     add("presentations", "Presentations", "/Presentations");
     add("charts", "Charts", "/Charts");
     add("registrants", "Class Registrants", "/Classes/Registrants");
