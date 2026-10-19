@@ -18,6 +18,7 @@ import {
   PATCH_INTERN_CWID_API,
   PATCH_INTERN_COMPANY_API,
   PATCH_INTERN_DEPARTMENT_API,
+  PATCH_INTERN_GRAD_DATE_API,
   PATCH_INTERN_MENTOR_API,
   PATCH_INTERN_WAGE_API,
   PATCH_INTERN_NOTE_API,
@@ -235,17 +236,25 @@ function formatDob(dob: string | null): string | undefined {
   return `${months[d.getUTCMonth()]} ${d.getUTCDate()}`;
 }
 
-/** Graduation as "MMM yyyy" (e.g. May 2025). */
-function formatGraduation(gradDateIso: string | null): string | undefined {
-  if (!gradDateIso) return undefined;
-  const d = new Date(gradDateIso);
-  if (Number.isNaN(d.getTime())) return undefined;
-  const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-  ];
-  return `${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+const GRAD_MONTH_OPTIONS = [
+  { value: 5, label: "May" },
+  { value: 8, label: "August" },
+  { value: 12, label: "December" },
+];
+
+/** Parse ISO date to grad month (5|8|12) and year. Use UTC to avoid timezone shifting. */
+function parseGradDate(iso: string | null): { month: number; year: number } | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  const m = d.getUTCMonth() + 1;
+  const gradMonth = [5, 8, 12].includes(m) ? m : 5;
+  return { month: gradMonth, year: d.getUTCFullYear() };
 }
+
+const currentYear = new Date().getFullYear();
+/** Staff may correct past or future dates; wider range than intern self-edit. */
+const GRAD_YEAR_OPTIONS = Array.from({ length: 11 }, (_, i) => currentYear - 2 + i);
 
 function formatImpactValue(value: number | string | null | undefined, isCount = false): string {
   if (value === "" || value === null || value === undefined) return "—";
@@ -357,7 +366,10 @@ export default function InternDetailsPage() {
   const [empWage, setEmpWage] = useState("");
   const [empNote, setEmpNote] = useState("");
   const [empCompanyId, setEmpCompanyId] = useState<number>(0);
-  const [empSaving, setEmpSaving] = useState<"company" | "department" | "mentor" | "wage" | "note" | null>(null);
+  const [gradMonth, setGradMonth] = useState("");
+  const [gradYear, setGradYear] = useState("");
+  const [gradDateError, setGradDateError] = useState<string | null>(null);
+  const [empSaving, setEmpSaving] = useState<"company" | "department" | "mentor" | "wage" | "note" | "gradDate" | null>(null);
   const [empError, setEmpError] = useState<string | null>(null);
   const [roles, setRoles] = useState<string[] | null>(null);
   const updateResumeDisclosure = useDisclosure();
@@ -489,6 +501,14 @@ export default function InternDetailsPage() {
     setEmpWage(i.wage != null ? String(i.wage) : "");
     setEmpNote(i.note ?? "");
     setEmpCompanyId(i.companyId ?? 0);
+    const grad = parseGradDate(i.gradDateIso ?? null);
+    if (grad) {
+      setGradMonth(String(grad.month));
+      setGradYear(String(grad.year));
+    } else {
+      setGradMonth("");
+      setGradYear(String(currentYear));
+    }
   }, [data?.intern]);
 
   const handleCwidSave = useCallback(() => {
@@ -541,6 +561,37 @@ export default function InternDetailsPage() {
       .catch(() => setEmpError("Failed to update department"))
       .finally(() => setEmpSaving(null));
   }, [id, empDepartment]);
+
+  const saveGradDate = useCallback(() => {
+    if (!id) return;
+    const month = parseInt(gradMonth, 10);
+    const year = parseInt(gradYear, 10);
+    if (!gradMonth || !gradYear || Number.isNaN(month) || Number.isNaN(year)) {
+      setGradDateError("Select a graduation month and year");
+      return;
+    }
+    setEmpSaving("gradDate");
+    setGradDateError(null);
+    PATCH_INTERN_GRAD_DATE_API(id, month, year)
+      .then((res) => {
+        if (res.ok) {
+          setData((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  intern: {
+                    ...prev.intern,
+                    gradDate: res.gradDate,
+                    gradDateIso: res.gradDateIso,
+                  },
+                }
+              : null
+          );
+        } else setGradDateError(res.error ?? "Failed to update graduation date");
+      })
+      .catch(() => setGradDateError("Failed to update graduation date"))
+      .finally(() => setEmpSaving(null));
+  }, [id, gradMonth, gradYear]);
 
   const saveMentor = useCallback(() => {
     if (!id) return;
@@ -1203,11 +1254,69 @@ export default function InternDetailsPage() {
                           value={intern?.level ?? undefined}
                           skeleton={showSkeleton}
                         />
-                        <TableRow
-                          label="Graduation"
-                          value={intern ? formatGraduation(intern.gradDateIso ?? null) : undefined}
-                          skeleton={showSkeleton}
-                        />
+                        {/* Graduation — editable by staff */}
+                        <tr className="font-roboto text-[14px]">
+                          <th className="text-left font-bold p-[10px] border border-[#7a0000] bg-[#900] w-[200px] align-top text-white">
+                            Graduation
+                          </th>
+                          <td className="p-[10px] border border-[#ddd] text-[#666] align-top">
+                            {showSkeleton ? (
+                              <div style={{ height: "24px", width: "200px", ...skeletonStyle }} aria-hidden />
+                            ) : (
+                              <div className="flex flex-col gap-2 w-fit">
+                                <div className="flex items-center gap-2">
+                                  <select
+                                    id="intern-grad-month"
+                                    value={gradMonth}
+                                    onChange={(e) => setGradMonth(e.target.value)}
+                                    className="min-w-[120px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px] bg-white"
+                                    aria-label="Graduation month"
+                                  >
+                                    <option value="">Month</option>
+                                    {GRAD_MONTH_OPTIONS.map((o) => (
+                                      <option key={o.value} value={o.value}>{o.label}</option>
+                                    ))}
+                                  </select>
+                                  <select
+                                    id="intern-grad-year"
+                                    value={gradYear}
+                                    onChange={(e) => setGradYear(e.target.value)}
+                                    className="min-w-[100px] px-3 py-2 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px] bg-white"
+                                    aria-label="Graduation year"
+                                  >
+                                    <option value="">Year</option>
+                                    {GRAD_YEAR_OPTIONS.map((y) => (
+                                      <option key={y} value={y}>{y}</option>
+                                    ))}
+                                    {/* Keep current value selectable if outside the default range */}
+                                    {gradYear &&
+                                      !GRAD_YEAR_OPTIONS.includes(parseInt(gradYear, 10)) && (
+                                        <option value={gradYear}>{gradYear}</option>
+                                      )}
+                                  </select>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={saveGradDate}
+                                  disabled={
+                                    empSaving === "gradDate" ||
+                                    !gradMonth ||
+                                    !gradYear
+                                  }
+                                  style={{ marginTop: 16 }}
+                                  className="inline-flex items-center justify-center w-fit min-w-0 px-[16px] py-[8px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  {empSaving === "gradDate" ? "Saving…" : "Save"}
+                                </button>
+                                {gradDateError && (
+                                  <p className="text-[13px] text-red-600 m-0" role="alert">
+                                    {gradDateError}
+                                  </p>
+                                )}
+                              </div>
+                            )}
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>

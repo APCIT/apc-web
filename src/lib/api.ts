@@ -893,6 +893,35 @@ export async function PATCH_INTERN_DEPARTMENT_API(
   return { ok: true };
 }
 
+/** Update intern graduation date. PATCH /api/interns/[id]/grad-date with body { gradMonth, gradYear }. */
+export async function PATCH_INTERN_GRAD_DATE_API(
+  id: string,
+  gradMonth: number,
+  gradYear: number
+): Promise<
+  | { ok: true; gradDate: string; gradDateIso: string }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/grad-date`, {
+    ...defaultFetchOptions,
+    method: "PATCH",
+    body: JSON.stringify({ gradMonth, gradYear }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update graduation date",
+      status: res.status,
+    };
+  }
+  return {
+    ok: true,
+    gradDate: (data?.gradDate as string) ?? "",
+    gradDateIso: (data?.gradDateIso as string) ?? "",
+  };
+}
+
 /** Update intern mentor. PATCH /api/interns/[id]/mentor with body { mentorName?, mentorTitle?, mentorPhone?, mentorEmail? }. */
 export async function PATCH_INTERN_MENTOR_API(
   id: string,
