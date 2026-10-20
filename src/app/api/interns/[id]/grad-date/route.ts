@@ -31,7 +31,7 @@ function gradDateToLabel(d: Date): string {
 
 async function requireAccess(): Promise<
   | { error: NextResponse }
-  | { ok: true; companyId: number | null }
+  | { ok: true; roles: string[]; companyId: number | null }
 > {
   const session = await getSession();
   if (!session?.isLoggedIn || !session.userId) {
@@ -48,7 +48,8 @@ async function requireAccess(): Promise<
   if (!ROLES.some((r) => roles.includes(r))) {
     return { error: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
   }
-  return { ok: true, companyId: user.CompanyId ?? null };
+  // Same as Details GET: company scoping only applies to client users.
+  return { ok: true, roles, companyId: user.CompanyId ?? null };
 }
 
 /** PATCH: set intern graduation date. Body: { gradMonth: 5|8|12, gradYear: number }. Same access as Details. */
@@ -83,7 +84,11 @@ export async function PATCH(
     if (!intern) {
       return NextResponse.json({ error: "Intern not found" }, { status: 404 });
     }
-    if (access.companyId != null && intern.AspNetUsers?.CompanyId !== access.companyId) {
+    if (
+      access.roles.includes("client") &&
+      access.companyId != null &&
+      intern.AspNetUsers?.CompanyId !== access.companyId
+    ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
