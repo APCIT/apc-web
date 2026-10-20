@@ -94,6 +94,9 @@ export default function ManagePage() {
                     <span className="font-medium">Teams Sheets:</span> [ <a href="https://bama365.sharepoint.com/:x:/t/Intern-AlabamaProductivityCenter/ESJD3H41yXVDo8ai2A-XbNYBW7iAJUk7ud0OgaN0DKLydQ?e=eqZPza" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Info</a> ]
                   </div>
                   <div className={linkCls}>
+                    <span className="font-medium">Teams Sheets:</span> [ <a href="https://bama365.sharepoint.com/:x:/r/teams/Main-AlabamaProductivityCenter-CBA/Shared%20Documents/General/Potential%20client%20log.xlsx?d=w2447bc05e3d1449999bae21be370489e&csf=1&web=1&e=U9pl8n" className="manage-link" target="_blank" rel="noopener noreferrer">Potential Client Log</a> ]
+                  </div>
+                  <div className={linkCls}>
                     <span className="font-medium">Info:</span> [ <Link href="/Manage/EditInfo" className="manage-link">Edit your Information</Link> ]
                   </div>
                 </>
@@ -106,6 +109,9 @@ export default function ManagePage() {
               <PasswordCell hasPassword={hasPassword} />
               <div className={linkCls}>
                 <span className="font-medium">Teams Sheets:</span> [ <a href="https://bama365.sharepoint.com/:x:/t/Intern-AlabamaProductivityCenter/ESJD3H41yXVDo8ai2A-XbNYBW7iAJUk7ud0OgaN0DKLydQ?e=eqZPza" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Info</a> ]
+              </div>
+              <div className={linkCls}>
+                <span className="font-medium">Teams Sheets:</span> [ <a href="https://bama365.sharepoint.com/:x:/r/teams/Main-AlabamaProductivityCenter-CBA/Shared%20Documents/General/Potential%20client%20log.xlsx?d=w2447bc05e3d1449999bae21be370489e&csf=1&web=1&e=U9pl8n" className="manage-link" target="_blank" rel="noopener noreferrer">Potential Client Log</a> ]
               </div>
             </>
           )}
