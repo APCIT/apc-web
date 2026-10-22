@@ -159,13 +159,16 @@ export async function buildClientTimelogXls(options: {
     where: { Id: { in: internIds } },
     select: { Id: true, Semester: true },
   });
-  const startByIntern = new Map(
-    interns.map((i) => [i.Id, getInternshipStartFromSemester(i.Semester)])
+  const startByIntern = new Map<string, Date>(
+    interns.map((i: { Id: string; Semester: Date }) => [
+      i.Id,
+      getInternshipStartFromSemester(i.Semester),
+    ])
   );
   const starts = [...startByIntern.values()];
   const rangeStart =
     starts.length > 0
-      ? new Date(Math.min(...starts.map((d) => d.getTime())))
+      ? new Date(Math.min(...starts.map((d: Date) => d.getTime())))
       : startOfLocalDay(asOf);
 
   const timelogs = await prisma.timelogs.findMany({
@@ -182,16 +185,17 @@ export async function buildClientTimelogXls(options: {
     },
   });
 
-  type Row = (typeof timelogs)[0];
+  type Row = (typeof timelogs)[number];
+  type RowWithIntern = Row & { Interns: NonNullable<Row["Interns"]> };
   const rows = timelogs
-    .filter((t): t is Row & { Interns: NonNullable<Row["Interns"]> } => {
+    .filter((t: Row): t is RowWithIntern => {
       if (t.Interns == null || !t.Intern_Id) return false;
       const internStart = startByIntern.get(t.Intern_Id);
       if (!internStart) return false;
       const start = t.Start instanceof Date ? t.Start : new Date(t.Start);
       return start.getTime() >= internStart.getTime();
     })
-    .map((t) => ({
+    .map((t: RowWithIntern) => ({
       timelog: t,
       lastName: t.Interns.AspNetUsers?.LastName ?? "",
       firstName: t.Interns.AspNetUsers?.FirstName ?? "",
@@ -295,12 +299,14 @@ export async function resolveInternIdsForClient(options: {
     where: { AspNetUsers: { CompanyId: options.companyId } },
     select: { Id: true },
   });
-  const companySet = new Set(companyInterns.map((i) => i.Id));
+  const companySet = new Set<string>(
+    companyInterns.map((i: { Id: string }) => i.Id)
+  );
   const selected = parseInternIdsJson(options.internIdsJson);
   if (!selected || selected.length === 0) {
-    return [...companySet];
+    return Array.from(companySet);
   }
-  return selected.filter((id) => companySet.has(id));
+  return selected.filter((id: string) => companySet.has(id));
 }
 
 export type SendClientTimelogResult = {
@@ -370,7 +376,9 @@ export async function sendClientTimelogEmail(options: {
     };
   }
 
-  const isClient = client.AspNetUserRoles.some((ur) => ur.AspNetRoles.Name === "client");
+  const isClient = client.AspNetUserRoles.some(
+    (ur: { AspNetRoles: { Name: string | null } }) => ur.AspNetRoles.Name === "client"
+  );
   if (!isClient) {
     return {
       ok: false,
@@ -424,13 +432,17 @@ export async function sendClientTimelogEmail(options: {
           },
         });
   const internNames = selectedInterns
-    .map((i) => {
-      const last = i.AspNetUsers?.LastName?.trim() ?? "";
-      const first = i.AspNetUsers?.FirstName?.trim() ?? "";
-      if (last && first) return `${last}, ${first}`;
-      return last || first || "Unknown intern";
-    })
-    .sort((a, b) => a.localeCompare(b));
+    .map(
+      (i: {
+        AspNetUsers: { FirstName: string | null; LastName: string | null } | null;
+      }) => {
+        const last = i.AspNetUsers?.LastName?.trim() ?? "";
+        const first = i.AspNetUsers?.FirstName?.trim() ?? "";
+        if (last && first) return `${last}, ${first}`;
+        return last || first || "Unknown intern";
+      }
+    )
+    .sort((a: string, b: string) => a.localeCompare(b));
 
   const xls = await buildClientTimelogXls({ internIds, asOf });
   const periodStart = xls.rangeStart;
@@ -444,7 +456,7 @@ export async function sendClientTimelogEmail(options: {
       ? "the selected intern(s)"
       : internNames.length === 1
         ? `<strong>${escapeHtml(internNames[0])}</strong>`
-        : internNames.map((n) => `<strong>${escapeHtml(n)}</strong>`).join(", ");
+        : internNames.map((n: string) => `<strong>${escapeHtml(n)}</strong>`).join(", ");
 
   const throughSat = getLastCompletedSaturday(asOf);
   const throughLabel = `${throughSat.getMonth() + 1}/${throughSat.getDate()}/${throughSat.getFullYear()}`;

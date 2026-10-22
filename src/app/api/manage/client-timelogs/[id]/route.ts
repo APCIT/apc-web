@@ -59,8 +59,10 @@ export async function PATCH(request: Request, context: Ctx) {
           where: { AspNetUsers: { CompanyId: client.CompanyId } },
           select: { Id: true },
         });
-        const allowed = new Set(companyInterns.map((i) => i.Id));
-        const filtered = ids.filter((i) => allowed.has(i));
+        const allowed = new Set<string>(
+          companyInterns.map((i: { Id: string }) => i.Id)
+        );
+        const filtered = ids.filter((i: string) => allowed.has(i));
         // null = all; empty array = none selected
         const allSelected =
           filtered.length === companyInterns.length && companyInterns.length > 0;
