@@ -71,6 +71,8 @@ const TITLE_RULES: TitleRule[] = [
   { test: /^\/Applicants\/Edit\/[^/]+$/, title: "Edit Applicant - APC" },
   { test: /^\/Applicants\/Search$/, title: "Search Applicants - APC" },
   { test: /^\/Applicants\/SearchResults$/, title: "Search Results - APC" },
+  { test: /^\/ClientTimelogs$/, title: "Client Timelogs - APC" },
+  { test: /^\/Manage\/OutlookMail$/, title: "Outlook Mail - APC" },
   { test: /^\/Companies$/, title: "Companies - APC" },
   { test: /^\/Companies\/Create$/, title: "Create Company - APC" },
   { test: /^\/Companies\/Edit\/[^/]+$/, title: "Edit Company - APC" },

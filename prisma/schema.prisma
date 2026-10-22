@@ -315,3 +315,44 @@ model ImpactTotals {
 
   @@index([InternId])
 }
+
+/** Global payday email config (single row Id=1): semester end stops bulk sends. */
+model ClientTimelogConfig {
+  Id            Int       @id @default(1)
+  SemesterLabel String?   @db.NVarChar(64)
+  SemesterEnd   DateTime? @db.DateTime
+  UpdatedAt     DateTime  @updatedAt @db.DateTime
+}
+
+/** Payday client email: which interns a client user receives, and whether sends are active. */
+model ClientTimelogSettings {
+  Id           String   @id @default(cuid()) @db.NVarChar(128)
+  ClientUserId String   @unique @db.NVarChar(128)
+  Active       Boolean  @default(true)
+  /// JSON array of intern Ids; null/empty = all interns at the client's company
+  InternIdsJson String? @db.NVarChar(Max)
+  CreatedAt    DateTime @default(now()) @db.DateTime
+  UpdatedAt    DateTime @updatedAt @db.DateTime
+
+  @@index([ClientUserId])
+}
+
+/** History of payday / manual client timelog emails. */
+model ClientTimelogSendLog {
+  Id             String   @id @default(cuid()) @db.NVarChar(128)
+  ClientUserId   String   @db.NVarChar(128)
+  RecipientEmail String   @db.NVarChar(256)
+  ClientName     String?  @db.NVarChar(Max)
+  CompanyName    String?  @db.NVarChar(Max)
+  PeriodStart    DateTime @db.DateTime
+  PeriodEnd      DateTime @db.DateTime
+  InternCount    Int      @default(0)
+  RowCount       Int      @default(0)
+  Status         String   @db.NVarChar(32)
+  ErrorMessage   String?  @db.NVarChar(Max)
+  SentByUserId   String?  @db.NVarChar(128)
+  SentAt         DateTime @default(now()) @db.DateTime
+
+  @@index([ClientUserId])
+  @@index([SentAt])
+}

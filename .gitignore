@@ -33,6 +33,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# Outlook OAuth refresh tokens (local/server file store)
+.data/
+
 # vercel
 .vercel
 

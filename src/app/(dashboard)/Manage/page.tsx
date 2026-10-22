@@ -148,6 +148,9 @@ export default function ManagePage() {
           <>
             <div className="pl-4 flex flex-col gap-1 mb-8">
               <Link href="/Manage/InternContact" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]">Intern Help Request</Link>
+              {(isIT || isAdmin) && (
+                <Link href="/Manage/OutlookMail" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]">Outlook Mail (send setup)</Link>
+              )}
               <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Intern-Handbook-Revision-13-01132025.docx" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Intern Handbook</a>
             </div>
 
