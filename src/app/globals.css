@@ -2380,7 +2380,7 @@ header nav button {
 .services-columns-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.25rem;
+  gap: 1rem;
   align-items: stretch;
 }
 
@@ -2389,12 +2389,24 @@ header nav button {
   flex-direction: column;
   align-items: stretch;
   height: 100%;
-  padding: 2rem 1.35rem 1.5rem;
+  padding: 2rem 1.1rem 1.5rem;
   border-radius: 0.5rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
+}
+
+.service-column-title {
+  font-size: clamp(0.95rem, 1.05vw, 1.25rem);
+  font-family: proxima-nova, sans-serif;
+  font-weight: 800;
+  margin: 0;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .service-column:hover {
@@ -2501,6 +2513,11 @@ header nav button {
 @media (max-width: 1100px) {
   .services-columns-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .service-column-title {
+    white-space: normal;
+    font-size: 1.35rem;
   }
 }
 
@@ -2635,7 +2652,7 @@ header nav button {
 
 .service-category-expanded-services .service-nested-item [data-slot="trigger"],
 .service-category-expanded-services .service-nested-trigger {
-  background-color: #6E7470 !important;
+  background-color: #4F5552 !important;
   color: #ffffff !important;
   filter: none;
 }
@@ -2722,6 +2739,128 @@ header nav button {
   margin-bottom: 0.35rem;
   font-size: 0.98rem;
   line-height: 1.45;
+}
+
+.service-item-topics--two-col ul {
+  columns: 2;
+  column-gap: 2.5rem;
+}
+
+.service-item-topics--two-col li {
+  break-inside: avoid;
+}
+
+.catalog-download-section {
+  background-color: #ffffff;
+  /* Same horizontal padding as .expanded-services-wrap so it aligns with the accordion area */
+  padding: 3.5rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.catalog-download-container {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.catalog-viewer-frame {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: min(82vh, 980px);
+  min-height: 640px;
+  margin: 0 0 1.5rem;
+  border: 1px solid #ACB2BA;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #525659;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+}
+
+.catalog-viewer-iframe {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100%;
+  border: 0;
+}
+
+.catalog-download-title {
+  font-family: proxima-nova, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #212124;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.catalog-download-line {
+  width: 72px;
+  height: 4px;
+  background-color: #9E1B32;
+  margin: 1rem auto 1.25rem;
+}
+
+.catalog-download-text {
+  font-family: proxima-nova, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: #35363B;
+  margin: 0 0 1.5rem;
+}
+
+.catalog-download-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.85rem;
+}
+
+.catalog-download-button {
+  display: inline-block;
+  background-color: #9E1B32;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 0.9rem 1.75rem;
+  font-family: proxima-nova, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.catalog-download-button:hover {
+  background-color: #821E2E;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.catalog-download-button--secondary {
+  background-color: #ffffff;
+  color: #9E1B32;
+  border: 2px solid #9E1B32;
+  box-shadow: none;
+}
+
+.catalog-download-button--secondary:hover {
+  background-color: #9E1B32;
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+@media (max-width: 700px) {
+  .service-item-topics--two-col ul {
+    columns: 1;
+  }
+
+  .catalog-download-title {
+    font-size: 1.65rem;
+  }
 }
 
 @media (max-width: 672px) {

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Accordion, AccordionItem } from '@heroui/accordion';
 import HeadingIntroBanner from '@/components/HeadingIntroBanner';
 import {
+  CATALOG_PDF_EMBED_URL,
   professionalServices,
   type ServiceItem,
 } from '@/data/professionalServices';
@@ -72,7 +73,11 @@ function ItemContent({ item }: { item: ServiceItem }) {
         <p key={`${item.id}-p-${index}`}>{paragraph}</p>
       ))}
       {item.topics && item.topics.length > 0 && (
-        <div className="service-item-topics">
+        <div
+          className={`service-item-topics${
+            item.id === 'lean-manufacturing' ? ' service-item-topics--two-col' : ''
+          }`}
+        >
           <h4>Topics of Discussion</h4>
           <ul>
             {item.topics.map((topic) => (
@@ -260,6 +265,27 @@ export default function ExpandedServicesPage() {
           ))}
         </Accordion>
       </div>
+
+      <section className="catalog-download-section" aria-label="Professional services catalog">
+        <div className="catalog-download-container">
+          <h2 className="catalog-download-title">Our Catalog</h2>
+          <div className="catalog-download-line" />
+          <div className="catalog-viewer-frame">
+            <iframe
+              src={CATALOG_PDF_EMBED_URL}
+              title="APC Professional Services Catalog 2026"
+              className="catalog-viewer-iframe"
+              width="100%"
+              height="100%"
+            />
+          </div>
+          <div className="catalog-download-actions">
+            <a href="/api/catalog/download" className="catalog-download-button">
+              Download PDF
+            </a>
+          </div>
+        </div>
+      </section>
 
       <section className="contact-section">
         <div className="contact-container">

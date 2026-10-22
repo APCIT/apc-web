@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import HeadingIntroBanner from '@/components/HeadingIntroBanner';
-import { professionalServices } from '@/data/professionalServices';
+import { CATALOG_PDF_EMBED_URL, professionalServices } from '@/data/professionalServices';
 
 const BUTTON_BG = '#9E1B32';
 const BUTTON_TEXT = '#ffffff';
@@ -22,10 +22,10 @@ export default function ServicesPage() {
         style={{
           backgroundColor: '#F2F3F4',
           width: '100%',
-          padding: '3rem 1rem 4rem',
+          padding: '3rem 0.75rem 4rem',
         }}
       >
-        <div style={{ maxWidth: '1232px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1560px', margin: '0 auto' }}>
           <h2
             style={{
               fontFamily: 'proxima-nova, sans-serif',
@@ -74,14 +74,9 @@ export default function ServicesPage() {
                     </div>
 
                     <h3
+                      className="service-column-title"
                       style={{
                         color: category.accentTextColor,
-                        fontSize: '1.45rem',
-                        fontFamily: 'proxima-nova, sans-serif',
-                        fontWeight: 800,
-                        margin: 0,
-                        textAlign: 'center',
-                        lineHeight: 1.25,
                       }}
                     >
                       {category.title}
@@ -304,6 +299,27 @@ export default function ServicesPage() {
           </div>
         </div>
       </div>
+
+      <section className="catalog-download-section" aria-label="Professional services catalog">
+        <div className="catalog-download-container">
+          <h2 className="catalog-download-title">Our Catalog</h2>
+          <div className="catalog-download-line" />
+          <div className="catalog-viewer-frame">
+            <iframe
+              src={CATALOG_PDF_EMBED_URL}
+              title="APC Professional Services Catalog 2026"
+              className="catalog-viewer-iframe"
+              width="100%"
+              height="100%"
+            />
+          </div>
+          <div className="catalog-download-actions">
+            <a href="/api/catalog/download" className="catalog-download-button">
+              Download PDF
+            </a>
+          </div>
+        </div>
+      </section>
 
       <section className="contact-section">
         <div className="contact-container">

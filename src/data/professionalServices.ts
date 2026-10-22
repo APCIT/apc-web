@@ -31,6 +31,13 @@ export type ServiceCategory = {
   items: ServiceItem[];
 };
 
+/** Public catalog PDF hosted on Azure Blob Storage */
+export const CATALOG_PDF_URL =
+  'https://apcstorage.blob.core.windows.net/staff-only-materials/FINAL_Professional_Services_Catalog_2026.pdf';
+
+/** Embed URL — hides thumbnail sidebar, fits page to viewer width */
+export const CATALOG_PDF_EMBED_URL = `${CATALOG_PDF_URL}#navpanes=0&scrollbar=1&view=FitH`;
+
 /** Matches the four TOC ribbon colors in the 2026 catalog (no brand red). */
 export const professionalServices: ServiceCategory[] = [
   {
@@ -455,8 +462,8 @@ export const professionalServices: ServiceCategory[] = [
     id: 'expanded-services',
     title: 'Expanded Services',
     icon: '/images/Icons/Technology (1).png',
-    accentColor: '#A0A4A0',
-    accentTextColor: '#212124',
+    accentColor: '#4F5552',
+    accentTextColor: '#FFFFFF',
     introText:
       'Our Services extend beyond training to provide hands-on implementation and measurable results. Our professional staff works directly alongside your team to plan, execute, and sustain improvement initiatives, ensuring defined goals are achieved before project completion. Services are often paired with training to build internal capability and drive immediate impact. We help organizations move from learning concepts to applying them effectively in real-world settings. Where appropriate, we integrate our student internship program to support implementation efforts, expanding capacity while maintaining quality and accountability.',
     columnItems: [
