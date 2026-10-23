@@ -66,7 +66,8 @@ export function formatPeriodLabel(start: Date, endExclusive: Date): string {
 
 export function formatCumulativeRangeLabel(asOf = new Date()): string {
   const sat = getLastCompletedSaturday(asOf);
-  return `each intern's start through ${sat.getMonth() + 1}/${sat.getDate()}/${sat.getFullYear()} (last Saturday)`;
+  const satLabel = `${sat.getMonth() + 1}/${sat.getDate()}/${sat.getFullYear()}`;
+  return `each intern's start through end of last completed week (Sat ${satLabel})`;
 }
 
 /** Weekday in America/Chicago: 0 = Sunday … 6 = Saturday. */

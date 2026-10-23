@@ -193,7 +193,7 @@ export default function ClientTimelogsPage() {
     }
     if (
       !confirm(
-        "Send all active clients timelogs from each intern's start through last Saturday?"
+        "Send all active clients timelogs from each intern's start through end of last completed week?"
       )
     )
       return;
@@ -293,9 +293,9 @@ export default function ClientTimelogsPage() {
         </div>
 
         <p className="font-roboto text-[14px] text-[#666] mb-4 max-w-3xl">
-          Email each client a privacy-safe timesheet (no CWID) with every entry from each
-          intern&apos;s start date through last Saturday. Auto-send runs Mondays (after
-          Saturday noon due). Add clients under{" "}
+          Email each client a timesheet with every entry from each intern&apos;s start
+          date through the end of the last completed week (Saturday). Auto-send runs
+          Mondays (after Saturday noon due). Add clients under{" "}
           <Link href="/Manage/Users" className="text-[#337ab7] hover:underline">
             Users
           </Link>{" "}
