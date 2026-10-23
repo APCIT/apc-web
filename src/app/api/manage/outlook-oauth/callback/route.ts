@@ -10,7 +10,17 @@ export async function GET(request: Request) {
   const oauthError = url.searchParams.get("error");
   const oauthErrorDesc = url.searchParams.get("error_description");
 
-  const base = process.env.NEXT_PUBLIC_APP_URL ?? `${url.protocol}//${url.host}`;
+  // Prefer public URL. On Azure App Service, request.url host is the container
+  // (e.g. abc123:8080), so fall back to x-forwarded-host / WEBSITE_HOSTNAME.
+  const forwardedHost = request.headers.get("x-forwarded-host")?.split(",")[0]?.trim();
+  const forwardedProto =
+    request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() || "https";
+  const websiteHost = process.env.WEBSITE_HOSTNAME?.trim();
+  const base =
+    process.env.NEXT_PUBLIC_APP_URL?.trim() ||
+    (forwardedHost ? `${forwardedProto}://${forwardedHost}` : null) ||
+    (websiteHost ? `https://${websiteHost}` : null) ||
+    `${url.protocol}//${url.host}`;
   const doneUrl = new URL("/Manage/OutlookMail", base);
 
   if (oauthError) {
