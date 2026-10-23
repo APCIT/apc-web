@@ -1,0 +1,46 @@
+# Monday auto-send: call production client-timelogs cron.
+# Create a separate pipeline in Azure DevOps that uses this YAML.
+# Pipeline variables (secret): CRON_SECRET
+# Optional variable: CLIENT_TIMELOGS_CRON_URL (defaults to https://apc.ua.edu/api/cron/client-timelogs)
+
+trigger: none
+pr: none
+
+schedules:
+  # Monday 13:00 UTC ≈ 8:00 AM America/Chicago (CDT)
+  - cron: "0 13 * * 1"
+    displayName: Monday 8am Central client timelogs
+    branches:
+      include:
+        - main
+    always: true
+
+pool:
+  vmImage: "ubuntu-latest"
+
+variables:
+  CLIENT_TIMELOGS_CRON_URL: "https://apc.ua.edu/api/cron/client-timelogs"
+
+steps:
+  - bash: |
+      set -euo pipefail
+      if [ -z "${CRON_SECRET:-}" ]; then
+        echo "##vso[task.logissue type=error]CRON_SECRET pipeline variable is not set"
+        exit 1
+      fi
+      echo "Calling $CLIENT_TIMELOGS_CRON_URL"
+      HTTP_CODE=$(curl -sS -o /tmp/cron-response.json -w "%{http_code}" \
+        -H "Authorization: Bearer ${CRON_SECRET}" \
+        -H "Accept: application/json" \
+        "$CLIENT_TIMELOGS_CRON_URL")
+      echo "HTTP $HTTP_CODE"
+      cat /tmp/cron-response.json
+      echo
+      if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+        echo "##vso[task.logissue type=error]Cron endpoint returned HTTP $HTTP_CODE"
+        exit 1
+      fi
+    displayName: "POST/GET client timelogs cron"
+    env:
+      CRON_SECRET: $(CRON_SECRET)
+      CLIENT_TIMELOGS_CRON_URL: $(CLIENT_TIMELOGS_CRON_URL)
