@@ -329,6 +329,7 @@ export default function ManagePage() {
             <AccordionItem key="7" aria-label="Payroll" title="Payroll" HeadingComponent="div">
               <div className="flex flex-col gap-3">
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/2026_APC_Internship_Calendar.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">2026 Payroll Calendar</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/2027%20APC%20Internship%20Calendar.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">2027 Payroll Calendar</a>
               </div>
             </AccordionItem>
 
@@ -365,7 +366,7 @@ export default function ManagePage() {
                 <h5 className="text-[15px] font-semibold mt-2 mb-1 text-[#333333]">Proposals</h5>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Internship-Proposal-Rev-18-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Proposal for Internship Program</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Professional-Services-Proposal-Rev-11-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Proposal for Professional Services</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Proposal-Calculator-1.15.2026.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Proposal Calculator</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/APC%20Internship%20Calculator%20%202027%20v.10.21.2026.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Proposal Calculator</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Staff Materials</h5>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Service%20Log%20Instructions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Service Log Instructions</a>
@@ -381,9 +382,9 @@ export default function ManagePage() {
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Non-UA_Onboarding_Checklist_for_Interns_Revision_3_072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Non-UA Onboarding Checklist for Interns</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/UA_Student_Intern_Hiring_Process_for_Staff_Revision_2_072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">UA Student Intern Hiring Process for Staff</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Combined_Confidentiality_and_Handbook_Signature_Pages_05272025.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Combined Confidentiality & Handbook Signature Pages</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Letter-of-Intent-for-Non-UA-students-Revision-11-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Letter of Intent for Non-UA Students</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Offer-Letter-for-UA-Student-Revision-21.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Offer Letter for UA Students</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Return-Student-Offer-Letter-Revision-5-2212024.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Return Student Offer Letter</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Internship%20Commitment%20Letter%20-%20Non-UA-Student%20Revision-12%2010142026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Commitment Letter - Non-UA Student</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Internship%20Commitment%20Letter%20-%20UA%20Student-Revision-22%2010142026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Commitment Letter - UA Student</a>
+                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Internship%20Commitment%20Letter%20-%20Return%20Student%20Revision-6%2010142026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Commitment Letter - Return Student</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Handbook-Compliance-Highlights-Revision-3-0825223.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Handbook Compliance Document</a>
                 <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Interview Questionnaire Revision 10 04172026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Questionnaire</a>
               </div>

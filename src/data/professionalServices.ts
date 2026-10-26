@@ -33,7 +33,7 @@ export type ServiceCategory = {
 
 /** Public catalog PDF hosted on Azure Blob Storage */
 export const CATALOG_PDF_URL =
-  'https://apcstorage.blob.core.windows.net/staff-only-materials/FINAL_Professional_Services_Catalog_2026.pdf';
+  'https://apcstorage.blob.core.windows.net/staff-only-materials/APC%20Professional%20Services%20Catalog%202026.pdf';
 
 /** Embed URL — hides thumbnail sidebar, fits page to viewer width */
 export const CATALOG_PDF_EMBED_URL = `${CATALOG_PDF_URL}#navpanes=0&scrollbar=1&view=FitH`;

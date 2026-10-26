@@ -224,6 +224,52 @@ function formatPhone(phone: string | null): string | undefined {
   return phone.trim() || undefined;
 }
 
+/** Digits only (for clipboard / APIs). */
+function phoneDigits(phone: string | null | undefined): string {
+  return (phone ?? "").replace(/\D/g, "");
+}
+
+/** Copy button that puts digits-only on the clipboard. */
+function CopyPhoneDigitsButton({ phone }: { phone: string | null | undefined }) {
+  const [copied, setCopied] = useState(false);
+  const digits = phoneDigits(phone);
+  if (!digits) return null;
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(digits);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // Clipboard may be unavailable; leave UI unchanged.
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      className="inline-flex items-center px-2 py-0.5 border border-[#ccc] rounded-[6px] text-[12px] leading-tight text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] cursor-pointer select-none shrink-0"
+      aria-label={`Copy phone as ${digits}`}
+    >
+      {copied ? "Copied" : "Copy"}
+    </button>
+  );
+}
+
+/** Formatted phone with a copy button that puts digits-only on the clipboard. */
+function PhoneWithCopy({ phone }: { phone: string | null | undefined }) {
+  const formatted = formatPhone(phone ?? null);
+  if (!formatted) return null;
+
+  return (
+    <span className="inline-flex items-center gap-2">
+      <span>{formatted}</span>
+      <CopyPhoneDigitsButton phone={phone} />
+    </span>
+  );
+}
+
 /** DOB as "Month Day" (e.g. January 1). */
 function formatDob(dob: string | null): string | undefined {
   if (!dob) return undefined;
@@ -332,7 +378,11 @@ function EmergencyContent({ intern }: { intern: InternDetailItem }): React.React
     <span className="block font-roboto text-[14px] text-[#666]">
       {name && <span className="block">{name}</span>}
       {rel && <span className="block">{rel}</span>}
-      {phone && <span className="block">{formatPhone(phone)}</span>}
+      {phone && (
+        <span className="block">
+          <PhoneWithCopy phone={phone} />
+        </span>
+      )}
     </span>
   );
 }
@@ -1199,7 +1249,7 @@ export default function InternDetailsPage() {
                         />
                         <TableRow
                           label="Phone"
-                          value={intern ? formatPhone(intern.phone) : undefined}
+                          value={intern ? <PhoneWithCopy phone={intern.phone} /> : undefined}
                           skeleton={showSkeleton}
                         />
                         <TableRow
@@ -1431,13 +1481,16 @@ export default function InternDetailsPage() {
                                   className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
                                 />
                                 <label htmlFor="intern-mentor-phone" className="font-roboto text-[14px] text-[#666]">Phone:</label>
-                                <input
-                                  id="intern-mentor-phone"
-                                  type="text"
-                                  value={empMentorPhone}
-                                  onChange={(e) => setEmpMentorPhone(e.target.value)}
-                                  className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
-                                />
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    id="intern-mentor-phone"
+                                    type="text"
+                                    value={empMentorPhone}
+                                    onChange={(e) => setEmpMentorPhone(e.target.value)}
+                                    className="w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]"
+                                  />
+                                  <CopyPhoneDigitsButton phone={empMentorPhone} />
+                                </div>
                                 <label htmlFor="intern-mentor-email" className="font-roboto text-[14px] text-[#666]">Email:</label>
                                 <input
                                   id="intern-mentor-email"

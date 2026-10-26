@@ -15,7 +15,7 @@ export async function GET() {
     headers.set('Content-Type', 'application/pdf');
     headers.set(
       'Content-Disposition',
-      'attachment; filename="FINAL_Professional_Services_Catalog_2026.pdf"'
+      'attachment; filename="APC Professional Services Catalog 2026.pdf"'
     );
     const length = response.headers.get('Content-Length');
     if (length) headers.set('Content-Length', length);
