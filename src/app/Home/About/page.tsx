@@ -918,6 +918,41 @@ export default function AboutPage() {
               </h4>
             </div>
           </div>
+
+          {/* Sixth Row */}
+          <div className="board-row" style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-evenly',
+            gap: '1em',
+            width: '100%',
+            marginBottom: '3em'
+          }}>
+            {/* Kevin Taylor */}
+            <div className="staff-member" style={{flex: '0 0 auto'}}>
+              <div className="headshot-container">
+                <div className="image-cropper">
+                  <img 
+                    className="staff-photo" 
+                    src="/images/Board Headshots/Kevin Photo 2026 revised.jpg" 
+                    alt="Kevin Taylor"
+                    style={{width: '113%', height: '113%', marginLeft: '-15px'}}
+                  />
+                </div>
+              </div>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+                Kevin Taylor
+              </h3>
+              <a href="https://www.aidt.edu" target="_blank" rel="noopener noreferrer">
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                  AIDT
+                </h4>
+              </a>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
+                Executive Director
+              </h4>
+            </div>
+          </div>
         </div>
       </div>
 
