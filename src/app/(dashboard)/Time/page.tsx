@@ -22,11 +22,26 @@ import {
 
 const selectClass =
   "px-2 py-1 border border-[#999] rounded text-[14px] font-roboto text-[#333] bg-white focus:border-[#666]";
+const mobileHourSelectClass =
+  "time-log-field time-log-hour-select px-2.5 py-2 text-[16px] text-[#212124] bg-white";
+const mobileMinuteSelectClass =
+  "time-log-field time-log-minute-select px-2 py-2 text-[16px] text-[#212124] bg-white";
+const mobileLunchSelectClass =
+  "time-log-field time-log-lunch-select px-3 py-2 text-[16px] text-[#212124] bg-white";
 const backButtonClass =
-  "inline-flex items-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
+  "inline-flex items-center justify-center px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
 
+/** Desktop / modal outline button (existing dashboard style). */
 const actionButtonClass =
-  "inline-flex items-center px-[12px] py-[6px] border border-[#900] rounded-[10px] text-[#900] bg-gray-200 hover:bg-gray-300 hover:border-[#700] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
+  "inline-flex items-center justify-center px-[12px] py-[6px] border border-[#900] rounded-[10px] text-[#900] bg-gray-200 hover:bg-gray-300 hover:border-[#700] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
+
+/** Public-site primary pill CTA. */
+const primaryPillClass =
+  "inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-full bg-[#9E1B32] text-white font-proxima text-[16px] font-semibold border-0 shadow-[0_6px_16px_rgba(0,0,0,0.22)] transition-all duration-300 hover:bg-[#821E2E] hover:shadow-[0_10px_24px_rgba(0,0,0,0.28)] hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-[#9E1B32]";
+
+/** Public-site secondary outline pill. */
+const secondaryPillClass =
+  "inline-flex items-center justify-center min-h-[44px] px-4 py-2.5 rounded-full bg-white text-[#9E1B32] font-proxima text-[14px] font-semibold border-2 border-[#9E1B32] transition-all duration-300 hover:bg-[#9E1B32] hover:text-white";
 
 const detailsInputClass =
   "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
@@ -382,29 +397,75 @@ function TimePageContent() {
       ? `${weekStartDateForRange.toLocaleDateString("en-US", { month: "long" })} ${weekStartDateForRange.getDate()} – ${weekEndDateForRange.toLocaleDateString("en-US", { month: "long" })} ${weekEndDateForRange.getDate()}`
       : "—";
 
+  const renderTimeSelects = (row: RowState, index: number, which: "start" | "end") => {
+    const hourKey = which === "start" ? "startHour" : "endHour";
+    const minuteKey = which === "start" ? "startMinute" : "endMinute";
+    const hours = which === "start" ? START_HOUR_OPTIONS : END_HOUR_OPTIONS;
+    return (
+      <div className="time-log-time-row">
+        <select
+          className={mobileHourSelectClass}
+          value={row[hourKey]}
+          onChange={(e) => setRow(index, (r) => ({ ...r, [hourKey]: e.target.value }))}
+          aria-label={`${which === "start" ? "Start" : "End"} hour ${row.date}`}
+        >
+          {hours.map((o) => (
+            <option key={o.value || "blank"} value={o.value}>
+              {o.label || "Hour"}
+            </option>
+          ))}
+        </select>
+        <span className="time-log-time-colon" aria-hidden>
+          :
+        </span>
+        <select
+          className={mobileMinuteSelectClass}
+          value={row[minuteKey]}
+          onChange={(e) => setRow(index, (r) => ({ ...r, [minuteKey]: e.target.value }))}
+          aria-label={`${which === "start" ? "Start" : "End"} minute ${row.date}`}
+        >
+          {MINUTE_OPTIONS.map((o) => (
+            <option key={o.value || "blank"} value={o.value}>
+              {o.label || "Min"}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  };
+
   return (
-    <div className="w-full bg-white min-h-screen">
-      <div className="py-8 px-[100px]">
-        <div className="text-center" style={{ marginBottom: "4px" }}>
-          <h2 className="font-roboto mx-auto leading-none" style={{ fontSize: "30px", fontWeight: "normal", color: "#000000", marginBottom: "6px" }}>
-            This Week
-          </h2>
+    <div className="time-log-page w-full">
+      <div className="time-log-page-inner">
+        <div className="time-log-header">
+          <h2 className="time-log-title m-0">This Week</h2>
+          <div className="time-log-title-line" aria-hidden />
           {loading ? (
-            <div
-              className="mx-auto h-5 w-[180px] rounded"
-              style={{ ...skeletonStyle, marginTop: "2px" }}
-              aria-hidden
-            />
+            <div className="mx-auto h-5 w-[180px] rounded mt-2" style={skeletonStyle} aria-hidden />
           ) : loadError && !data ? (
-            <p className="text-red-600 font-roboto text-sm" style={{ marginTop: "2px" }}>{loadError}</p>
+            <p className="text-red-600 font-proxima text-sm mt-2">{loadError}</p>
           ) : (
-            <p className="text-[#555555] font-roboto leading-none" style={{ fontSize: "18px", marginTop: "2px" }}>{rangeDisplay}</p>
+            <p className="time-log-range m-0 mt-2 leading-snug">{rangeDisplay}</p>
           )}
-          <p className="font-roboto mx-auto leading-none" style={{ fontSize: "36px", color: "#000000", marginTop: "2px" }}>
+          <p role="status" className="time-log-note time-log-mobile-only">
+            <span style={{ fontWeight: 600, color: "#9E1B32" }}>Note:</span> entries need a
+            description and lunch selection to save.
+          </p>
+          <p
+            className="time-log-desktop-only font-roboto mx-auto leading-none"
+            style={{ fontSize: "36px", color: "#000000", marginTop: "2px" }}
+          >
             **YOUR TIME LOGS WILL NOT SAVE WITHOUT A DESCRIPTION OR LUNCH**
           </p>
           {loadError && !data && (
-            <div style={{ marginTop: "2px" }} className="text-center">
+            <div className="mt-5 text-center time-log-mobile-only">
+              <Link href="/" className={secondaryPillClass}>
+                Go to Home
+              </Link>
+            </div>
+          )}
+          {loadError && !data && (
+            <div style={{ marginTop: "2px" }} className="text-center time-log-desktop-only">
               <Link href="/" className={backButtonClass}>
                 Go to Home
               </Link>
@@ -412,7 +473,8 @@ function TimePageContent() {
           )}
         </div>
 
-        <div className="flex items-center justify-between mb-3 font-roboto">
+        {/* Desktop actions */}
+        <div className="time-log-desktop-only time-log-desktop-actions items-center justify-between mb-4 font-roboto">
           <button
             type="button"
             onClick={handleSave}
@@ -421,226 +483,432 @@ function TimePageContent() {
           >
             {saving ? "Saving…" : "Save Changes"}
           </button>
-          <div className="flex items-center">
+          <div className="flex items-center gap-3">
+            <button type="button" onClick={onHometownOpen} className={actionButtonClass}>
+              Hometown
+            </button>
+            <button type="button" onClick={onMentorOpen} className={actionButtonClass}>
+              Mentor Info
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile actions — public pill CTAs */}
+        <div className="time-log-mobile-only time-log-mobile-actions">
+          <div className="time-log-mobile-actions-row">
             <button
               type="button"
               onClick={onHometownOpen}
-              className={actionButtonClass + " no-underline"}
+              className={secondaryPillClass + " flex-1"}
             >
               Hometown
             </button>
             <button
               type="button"
               onClick={onMentorOpen}
-              className={actionButtonClass + " no-underline"}
-              style={{ marginLeft: "12px" }}
+              className={secondaryPillClass + " flex-1"}
             >
               Mentor Info
             </button>
           </div>
         </div>
 
-        <div style={{ height: "28px" }} aria-hidden />
-
-        <div className="mb-5">
-          <div className="overflow-x-auto">
-            <table className="w-full max-w-full border-collapse font-roboto text-sm">
-            <thead>
-              <tr className="bg-[#9E1B32]">
-                <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Date</th>
-                <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Start Time</th>
-                <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">End Time</th>
-                <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Lunch</th>
-                <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">Description</th>
-                <th className="bg-[#9E1B32] border border-[#7a0000] p-[5px] text-white font-normal text-center">
-                  Clear
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                Array.from({ length: 7 }, (_, i) => (
-                  <tr key={`skeleton-${i}`} className="bg-white h-[80px]">
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                      <div className="text-[18px] font-normal mb-1" style={{ color: "#000000" }}>
-                        {DAY_NAMES[i]}
-                      </div>
-                      <div
-                        className="flex items-center justify-center gap-1 mt-1"
-                        style={{ minHeight: "20px" }}
-                        aria-hidden
-                      >
-                        <div
+        {/* Mobile: day cards */}
+        <div className="time-log-mobile-only time-log-day-list">
+          {loading
+            ? Array.from({ length: 7 }, (_, i) => (
+                <div key={`mobile-skel-${i}`} className="time-log-day-card" aria-hidden>
+                  <div className="time-log-day-accent" />
+                  <div className="time-log-day-body">
+                    <div className="time-log-day-top">
+                      <div>
+                        <h3
+                          className="m-0 leading-tight"
                           style={{
-                            ...skeletonStyle,
-                            width: "28px",
-                            height: "14px",
+                            fontFamily: "proxima-nova, sans-serif",
+                            fontSize: 20,
+                            fontWeight: 700,
+                            color: "#212124",
                           }}
-                        />
-                        <span className="text-transparent select-none" style={{ fontSize: "12px" }}>/</span>
+                        >
+                          {DAY_NAMES[i]}
+                        </h3>
                         <div
-                          style={{
-                            ...skeletonStyle,
-                            width: "28px",
-                            height: "14px",
-                          }}
+                          style={{ ...skeletonStyle, width: 52, height: 16, marginTop: 8 }}
                         />
                       </div>
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                      <div className="flex items-center justify-center gap-1">
-                        <div className="h-[34px] w-[80px] rounded" style={skeletonStyle} aria-hidden />
-                        <div className="h-[34px] w-[70px] rounded" style={skeletonStyle} aria-hidden />
+                      <div style={{ ...skeletonStyle, width: 68, height: 36, borderRadius: 999 }} />
+                    </div>
+                    <div className="time-log-day-fields">
+                      <div className="time-log-time-lunch-grid">
+                        <div>
+                          <div
+                            style={{ ...skeletonStyle, width: 72, height: 14, marginBottom: 10 }}
+                          />
+                          <div style={{ display: "flex", gap: 8 }}>
+                            <div style={{ ...skeletonStyle, width: 92, height: 44 }} />
+                            <div style={{ ...skeletonStyle, width: 68, height: 44 }} />
+                          </div>
+                        </div>
+                        <div>
+                          <div
+                            style={{ ...skeletonStyle, width: 48, height: 14, marginBottom: 10 }}
+                          />
+                          <div style={{ ...skeletonStyle, width: 124, height: 44 }} />
+                        </div>
+                        <div>
+                          <div
+                            style={{ ...skeletonStyle, width: 64, height: 14, marginBottom: 10 }}
+                          />
+                          <div style={{ display: "flex", gap: 8 }}>
+                            <div style={{ ...skeletonStyle, width: 92, height: 44 }} />
+                            <div style={{ ...skeletonStyle, width: 68, height: 44 }} />
+                          </div>
+                        </div>
                       </div>
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                      <div className="flex items-center justify-center gap-1">
-                        <div className="h-[34px] w-[80px] rounded" style={skeletonStyle} aria-hidden />
-                        <div className="h-[34px] w-[70px] rounded" style={skeletonStyle} aria-hidden />
+                      <div>
+                        <div
+                          style={{ ...skeletonStyle, width: 88, height: 14, marginBottom: 10 }}
+                        />
+                        <div style={{ ...skeletonStyle, width: "100%", height: 120 }} />
                       </div>
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                      <div className="h-[34px] w-[140px] rounded mx-auto" style={skeletonStyle} aria-hidden />
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] align-middle text-center">
-                      <div className="h-[60px] w-[280px] rounded mx-auto" style={skeletonStyle} aria-hidden />
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                      <div className="h-6 w-6 rounded mx-auto" style={skeletonStyle} aria-hidden />
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                rows.map((row, index) => (
-                  <tr key={row.date} className="bg-white hover:bg-[#f5f5f5] h-[80px]">
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                      <div className="text-[18px] font-normal mb-1" style={{ color: "#000000" }}>
-                        {getDayName(row.date)}
-                      </div>
-                      <div className="text-[#555555] text-xs">{formatDateDisplay(row.date).split(" ")[1]}</div>
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                      <div className="flex items-center justify-center gap-1">
-                        <select
-                          className={selectClass + " max-w-[80px]"}
-                          value={row.startHour}
-                          onChange={(e) => setRow(index, (r) => ({ ...r, startHour: e.target.value }))}
-                          aria-label={`Start hour ${row.date}`}
+                    </div>
+                  </div>
+                </div>
+              ))
+            : rows.map((row, index) => (
+                <article key={row.date} className="time-log-day-card">
+                  <div className="time-log-day-accent" aria-hidden />
+                  <div className="time-log-day-body">
+                    <div className="time-log-day-top">
+                      <div>
+                        <h3
+                          className="m-0 leading-tight"
+                          style={{
+                            fontFamily: "proxima-nova, sans-serif",
+                            fontSize: 20,
+                            fontWeight: 700,
+                            color: "#212124",
+                          }}
                         >
-                          {START_HOUR_OPTIONS.map((o) => (
-                            <option key={o.value || "blank"} value={o.value}>
-                              {o.label || "Hour"}
-                            </option>
-                          ))}
-                        </select>
-                        <span style={{ color: "#000000" }}>:</span>
-                        <select
-                          className={selectClass + " max-w-[70px]"}
-                          value={row.startMinute}
-                          onChange={(e) => setRow(index, (r) => ({ ...r, startMinute: e.target.value }))}
-                          aria-label={`Start minute ${row.date}`}
+                          {getDayName(row.date)}
+                        </h3>
+                        <p
+                          className="m-0"
+                          style={{
+                            fontFamily: "proxima-nova, sans-serif",
+                            fontSize: 18,
+                            fontWeight: 600,
+                            color: "#35363B",
+                            marginTop: 6,
+                          }}
                         >
-                          {MINUTE_OPTIONS.map((o) => (
-                            <option key={o.value || "blank"} value={o.value}>
-                              {o.label || "Min"}
-                            </option>
-                          ))}
-                        </select>
+                          {formatDateDisplay(row.date).split(" ")[1]}
+                        </p>
                       </div>
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                      <div className="flex items-center justify-center gap-1">
-                        <select
-                          className={selectClass + " max-w-[80px]"}
-                          value={row.endHour}
-                          onChange={(e) => setRow(index, (r) => ({ ...r, endHour: e.target.value }))}
-                          aria-label={`End hour ${row.date}`}
-                        >
-                          {END_HOUR_OPTIONS.map((o) => (
-                            <option key={o.value || "blank"} value={o.value}>
-                              {o.label || "Hour"}
-                            </option>
-                          ))}
-                        </select>
-                        <span style={{ color: "#000000" }}>:</span>
-                        <select
-                          className={selectClass + " max-w-[70px]"}
-                          value={row.endMinute}
-                          onChange={(e) => setRow(index, (r) => ({ ...r, endMinute: e.target.value }))}
-                          aria-label={`End minute ${row.date}`}
-                        >
-                          {MINUTE_OPTIONS.map((o) => (
-                            <option key={o.value || "blank"} value={o.value}>
-                              {o.label || "Min"}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                      <select
-                        className={selectClass + " w-[140px] max-w-[280px]"}
-                        value={row.lunch}
-                        onChange={(e) => setRow(index, (r) => ({ ...r, lunch: e.target.value }))}
-                        aria-label={`Lunch ${row.date}`}
-                      >
-                        {LUNCH_OPTIONS.map((o) => (
-                          <option key={o.value} value={o.value}>
-                            {o.label}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] align-middle text-center">
-                      <textarea
-                        className="w-[280px] max-w-[280px] px-2 py-1 border border-[#999] rounded text-[#333] text-sm bg-white resize overflow-auto mx-auto block font-roboto"
-                        rows={3}
-                        cols={40}
-                        value={row.description}
-                        onChange={(e) => setRow(index, (r) => ({ ...r, description: e.target.value }))}
-                        aria-label={`Description ${row.date}`}
-                      />
-                    </td>
-                    <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
                       <button
                         type="button"
-                        className="px-[5px] py-[1px] text-[12px] leading-[1.5] rounded-[3px] text-[#333] bg-white border border-[#ccc] hover:bg-[#e6e6e6]"
+                        className="time-log-clear-btn"
                         onClick={() => clearRow(index)}
                         aria-label={`Clear ${row.date}`}
                       >
-                        ×
+                        Clear
                       </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                    </div>
+
+                    <div className="time-log-day-fields">
+                      <div className="time-log-time-lunch-grid">
+                        <div>
+                          <label className="time-log-field-block-label">Start Time</label>
+                          {renderTimeSelects(row, index, "start")}
+                        </div>
+                        <div>
+                          <label
+                            htmlFor={`lunch-mobile-${row.date}`}
+                            className="time-log-field-block-label"
+                          >
+                            Lunch
+                          </label>
+                          <select
+                            id={`lunch-mobile-${row.date}`}
+                            className={mobileLunchSelectClass}
+                            value={row.lunch}
+                            onChange={(e) =>
+                              setRow(index, (r) => ({ ...r, lunch: e.target.value }))
+                            }
+                          >
+                            {LUNCH_OPTIONS.map((o) => (
+                              <option key={o.value} value={o.value}>
+                                {o.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="time-log-field-block-label">End Time</label>
+                          {renderTimeSelects(row, index, "end")}
+                        </div>
+                      </div>
+                      <div>
+                        <label
+                          htmlFor={`desc-mobile-${row.date}`}
+                          className="time-log-field-block-label"
+                        >
+                          Description
+                        </label>
+                        <textarea
+                          id={`desc-mobile-${row.date}`}
+                          className="time-log-field time-log-desc-area"
+                          rows={4}
+                          value={row.description}
+                          onChange={(e) =>
+                            setRow(index, (r) => ({ ...r, description: e.target.value }))
+                          }
+                          placeholder="What did you work on?"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+        </div>
+
+        {/* Mobile sticky save — always reachable */}
+        <div className="time-log-sticky-bar">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving || loading}
+            className={primaryPillClass + " w-full"}
+          >
+            {saving ? "Saving…" : "Save Changes"}
+          </button>
+        </div>
+
+        {/* Desktop: table */}
+        <div className="time-log-desktop-only mb-5">
+          <div className="overflow-x-auto">
+            <table className="w-full max-w-full border-collapse font-roboto text-sm">
+              <thead>
+                <tr className="bg-[#9E1B32]">
+                  <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">
+                    Date
+                  </th>
+                  <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">
+                    Start Time
+                  </th>
+                  <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">
+                    End Time
+                  </th>
+                  <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">
+                    Lunch
+                  </th>
+                  <th className="border border-[#7a0000] p-[5px] text-white font-normal text-center">
+                    Description
+                  </th>
+                  <th className="bg-[#9E1B32] border border-[#7a0000] p-[5px] text-white font-normal text-center">
+                    Clear
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading
+                  ? Array.from({ length: 7 }, (_, i) => (
+                      <tr key={`skeleton-${i}`} className="bg-white h-[80px]">
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <div className="text-[18px] font-normal mb-1 text-black">{DAY_NAMES[i]}</div>
+                          <div
+                            className="flex items-center justify-center gap-1 mt-1"
+                            style={{ minHeight: "20px" }}
+                            aria-hidden
+                          >
+                            <div style={{ ...skeletonStyle, width: "28px", height: "14px" }} />
+                            <span className="text-transparent select-none text-xs">/</span>
+                            <div style={{ ...skeletonStyle, width: "28px", height: "14px" }} />
+                          </div>
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <div className="flex items-center justify-center gap-1">
+                            <div style={{ ...skeletonStyle, width: 80, height: 34 }} aria-hidden />
+                            <div style={{ ...skeletonStyle, width: 70, height: 34 }} aria-hidden />
+                          </div>
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <div className="flex items-center justify-center gap-1">
+                            <div style={{ ...skeletonStyle, width: 80, height: 34 }} aria-hidden />
+                            <div style={{ ...skeletonStyle, width: 70, height: 34 }} aria-hidden />
+                          </div>
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <div style={{ ...skeletonStyle, width: 140, height: 34, margin: "0 auto" }} aria-hidden />
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] align-middle text-center">
+                          <div style={{ ...skeletonStyle, width: 280, height: 60, margin: "0 auto" }} aria-hidden />
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <div style={{ ...skeletonStyle, width: 24, height: 24, margin: "0 auto" }} aria-hidden />
+                        </td>
+                      </tr>
+                    ))
+                  : rows.map((row, index) => (
+                      <tr key={row.date} className="bg-white hover:bg-[#f5f5f5] h-[80px]">
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <div className="text-[18px] font-normal mb-1 text-black">
+                            {getDayName(row.date)}
+                          </div>
+                          <div className="text-[#555555] text-xs">
+                            {formatDateDisplay(row.date).split(" ")[1]}
+                          </div>
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <div className="flex items-center justify-center gap-1">
+                            <select
+                              className={selectClass + " max-w-[80px]"}
+                              value={row.startHour}
+                              onChange={(e) =>
+                                setRow(index, (r) => ({ ...r, startHour: e.target.value }))
+                              }
+                              aria-label={`Start hour ${row.date}`}
+                            >
+                              {START_HOUR_OPTIONS.map((o) => (
+                                <option key={o.value || "blank"} value={o.value}>
+                                  {o.label || "Hour"}
+                                </option>
+                              ))}
+                            </select>
+                            <span style={{ color: "#000000" }}>:</span>
+                            <select
+                              className={selectClass + " max-w-[70px]"}
+                              value={row.startMinute}
+                              onChange={(e) =>
+                                setRow(index, (r) => ({ ...r, startMinute: e.target.value }))
+                              }
+                              aria-label={`Start minute ${row.date}`}
+                            >
+                              {MINUTE_OPTIONS.map((o) => (
+                                <option key={o.value || "blank"} value={o.value}>
+                                  {o.label || "Min"}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <div className="flex items-center justify-center gap-1">
+                            <select
+                              className={selectClass + " max-w-[80px]"}
+                              value={row.endHour}
+                              onChange={(e) =>
+                                setRow(index, (r) => ({ ...r, endHour: e.target.value }))
+                              }
+                              aria-label={`End hour ${row.date}`}
+                            >
+                              {END_HOUR_OPTIONS.map((o) => (
+                                <option key={o.value || "blank"} value={o.value}>
+                                  {o.label || "Hour"}
+                                </option>
+                              ))}
+                            </select>
+                            <span style={{ color: "#000000" }}>:</span>
+                            <select
+                              className={selectClass + " max-w-[70px]"}
+                              value={row.endMinute}
+                              onChange={(e) =>
+                                setRow(index, (r) => ({ ...r, endMinute: e.target.value }))
+                              }
+                              aria-label={`End minute ${row.date}`}
+                            >
+                              {MINUTE_OPTIONS.map((o) => (
+                                <option key={o.value || "blank"} value={o.value}>
+                                  {o.label || "Min"}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <select
+                            className={selectClass + " w-[140px] max-w-[280px]"}
+                            value={row.lunch}
+                            onChange={(e) =>
+                              setRow(index, (r) => ({ ...r, lunch: e.target.value }))
+                            }
+                            aria-label={`Lunch ${row.date}`}
+                          >
+                            {LUNCH_OPTIONS.map((o) => (
+                              <option key={o.value} value={o.value}>
+                                {o.label}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] align-middle text-center">
+                          <textarea
+                            className="w-[280px] max-w-[280px] px-2 py-1 border border-[#999] rounded text-[#333] text-sm bg-white resize overflow-auto mx-auto block font-roboto"
+                            rows={3}
+                            cols={40}
+                            value={row.description}
+                            onChange={(e) =>
+                              setRow(index, (r) => ({ ...r, description: e.target.value }))
+                            }
+                            aria-label={`Description ${row.date}`}
+                          />
+                        </td>
+                        <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
+                          <button
+                            type="button"
+                            className="px-[5px] py-[1px] text-[12px] leading-[1.5] rounded-[3px] text-[#333] bg-white border border-[#ccc] hover:bg-[#e6e6e6]"
+                            onClick={() => clearRow(index)}
+                            aria-label={`Clear ${row.date}`}
+                          >
+                            ×
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div style={{ height: "28px" }} aria-hidden />
-
-        <div className="flex items-center justify-between gap-4 flex-wrap font-roboto">
-          <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center justify-between gap-3 flex-wrap mt-2 mb-2">
+          <div className="flex items-center gap-3 flex-wrap w-full">
             {currentWeek && prevWeekStr && (
-              <button
-                type="button"
-                onClick={() => changeWeek(prevWeekStr)}
-                className={backButtonClass + " no-underline"}
-              >
-                &laquo;&laquo; Prev Week
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => changeWeek(prevWeekStr)}
+                  className={secondaryPillClass + " time-log-mobile-only w-full"}
+                >
+                  ← Prev Week
+                </button>
+                <button
+                  type="button"
+                  onClick={() => changeWeek(prevWeekStr)}
+                  className={backButtonClass + " time-log-desktop-only no-underline"}
+                >
+                  &laquo;&laquo; Prev Week
+                </button>
+              </>
             )}
           </div>
           {nextWeek && nextWeekStr && (
-            <button
-              type="button"
-              onClick={() => changeWeek(nextWeekStr)}
-              className={backButtonClass + " no-underline"}
-            >
-              Next Week &raquo;&raquo;
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={() => changeWeek(nextWeekStr)}
+                className={secondaryPillClass + " time-log-mobile-only w-full"}
+              >
+                Next Week →
+              </button>
+              <button
+                type="button"
+                onClick={() => changeWeek(nextWeekStr)}
+                className={backButtonClass + " time-log-desktop-only no-underline"}
+              >
+                Next Week &raquo;&raquo;
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -691,12 +959,29 @@ function TimePageContent() {
         </ModalContent>
       </Modal>
 
-      <Modal isOpen={saveModalDisclosure.isOpen} onOpenChange={saveModalDisclosure.onOpenChange} hideCloseButton>
-        <ModalContent className="max-w-[380px] w-full">
-          <ModalBody className="flex flex-col items-center justify-center gap-4 py-8 font-roboto">
+      <Modal
+        isOpen={saveModalDisclosure.isOpen}
+        onOpenChange={(open) => {
+          saveModalDisclosure.onOpenChange(open);
+          if (!open) {
+            setSaving(false);
+            setSaveError(null);
+            setSuccessMessage(false);
+            setSavedHours(null);
+          }
+        }}
+        hideCloseButton
+      >
+        <ModalContent className="max-w-[380px] w-[calc(100%-2rem)] mx-auto">
+          <ModalBody
+            className="flex flex-col items-center justify-center gap-4 py-8"
+            style={{ fontFamily: "Roboto, sans-serif", color: "#000000" }}
+          >
             {saving ? (
               <div className="flex flex-col items-center gap-4" style={{ minHeight: 120 }}>
-                <p className="text-[#000000] text-center font-normal" style={{ fontSize: "18px" }}>Saving Timesheet...</p>
+                <p style={{ fontSize: 18, color: "#000000", textAlign: "center", margin: 0 }}>
+                  Saving Timesheet...
+                </p>
                 <div
                   aria-hidden
                   style={{
@@ -726,7 +1011,12 @@ function TimePageContent() {
               </div>
             ) : saveError ? (
               <>
-                <p className="text-center text-red-600 text-sm" role="alert">{saveError}</p>
+                <p
+                  role="alert"
+                  style={{ color: "#b91c1c", fontSize: 15, textAlign: "center", margin: 0, lineHeight: 1.4 }}
+                >
+                  {saveError}
+                </p>
                 <button
                   type="button"
                   onClick={saveModalDisclosure.onClose}
@@ -735,13 +1025,27 @@ function TimePageContent() {
                   Close
                 </button>
               </>
-            ) : successMessage ? (
+            ) : (
               <>
-                <p className="text-[#000000] font-bold text-center" style={{ fontSize: "22px" }}>Timesheet saved!</p>
+                <p style={{ fontSize: 22, fontWeight: 700, color: "#000000", textAlign: "center", margin: 0 }}>
+                  Timesheet saved!
+                </p>
                 {savedHours != null && (
-                  <p className="text-[#000000] text-center font-normal flex flex-wrap items-baseline justify-center gap-x-1.5 gap-y-1" style={{ fontSize: "18px" }}>
+                  <p
+                    style={{
+                      fontSize: 18,
+                      color: "#000000",
+                      textAlign: "center",
+                      margin: 0,
+                      display: "flex",
+                      flexWrap: "wrap",
+                      alignItems: "baseline",
+                      justifyContent: "center",
+                      gap: "0.35rem 0.4rem",
+                    }}
+                  >
                     <span>You have logged</span>
-                    <span className="font-bold" style={{ fontSize: "42px" }}>{savedHours}</span>
+                    <span style={{ fontWeight: 700, fontSize: 42 }}>{savedHours}</span>
                     <span>hours this week!</span>
                   </p>
                 )}
@@ -753,7 +1057,7 @@ function TimePageContent() {
                   Close
                 </button>
               </>
-            ) : null}
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -855,8 +1159,8 @@ export default function TimePage() {
   return (
     <Suspense
       fallback={
-        <div className="w-full bg-white min-h-screen py-8 px-[100px] text-center text-[#555] font-roboto">
-          Loading…
+        <div className="time-log-page w-full">
+          <div className="time-log-page-inner text-center text-[#55565a]">Loading…</div>
         </div>
       }
     >

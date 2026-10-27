@@ -116,6 +116,9 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
   const [isSuccessStoriesOpen, setIsSuccessStoriesOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<"main" | "account">("main");
+  const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false);
+  const [isMobileSuccessStoriesOpen, setIsMobileSuccessStoriesOpen] = useState(false);
   const [user, setUser] = useState<{ userName: string } | null>(initialUser ?? null);
   const [menuLinks, setMenuLinks] = useState<MenuLink[]>(() => getMenuLinksForRoles(initialRoles ?? []));
 
@@ -131,66 +134,121 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
     });
   }, [pathname]);
 
+  const resetMobileNavState = () => {
+    setMobilePanel("main");
+    setIsMobileAboutOpen(false);
+    setIsMobileSuccessStoriesOpen(false);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    resetMobileNavState();
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((open) => {
+      if (open) resetMobileNavState();
+      return !open;
+    });
+  };
+
   useEffect(() => {
     if (!isMobileMenuOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsMobileMenuOpen(false);
+      if (event.key !== "Escape") return;
+      if (mobilePanel === "account") {
+        setMobilePanel("main");
+        return;
+      }
+      closeMobileMenu();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isMobileMenuOpen, mobilePanel]);
+
+  // Lock background scroll while the mobile menu is open (iOS Safari-safe)
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const scrollY = window.scrollY;
+    const { body, documentElement } = document;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      overflow: body.style.overflow,
+      width: body.style.width,
+      htmlOverflow: documentElement.style.overflow,
+    };
+    body.classList.add("mobile-nav-locked");
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
+    documentElement.style.overflow = "hidden";
+    return () => {
+      body.classList.remove("mobile-nav-locked");
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.left = prev.left;
+      body.style.right = prev.right;
+      body.style.width = prev.width;
+      body.style.overflow = prev.overflow;
+      documentElement.style.overflow = prev.htmlOverflow;
+      window.scrollTo(0, scrollY);
+    };
   }, [isMobileMenuOpen]);
 
   const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    
-    // Close mobile menu first
-    setIsMobileMenuOpen(false);
-    
+    closeMobileMenu();
+
     // If we're on the home page, just scroll
-    if (pathname === '/') {
+    if (pathname === "/") {
       setTimeout(() => {
-        const contactSection = document.getElementById('contact');
+        const contactSection = document.getElementById("contact");
         if (contactSection) {
-          contactSection.scrollIntoView({ behavior: 'smooth' });
+          contactSection.scrollIntoView({ behavior: "smooth" });
         }
       }, 100);
     } else {
       // Navigate to home page, then scroll
-      router.push('/');
+      router.push("/");
       setTimeout(() => {
-        const contactSection = document.getElementById('contact');
+        const contactSection = document.getElementById("contact");
         if (contactSection) {
-          contactSection.scrollIntoView({ behavior: 'smooth' });
+          contactSection.scrollIntoView({ behavior: "smooth" });
         }
       }, 500);
     }
   };
 
   const handleSectionClick = (e: React.MouseEvent<HTMLElement>, href: string, sectionId: string) => {
-    if (e && typeof e.preventDefault === 'function') {
+    if (e && typeof e.preventDefault === "function") {
       e.preventDefault();
     }
-    
-    // Close mobile menu first
-    setIsMobileMenuOpen(false);
-    
-    const targetPath = href.split('#')[0];
+
+    closeMobileMenu();
+
+    const targetPath = href.split("#")[0];
     const navbarHeight = 100; // Height of the fixed navbar
     const extraPadding = 20; // Extra padding for visual clearance
-    
+
     const scrollToSection = () => {
       const section = document.getElementById(sectionId);
       if (section) {
         const elementPosition = section.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - navbarHeight - extraPadding;
-        
+
         window.scrollTo({
           top: offsetPosition,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       }
     };
-    
+
     // If we're on the target page, just scroll
     if (pathname === targetPath) {
       setTimeout(() => {
@@ -203,9 +261,6 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
         scrollToSection();
       }, 500);
     }
-  };
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -229,7 +284,7 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
         <button
           type="button"
           className="navbar-hamburger"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          onClick={toggleMobileMenu}
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-nav"
@@ -436,193 +491,210 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
           </li>
         </ul>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu — inline panels (no HeroUI portals; Safari-safe) */}
         <div
           id="mobile-nav"
-          className={`navbar-mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}
+          className={`navbar-mobile-menu ${isMobileMenuOpen ? "open" : ""}`}
           aria-hidden={!isMobileMenuOpen}
           inert={!isMobileMenuOpen ? true : undefined}
         >
-          <ul className="mobile-nav-list" style={{fontFamily: 'var(--font-sans)'}}>
-            <li><Link href="/" onClick={closeMobileMenu}>Home</Link></li>
-            <li className="mobile-dropdown">
-              <Dropdown 
-                classNames={{
-                  content: "bg-white p-0 border-0 shadow-lg min-w-[160px] overflow-hidden",
-                }}
-                onOpenChange={(open) => setIsAboutOpen(open)}
-              >
-                <DropdownTrigger>
-                  <button type="button" className="mobile-dropdown-trigger">
-                    About
-                    <CaretSvg open={isAboutOpen} />
-                  </button>
-                </DropdownTrigger>
-                <DropdownMenu 
-                  aria-label="About menu"
-                  className="p-0 bg-white"
-                  itemClasses={{
-                    base: "dropdown-item text-black data-[hover=true]:bg-transparent rounded-none px-4 py-[3px] m-0 text-center justify-center relative",
-                  }}
+          {mobilePanel === "account" && user ? (
+            <ul className="mobile-nav-list" style={{ fontFamily: "var(--font-sans)" }}>
+              <li className="mobile-account-header">
+                <button
+                  type="button"
+                  className="mobile-dropdown-trigger mobile-back-btn"
+                  onClick={() => setMobilePanel("main")}
+                  aria-label="Back to main menu"
                 >
-                  <DropdownItem 
-                    key="about-us-mobile"
-                    as={Link}
-                    href="/Home/About"
-                    onClick={closeMobileMenu}
-                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400'}}
+                  <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
                   >
-                    About Us
-                  </DropdownItem>
-                  <DropdownItem 
-                    key="staff-mobile"
-                    onClick={(e) => { handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#StaffSectionLoc", "StaffSectionLoc"); closeMobileMenu(); }}
-                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
-                  >
-                    Staff Directory
-                  </DropdownItem>
-                  <DropdownItem 
-                    key="board-mobile"
-                    onClick={(e) => { handleSectionClick(e as React.MouseEvent<HTMLElement>, "/Home/About#BoardSectionLoc", "BoardSectionLoc"); closeMobileMenu(); }}
-                    style={{fontSize: '1rem', lineHeight: '1.35', fontWeight: '400', cursor: 'pointer'}}
-                  >
-                    Board Directory
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </li>
-            <li><Link href="/Home/Internships" onClick={closeMobileMenu}>Internships</Link></li>
-            <li>
-              <Link href="/Apply" onClick={closeMobileMenu}>
-                Apply
-              </Link>
-            </li>
-            <li>
-              <Link href="/Home/Services" onClick={closeMobileMenu}>
-                Professional Services
-              </Link>
-            </li>
-            <li className="mobile-dropdown">
-              <Dropdown
-                classNames={{
-                  content: "bg-white p-0 border-0 shadow-lg min-w-[180px] overflow-hidden",
-                }}
-                onOpenChange={(open) => setIsSuccessStoriesOpen(open)}
-              >
-                <DropdownTrigger>
-                  <button type="button" className="mobile-dropdown-trigger">
-                    Success Stories
-                    <CaretSvg open={isSuccessStoriesOpen} />
-                  </button>
-                </DropdownTrigger>
-
-                <DropdownMenu
-                  aria-label="Success Stories menu"
-                  className="p-0 bg-white"
-                  itemClasses={{
-                    base: "dropdown-item text-black data-[hover=true]:bg-transparent rounded-none px-4 py-[3px] m-0 text-center justify-center relative",
-                  }}
-                >
-                  <DropdownItem
-                    key="success-stories-mobile"
-                    as={Link}
-                    href="/Home/SuccessStories"
-                    onClick={closeMobileMenu}
-                    style={{
-                      fontSize: "1rem",
-                      lineHeight: "1.35",
-                      fontWeight: "400",
-                    }}
-                  >
-                    Success Stories
-                  </DropdownItem>
-
-                  <DropdownItem
-                    key="intern-spotlights-mobile"
-                    as={Link}
-                    href="/Home/InternSpotlights"
-                    onClick={closeMobileMenu}
-                    style={{
-                      fontSize: "1rem",
-                      lineHeight: "1.35",
-                      fontWeight: "400",
-                    }}
-                  >
-                    Intern Spotlights
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </li>
-            <li><Link href="/Home/Locations" onClick={closeMobileMenu}>Locations</Link></li>
-            <li><Link href="/Home/Newsletters" onClick={closeMobileMenu}>News</Link></li>
-            <li>
-              <a
-                href="#contact"
-                onClick={(e) => { handleContactClick(e); closeMobileMenu(); }}
-              >
-                Contact
-              </a>
-            </li>
-            <li>
-              {user ? (
-                <div className="mobile-dropdown">
-                  <Dropdown
-                    placement="bottom-end"
-                    classNames={{
-                      content: "bg-white p-0 border-0 shadow-lg min-w-[180px] overflow-hidden",
-                    }}
-                    onOpenChange={(open) => setIsUserOpen(open)}
-                  >
-                    <DropdownTrigger>
-                      <button type="button" className="mobile-dropdown-trigger">
-                        {user.userName}
-                        <CaretSvg open={isUserOpen} />
-                      </button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="User menu mobile"
-                      className="p-0 bg-white"
-                      itemClasses={{
-                        base: "dropdown-item text-black data-[hover=true]:bg-transparent rounded-none px-4 py-[3px] m-0 text-center justify-center relative",
-                      }}
-                    >
-                      {[
-                        ...menuLinks.map((item) => (
-                          <DropdownItem
-                            key={`mobile-${item.key}`}
-                            as={Link}
-                            href={item.href}
-                            onClick={closeMobileMenu}
-                            style={{ fontSize: "1rem", lineHeight: "1.35", fontWeight: "400" }}
-                          >
-                            {item.label}
-                          </DropdownItem>
-                        )),
-                        <DropdownItem
-                          key="logout-mobile"
-                          style={{ fontSize: "1rem", lineHeight: "1.35", fontWeight: "400", cursor: "pointer" }}
-                          onPress={async () => {
-                            await LOGOUT_API();
-                            setUser(null);
-                            setMenuLinks([]);
-                            closeMobileMenu();
-                            router.push("/");
-                            router.refresh();
-                          }}
-                        >
-                          Log Out
-                        </DropdownItem>,
-                      ]}
-                    </DropdownMenu>
-                  </Dropdown>
+                    <path
+                      fillRule="evenodd"
+                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>Back</span>
+                </button>
+                <div className="mobile-account-heading" aria-hidden="true">
+                  {user.userName}
                 </div>
-              ) : (
-                <Link href="/Account/Login" onClick={closeMobileMenu}>
-                  Log In
+              </li>
+              {menuLinks.map((item) => (
+                <li key={`mobile-account-${item.key}`}>
+                  <Link href={item.href} onClick={closeMobileMenu}>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <button
+                  type="button"
+                  className="mobile-dropdown-trigger"
+                  onClick={async () => {
+                    await LOGOUT_API();
+                    setUser(null);
+                    setMenuLinks([]);
+                    closeMobileMenu();
+                    router.push("/");
+                    router.refresh();
+                  }}
+                >
+                  Log Out
+                </button>
+              </li>
+            </ul>
+          ) : (
+            <ul className="mobile-nav-list" style={{ fontFamily: "var(--font-sans)" }}>
+              <li>
+                <Link href="/" onClick={closeMobileMenu}>
+                  Home
                 </Link>
-              )}
-            </li>
-          </ul>
+              </li>
+              <li className="mobile-accordion">
+                <button
+                  type="button"
+                  className="mobile-dropdown-trigger"
+                  aria-expanded={isMobileAboutOpen}
+                  onClick={() => setIsMobileAboutOpen((o) => !o)}
+                >
+                  About
+                  <CaretSvg open={isMobileAboutOpen} />
+                </button>
+                {isMobileAboutOpen && (
+                  <ul className="mobile-accordion-panel">
+                    <li>
+                      <Link href="/Home/About" onClick={closeMobileMenu}>
+                        About Us
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        className="mobile-dropdown-trigger"
+                        onClick={(e) => {
+                          handleSectionClick(
+                            e as React.MouseEvent<HTMLElement>,
+                            "/Home/About#StaffSectionLoc",
+                            "StaffSectionLoc"
+                          );
+                        }}
+                      >
+                        Staff Directory
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        type="button"
+                        className="mobile-dropdown-trigger"
+                        onClick={(e) => {
+                          handleSectionClick(
+                            e as React.MouseEvent<HTMLElement>,
+                            "/Home/About#BoardSectionLoc",
+                            "BoardSectionLoc"
+                          );
+                        }}
+                      >
+                        Board Directory
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <Link href="/Home/Internships" onClick={closeMobileMenu}>
+                  Internships
+                </Link>
+              </li>
+              <li>
+                <Link href="/Apply" onClick={closeMobileMenu}>
+                  Apply
+                </Link>
+              </li>
+              <li>
+                <Link href="/Home/Services" onClick={closeMobileMenu}>
+                  Professional Services
+                </Link>
+              </li>
+              <li className="mobile-accordion">
+                <button
+                  type="button"
+                  className="mobile-dropdown-trigger"
+                  aria-expanded={isMobileSuccessStoriesOpen}
+                  onClick={() => setIsMobileSuccessStoriesOpen((o) => !o)}
+                >
+                  Success Stories
+                  <CaretSvg open={isMobileSuccessStoriesOpen} />
+                </button>
+                {isMobileSuccessStoriesOpen && (
+                  <ul className="mobile-accordion-panel">
+                    <li>
+                      <Link href="/Home/SuccessStories" onClick={closeMobileMenu}>
+                        Success Stories
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/Home/InternSpotlights" onClick={closeMobileMenu}>
+                        Intern Spotlights
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <Link href="/Home/Locations" onClick={closeMobileMenu}>
+                  Locations
+                </Link>
+              </li>
+              <li>
+                <Link href="/Home/Newsletters" onClick={closeMobileMenu}>
+                  News
+                </Link>
+              </li>
+              <li>
+                <a href="#contact" onClick={handleContactClick}>
+                  Contact
+                </a>
+              </li>
+              <li>
+                {user ? (
+                  <button
+                    type="button"
+                    className="mobile-dropdown-trigger"
+                    aria-haspopup="true"
+                    onClick={() => setMobilePanel("account")}
+                  >
+                    {user.userName}
+                    <svg
+                      aria-hidden="true"
+                      focusable="false"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  <Link href="/Account/Login" onClick={closeMobileMenu}>
+                    Log In
+                  </Link>
+                )}
+              </li>
+            </ul>
+          )}
         </div>
       </nav>
     </header>
