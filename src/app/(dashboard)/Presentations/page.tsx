@@ -325,6 +325,7 @@ export default function PresentationsPage() {
                     ref={fileInputRef}
                     type="file"
                     name="presentationFile"
+                    accept=".pptx,.ppt,.pdf,.pub"
                     className="font-roboto text-[14px]"
                     aria-label="Presentation file"
                     aria-describedby="presentation-file-status"

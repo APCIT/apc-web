@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { downloadImpactCalcBlob, uploadImpactCalcBlob } from "@/lib/azure-storage";
+import { validateUpload } from "@/lib/upload-validation";
 import { parseImpactCalculator } from "@/lib/impact-calc-parser";
 
 const STAFF_ROLES = ["admin", "IT", "staff"];
@@ -147,6 +148,15 @@ export async function POST(
       return NextResponse.json({ error: "Please select a file to upload." }, { status: 400 });
     }
 
+    const check = validateUpload({
+      kind: "impactCalc",
+      fileName,
+      sizeBytes: buffer.length,
+    });
+    if (!check.ok) {
+      return NextResponse.json({ error: check.error }, { status: 400 });
+    }
+
     const intern = await prisma.interns.findUnique({ where: { Id: id } });
     if (!intern) {
       return NextResponse.json({ error: "Intern not found" }, { status: 404 });
@@ -159,8 +169,7 @@ export async function POST(
       );
     }
 
-    const ext = fileName.includes(".") ? fileName.slice(fileName.lastIndexOf(".")) : "";
-    const blobName = `${crypto.randomUUID()}${ext}`;
+    const blobName = `${crypto.randomUUID()}${check.ext}`;
 
     const uploadTimeoutMs = 60_000;
     const uploadPromise = uploadImpactCalcBlob(blobName, buffer);

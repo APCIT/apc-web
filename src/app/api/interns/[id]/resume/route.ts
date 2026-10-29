@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { uploadResumeBlob } from "@/lib/azure-storage";
+import { validateUpload } from "@/lib/upload-validation";
 
 /** Update Resume: admin, IT, staff only (not reception). */
 const ROLES = ["admin", "IT", "staff"];
@@ -61,6 +62,15 @@ export async function POST(
       return NextResponse.json({ error: "Please select a file to upload." }, { status: 400 });
     }
 
+    const check = validateUpload({
+      kind: "resume",
+      fileName,
+      sizeBytes: buffer.length,
+    });
+    if (!check.ok) {
+      return NextResponse.json({ error: check.error }, { status: 400 });
+    }
+
     const intern = await prisma.interns.findUnique({
       where: { Id: id },
     });
@@ -75,8 +85,7 @@ export async function POST(
       );
     }
 
-    const ext = fileName.includes(".") ? fileName.slice(fileName.lastIndexOf(".")) : "";
-    const resumeId = `${crypto.randomUUID()}${ext}`;
+    const resumeId = `${crypto.randomUUID()}${check.ext}`;
 
     const uploadTimeoutMs = 60_000;
     const uploadPromise = uploadResumeBlob(resumeId, buffer);

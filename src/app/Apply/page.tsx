@@ -687,6 +687,7 @@ export default function ApplyPage() {
                   name="resume"
                   type="file"
                   required
+                  accept=".pdf,.doc,.docx"
                   aria-required="true"
                   aria-invalid={!!e.resume}
                   aria-describedby={e.resume ? "resume-error" : undefined}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { uploadResumeBlob } from "@/lib/azure-storage";
 import { getSession, hasLoggedInUser } from "@/lib/auth";
+import { validateUpload } from "@/lib/upload-validation";
 
 function getSemesterLabels(): [string, string, string] {
   const now = new Date();
@@ -97,25 +98,21 @@ export async function POST(request: Request) {
 
     const resumeFile = form.get("resume") as File | null;
     let resumeId = "404.txt";
+    let resumeValidationError: string | null = null;
+    let resumeBuffer: Buffer | null = null;
+    let resumeExt = "";
+
     if (resumeFile && resumeFile.size > 0) {
-      const ext = resumeFile.name.includes(".") ? resumeFile.name.slice(resumeFile.name.lastIndexOf(".")) : "";
-      resumeId = `${crypto.randomUUID()}${ext}`;
-
-      if (!process.env.AZURE_STORAGE_CONNECTION_STRING || process.env.AZURE_STORAGE_CONNECTION_STRING.includes("YOUR_ACCOUNT_KEY")) {
-        return NextResponse.json({ error: "Storage is not configured." }, { status: 503 });
-      }
-
-      const buffer = Buffer.from(await resumeFile.arrayBuffer());
-      try {
-        const uploadTimeout = 60_000;
-        const uploadPromise = uploadResumeBlob(resumeId, buffer);
-        const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Upload timed out")), uploadTimeout)
-        );
-        await Promise.race([uploadPromise, timeoutPromise]);
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : "Upload failed";
-        return NextResponse.json({ error: `Resume upload failed: ${msg}` }, { status: 502 });
+      const check = validateUpload({
+        kind: "resume",
+        fileName: resumeFile.name,
+        sizeBytes: resumeFile.size,
+      });
+      if (!check.ok) {
+        resumeValidationError = check.error;
+      } else {
+        resumeExt = check.ext;
+        resumeBuffer = Buffer.from(await resumeFile.arrayBuffer());
       }
     }
 
@@ -138,13 +135,31 @@ export async function POST(request: Request) {
     if (phone.length !== 10) errors.phone = "Phone must be 10 digits.";
     if (!anyLoc) errors.locations = "At least one location must be selected.";
     if (dob.getTime() === SENTINEL.getTime()) errors.dob = "A valid birthday is required.";
-    if (resumeId === "404.txt") errors.resume = "A resume file is required.";
+    if (resumeValidationError) errors.resume = resumeValidationError;
+    else if (!resumeBuffer) errors.resume = "A resume file is required.";
 
     if (Object.keys(errors).length > 0) {
       return NextResponse.json(
         { error: "Please correct the highlighted fields.", errors },
         { status: 400 }
       );
+    }
+
+    if (!process.env.AZURE_STORAGE_CONNECTION_STRING || process.env.AZURE_STORAGE_CONNECTION_STRING.includes("YOUR_ACCOUNT_KEY")) {
+      return NextResponse.json({ error: "Storage is not configured." }, { status: 503 });
+    }
+
+    resumeId = `${crypto.randomUUID()}${resumeExt}`;
+    try {
+      const uploadTimeout = 60_000;
+      const uploadPromise = uploadResumeBlob(resumeId, resumeBuffer!);
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("Upload timed out")), uploadTimeout)
+      );
+      await Promise.race([uploadPromise, timeoutPromise]);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Upload failed";
+      return NextResponse.json({ error: `Resume upload failed: ${msg}` }, { status: 502 });
     }
 
     await prisma.applicants.create({

@@ -288,6 +288,7 @@ export default function ToDoListPage() {
                         ref={impactFileInputRef}
                         type="file"
                         name="impactCalc"
+                        accept=".xlsx,.xls,.xlsm"
                         className="hidden"
                         aria-label="Upload Impact Calculator file"
                         aria-describedby="todo-impact-file-status"
@@ -391,6 +392,7 @@ export default function ToDoListPage() {
                         ref={presFileInputRef}
                         type="file"
                         name="presentation"
+                        accept=".pptx,.ppt,.pdf,.pub"
                         className="hidden"
                         aria-label="Upload Presentation or Poster file"
                         aria-describedby="todo-pres-file-status"

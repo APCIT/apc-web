@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { uploadPresentationBlob } from "@/lib/azure-storage";
+import { validateUpload } from "@/lib/upload-validation";
 
 const PRESENTATIONS_ROLES = ["IT", "admin", "staff", "advisor", "reception"];
 const IT_ONLY = ["IT"];
@@ -126,6 +127,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Please select a file to upload." }, { status: 400 });
     }
 
+    const check = validateUpload({
+      kind: "presentation",
+      fileName,
+      sizeBytes: buffer.length,
+    });
+    if (!check.ok) {
+      return NextResponse.json({ error: check.error }, { status: 400 });
+    }
+
     if (!process.env.AZURE_STORAGE_CONNECTION_STRING || process.env.AZURE_STORAGE_CONNECTION_STRING.includes("YOUR_ACCOUNT_KEY")) {
       return NextResponse.json(
         { error: "Storage is not configured. Please set AZURE_STORAGE_CONNECTION_STRING with a valid key." },
@@ -133,8 +143,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const ext = fileName.includes(".") ? fileName.slice(fileName.lastIndexOf(".")) : "";
-    const id = `${crypto.randomUUID()}${ext}`;
+    const id = `${crypto.randomUUID()}${check.ext}`;
 
     const uploadTimeoutMs = 60_000;
     const uploadPromise = uploadPresentationBlob(id, buffer);

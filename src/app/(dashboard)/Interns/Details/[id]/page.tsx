@@ -2048,6 +2048,7 @@ export default function InternDetailsPage() {
                     type="file"
                     name="impactCalc"
                     id="impactCalc"
+                    accept=".xlsx,.xls,.xlsm"
                     className="font-roboto text-[14px]"
                     aria-describedby={updateImpactCalcError ? "intern-update-impact-error" : undefined}
                     onChange={(e) =>
@@ -2108,6 +2109,7 @@ export default function InternDetailsPage() {
                     type="file"
                     name="presentation"
                     id="presentation"
+                    accept=".pptx,.ppt,.pdf,.pub"
                     className="font-roboto text-[14px]"
                     aria-describedby={updatePresentationError ? "intern-update-presentation-error" : undefined}
                     onChange={(e) =>
