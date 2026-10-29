@@ -22,7 +22,7 @@ async function requireAccess() {
   if (!ALLOWED.some((r) => roles.includes(r))) {
     return { error: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
   }
-  return { ok: true as const };
+  return { ok: true as const, userId: session.userId };
 }
 
 /** GET: redirect to Microsoft login to connect Outlook send. */
@@ -40,7 +40,7 @@ export async function GET() {
     );
   }
 
-  const state = createOauthState();
+  const state = createOauthState(access.userId);
   const res = NextResponse.redirect(buildAuthorizeUrl(state));
   res.cookies.set("outlook_oauth_state", state, {
     httpOnly: true,

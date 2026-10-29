@@ -48,31 +48,52 @@ function signState(payload: string): string {
   return `${payload}.${sig}`;
 }
 
-export function createOauthState(): string {
+/**
+ * Signed OAuth state bound to the IT/admin who started Connect.
+ * Callback must require the same user session so a hijacked completion
+ * cannot store an attacker mailbox as the org sender.
+ */
+export function createOauthState(userId: string): string {
   const payload = Buffer.from(
-    JSON.stringify({ t: Date.now(), n: Math.random().toString(36).slice(2) })
+    JSON.stringify({
+      t: Date.now(),
+      n: Math.random().toString(36).slice(2),
+      u: userId,
+    })
   ).toString("base64url");
   return signState(payload);
 }
 
-export function verifyOauthState(state: string): boolean {
+export type OauthStatePayload = {
+  userId: string;
+};
+
+/** Verify HMAC + TTL; returns the bound userId when valid. */
+export function verifyOauthState(state: string): OauthStatePayload | null {
   const i = state.lastIndexOf(".");
-  if (i <= 0) return false;
+  if (i <= 0) return null;
   const payload = state.slice(0, i);
   const sig = state.slice(i + 1);
   const expected = signState(payload).slice(payload.length + 1);
   try {
     const a = Buffer.from(sig);
     const b = Buffer.from(expected);
-    if (a.length !== b.length) return false;
-    if (!timingSafeEqual(a, b)) return false;
+    if (a.length !== b.length) return null;
+    if (!timingSafeEqual(a, b)) return null;
     const raw = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as {
       t?: number;
+      u?: string;
     };
     // 15 minutes
-    return typeof raw.t === "number" && Date.now() - raw.t < 15 * 60 * 1000;
+    if (typeof raw.t !== "number" || Date.now() - raw.t >= 15 * 60 * 1000) {
+      return null;
+    }
+    if (typeof raw.u !== "string" || !raw.u.trim()) {
+      return null;
+    }
+    return { userId: raw.u };
   } catch {
-    return false;
+    return null;
   }
 }
 
