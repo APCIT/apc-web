@@ -4,10 +4,20 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@heroui/modal";
+import {
   GET_COMPANIES_API,
   CREATE_USER_API,
   type CompanyItem,
 } from "@/lib/api";
+import TempCredentialsNotice, {
+  TempCredentialsFooter,
+} from "@/components/TempCredentialsNotice";
 
 const inputClass =
   "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
@@ -40,6 +50,10 @@ export default function CreateNewUserPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [loadingCompanies, setLoadingCompanies] = useState(true);
+  const [credentials, setCredentials] = useState<{
+    userName: string;
+    temporaryPassword: string;
+  } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -73,7 +87,10 @@ export default function CreateNewUserPage() {
     });
     setSubmitting(false);
     if (res.ok) {
-      router.push("/Manage/Users");
+      setCredentials({
+        userName: res.userName,
+        temporaryPassword: res.temporaryPassword,
+      });
       return;
     }
     setError(res.error);
@@ -250,6 +267,48 @@ export default function CreateNewUserPage() {
           </Link>
         </div>
       </div>
+
+      <Modal
+        isOpen={!!credentials}
+        onOpenChange={(open) => {
+          if (!open && credentials) {
+            router.push("/Manage/Users");
+          }
+        }}
+        hideCloseButton
+        isDismissable={false}
+      >
+        <ModalContent className="max-w-[420px] w-full">
+          <ModalHeader className="flex flex-col items-center gap-0 pb-2 border-b-0">
+            <h3 className="font-roboto font-bold text-[#000000] text-center w-full">
+              User created
+            </h3>
+            <p className="font-roboto font-normal text-[#000000] text-center mt-1" style={{ fontSize: "11px" }}>
+              *Share these with the new user. The temporary password will not be shown again.
+            </p>
+          </ModalHeader>
+          <ModalBody className="gap-4 flex flex-col items-center" style={{ paddingBottom: 24 }}>
+            {credentials && (
+              <TempCredentialsNotice
+                userName={credentials.userName}
+                temporaryPassword={credentials.temporaryPassword}
+                showActions={false}
+                onDone={() => router.push("/Manage/Users")}
+              />
+            )}
+          </ModalBody>
+          {credentials && (
+            <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>
+              <TempCredentialsFooter
+                userName={credentials.userName}
+                temporaryPassword={credentials.temporaryPassword}
+                doneLabel="Back to Users"
+                onDone={() => router.push("/Manage/Users")}
+              />
+            </ModalFooter>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

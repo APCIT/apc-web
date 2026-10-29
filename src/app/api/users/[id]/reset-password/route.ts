@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { hashIdentityV2 } from "@/lib/password-identity-v2";
+import { generateTempPassword } from "@/lib/temp-password";
 
 const USERS_ROLES = ["admin", "IT"];
 
@@ -27,7 +28,7 @@ async function requireUsersAccess(): Promise<
   return { ok: true };
 }
 
-/** POST: set user password to Alabama2025! (admin/IT only). */
+/** POST: set a new one-time temporary password (admin/IT only). */
 export async function POST(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -48,13 +49,18 @@ export async function POST(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const newPasswordHash = await hashIdentityV2("Alabama2025!");
+    const temporaryPassword = generateTempPassword();
+    const newPasswordHash = await hashIdentityV2(temporaryPassword);
     await prisma.aspNetUsers.update({
       where: { Id: id },
       data: { PasswordHash: newPasswordHash },
     });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      userName: target.UserName,
+      temporaryPassword,
+    });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

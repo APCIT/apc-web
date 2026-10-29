@@ -24,6 +24,9 @@ import {
   type ApplicantEditItem,
   type CompanyItem,
 } from "@/lib/api";
+import TempCredentialsNotice, {
+  TempCredentialsFooter,
+} from "@/components/TempCredentialsNotice";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -247,6 +250,10 @@ export default function ApplicantsDetailsPage() {
   const [promoteSemesterYear, setPromoteSemesterYear] = useState("");
   const [promoteError, setPromoteError] = useState<string | null>(null);
   const [promoteLoading, setPromoteLoading] = useState(false);
+  const [promoteCredentials, setPromoteCredentials] = useState<{
+    userName: string;
+    temporaryPassword: string;
+  } | null>(null);
 
   useEffect(() => {
     GET_ME_API()
@@ -256,6 +263,7 @@ export default function ApplicantsDetailsPage() {
 
   const onPromoteOpen = useCallback(() => {
     setPromoteError(null);
+    setPromoteCredentials(null);
     setPromoteCwid("");
     setPromoteCompanyId(0);
     setPromoteWage("7.25");
@@ -267,6 +275,12 @@ export default function ApplicantsDetailsPage() {
     });
     promoteDisclosure.onOpen();
   }, [promoteDisclosure]);
+
+  const finishPromoteWithCredentials = useCallback(() => {
+    setPromoteCredentials(null);
+    promoteDisclosure.onClose();
+    router.push("/Interns");
+  }, [promoteDisclosure, router]);
 
   const handlePromoteSubmit = useCallback(async () => {
     if (!idNum || promoteLoading) return;
@@ -299,12 +313,14 @@ export default function ApplicantsDetailsPage() {
     });
     setPromoteLoading(false);
     if (res.ok) {
-      promoteDisclosure.onClose();
-      router.push("/Interns");
+      setPromoteCredentials({
+        userName: res.userName,
+        temporaryPassword: res.temporaryPassword,
+      });
     } else {
       setPromoteError((res as { error: string }).error ?? "Failed to promote applicant");
     }
-  }, [idNum, promoteCwid, promoteWage, promoteCompanyId, promoteSemesterSeason, promoteSemesterYear, promoteLoading, promoteDisclosure]);
+  }, [idNum, promoteCwid, promoteWage, promoteCompanyId, promoteSemesterSeason, promoteSemesterYear, promoteLoading]);
 
   useEffect(() => {
     if (!id || Number.isNaN(idNum)) {
@@ -824,152 +840,188 @@ export default function ApplicantsDetailsPage() {
         isOpen={promoteDisclosure.isOpen}
         onOpenChange={(open) => {
           if (!open) {
+            if (promoteCredentials) {
+              finishPromoteWithCredentials();
+              return;
+            }
             setPromoteError(null);
             promoteDisclosure.onClose();
           }
         }}
         hideCloseButton
+        isDismissable={!promoteCredentials}
       >
         <ModalContent className="max-w-[420px] w-full">
-          <ModalHeader className="flex flex-col items-center gap-0 pb-2 border-b-0">
-            <h3 className="font-roboto font-bold text-[#000000] text-center w-full">
-              Promote {applicant ? [applicant.firstName, applicant.lastName].filter(Boolean).join(" ") : "Applicant"} to Intern
-            </h3>
-            <p id="promote-required-help" className="font-roboto font-normal text-[#000000] text-center mt-1" style={{ fontSize: "11px" }}>
-              *All fields are required and must be valid, or data will not be saved.
-            </p>
-          </ModalHeader>
-          <ModalBody className="flex flex-col items-center" style={{ paddingBottom: 24 }}>
-            <div className="flex items-center font-roboto justify-center mb-4">
-              <label htmlFor="promote-cwid" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">CWID: </label>
-              <input
-                id="promote-cwid"
-                type="text"
-                maxLength={8}
-                className={promoteInputClass}
-                style={{ marginLeft: 24 }}
-                value={promoteCwid}
-                onChange={(e) => setPromoteCwid(e.target.value.slice(0, 8))}
-                required
-                aria-required="true"
-                aria-invalid={!!promoteError && promoteCwid.trim().length !== 8}
-                aria-describedby={
-                  promoteError
-                    ? "promote-error promote-cwid-help promote-required-help"
-                    : "promote-cwid-help promote-required-help"
-                }
-              />
-            </div>
-            <p id="promote-cwid-help" className="text-[12px] font-roboto text-[#4A4C54] text-center w-full mb-4 -mt-2">
-              Exactly 8 characters.
-            </p>
-            <div className="flex items-center font-roboto justify-center mb-4">
-              <label htmlFor="promote-company" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Company: </label>
-              <select
-                id="promote-company"
-                className={promoteInputClass}
-                style={{ marginLeft: 24 }}
-                value={promoteCompanyId || ""}
-                onChange={(e) => setPromoteCompanyId(Number(e.target.value))}
-                required
-                aria-required="true"
-                aria-invalid={!!promoteError && !promoteCompanyId}
-                aria-describedby={promoteError ? "promote-error promote-required-help" : "promote-required-help"}
-              >
-                <option value="">Company</option>
-                {companies.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name || c.abbreviation || `Company ${c.id}`}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex items-center font-roboto justify-center mb-4">
-              <label htmlFor="promote-wage" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Wage: </label>
-              <input
-                id="promote-wage"
-                type="text"
-                inputMode="decimal"
-                className={promoteInputClass}
-                style={{ marginLeft: 24 }}
-                value={promoteWage}
-                onChange={(e) => setPromoteWage(e.target.value)}
-                required
-                aria-required="true"
-                aria-invalid={!!promoteError && (Number.isNaN(parseFloat(promoteWage)) || parseFloat(promoteWage) < 7.25)}
-                aria-describedby={
-                  promoteError
-                    ? "promote-error promote-wage-help promote-required-help"
-                    : "promote-wage-help promote-required-help"
-                }
-              />
-            </div>
-            <p id="promote-wage-help" className="text-[12px] font-roboto text-[#4A4C54] text-center w-full mb-4 -mt-2">
-              Minimum $7.25.
-            </p>
-            <div className="flex items-center font-roboto justify-center mb-4">
-              <label htmlFor="promote-semester-season" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Semester: </label>
-              <select
-                id="promote-semester-season"
-                className={promoteInputClass}
-                style={{ marginLeft: 24 }}
-                value={promoteSemesterSeason}
-                onChange={(e) => setPromoteSemesterSeason(e.target.value)}
-                required
-                aria-required="true"
-                aria-invalid={!!promoteError && !promoteSemesterSeason}
-                aria-describedby={promoteError ? "promote-error promote-required-help" : "promote-required-help"}
-              >
-                <option value="">Season</option>
-                <option value="Spring">Spring</option>
-                <option value="Summer">Summer</option>
-                <option value="Fall">Fall</option>
-              </select>
-            </div>
-            <div className="flex items-center font-roboto justify-center mb-4">
-              <label htmlFor="promote-semester-year" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Year: </label>
-              <select
-                id="promote-semester-year"
-                className={promoteInputClass}
-                style={{ marginLeft: 24 }}
-                value={promoteSemesterYear}
-                onChange={(e) => setPromoteSemesterYear(e.target.value)}
-                required
-                aria-required="true"
-                aria-invalid={!!promoteError && !promoteSemesterYear}
-                aria-describedby={promoteError ? "promote-error promote-required-help" : "promote-required-help"}
-              >
-                <option value="">Year</option>
-                <option value={new Date().getFullYear()}>{new Date().getFullYear()}</option>
-                <option value={new Date().getFullYear() + 1}>{new Date().getFullYear() + 1}</option>
-              </select>
-            </div>
-            {promoteError && (
-              <p id="promote-error" className="text-red-600 text-sm font-roboto text-center w-full" role="alert">
-                {promoteError}
-              </p>
-            )}
-          </ModalBody>
-          <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>
-            <button
-              type="button"
-              onClick={() => {
-                setPromoteError(null);
-                promoteDisclosure.onClose();
-              }}
-              className={modalButtonClass}
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              disabled={promoteLoading}
-              onClick={handlePromoteSubmit}
-              className={modalButtonClass + " disabled:opacity-70 disabled:cursor-not-allowed"}
-            >
-              {promoteLoading ? "Promoting…" : "Promote to Intern"}
-            </button>
-          </ModalFooter>
+          {promoteCredentials ? (
+            <>
+              <ModalHeader className="flex flex-col items-center gap-0 pb-2 border-b-0">
+                <h3 className="font-roboto font-bold text-[#000000] text-center w-full">
+                  Intern account created
+                </h3>
+                <p className="font-roboto font-normal text-[#000000] text-center mt-1" style={{ fontSize: "11px" }}>
+                  *Share these with the new intern. The temporary password will not be shown again.
+                </p>
+              </ModalHeader>
+              <ModalBody className="gap-4 flex flex-col items-center" style={{ paddingBottom: 24 }}>
+                <TempCredentialsNotice
+                  userName={promoteCredentials.userName}
+                  temporaryPassword={promoteCredentials.temporaryPassword}
+                  showActions={false}
+                  onDone={finishPromoteWithCredentials}
+                />
+              </ModalBody>
+              <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>
+                <TempCredentialsFooter
+                  userName={promoteCredentials.userName}
+                  temporaryPassword={promoteCredentials.temporaryPassword}
+                  doneLabel="Go to Interns"
+                  onDone={finishPromoteWithCredentials}
+                />
+              </ModalFooter>
+            </>
+          ) : (
+            <>
+              <ModalHeader className="flex flex-col items-center gap-0 pb-2 border-b-0">
+                <h3 className="font-roboto font-bold text-[#000000] text-center w-full">
+                  Promote {applicant ? [applicant.firstName, applicant.lastName].filter(Boolean).join(" ") : "Applicant"} to Intern
+                </h3>
+                <p id="promote-required-help" className="font-roboto font-normal text-[#000000] text-center mt-1" style={{ fontSize: "11px" }}>
+                  *All fields are required and must be valid, or data will not be saved.
+                </p>
+              </ModalHeader>
+              <ModalBody className="flex flex-col items-center" style={{ paddingBottom: 24 }}>
+                <div className="flex items-center font-roboto justify-center mb-4">
+                  <label htmlFor="promote-cwid" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">CWID: </label>
+                  <input
+                    id="promote-cwid"
+                    type="text"
+                    maxLength={8}
+                    className={promoteInputClass}
+                    style={{ marginLeft: 24 }}
+                    value={promoteCwid}
+                    onChange={(e) => setPromoteCwid(e.target.value.slice(0, 8))}
+                    required
+                    aria-required="true"
+                    aria-invalid={!!promoteError && promoteCwid.trim().length !== 8}
+                    aria-describedby={
+                      promoteError
+                        ? "promote-error promote-cwid-help promote-required-help"
+                        : "promote-cwid-help promote-required-help"
+                    }
+                  />
+                </div>
+                <p id="promote-cwid-help" className="text-[12px] font-roboto text-[#4A4C54] text-center w-full mb-4 -mt-2">
+                  Exactly 8 characters.
+                </p>
+                <div className="flex items-center font-roboto justify-center mb-4">
+                  <label htmlFor="promote-company" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Company: </label>
+                  <select
+                    id="promote-company"
+                    className={promoteInputClass}
+                    style={{ marginLeft: 24 }}
+                    value={promoteCompanyId || ""}
+                    onChange={(e) => setPromoteCompanyId(Number(e.target.value))}
+                    required
+                    aria-required="true"
+                    aria-invalid={!!promoteError && !promoteCompanyId}
+                    aria-describedby={promoteError ? "promote-error promote-required-help" : "promote-required-help"}
+                  >
+                    <option value="">Company</option>
+                    {companies.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name || c.abbreviation || `Company ${c.id}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex items-center font-roboto justify-center mb-4">
+                  <label htmlFor="promote-wage" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Wage: </label>
+                  <input
+                    id="promote-wage"
+                    type="text"
+                    inputMode="decimal"
+                    className={promoteInputClass}
+                    style={{ marginLeft: 24 }}
+                    value={promoteWage}
+                    onChange={(e) => setPromoteWage(e.target.value)}
+                    required
+                    aria-required="true"
+                    aria-invalid={!!promoteError && (Number.isNaN(parseFloat(promoteWage)) || parseFloat(promoteWage) < 7.25)}
+                    aria-describedby={
+                      promoteError
+                        ? "promote-error promote-wage-help promote-required-help"
+                        : "promote-wage-help promote-required-help"
+                    }
+                  />
+                </div>
+                <p id="promote-wage-help" className="text-[12px] font-roboto text-[#4A4C54] text-center w-full mb-4 -mt-2">
+                  Minimum $7.25.
+                </p>
+                <div className="flex items-center font-roboto justify-center mb-4">
+                  <label htmlFor="promote-semester-season" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Semester: </label>
+                  <select
+                    id="promote-semester-season"
+                    className={promoteInputClass}
+                    style={{ marginLeft: 24 }}
+                    value={promoteSemesterSeason}
+                    onChange={(e) => setPromoteSemesterSeason(e.target.value)}
+                    required
+                    aria-required="true"
+                    aria-invalid={!!promoteError && !promoteSemesterSeason}
+                    aria-describedby={promoteError ? "promote-error promote-required-help" : "promote-required-help"}
+                  >
+                    <option value="">Season</option>
+                    <option value="Spring">Spring</option>
+                    <option value="Summer">Summer</option>
+                    <option value="Fall">Fall</option>
+                  </select>
+                </div>
+                <div className="flex items-center font-roboto justify-center mb-4">
+                  <label htmlFor="promote-semester-year" className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0">Year: </label>
+                  <select
+                    id="promote-semester-year"
+                    className={promoteInputClass}
+                    style={{ marginLeft: 24 }}
+                    value={promoteSemesterYear}
+                    onChange={(e) => setPromoteSemesterYear(e.target.value)}
+                    required
+                    aria-required="true"
+                    aria-invalid={!!promoteError && !promoteSemesterYear}
+                    aria-describedby={promoteError ? "promote-error promote-required-help" : "promote-required-help"}
+                  >
+                    <option value="">Year</option>
+                    <option value={new Date().getFullYear()}>{new Date().getFullYear()}</option>
+                    <option value={new Date().getFullYear() + 1}>{new Date().getFullYear() + 1}</option>
+                  </select>
+                </div>
+                {promoteError && (
+                  <p id="promote-error" className="text-red-600 text-sm font-roboto text-center w-full" role="alert">
+                    {promoteError}
+                  </p>
+                )}
+              </ModalBody>
+              <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPromoteError(null);
+                    promoteDisclosure.onClose();
+                  }}
+                  className={modalButtonClass}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={promoteLoading}
+                  onClick={handlePromoteSubmit}
+                  className={modalButtonClass + " disabled:opacity-70 disabled:cursor-not-allowed"}
+                >
+                  {promoteLoading ? "Promoting…" : "Promote to Intern"}
+                </button>
+              </ModalFooter>
+            </>
+          )}
         </ModalContent>
       </Modal>
     </div>

@@ -28,7 +28,8 @@ div[tabindex="-1"] > [data-slot="wrapper"] {
   overflow-x: auto !important;
 }
 
-section[role="dialog"][data-dismissable] {
+/* Apply to all HeroUI dialogs (including isDismissable={false} — those omit data-dismissable). */
+section[role="dialog"] {
   position: relative !important;
   z-index: 50 !important;
   display: flex !important;
@@ -45,8 +46,8 @@ section[role="dialog"][data-dismissable] {
   overflow: hidden !important;
 }
 
-section[role="dialog"][data-dismissable] [data-slot="header"],
-section[role="dialog"][data-dismissable] header {
+section[role="dialog"] [data-slot="header"],
+section[role="dialog"] header {
   display: flex !important;
   padding: 1rem 1.5rem !important;
   font-size: 1.125rem !important;
@@ -55,7 +56,7 @@ section[role="dialog"][data-dismissable] header {
   flex-shrink: 0 !important;
 }
 
-section[role="dialog"][data-dismissable] [data-slot="body"] {
+section[role="dialog"] [data-slot="body"] {
   display: flex !important;
   flex: 1 1 0% !important;
   flex-direction: column !important;
@@ -63,7 +64,7 @@ section[role="dialog"][data-dismissable] [data-slot="body"] {
   padding: 0.5rem 1.5rem !important;
 }
 
-section[role="dialog"][data-dismissable] [data-slot="footer"] {
+section[role="dialog"] [data-slot="footer"] {
   display: flex !important;
   flex-direction: row !important;
   gap: 0.5rem !important;
@@ -71,7 +72,7 @@ section[role="dialog"][data-dismissable] [data-slot="footer"] {
   justify-content: flex-end !important;
 }
 
-section[role="dialog"][data-dismissable] [data-slot="close-button"] {
+section[role="dialog"] [data-slot="close-button"] {
   position: absolute !important;
   appearance: none !important;
   top: 0.25rem !important;
@@ -84,7 +85,7 @@ section[role="dialog"][data-dismissable] [data-slot="close-button"] {
   border: none !important;
 }
 
-section[role="dialog"][data-dismissable] [data-slot="close-button"]:hover {
+section[role="dialog"] [data-slot="close-button"]:hover {
   background-color: #f3f4f6 !important;
 }
 

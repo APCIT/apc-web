@@ -2,11 +2,10 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { hashIdentityV2 } from "@/lib/password-identity-v2";
+import { generateTempPassword } from "@/lib/temp-password";
 
 /** Promote to Intern: admin and IT only. */
 const ROLES = ["admin", "IT"];
-/** Same default as Create User / Reset Password. */
-const DEFAULT_PASSWORD = "Alabama2025!";
 
 async function requireAccess(): Promise<
   | { error: NextResponse }
@@ -118,7 +117,8 @@ export async function POST(
       username = baseUsername + suffix;
     }
 
-    const passwordHash = await hashIdentityV2(DEFAULT_PASSWORD);
+    const temporaryPassword = generateTempPassword();
+    const passwordHash = await hashIdentityV2(temporaryPassword);
 
     const userId = crypto.randomUUID();
 
@@ -183,7 +183,11 @@ export async function POST(
       });
     });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      userName: username,
+      temporaryPassword,
+    });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

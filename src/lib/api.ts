@@ -552,7 +552,7 @@ export async function PROMOTE_APPLICANT_API(
     semesterYear: string;
   }
 ): Promise<
-  | { ok: true }
+  | { ok: true; userName: string; temporaryPassword: string }
   | { ok: false; error: string; status?: number }
 > {
   const res = await fetch(`${API.applicants}/${id}/promote`, {
@@ -568,7 +568,16 @@ export async function PROMOTE_APPLICANT_API(
       status: res.status,
     };
   }
-  return { ok: true };
+  const userName = (data as { userName?: string }).userName;
+  const temporaryPassword = (data as { temporaryPassword?: string }).temporaryPassword;
+  if (typeof userName !== "string" || typeof temporaryPassword !== "string") {
+    return {
+      ok: false,
+      error: "Invalid response from server",
+      status: res.status,
+    };
+  }
+  return { ok: true, userName, temporaryPassword };
 }
 
 /** Upload resume file for applicant (admin, IT, staff). POST JSON with base64 file data. */
@@ -1983,7 +1992,7 @@ export async function GET_USERS_API(): Promise<
   return { ok: true, data: data as UsersByRoleResponse };
 }
 
-/** Payload for creating a user. Default password is set on server (Alabama2025!). */
+/** Payload for creating a user. Server returns a one-time temporary password. */
 export type CreateUserPayload = {
   firstName: string;
   lastName: string;
@@ -1992,11 +2001,11 @@ export type CreateUserPayload = {
   role: string;
 };
 
-/** Call this to create a user (admin/IT only). */
+/** Call this to create a user (IT only). Returns credentials to show once. */
 export async function CREATE_USER_API(
   payload: CreateUserPayload
 ): Promise<
-  | { ok: true; id: string; userName: string }
+  | { ok: true; id: string; userName: string; temporaryPassword: string }
   | { ok: false; error: string; status?: number }
 > {
   const res = await fetch(API.users, {
@@ -2014,19 +2023,24 @@ export async function CREATE_USER_API(
   }
   const id = (data as { id?: string }).id;
   const userName = (data as { userName?: string }).userName;
-  if (typeof id !== "string" || typeof userName !== "string") {
+  const temporaryPassword = (data as { temporaryPassword?: string }).temporaryPassword;
+  if (
+    typeof id !== "string" ||
+    typeof userName !== "string" ||
+    typeof temporaryPassword !== "string"
+  ) {
     return {
       ok: false,
       error: (data?.error as string) ?? "Invalid response from server",
       status: res.status,
     };
   }
-  return { ok: true, id, userName };
+  return { ok: true, id, userName, temporaryPassword };
 }
 
-/** Call this to reset a user's password to Alabama2025! (admin/IT only). */
+/** Call this to reset a user's password (admin/IT only). Returns a one-time temporary password. */
 export async function RESET_USER_PASSWORD_API(userId: string): Promise<
-  | { ok: true }
+  | { ok: true; userName: string; temporaryPassword: string }
   | { ok: false; error: string; status?: number }
 > {
   const res = await fetch(`${API.users}/${encodeURIComponent(userId)}/reset-password`, {
@@ -2041,7 +2055,16 @@ export async function RESET_USER_PASSWORD_API(userId: string): Promise<
       status: res.status,
     };
   }
-  return { ok: true };
+  const userName = (data as { userName?: string }).userName;
+  const temporaryPassword = (data as { temporaryPassword?: string }).temporaryPassword;
+  if (typeof userName !== "string" || typeof temporaryPassword !== "string") {
+    return {
+      ok: false,
+      error: "Invalid response from server",
+      status: res.status,
+    };
+  }
+  return { ok: true, userName, temporaryPassword };
 }
 
 /** Call this to delete a user (IT only). Removes intern/timelogs if present, then roles, logins, user. */

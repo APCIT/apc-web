@@ -4,12 +4,22 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@heroui/modal";
+import {
   GET_USERS_API,
   RESET_USER_PASSWORD_API,
   DELETE_USER_API,
   type UsersByRoleResponse,
   type UserListItem,
 } from "@/lib/api";
+import TempCredentialsNotice, {
+  TempCredentialsFooter,
+} from "@/components/TempCredentialsNotice";
 
 const ROLE_LABELS: Record<string, string> = {
   accountant: "Accountant",
@@ -50,6 +60,9 @@ function GhostBlock({ width }: { width: string }) {
   );
 }
 
+const modalButtonClass =
+  "inline-flex items-center px-[12px] py-[6px] border border-[#900] rounded-[10px] text-[#900] bg-gray-200 hover:bg-gray-300 hover:border-[#700] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
+
 function UserTable({
   users,
   loading,
@@ -58,7 +71,7 @@ function UserTable({
 }: {
   users: UserListItem[];
   loading: boolean;
-  onResetPassword?: (userId: string) => void;
+  onResetPassword?: (userId: string, userName: string) => void;
   onDeleteUser?: (userId: string) => void;
 }) {
   const thClass =
@@ -204,7 +217,7 @@ function UserTable({
               <td className="border border-[#ddd] p-[10px] text-center align-middle">
                 <button
                   type="button"
-                  onClick={() => onResetPassword?.(u.id)}
+                  onClick={() => onResetPassword?.(u.id, u.userName)}
                   className="bg-transparent border-0 p-0 cursor-pointer font-inherit text-[#666] no-underline hover:underline text-sm"
                 >
                   Reset Password
@@ -237,12 +250,19 @@ function UserTable({
   );
 }
 
-const RESET_PASSWORD_CONFIRM = "Reset password to Alabama2025!";
-
 export default function UsersPage() {
   const [data, setData] = useState<UsersByRoleResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [resetConfirmUser, setResetConfirmUser] = useState<{
+    id: string;
+    userName: string;
+  } | null>(null);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetCredentials, setResetCredentials] = useState<{
+    userName: string;
+    temporaryPassword: string;
+  } | null>(null);
 
   const loadUsers = useCallback(async () => {
     setLoading(true);
@@ -261,11 +281,21 @@ export default function UsersPage() {
     loadUsers();
   }, [loadUsers]);
 
-  async function handleResetPassword(userId: string) {
-    if (!window.confirm(RESET_PASSWORD_CONFIRM)) return;
-    const res = await RESET_USER_PASSWORD_API(userId);
+  function handleResetPassword(userId: string, userName: string) {
+    setResetConfirmUser({ id: userId, userName });
+  }
+
+  async function confirmResetPassword() {
+    if (!resetConfirmUser || resetLoading) return;
+    setResetLoading(true);
+    const res = await RESET_USER_PASSWORD_API(resetConfirmUser.id);
+    setResetLoading(false);
+    setResetConfirmUser(null);
     if (res.ok) {
-      loadUsers();
+      setResetCredentials({
+        userName: res.userName,
+        temporaryPassword: res.temporaryPassword,
+      });
     } else {
       alert(res.error);
     }
@@ -445,6 +475,90 @@ export default function UsersPage() {
           </div>
         )}
       </div>
+
+      <Modal
+        isOpen={!!resetConfirmUser}
+        onOpenChange={(open) => {
+          if (!open && !resetLoading) setResetConfirmUser(null);
+        }}
+        hideCloseButton
+        isDismissable={!resetLoading}
+      >
+        <ModalContent className="max-w-[420px] w-full">
+          <ModalHeader className="flex flex-col items-center gap-0 pb-2 border-b-0">
+            <h3 className="font-roboto font-bold text-[#000000] text-center w-full">
+              Reset password?
+            </h3>
+            <p className="font-roboto font-normal text-[#000000] text-center mt-1" style={{ fontSize: "11px" }}>
+              *A temporary password will be shown once. This cannot be undone.
+            </p>
+          </ModalHeader>
+          <ModalBody className="gap-4 flex flex-col items-center" style={{ paddingBottom: 24 }}>
+            <p className="font-roboto text-[14px] text-[#333] text-center m-0">
+              Reset password for{" "}
+              <span className="font-bold">{resetConfirmUser?.userName}</span>?
+            </p>
+          </ModalBody>
+          <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>
+            <button
+              type="button"
+              disabled={resetLoading}
+              onClick={() => setResetConfirmUser(null)}
+              className={modalButtonClass + " disabled:opacity-70 disabled:cursor-not-allowed"}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              disabled={resetLoading}
+              onClick={confirmResetPassword}
+              className={modalButtonClass + " disabled:opacity-70 disabled:cursor-not-allowed"}
+            >
+              {resetLoading ? "Resetting…" : "Reset password"}
+            </button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={!!resetCredentials}
+        onOpenChange={(open) => {
+          if (!open) setResetCredentials(null);
+        }}
+        hideCloseButton
+        isDismissable={false}
+      >
+        <ModalContent className="max-w-[420px] w-full">
+          <ModalHeader className="flex flex-col items-center gap-0 pb-2 border-b-0">
+            <h3 className="font-roboto font-bold text-[#000000] text-center w-full">
+              Password reset
+            </h3>
+            <p className="font-roboto font-normal text-[#000000] text-center mt-1" style={{ fontSize: "11px" }}>
+              *Share these with the user. The temporary password will not be shown again.
+            </p>
+          </ModalHeader>
+          <ModalBody className="gap-4 flex flex-col items-center" style={{ paddingBottom: 24 }}>
+            {resetCredentials && (
+              <TempCredentialsNotice
+                userName={resetCredentials.userName}
+                temporaryPassword={resetCredentials.temporaryPassword}
+                showActions={false}
+                onDone={() => setResetCredentials(null)}
+              />
+            )}
+          </ModalBody>
+          {resetCredentials && (
+            <ModalFooter style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}>
+              <TempCredentialsFooter
+                userName={resetCredentials.userName}
+                temporaryPassword={resetCredentials.temporaryPassword}
+                doneLabel="Done"
+                onDone={() => setResetCredentials(null)}
+              />
+            </ModalFooter>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 }

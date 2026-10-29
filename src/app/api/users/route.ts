@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { hashIdentityV2 } from "@/lib/password-identity-v2";
+import { generateTempPassword } from "@/lib/temp-password";
 
 const USERS_ROLES = ["admin", "IT"];
 /** Only IT can create users (Create New User form). */
@@ -122,7 +123,7 @@ export async function GET() {
   }
 }
 
-/** POST: create user (firstName, lastName, email, companyId, role); default password Alabama2025! (IT only). */
+/** POST: create user (firstName, lastName, email, companyId, role); returns one-time temporary password (IT only). */
 export async function POST(request: Request) {
   try {
     const access = await requireITAccess();
@@ -191,8 +192,8 @@ export async function POST(request: Request) {
       username = baseUsername + suffix;
     }
 
-    const defaultPassword = "Alabama2025!";
-    const passwordHash = await hashIdentityV2(defaultPassword);
+    const temporaryPassword = generateTempPassword();
+    const passwordHash = await hashIdentityV2(temporaryPassword);
 
     const userId = crypto.randomUUID();
     await prisma.aspNetUsers.create({
@@ -221,6 +222,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       id: userId,
       userName: username,
+      temporaryPassword,
     });
   } catch (e) {
     console.error(e);

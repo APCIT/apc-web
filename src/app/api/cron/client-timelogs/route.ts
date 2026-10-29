@@ -11,7 +11,7 @@ import {
 /**
  * Monday auto-send: cumulative timelogs (intern start → last Saturday).
  *
- * Auth: Authorization: Bearer <CRON_SECRET> or ?secret=<CRON_SECRET>
+ * Auth: Authorization: Bearer <CRON_SECRET> only (do not put the secret in the URL).
  * Optional: ?force=1 to run on a non-Monday (testing).
  *
  * Schedule externally (Azure Logic App, Task Scheduler, etc.) for Mondays
@@ -30,8 +30,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const auth = request.headers.get("authorization") ?? "";
     const bearer = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
-    const querySecret = url.searchParams.get("secret") ?? "";
-    if (bearer !== secret && querySecret !== secret) {
+    if (bearer !== secret) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
