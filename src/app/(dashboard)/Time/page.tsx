@@ -976,46 +976,48 @@ function TimePageContent() {
       >
         <ModalContent className="max-w-[380px] w-[calc(100%-2rem)] mx-auto">
           <ModalBody
-            className="flex flex-col items-center justify-center gap-4 py-8"
-            style={{ fontFamily: "Roboto, sans-serif", color: "#000000" }}
+            className="flex flex-col items-center justify-center"
+            style={{
+              fontFamily: "Roboto, sans-serif",
+              color: "#000000",
+              paddingTop: 24,
+              paddingBottom: 24,
+              paddingLeft: 28,
+              paddingRight: 28,
+              gap: 16,
+            }}
           >
             {saving ? (
-              <div className="flex flex-col items-center gap-4" style={{ minHeight: 120 }}>
-                <p style={{ fontSize: 18, color: "#000000", textAlign: "center", margin: 0 }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 20,
+                }}
+              >
+                <p style={{ fontSize: 18, fontWeight: 400, color: "#000000", textAlign: "center", margin: 0 }}>
                   Saving Timesheet...
                 </p>
                 <div
                   aria-hidden
                   style={{
-                    width: 80,
-                    height: 80,
-                    minWidth: 80,
-                    minHeight: 80,
+                    width: 36,
+                    height: 36,
                     flexShrink: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 16,
+                    border: "3px solid #e5e7eb",
+                    borderTopColor: "#900",
+                    borderRadius: "50%",
+                    boxSizing: "border-box",
+                    animation: "spin 0.8s linear infinite",
                   }}
-                >
-                  <div
-                    style={{
-                      width: 80,
-                      height: 80,
-                      border: "4px solid #e5e7eb",
-                      borderTopColor: "#900",
-                      borderRadius: "50%",
-                      boxSizing: "border-box",
-                      animation: "spin 0.8s linear infinite",
-                    }}
-                  />
-                </div>
+                />
               </div>
             ) : saveError ? (
               <>
                 <p
                   role="alert"
-                  style={{ color: "#b91c1c", fontSize: 15, textAlign: "center", margin: 0, lineHeight: 1.4 }}
+                  style={{ color: "#b91c1c", fontSize: 15, fontWeight: 400, textAlign: "center", margin: 0, lineHeight: 1.5 }}
                 >
                   {saveError}
                 </p>
@@ -1028,26 +1030,36 @@ function TimePageContent() {
                 </button>
               </>
             ) : (
-              <>
-                <p style={{ fontSize: 22, fontWeight: 700, color: "#000000", textAlign: "center", margin: 0 }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 16,
+                  width: "100%",
+                }}
+              >
+                <p style={{ fontSize: 22, fontWeight: 400, color: "#000000", textAlign: "center", margin: 0, lineHeight: 1.4 }}>
                   Timesheet saved!
                 </p>
                 {savedHours != null && (
                   <p
                     style={{
                       fontSize: 18,
+                      fontWeight: 400,
                       color: "#000000",
                       textAlign: "center",
                       margin: 0,
+                      lineHeight: 1.5,
                       display: "flex",
                       flexWrap: "wrap",
                       alignItems: "baseline",
                       justifyContent: "center",
-                      gap: "0.35rem 0.4rem",
+                      gap: "0.4rem 0.45rem",
                     }}
                   >
                     <span>You have logged</span>
-                    <span style={{ fontWeight: 700, fontSize: 42 }}>{savedHours}</span>
+                    <span style={{ fontWeight: 700, fontSize: 18 }}>{savedHours}</span>
                     <span>hours this week!</span>
                   </p>
                 )}
@@ -1058,7 +1070,7 @@ function TimePageContent() {
                 >
                   Close
                 </button>
-              </>
+              </div>
             )}
           </ModalBody>
         </ModalContent>
