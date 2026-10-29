@@ -962,8 +962,10 @@ function TimePageContent() {
       <Modal
         isOpen={saveModalDisclosure.isOpen}
         onOpenChange={(open) => {
-          saveModalDisclosure.onOpenChange(open);
-          if (!open) {
+          if (open) {
+            saveModalDisclosure.onOpen();
+          } else {
+            saveModalDisclosure.onClose();
             setSaving(false);
             setSaveError(null);
             setSuccessMessage(false);
