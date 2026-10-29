@@ -468,7 +468,7 @@ export default function PresentationsPage() {
                               </td>
                               <td className="border border-[#ddd] p-[10px] text-center align-middle">
                                 <a
-                                  href={`https://apcstorage.blob.core.windows.net/presentations/${p.id}`}
+                                  href={`/api/files/presentations/${encodeURIComponent(p.id)}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="text-[#909090] no-underline hover:underline text-sm inline-flex items-center justify-center"

@@ -583,7 +583,7 @@ export default function ApplicantSearchResultsPage() {
                         <div className="flex flex-col gap-1 text-sm text-[#909090]">
                           {app.resumeId && app.resumeId.length > 15 ? (
                             <a
-                              href={`https://apcstorage.blob.core.windows.net/resumes/${app.resumeId}`}
+                              href={`/api/files/resumes/${encodeURIComponent(app.resumeId)}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-[#909090] no-underline hover:underline"

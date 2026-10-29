@@ -10,7 +10,7 @@ import {
   type PastInternDetailItem,
 } from "@/lib/api";
 
-const BLOB_BASE = "https://apcstorage.blob.core.windows.net";
+const BLOB_BASE = "/api/files";
 const CONTAINER_MID_SEM = "intern-reports";
 
 const backButtonClass =

@@ -31,9 +31,11 @@ export type ServiceCategory = {
   items: ServiceItem[];
 };
 
-/** Public catalog PDF hosted on Azure Blob Storage */
+/** Public catalog PDF served via app proxy (Azure container may be private). */
+export const CATALOG_PDF_CONTAINER = 'staff-only-materials';
+export const CATALOG_PDF_BLOB = 'APC Professional Services Catalog 2026.pdf';
 export const CATALOG_PDF_URL =
-  'https://apcstorage.blob.core.windows.net/staff-only-materials/APC%20Professional%20Services%20Catalog%202026.pdf';
+  '/api/public-files/staff-only-materials/APC%20Professional%20Services%20Catalog%202026.pdf';
 
 /** Embed URL — hides thumbnail sidebar, fits page to viewer width */
 export const CATALOG_PDF_EMBED_URL = `${CATALOG_PDF_URL}#navpanes=0&scrollbar=1&view=FitH`;

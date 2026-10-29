@@ -233,7 +233,7 @@ export default function ToDoListPage() {
                   <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
                     <div className="flex flex-col gap-1">
                       <a
-                        href="https://apcstorage.blob.core.windows.net/staff-only-materials/Impact_Calculator_10312025.xlsx"
+                        href="/api/files/staff-only-materials/Impact_Calculator_10312025.xlsx"
                         className="text-[#909090] font-roboto text-[14px] no-underline hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -243,7 +243,7 @@ export default function ToDoListPage() {
                       <span className="text-[11px] text-[#909090] font-roboto">
                         *Need help filling out the Impact Calculator? Click{' '}
                         <a
-                          href="https://apcstorage.blob.core.windows.net/intern-reports/Impacts-Intern-Perspective.pptx"
+                          href="/api/files/intern-reports/Impacts-Intern-Perspective.pptx"
                           className="text-[#909090] text-[11px] no-underline hover:underline"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -324,7 +324,7 @@ export default function ToDoListPage() {
                   <td className="border border-[#ddd] py-[15px] px-[10px] align-top">
                     <div className="flex flex-col gap-1">
                       <a
-                        href="https://apcstorage.blob.core.windows.net/intern-reports/Sample%20Presentation.pdf"
+                        href="/api/files/intern-reports/Sample%20Presentation.pdf"
                         className="text-[#909090] font-roboto text-[14px] no-underline hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -332,7 +332,7 @@ export default function ToDoListPage() {
                         Sample Presentation
                       </a>
                       <a
-                        href="https://apcstorage.blob.core.windows.net/handbook/Sample%20Presentation.pdf"
+                        href="/api/files/handbook/Sample%20Presentation.pdf"
                         className="text-[#909090] font-roboto text-[14px] no-underline hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -340,7 +340,7 @@ export default function ToDoListPage() {
                         Sample Poster
                       </a>
                       <a
-                        href="https://apcstorage.blob.core.windows.net/staff-only-materials/APC.Student.Poster.template.pub"
+                        href="/api/files/staff-only-materials/APC.Student.Poster.template.pub"
                         className="text-[#909090] font-roboto text-[14px] no-underline hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -348,7 +348,7 @@ export default function ToDoListPage() {
                         Poster Template (Publisher)
                       </a>
                       <a
-                        href="https://apcstorage.blob.core.windows.net/staff-only-materials/APC.Student.Poster.template.pptx"
+                        href="/api/files/staff-only-materials/APC.Student.Poster.template.pptx"
                         className="text-[#909090] font-roboto text-[14px] no-underline hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"

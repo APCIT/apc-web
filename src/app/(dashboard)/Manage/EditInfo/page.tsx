@@ -719,7 +719,7 @@ export default function EditInfoPage() {
                     <p className="text-[14px] font-roboto text-[#333] m-0">
                       Current resume:{" "}
                       <a
-                        href={`https://apcstorage.blob.core.windows.net/resumes/${encodeURIComponent(intern.resumeId)}`}
+                        href={`/api/files/resumes/${encodeURIComponent(intern.resumeId)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-[#337ab7] underline hover:no-underline"

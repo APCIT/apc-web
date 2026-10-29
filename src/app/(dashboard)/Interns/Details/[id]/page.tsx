@@ -184,7 +184,7 @@ const RIGHT_ACTIONS: { label: string; icon?: React.ReactNode }[] = [
   { label: "Presentation", icon: <DocIcon /> },
 ];
 
-const RESUME_BLOB_BASE = "https://apcstorage.blob.core.windows.net/resumes";
+const RESUME_BLOB_BASE = "/api/files/resumes";
 /** Left/right table row – same style as PastInterns Details. */
 function TableRow({
   label,

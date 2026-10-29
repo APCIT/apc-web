@@ -62,15 +62,15 @@ const newsletterEntries: NewsletterEntry[] = [
   },
   {
     title: 'Fall 2025',
-    href: 'https://apcstorage.blob.core.windows.net/staff-only-materials/APC Fall 2025 Newsletter .pdf',
+    href: '/api/public-files/staff-only-materials/APC%20Fall%202025%20Newsletter%20.pdf',
     cta: 'View Newsletter',
     isExternal: true,
   },
-  { 
+  {
     title: 'Spring 2025',
-    href:'https://apcstorage.blob.core.windows.net/staff-only-materials/APC Spring 2025 Newsletter.pdf',
+    href: '/api/public-files/staff-only-materials/APC%20Spring%202025%20Newsletter.pdf',
     cta: 'View Newsletter',
-    isExternal: true
+    isExternal: true,
   },
   {
     title: 'Fall 2023',

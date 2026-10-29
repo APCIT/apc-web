@@ -151,7 +151,7 @@ export default function ManagePage() {
               {(isIT || isAdmin) && (
                 <Link href="/Manage/OutlookMail" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]">Outlook Mail (send setup)</Link>
               )}
-              <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Intern-Handbook-Revision-13-01132025.docx" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Intern Handbook</a>
+              <a href="/api/files/staff-only-materials/Intern-Handbook-Revision-13-01132025.docx" className="text-[#666666] font-roboto text-[17px] font-normal no-underline hover:text-[#666666]" target="_blank" rel="noopener noreferrer">Intern Handbook</a>
             </div>
 
             <div style={{ height: "32px" }} aria-hidden="true" />
@@ -174,19 +174,19 @@ export default function ManagePage() {
             {/* Intern Work Instructions */}
             <AccordionItem key="1" aria-label="Intern Work Instructions" title="Intern Work Instructions" HeadingComponent="div">
               <div className="flex flex-col gap-3">
-                <a href="https://apcstorage.blob.core.windows.net/intern-reports/LoggingTimeInstructions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Time Logging Instructions</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Direct%20Deposit%20Instructions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Banner Self-Service Direct Deposit Instructions</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Tax-Work-Instructions-for-Interns-01172024.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Tax Work Instructions</a>
+                <a href="/api/files/intern-reports/LoggingTimeInstructions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Time Logging Instructions</a>
+                <a href="/api/files/handbook/Direct%20Deposit%20Instructions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Banner Self-Service Direct Deposit Instructions</a>
+                <a href="/api/files/staff-only-materials/Tax-Work-Instructions-for-Interns-01172024.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Tax Work Instructions</a>
               </div>
             </AccordionItem>
 
             {/* Intern's Required Reports */}
             <AccordionItem key="2" aria-label="Intern's Required Reports" title="Intern's Required Reports" HeadingComponent="div">
               <div className="flex flex-col gap-3">
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Impact_Calculator_10312025.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">Impact Calculator</a>
+                <a href="/api/files/staff-only-materials/Impact_Calculator_10312025.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">Impact Calculator</a>
                 <Link href="/Manage/ImpactTotals" className="manage-link">Impact Totals Submission</Link>
-                <a href="https://apcstorage.blob.core.windows.net/intern-reports/Impacts-Intern-Perspective.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Helpful Powerpoint for completing the Impact Calculator</a>
-                <a href="https://apcstorage.blob.core.windows.net/intern-reports/Sample%20Presentation.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Sample Presentation</a>
+                <a href="/api/files/intern-reports/Impacts-Intern-Perspective.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Helpful Powerpoint for completing the Impact Calculator</a>
+                <a href="/api/files/intern-reports/Sample%20Presentation.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Sample Presentation</a>
               </div>
             </AccordionItem>
 
@@ -194,39 +194,39 @@ export default function ManagePage() {
             <AccordionItem key="3" aria-label="Communication and Time Management" title="Communication and Time Management" HeadingComponent="div">
               <div className="flex flex-col gap-3">
                 <h5 className="text-[15px] font-semibold mt-2 mb-1 text-[#333333]">Communication</h5>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/Business%20Etiquette.ppt" className="manage-link" target="_blank" rel="noopener noreferrer">Business Etiquette</a>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/0%20Communication%20Part%201_Personality%20Types.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Communication Part 1</a>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/1%20Communication%20Part%202.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Communication Part 2</a>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/Handout%201%20Communicating%20with%20different%20MBTI.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Communicating with different MBTI</a>
+                <a href="/api/files/communication-timemangement/Business%20Etiquette.ppt" className="manage-link" target="_blank" rel="noopener noreferrer">Business Etiquette</a>
+                <a href="/api/files/communication-timemangement/0%20Communication%20Part%201_Personality%20Types.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Communication Part 1</a>
+                <a href="/api/files/communication-timemangement/1%20Communication%20Part%202.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Communication Part 2</a>
+                <a href="/api/files/communication-timemangement/Handout%201%20Communicating%20with%20different%20MBTI.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Communicating with different MBTI</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Time Management</h5>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/Assignment%20Prioritization.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Assignment Prioritization</a>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/Getting%20Organized%20Self-assessment.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Getting Organized Self-Assessment</a>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/Priority%20Disruptions%20Tool.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Priority Disruptions</a>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/Time%20Log%20Tool.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Time Log Tool</a>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/Time%20Management%20Assessment.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Time Management Assessment</a>
-                <a href="https://apcstorage.blob.core.windows.net/communication-timemangement/Time%20Management.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Time Management Presentation</a>
+                <a href="/api/files/communication-timemangement/Assignment%20Prioritization.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Assignment Prioritization</a>
+                <a href="/api/files/communication-timemangement/Getting%20Organized%20Self-assessment.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Getting Organized Self-Assessment</a>
+                <a href="/api/files/communication-timemangement/Priority%20Disruptions%20Tool.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Priority Disruptions</a>
+                <a href="/api/files/communication-timemangement/Time%20Log%20Tool.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Time Log Tool</a>
+                <a href="/api/files/communication-timemangement/Time%20Management%20Assessment.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Time Management Assessment</a>
+                <a href="/api/files/communication-timemangement/Time%20Management.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Time Management Presentation</a>
               </div>
             </AccordionItem>
 
             {/* Assessments */}
             <AccordionItem key="4" aria-label="Assessments" title="Assessments" HeadingComponent="div">
               <div className="flex flex-col gap-3">
-                <a href="https://apcstorage.blob.core.windows.net/handbook/20%20Keys%20Assessment.doc" className="manage-link" target="_blank" rel="noopener noreferrer">20 Keys Assessment</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Factory%20Floor%20Assessment.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Factory Floor Assessment</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/FORD%20ASSESSMENT.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Ford Assessment</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Lean%20Diagnostic.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Lean Diagnostics</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Toyota%20LeanAssessment%20modified.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Toyota Lean Assessment</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/VPMEP%20Supply%20Chain%20Lean%20Assessment%20Updated1.xls" className="manage-link" target="_blank" rel="noopener noreferrer">VPMEP Supply Chain Lean Assessment</a>
+                <a href="/api/files/handbook/20%20Keys%20Assessment.doc" className="manage-link" target="_blank" rel="noopener noreferrer">20 Keys Assessment</a>
+                <a href="/api/files/handbook/Factory%20Floor%20Assessment.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Factory Floor Assessment</a>
+                <a href="/api/files/handbook/FORD%20ASSESSMENT.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Ford Assessment</a>
+                <a href="/api/files/handbook/Lean%20Diagnostic.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Lean Diagnostics</a>
+                <a href="/api/files/handbook/Toyota%20LeanAssessment%20modified.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Toyota Lean Assessment</a>
+                <a href="/api/files/handbook/VPMEP%20Supply%20Chain%20Lean%20Assessment%20Updated1.xls" className="manage-link" target="_blank" rel="noopener noreferrer">VPMEP Supply Chain Lean Assessment</a>
               </div>
             </AccordionItem>
 
             {/* Leadership */}
             <AccordionItem key="5" aria-label="Leadership" title="Leadership" HeadingComponent="div">
               <div className="flex flex-col gap-3">
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Irrefutable%20Laws%20of%20Leadership%20Part%20I%20(1).pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Irrefutable Laws of Leadership I</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Irrefutable%20Laws%20of%20Leadership%20Part%20I%20(2).pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Irrefutable Laws of Leadership II</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/What%20Companies%20Look%20for%20in%20Future%20Leaders.docx" className="manage-link" target="_blank" rel="noopener noreferrer">What Companies Look for in Future Leaders</a>
+                <a href="/api/files/handbook/Irrefutable%20Laws%20of%20Leadership%20Part%20I%20(1).pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Irrefutable Laws of Leadership I</a>
+                <a href="/api/files/handbook/Irrefutable%20Laws%20of%20Leadership%20Part%20I%20(2).pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Irrefutable Laws of Leadership II</a>
+                <a href="/api/files/staff-only-materials/What%20Companies%20Look%20for%20in%20Future%20Leaders.docx" className="manage-link" target="_blank" rel="noopener noreferrer">What Companies Look for in Future Leaders</a>
               </div>
             </AccordionItem>
 
@@ -234,120 +234,120 @@ export default function ManagePage() {
             <AccordionItem key="6" aria-label="Lean Manufacturing" title="Lean Manufacturing" HeadingComponent="div">
               <div className="flex flex-col gap-3">
                 <h5 className="text-[15px] font-semibold mt-2 mb-1 text-[#333333]">5S</h5>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/5s%20audit.xls" className="manage-link" target="_blank" rel="noopener noreferrer">5S Audit</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/5sdaily%20checklist.xls" className="manage-link" target="_blank" rel="noopener noreferrer">5S Daily Checklist</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/5S_job_aid.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">5S Job Aid</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/2-5S%20%26%20Visual%20Factory.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">5S Visual Factory</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/AOMI%20ASSESSMENT.doc" className="manage-link" target="_blank" rel="noopener noreferrer">AOMI Assessment</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/InitialCleaningPlan.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Initial Cleaning Plan</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/ItemDispositionList.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Item Disposition List</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Team%20Charter_Blank.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Team Charter Blank</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/UnneededItemsLog.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Unneeded Items Log</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/WorkplaceScanChecklist.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Workplace Scan Checklist</a>
+                <a href="/api/files/handbook/5s%20audit.xls" className="manage-link" target="_blank" rel="noopener noreferrer">5S Audit</a>
+                <a href="/api/files/handbook/5sdaily%20checklist.xls" className="manage-link" target="_blank" rel="noopener noreferrer">5S Daily Checklist</a>
+                <a href="/api/files/handbook/5S_job_aid.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">5S Job Aid</a>
+                <a href="/api/files/handbook/2-5S%20%26%20Visual%20Factory.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">5S Visual Factory</a>
+                <a href="/api/files/handbook/AOMI%20ASSESSMENT.doc" className="manage-link" target="_blank" rel="noopener noreferrer">AOMI Assessment</a>
+                <a href="/api/files/handbook/InitialCleaningPlan.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Initial Cleaning Plan</a>
+                <a href="/api/files/handbook/ItemDispositionList.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Item Disposition List</a>
+                <a href="/api/files/handbook/Team%20Charter_Blank.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Team Charter Blank</a>
+                <a href="/api/files/handbook/UnneededItemsLog.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Unneeded Items Log</a>
+                <a href="/api/files/handbook/WorkplaceScanChecklist.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Workplace Scan Checklist</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Cellular Flow</h5>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/4-Cellular%20Manufacturing%20v.2.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Cellular Manufacturing</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/stdworkcomb.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Standard Work Combination Sheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Time%20Obs%20Form.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation Form</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Work%20Station%20Requirements%20Form.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Work Station Requirements Form</a>
+                <a href="/api/files/handbook/4-Cellular%20Manufacturing%20v.2.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Cellular Manufacturing</a>
+                <a href="/api/files/handbook/stdworkcomb.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Standard Work Combination Sheet</a>
+                <a href="/api/files/handbook/Time%20Obs%20Form.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation Form</a>
+                <a href="/api/files/handbook/Work%20Station%20Requirements%20Form.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Work Station Requirements Form</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Kaizen</h5>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/KAIZEN%20CHECK%20LIST.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Checklist</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/1-Kaizen%20Event%20Planning%20Form.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Event Planning Form</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Kaizen%20Event%20Preparation%20Checklist.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Event Preparation Checklist</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/KaizenMilestone.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Milestone</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/KaizenPlanWrkSht.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Plan Worksheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Kaizen%20Report%20Format.ppt" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Report Format</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Kaizen%20Team%20Charter%20Leadership%20Definitions.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Team Charter Leadership Definitions</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/4-kaizen%20time%20observation%20form.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Time Observation Form</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/KaizenWrksht.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Worksheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/6-problem%20sheet.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Problem Sheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Team%20Charter.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Team Charter</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/2-Time%20Observation%20Form.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation Form</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/95-Value%20Stream%20Map%20Review.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Value Stream Map Review</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/94-VSM%20Plan%20sheet.xls" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Plan Sheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/8-Work%20Station%20Requirements%20Form.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Work Station Requirements Form</a>
+                <a href="/api/files/handbook/KAIZEN%20CHECK%20LIST.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Checklist</a>
+                <a href="/api/files/handbook/1-Kaizen%20Event%20Planning%20Form.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Event Planning Form</a>
+                <a href="/api/files/handbook/Kaizen%20Event%20Preparation%20Checklist.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Event Preparation Checklist</a>
+                <a href="/api/files/handbook/KaizenMilestone.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Milestone</a>
+                <a href="/api/files/handbook/KaizenPlanWrkSht.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Plan Worksheet</a>
+                <a href="/api/files/handbook/Kaizen%20Report%20Format.ppt" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Report Format</a>
+                <a href="/api/files/handbook/Kaizen%20Team%20Charter%20Leadership%20Definitions.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Team Charter Leadership Definitions</a>
+                <a href="/api/files/handbook/4-kaizen%20time%20observation%20form.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Time Observation Form</a>
+                <a href="/api/files/handbook/KaizenWrksht.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Kaizen Worksheet</a>
+                <a href="/api/files/handbook/6-problem%20sheet.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Problem Sheet</a>
+                <a href="/api/files/handbook/Team%20Charter.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Team Charter</a>
+                <a href="/api/files/handbook/2-Time%20Observation%20Form.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation Form</a>
+                <a href="/api/files/handbook/95-Value%20Stream%20Map%20Review.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Value Stream Map Review</a>
+                <a href="/api/files/handbook/94-VSM%20Plan%20sheet.xls" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Plan Sheet</a>
+                <a href="/api/files/handbook/8-Work%20Station%20Requirements%20Form.doc" className="manage-link" target="_blank" rel="noopener noreferrer">Work Station Requirements Form</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Kanban</h5>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Copy%20of%20LE206%20Revised%20Pull%20Calculations%20Template82703.xls" className="manage-link" target="_blank" rel="noopener noreferrer">LE206 Pull Calculations Template</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/5-kanban%20v.3.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Kanban</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Pull%20Calculations%20Template.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Pull Calculations Template</a>
+                <a href="/api/files/handbook/Copy%20of%20LE206%20Revised%20Pull%20Calculations%20Template82703.xls" className="manage-link" target="_blank" rel="noopener noreferrer">LE206 Pull Calculations Template</a>
+                <a href="/api/files/handbook/5-kanban%20v.3.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Kanban</a>
+                <a href="/api/files/handbook/Pull%20Calculations%20Template.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Pull Calculations Template</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Quick Changeover</h5>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/90-co%20combination%20form.xls" className="manage-link" target="_blank" rel="noopener noreferrer">90-CO Combination Form</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Changeover%20Obs%20Sheet%20BLANK.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Changeover Observation Sheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Changeover%20Setup%20Sheet%20BLANK.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Changeover Setup Sheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/QC%20-%20AcmeObsChart.xls" className="manage-link" target="_blank" rel="noopener noreferrer">QC- Acme Observation Chart</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/QC%20-%20Blank%20changeover%20ObsChart.xls" className="manage-link" target="_blank" rel="noopener noreferrer">QC- Blank Changeover Observation Chart</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/3-Quick%20Changeoverv.2.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Quick Changeover</a>
+                <a href="/api/files/handbook/90-co%20combination%20form.xls" className="manage-link" target="_blank" rel="noopener noreferrer">90-CO Combination Form</a>
+                <a href="/api/files/handbook/Changeover%20Obs%20Sheet%20BLANK.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Changeover Observation Sheet</a>
+                <a href="/api/files/handbook/Changeover%20Setup%20Sheet%20BLANK.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Changeover Setup Sheet</a>
+                <a href="/api/files/handbook/QC%20-%20AcmeObsChart.xls" className="manage-link" target="_blank" rel="noopener noreferrer">QC- Acme Observation Chart</a>
+                <a href="/api/files/handbook/QC%20-%20Blank%20changeover%20ObsChart.xls" className="manage-link" target="_blank" rel="noopener noreferrer">QC- Blank Changeover Observation Chart</a>
+                <a href="/api/files/handbook/3-Quick%20Changeoverv.2.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Quick Changeover</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Standardize Work</h5>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/302_-_Cycle_Time_Bar_Chart_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Cycle Time Bar Chart</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Job%20Breakdown%20Sheet.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Job Breakdown Sheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/NEW%20SL_SMP%20cleaned.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">SL_SMP Cleaned</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/NEW%20SL_SMP%20example.xlsm" className="manage-link" target="_blank" rel="noopener noreferrer">SL_SMP Example (xlsm)</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/NEW%20SL_SMP%20example.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">SL_SMP Example (xlsx)</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/302_-_Standardized_Work_Combination_Sheet_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Standardized Work Combination Sheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/302_-_Standardized_Work_Layout_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Standardized Work Layout Master</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/302_-_Time_Observation_Form_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation Form Master</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/302_-_Work_Instruction_Sheet_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Work Instruction Sheet</a>
+                <a href="/api/files/handbook/302_-_Cycle_Time_Bar_Chart_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Cycle Time Bar Chart</a>
+                <a href="/api/files/handbook/Job%20Breakdown%20Sheet.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Job Breakdown Sheet</a>
+                <a href="/api/files/handbook/NEW%20SL_SMP%20cleaned.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">SL_SMP Cleaned</a>
+                <a href="/api/files/handbook/NEW%20SL_SMP%20example.xlsm" className="manage-link" target="_blank" rel="noopener noreferrer">SL_SMP Example (xlsm)</a>
+                <a href="/api/files/handbook/NEW%20SL_SMP%20example.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">SL_SMP Example (xlsx)</a>
+                <a href="/api/files/handbook/302_-_Standardized_Work_Combination_Sheet_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Standardized Work Combination Sheet</a>
+                <a href="/api/files/handbook/302_-_Standardized_Work_Layout_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Standardized Work Layout Master</a>
+                <a href="/api/files/handbook/302_-_Time_Observation_Form_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation Form Master</a>
+                <a href="/api/files/handbook/302_-_Work_Instruction_Sheet_Master.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Work Instruction Sheet</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Time Measurement</h5>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Job%20Breakdown%20Sheet.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Job Breakdown Sheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Observed%20Times.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Observed Times</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Standard%20Work%20Combo%20Table.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Standard Work Combination Table</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Time%20Measurement%20Tool.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Time Measurement Tool</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Time%20Observation%20with%20Work%20Content%20Graph.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation with Work Content Graph</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/2021%20Time%20and%20Motion%20Study%20(1).pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Time and Motion Study</a>
+                <a href="/api/files/handbook/Job%20Breakdown%20Sheet.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Job Breakdown Sheet</a>
+                <a href="/api/files/handbook/Observed%20Times.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Observed Times</a>
+                <a href="/api/files/handbook/Standard%20Work%20Combo%20Table.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Standard Work Combination Table</a>
+                <a href="/api/files/handbook/Time%20Measurement%20Tool.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Time Measurement Tool</a>
+                <a href="/api/files/handbook/Time%20Observation%20with%20Work%20Content%20Graph.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation with Work Content Graph</a>
+                <a href="/api/files/staff-only-materials/2021%20Time%20and%20Motion%20Study%20(1).pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Time and Motion Study</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">TPM</h5>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Time%20Obs%20Form.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation Form</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/TPM%20-%20Exercise%201.doc" className="manage-link" target="_blank" rel="noopener noreferrer">TPM - Exercise 1</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/TPM%20-%20Exercise%202.doc" className="manage-link" target="_blank" rel="noopener noreferrer">TPM - Exercise 2</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/TPM%20OEE%20Worksheet.xls" className="manage-link" target="_blank" rel="noopener noreferrer">TPM OEE Worksheet</a>
+                <a href="/api/files/handbook/Time%20Obs%20Form.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Time Observation Form</a>
+                <a href="/api/files/handbook/TPM%20-%20Exercise%201.doc" className="manage-link" target="_blank" rel="noopener noreferrer">TPM - Exercise 1</a>
+                <a href="/api/files/handbook/TPM%20-%20Exercise%202.doc" className="manage-link" target="_blank" rel="noopener noreferrer">TPM - Exercise 2</a>
+                <a href="/api/files/handbook/TPM%20OEE%20Worksheet.xls" className="manage-link" target="_blank" rel="noopener noreferrer">TPM OEE Worksheet</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">VSM</h5>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/BlankStoryboard.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Blank Storyboard</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/ContFlowQ-I.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Continuous Flow</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/CStateIcons.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Current State Icons</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/DemandQ-I.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Demand Phase Questions</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/LeanQuestions.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Lean Questions</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/LevelingQ-I.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Leveling Questions</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/MapGuidelines.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Map Guidelines</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/RouteWrksht.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Route Worksheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/StyBrdWorksheet.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Storyboard Worksheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Value%20Stream%20Map%20Review.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Value Stream Map Review</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/6-Value%20Stream%20Mapping%20v.2.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Value Stream Mapping</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/VSMIcons.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Icons</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/VSM%20Intern%20Orientation%20.ppt" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Intern Orientation</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/VSM%20Plan%20sheet.xls" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Plan Sheet</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/VSM%20Sheet%2011%20by%2017.ppt" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Sheet 11x17</a>
+                <a href="/api/files/handbook/BlankStoryboard.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Blank Storyboard</a>
+                <a href="/api/files/handbook/ContFlowQ-I.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Continuous Flow</a>
+                <a href="/api/files/handbook/CStateIcons.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Current State Icons</a>
+                <a href="/api/files/handbook/DemandQ-I.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Demand Phase Questions</a>
+                <a href="/api/files/handbook/LeanQuestions.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Lean Questions</a>
+                <a href="/api/files/handbook/LevelingQ-I.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Leveling Questions</a>
+                <a href="/api/files/handbook/MapGuidelines.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Map Guidelines</a>
+                <a href="/api/files/handbook/RouteWrksht.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Route Worksheet</a>
+                <a href="/api/files/handbook/StyBrdWorksheet.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Storyboard Worksheet</a>
+                <a href="/api/files/handbook/Value%20Stream%20Map%20Review.xls" className="manage-link" target="_blank" rel="noopener noreferrer">Value Stream Map Review</a>
+                <a href="/api/files/handbook/6-Value%20Stream%20Mapping%20v.2.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Value Stream Mapping</a>
+                <a href="/api/files/handbook/VSMIcons.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Icons</a>
+                <a href="/api/files/handbook/VSM%20Intern%20Orientation%20.ppt" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Intern Orientation</a>
+                <a href="/api/files/handbook/VSM%20Plan%20sheet.xls" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Plan Sheet</a>
+                <a href="/api/files/handbook/VSM%20Sheet%2011%20by%2017.ppt" className="manage-link" target="_blank" rel="noopener noreferrer">VSM Sheet 11x17</a>
               </div>
             </AccordionItem>
 
             {/* Payroll */}
             <AccordionItem key="7" aria-label="Payroll" title="Payroll" HeadingComponent="div">
               <div className="flex flex-col gap-3">
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/2026_APC_Internship_Calendar.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">2026 Payroll Calendar</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/2027%20APC%20Internship%20Calendar.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">2027 Payroll Calendar</a>
+                <a href="/api/files/staff-only-materials/2026_APC_Internship_Calendar.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">2026 Payroll Calendar</a>
+                <a href="/api/files/staff-only-materials/2027%20APC%20Internship%20Calendar.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">2027 Payroll Calendar</a>
               </div>
             </AccordionItem>
 
             {/* Presentations */}
             <AccordionItem key="8" aria-label="Presentations" title="Presentations" HeadingComponent="div">
               <div className="flex flex-col gap-3">
-                <a href="https://apcstorage.blob.core.windows.net/handbook/PPT%20Presentation%20Training.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">PPT Presentation Training</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Sample%20Presentation.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Sample Presentation</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/APC.Student.Poster.template.pub" className="manage-link" target="_blank" rel="noopener noreferrer">Student Poster Template</a>
+                <a href="/api/files/handbook/PPT%20Presentation%20Training.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">PPT Presentation Training</a>
+                <a href="/api/files/handbook/Sample%20Presentation.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Sample Presentation</a>
+                <a href="/api/files/staff-only-materials/APC.Student.Poster.template.pub" className="manage-link" target="_blank" rel="noopener noreferrer">Student Poster Template</a>
               </div>
             </AccordionItem>
 
             {/* Problem Solving */}
             <AccordionItem key="9" aria-label="Problem Solving" title="Problem Solving" HeadingComponent="div">
               <div className="flex flex-col gap-3">
-                <a href="https://apcstorage.blob.core.windows.net/handbook/5Why%20.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">5 Why</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Practical%20Problem%20Solving%20v1.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Practical Problem Solving</a>
-                <a href="https://apcstorage.blob.core.windows.net/handbook/Problem%20Solving.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Problem Solving</a>
+                <a href="/api/files/handbook/5Why%20.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">5 Why</a>
+                <a href="/api/files/handbook/Practical%20Problem%20Solving%20v1.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Practical Problem Solving</a>
+                <a href="/api/files/handbook/Problem%20Solving.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Problem Solving</a>
               </div>
             </AccordionItem>
 
@@ -364,29 +364,29 @@ export default function ManagePage() {
             <AccordionItem key="11" aria-label="Staff Files" title="Staff Files" HeadingComponent="div">
               <div className="flex flex-col gap-3">
                 <h5 className="text-[15px] font-semibold mt-2 mb-1 text-[#333333]">Proposals</h5>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Internship-Proposal-Rev-18-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Proposal for Internship Program</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Professional-Services-Proposal-Rev-11-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Proposal for Professional Services</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/APC%20Internship%20Calculator%20%202027%20v.10.21.2026.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Proposal Calculator</a>
+                <a href="/api/files/staff-only-materials/Internship-Proposal-Rev-18-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Proposal for Internship Program</a>
+                <a href="/api/files/staff-only-materials/Professional-Services-Proposal-Rev-11-22625.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Proposal for Professional Services</a>
+                <a href="/api/files/staff-only-materials/APC%20Internship%20Calculator%20%202027%20v.10.21.2026.xlsx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Proposal Calculator</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Staff Materials</h5>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Service%20Log%20Instructions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Service Log Instructions</a>
+                <a href="/api/files/staff-only-materials/Service%20Log%20Instructions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Service Log Instructions</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Staff Surveys</h5>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Work_Schedules_Fall_2018%20(1).qsf" className="manage-link" target="_blank" rel="noopener noreferrer">Schedule Survey</a>
+                <a href="/api/files/staff-only-materials/Work_Schedules_Fall_2018%20(1).qsf" className="manage-link" target="_blank" rel="noopener noreferrer">Schedule Survey</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">One Drive</h5>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/One%20Drive%20Collaboration%20Instructions%20(1).docx" className="manage-link" target="_blank" rel="noopener noreferrer">One Drive Instructions</a>
+                <a href="/api/files/staff-only-materials/One%20Drive%20Collaboration%20Instructions%20(1).docx" className="manage-link" target="_blank" rel="noopener noreferrer">One Drive Instructions</a>
                 
                 <h5 className="text-[15px] font-semibold mt-4 mb-1 text-[#333333]">Intern Hiring Documents</h5>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Non-UA_Student_Intern_Hiring_Process_for_Staff_Revision_3_072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Non-UA Student Intern Hiring Process for Staff</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Non-UA_Onboarding_Checklist_for_Interns_Revision_3_072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Non-UA Onboarding Checklist for Interns</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/UA_Student_Intern_Hiring_Process_for_Staff_Revision_2_072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">UA Student Intern Hiring Process for Staff</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Combined_Confidentiality_and_Handbook_Signature_Pages_05272025.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Combined Confidentiality & Handbook Signature Pages</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Internship%20Commitment%20Letter%20-%20Non-UA-Student%20Revision-12%2010142026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Commitment Letter - Non-UA Student</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Internship%20Commitment%20Letter%20-%20UA%20Student-Revision-22%2010142026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Commitment Letter - UA Student</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Internship%20Commitment%20Letter%20-%20Return%20Student%20Revision-6%2010142026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Commitment Letter - Return Student</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Handbook-Compliance-Highlights-Revision-3-0825223.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Handbook Compliance Document</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Interview Questionnaire Revision 10 04172026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Questionnaire</a>
+                <a href="/api/files/staff-only-materials/Non-UA_Student_Intern_Hiring_Process_for_Staff_Revision_3_072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Non-UA Student Intern Hiring Process for Staff</a>
+                <a href="/api/files/staff-only-materials/Non-UA_Onboarding_Checklist_for_Interns_Revision_3_072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Non-UA Onboarding Checklist for Interns</a>
+                <a href="/api/files/staff-only-materials/UA_Student_Intern_Hiring_Process_for_Staff_Revision_2_072926.docx" className="manage-link" target="_blank" rel="noopener noreferrer">UA Student Intern Hiring Process for Staff</a>
+                <a href="/api/files/staff-only-materials/Combined_Confidentiality_and_Handbook_Signature_Pages_05272025.pdf" className="manage-link" target="_blank" rel="noopener noreferrer">Combined Confidentiality & Handbook Signature Pages</a>
+                <a href="/api/files/staff-only-materials/Internship%20Commitment%20Letter%20-%20Non-UA-Student%20Revision-12%2010142026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Commitment Letter - Non-UA Student</a>
+                <a href="/api/files/staff-only-materials/Internship%20Commitment%20Letter%20-%20UA%20Student-Revision-22%2010142026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Commitment Letter - UA Student</a>
+                <a href="/api/files/staff-only-materials/Internship%20Commitment%20Letter%20-%20Return%20Student%20Revision-6%2010142026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Internship Commitment Letter - Return Student</a>
+                <a href="/api/files/staff-only-materials/Handbook-Compliance-Highlights-Revision-3-0825223.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Handbook Compliance Document</a>
+                <a href="/api/files/staff-only-materials/Interview Questionnaire Revision 10 04172026.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Questionnaire</a>
               </div>
             </AccordionItem>
             ) : null}
@@ -394,13 +394,13 @@ export default function ManagePage() {
             {/* Interview Tips */}
             <AccordionItem key="12" aria-label="Interview Tips" title="Interview Tips" HeadingComponent="div">
               <div className="flex flex-col gap-3">
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Interview Tips for In Person Interviews.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Tips for In Person Interviews</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Interview Tips for Virtual Interviews.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Tips for Virtual Interviews</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Interviewee.Questions.for.Interns.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Questions for Interns</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/STAR-Method-Updated-02272025.docx" className="manage-link" target="_blank" rel="noopener noreferrer">STAR Method</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Additional.Interviewee.Questions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Additional Interview Questions</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Behavioral.Analytical.Team.Focused.Interview.Questions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Behavioral Analytical Team Focused Interview</a>
-                <a href="https://apcstorage.blob.core.windows.net/staff-only-materials/Resume_Building.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Resume Optimization</a>
+                <a href="/api/files/staff-only-materials/Interview Tips for In Person Interviews.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Tips for In Person Interviews</a>
+                <a href="/api/files/staff-only-materials/Interview Tips for Virtual Interviews.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Tips for Virtual Interviews</a>
+                <a href="/api/files/staff-only-materials/Interviewee.Questions.for.Interns.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Interview Questions for Interns</a>
+                <a href="/api/files/staff-only-materials/STAR-Method-Updated-02272025.docx" className="manage-link" target="_blank" rel="noopener noreferrer">STAR Method</a>
+                <a href="/api/files/staff-only-materials/Additional.Interviewee.Questions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Additional Interview Questions</a>
+                <a href="/api/files/staff-only-materials/Behavioral.Analytical.Team.Focused.Interview.Questions.docx" className="manage-link" target="_blank" rel="noopener noreferrer">Behavioral Analytical Team Focused Interview</a>
+                <a href="/api/files/staff-only-materials/Resume_Building.pptx" className="manage-link" target="_blank" rel="noopener noreferrer">Resume Optimization</a>
               </div>
             </AccordionItem>
 

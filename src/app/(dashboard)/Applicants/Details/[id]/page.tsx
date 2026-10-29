@@ -720,7 +720,7 @@ export default function ApplicantsDetailsPage() {
                   ) : key === "view-resume" ? (
                     applicant?.resumeId && applicant.resumeId.length > 15 ? (
                       <a
-                        href={`https://apcstorage.blob.core.windows.net/resumes/${encodeURIComponent(applicant.resumeId)}`}
+                        href={`/api/files/resumes/${encodeURIComponent(applicant.resumeId)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={actionButtonClass + " no-underline"}

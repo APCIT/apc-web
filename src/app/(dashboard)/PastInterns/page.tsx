@@ -14,7 +14,7 @@ import {
   type PastInternItem,
 } from "@/lib/api";
 
-const BLOB_BASE = "https://apcstorage.blob.core.windows.net";
+const BLOB_BASE = "/api/files";
 const CONTAINER_MID_SEM = "intern-reports";
 
 const DELETE_CONFIRM_MESSAGE = "Are you sure you want to permanently delete this past intern?";
