@@ -3429,6 +3429,11 @@ a.time-log-mobile-only {
     display: flex !important;
   }
 
+  /* Keep desktop page chrome identical to pre-mobile redesign */
+  .time-log-page {
+    background-color: #ffffff;
+  }
+
   .time-log-page-inner {
     padding: 2rem 100px;
   }

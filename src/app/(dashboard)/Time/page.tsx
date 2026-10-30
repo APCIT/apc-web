@@ -753,7 +753,7 @@ function TimePageContent() {
                   : rows.map((row, index) => (
                       <tr key={row.date} className="bg-white hover:bg-[#f5f5f5] h-[80px]">
                         <td className="border border-[#ddd] py-[15px] px-[10px] text-center align-middle">
-                          <div className="text-[18px] font-normal mb-1 text-black">
+                          <div className="text-[18px] font-normal mb-1 text-[#555555]">
                             {getDayName(row.date)}
                           </div>
                           <div className="text-[#555555] text-xs">
