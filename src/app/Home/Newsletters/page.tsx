@@ -43,6 +43,18 @@ type NewsArticle = {
 
 const newsletterEntries: NewsletterEntry[] = [
   {
+    title: 'October 2026',
+    href: 'https://t.e2ma.net/webview/9p3r2r/e2449ec644b358483545a2afd6bd49e4',
+    cta: 'View Newsletter',
+    isExternal: true,
+  },
+  {
+    title: 'September 2026',
+    href: 'https://t.e2ma.net/webview/xk7x1r/fb5b87cc8f22ec91b7fe47fb56a4f218',
+    cta: 'View Newsletter',
+    isExternal: true,
+  },
+  {
     title: 'August 2026',
     href: 'https://t.e2ma.net/webview/th6r0r/207a7cbe73ea9c7bb8f43a7a6ad009fd',
     cta: 'View Newsletter',
