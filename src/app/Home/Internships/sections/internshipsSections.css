@@ -1,0 +1,100 @@
+/* Scoped layout for Internships redesign — avoids depending on newly-scanned Tailwind utilities */
+
+.apc-intern-section {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.apc-intern-why-grid,
+.apc-intern-majors-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.apc-intern-partners-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem 2.5rem;
+  width: 100%;
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.apc-intern-partners-grid > div {
+  flex: 0 1 180px;
+  max-width: 200px;
+}
+
+@media (min-width: 640px) {
+  .apc-intern-why-grid,
+  .apc-intern-majors-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .apc-intern-why-grid,
+  .apc-intern-majors-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.apc-intern-steps-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 36rem;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+}
+
+.apc-intern-steps-desktop {
+  display: none;
+  max-width: 72rem;
+  margin: 0 auto;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .apc-intern-steps-mobile {
+    display: none;
+  }
+
+  .apc-intern-steps-desktop {
+    display: flex;
+  }
+}
+
+.apc-intern-stories-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: center;
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .apc-intern-stories-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.apc-intern-hero {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 28vh;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
