@@ -952,6 +952,31 @@ export default function AboutPage() {
                 Executive Director
               </h4>
             </div>
+
+            {/* Nathan Reamey */}
+            <div className="staff-member" style={{flex: '0 0 auto'}}>
+              <div className="headshot-container">
+                <div className="image-cropper">
+                  <img 
+                    className="staff-photo" 
+                    src="/images/Board Headshots/Nathan Reamey Headshot Photo.jpg" 
+                    alt="Nathan Reamey"
+                    style={{width: '113%', height: '113%', marginLeft: '-15px'}}
+                  />
+                </div>
+              </div>
+              <h3 style={{textAlign: 'center', fontSize: '1.4em', marginTop: '1em', marginBottom: '0.3em', fontFamily: 'proxima-nova, sans-serif', color: '#9E1B32', fontWeight: 'normal'}}>
+                Nathan Reamey
+              </h3>
+              <a href="https://www.vulcanpainters.com" target="_blank" rel="noopener noreferrer">
+                <h4 style={{textAlign: 'center', fontSize: '1.05em', marginTop: '0', marginBottom: '0.3em', color: 'blue', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal', textDecoration: 'underline'}}>
+                  Vulcan Painters, Inc.
+                </h4>
+              </a>
+              <h4 style={{textAlign: 'center', fontSize: '1.1em', marginTop: '0', color: 'black', fontFamily: 'proxima-nova, sans-serif', fontWeight: 'normal'}}>
+                Chief Operating Officer
+              </h4>
+            </div>
           </div>
         </div>
       </div>
