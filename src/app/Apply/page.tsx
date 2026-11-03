@@ -82,7 +82,7 @@ const SCHOOLS = [
   { v: "ASU", t: "ASU - Athens" },
   { v: "AU", t: "AU - Auburn" },
   { v: "CCC", t: "CCC - Calhoun Community College" },
-  { v: "COC", t: "COC - Coastal Community College" },
+  { v: "COC", t: "COC - Coastal Alabama Community College" },
   { v: "DCC", t: "DCC - Drake Community College" },
   { v: "JSU", t: "JSU - Jacksonville State University" },
   { v: "MS", t: "MS - Mississippi State" },

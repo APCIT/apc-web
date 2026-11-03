@@ -129,7 +129,7 @@ export default function ApplicantSearchPage() {
                 <option value="ASU">ASU - Athens</option>
                 <option value="AU">AU - Auburn</option>
                 <option value="CCC">CCC - Calhoun Community College</option>
-                <option value="COC">COC - Coastal Community College</option>
+                <option value="COC">COC - Coastal Alabama Community College</option>
                 <option value="DCC">DCC - Drake Community College</option>
                 <option value="JSU">JSU - Jacksonville State University</option>
                 <option value="MS">MS - Mississippi State</option>
