@@ -679,6 +679,23 @@ textarea.form-control {
   color: inherit !important;
 }
 
+/* Kill native button chrome + default h2 margin that split the header color */
+.serviceDetailsRow [data-slot="heading"] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.serviceDetailsRow [data-slot="trigger"] {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+
 /* Ensure all accordion child elements inherit background */
 .serviceDetailsRow [data-slot="content"] > * {
   background-color: transparent !important;
@@ -709,8 +726,8 @@ textarea.form-control {
 .service-category-expanded-services,
 .service-category-expanded-services [data-slot="base"],
 .service-category-expanded-services [data-slot="trigger"] {
-  background-color: #A0A4A0 !important;
-  color: #212124 !important;
+  background-color: #4F5552 !important;
+  color: #ffffff !important;
 }
 
 /* Opened panel: light background for readable body + nested items */
