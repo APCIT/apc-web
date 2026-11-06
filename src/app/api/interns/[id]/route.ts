@@ -94,6 +94,8 @@ export type InternDetailItem = {
   contactRelationship: string | null;
   contactPhone: string | null;
   resumeId: string | null;
+  /** Blob name in intern-headshots container (opaque UUID). */
+  headshotId: string | null;
   impactCalcId: string | null;
   presentationId: string | null;
 };
@@ -266,6 +268,7 @@ export async function GET(
       contactRelationship: intern.ContactRelationship ?? null,
       contactPhone: intern.ContactPhone ?? null,
       resumeId: intern.ResumeId ?? null,
+      headshotId: intern.HeadshotId ?? null,
       impactCalcId: intern.ImpactCalcId ?? null,
       presentationId: intern.PresentationId ?? null,
     };

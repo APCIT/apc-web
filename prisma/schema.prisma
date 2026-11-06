@@ -158,6 +158,7 @@ model Interns {
   Level               String?         @db.NVarChar(Max)
   GradDate            DateTime        @db.DateTime
   ResumeId            String?         @db.NVarChar(Max)
+  HeadshotId          String?         @db.NVarChar(Max)
   ContactName         String?         @default("", map: "DF__Interns__Contact__5AEE82B9") @db.NVarChar(Max)
   ContactRelationship String?         @default("", map: "DF__Interns__Contact__5BE2A6F2") @db.NVarChar(Max)
   ContactPhone        String?         @default("", map: "DF__Interns__Contact__5CD6CB2B") @db.NVarChar(Max)

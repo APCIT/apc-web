@@ -31,6 +31,16 @@ const PRESENTATION_ROLES = ["IT", "admin", "staff", "advisor", "reception"];
 /** Checklist uploads — staff or the intern (opaque UUID). */
 const CHECKLIST_ROLES = ["IT", "admin", "staff", "reception", "intern"];
 
+/** Intern headshots — same audience as resumes (opaque UUID; no phone in URL). */
+const HEADSHOT_ROLES = [
+  "IT",
+  "admin",
+  "staff",
+  "reception",
+  "accountant",
+  "intern",
+];
+
 async function requireAccess(
   container: string
 ): Promise<{ error: NextResponse } | { ok: true; roles: string[] }> {
@@ -67,6 +77,8 @@ async function requireAccess(
     container === "checklist-presentation"
   ) {
     allowed = CHECKLIST_ROLES;
+  } else if (container === "intern-headshots") {
+    allowed = HEADSHOT_ROLES;
   } else {
     return {
       error: NextResponse.json({ error: "Forbidden" }, { status: 403 }),

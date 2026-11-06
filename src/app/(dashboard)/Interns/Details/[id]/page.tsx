@@ -25,6 +25,7 @@ import {
   GET_ME_API,
   getInternTimesheetExportUrl,
   UPDATE_INTERN_RESUME_API,
+  UPDATE_INTERN_HEADSHOT_API,
   UPDATE_INTERN_IMPACT_CALC_API,
   UPDATE_INTERN_PRESENTATION_API,
   GET_IMPACT_TOTALS_API,
@@ -97,6 +98,10 @@ const detailsAccordionItemClasses = {
 /** Same look and size as Back to Interns – content width. Spacing from parent gap. */
 const actionButtonClass =
   "inline-flex items-center justify-center gap-2 px-[12px] py-[6px] border border-[#ccc] rounded-[10px] text-[#333] bg-white hover:bg-[#e6e6e6] hover:border-[#adadad] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none";
+
+/** Modal footer buttons – same as Time page (Hometown/Mentor) and Applicants Update Resume. */
+const modalButtonClass =
+  "inline-flex items-center px-[12px] py-[6px] border border-[#900] rounded-[10px] text-[#900] bg-gray-200 hover:bg-gray-300 hover:border-[#700] text-[14px] leading-[1.42857143] font-normal text-center align-middle cursor-pointer select-none no-underline hover:no-underline";
 
 /** Skeleton/ghost style – same as Companies/Edit (gray pulse). */
 const skeletonStyle = {
@@ -174,6 +179,7 @@ function RefreshIcon() {
 const LEFT_ACTIONS: { label: string; icon?: React.ReactNode }[] = [
   { label: "Export Timesheet", icon: <CloudDownloadIcon /> },
   { label: "Update Resume", icon: <CloudDownloadIcon /> },
+  { label: "Update Picture", icon: <CloudDownloadIcon /> },
   { label: "Update Impact Calc", icon: <CloudDownloadIcon /> },
   { label: "Update Presentation", icon: <CloudDownloadIcon /> },
   { label: "New Semester", icon: <RefreshIcon /> },
@@ -185,6 +191,7 @@ const RIGHT_ACTIONS: { label: string; icon?: React.ReactNode }[] = [
 ];
 
 const RESUME_BLOB_BASE = "/api/files/resumes";
+const HEADSHOT_BLOB_BASE = "/api/files/intern-headshots";
 /** Left/right table row – same style as PastInterns Details. */
 function TableRow({
   label,
@@ -427,6 +434,12 @@ export default function InternDetailsPage() {
   const [updateResumeError, setUpdateResumeError] = useState<string | null>(null);
   const [updateResumeSelectedFileName, setUpdateResumeSelectedFileName] = useState<string | null>(null);
   const resumeFileInputRef = useRef<HTMLInputElement>(null);
+
+  const updatePictureDisclosure = useDisclosure();
+  const [updatePictureLoading, setUpdatePictureLoading] = useState(false);
+  const [updatePictureError, setUpdatePictureError] = useState<string | null>(null);
+  const [updatePictureSelectedFileName, setUpdatePictureSelectedFileName] = useState<string | null>(null);
+  const pictureFileInputRef = useRef<HTMLInputElement>(null);
 
   const updateImpactCalcDisclosure = useDisclosure();
   const [updateImpactCalcLoading, setUpdateImpactCalcLoading] = useState(false);
@@ -750,6 +763,48 @@ export default function InternDetailsPage() {
     [id, fetchDetail, updateResumeDisclosure]
   );
 
+  const handleUpdatePictureClick = useCallback(
+    async (e: React.MouseEvent) => {
+      e.preventDefault();
+      if (!id) return;
+      const file = pictureFileInputRef.current?.files?.[0];
+      if (!file || file.size === 0) {
+        setUpdatePictureError("Please select a file to upload.");
+        return;
+      }
+      setUpdatePictureError(null);
+      setUpdatePictureLoading(true);
+      const abort = new AbortController();
+      const timeoutId = setTimeout(() => abort.abort(), 120_000);
+      try {
+        const headshotFileBase64 = await fileToBase64(file);
+        const res = await UPDATE_INTERN_HEADSHOT_API(
+          id,
+          { headshotFileBase64, headshotFileName: file.name },
+          { signal: abort.signal }
+        );
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          updatePictureDisclosure.onClose();
+          fetchDetail();
+          if (pictureFileInputRef.current) pictureFileInputRef.current.value = "";
+          setUpdatePictureSelectedFileName(null);
+        } else {
+          setUpdatePictureError(res.error ?? "Failed to update picture");
+        }
+      } catch (err) {
+        const isAbort = err instanceof Error && err.name === "AbortError";
+        setUpdatePictureError(
+          isAbort ? "Upload timed out. Please try again." : "Failed to update picture"
+        );
+      } finally {
+        clearTimeout(timeoutId);
+        setUpdatePictureLoading(false);
+      }
+    },
+    [id, fetchDetail, updatePictureDisclosure]
+  );
+
   const handleUpdateImpactCalcClick = useCallback(
     async (e: React.MouseEvent) => {
       e.preventDefault();
@@ -859,6 +914,7 @@ export default function InternDetailsPage() {
   const canUpdateResume = !!roles?.some((r) =>
     ["admin", "IT", "staff"].includes(r)
   );
+  const canUpdatePicture = canUpdateResume;
   const canNewSemester = !!roles?.some((r) =>
     ["admin", "IT"].includes(r)
   );
@@ -1684,6 +1740,42 @@ export default function InternDetailsPage() {
                           <span>{label}</span>
                         </button>
                       )
+                    ) : label === "Update Picture" ? (
+                      rolesLoading || !id ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : canUpdatePicture ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass}
+                          onClick={() => {
+                            setUpdatePictureError(null);
+                            setUpdatePictureSelectedFileName(null);
+                            if (pictureFileInputRef.current) pictureFileInputRef.current.value = "";
+                            updatePictureDisclosure.onOpen();
+                          }}
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      )
                     ) : label === "Update Impact Calc" ? (
                       rolesLoading || !id ? (
                         <button
@@ -1919,17 +2011,24 @@ export default function InternDetailsPage() {
                 ))}
               </div>
               {(() => {
+                const headshotId = intern?.headshotId?.trim() ?? "";
                 const cwid = intern?.cwid?.trim() ?? "";
                 const phone = intern?.phone?.replace(/\D/g, "") ?? "";
-                const hasCustomHeadshot = !!cwid && !!phone;
-                const candidates = hasCustomHeadshot
+                const hasLegacyHeadshot = !!cwid && !!phone;
+                const legacyCandidates = hasLegacyHeadshot
                   ? [
                       `/images/InternHeadshots/${encodeURIComponent(phone)}.jpg`,
                       `/images/InternHeadshots/${encodeURIComponent(phone)}.JPG`,
                       `/images/InternHeadshots/${encodeURIComponent(phone)}.jpeg`,
-                      "/images/InternHeadshots/default.jpg",
                     ]
-                  : ["/images/InternHeadshots/default.jpg"];
+                  : [];
+                const candidates = [
+                  ...(headshotId
+                    ? [`${HEADSHOT_BLOB_BASE}/${encodeURIComponent(headshotId)}`]
+                    : []),
+                  ...legacyCandidates,
+                  "/images/InternHeadshots/default.jpg",
+                ];
                 const src = candidates[0];
                 return (
                   <img
@@ -1949,7 +2048,10 @@ export default function InternDetailsPage() {
                         // Keep relative src when URL parsing is unavailable.
                       }
                       const currentIndex = candidates.findIndex((candidate) =>
-                        currentPath.endsWith(candidate)
+                        currentPath.endsWith(candidate) ||
+                        decodeURIComponent(currentPath).endsWith(
+                          decodeURIComponent(candidate)
+                        )
                       );
                       const nextIndex = currentIndex >= 0 ? currentIndex + 1 : 1;
                       if (nextIndex < candidates.length) {
@@ -2022,6 +2124,100 @@ export default function InternDetailsPage() {
               </ModalFooter>
             </>
           )}
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        isOpen={updatePictureDisclosure.isOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setUpdatePictureError(null);
+            setUpdatePictureSelectedFileName(null);
+            if (pictureFileInputRef.current) pictureFileInputRef.current.value = "";
+            updatePictureDisclosure.onClose();
+          }
+        }}
+        hideCloseButton
+      >
+        <ModalContent className="max-w-[420px] w-full">
+          <ModalHeader className="flex flex-col items-center gap-0 pb-2 border-b-0">
+            <h3 className="font-roboto font-bold text-[#000000] text-center w-full">
+              Update Picture
+            </h3>
+            <p
+              className="font-roboto font-normal text-[#000000] text-center mt-1"
+              style={{ fontSize: "11px" }}
+            >
+              Accepted: JPG, PNG, WEBP (max 10 MB). No need to rename the file.
+            </p>
+          </ModalHeader>
+          <ModalBody className="gap-4 flex flex-col items-center" style={{ paddingBottom: 24 }}>
+            <div className="flex items-center font-roboto justify-center">
+              <label
+                className="w-[140px] text-right text-[14px] text-[#333] font-bold shrink-0"
+                htmlFor="headshot"
+              >
+                Picture file:{" "}
+              </label>
+              <input
+                ref={pictureFileInputRef}
+                type="file"
+                name="headshot"
+                id="headshot"
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                className="font-roboto text-[14px] w-[200px] max-w-[200px]"
+                style={{ marginLeft: 24 }}
+                aria-describedby={
+                  updatePictureError ? "intern-update-picture-error" : undefined
+                }
+                onChange={(e) =>
+                  setUpdatePictureSelectedFileName(e.target.files?.[0]?.name ?? null)
+                }
+              />
+            </div>
+            <p className="font-roboto text-[14px] text-[#666] text-center w-full">
+              {updatePictureSelectedFileName ? (
+                <span className="text-green-700">
+                  File chosen: {updatePictureSelectedFileName}
+                </span>
+              ) : (
+                <span>No file chosen</span>
+              )}
+            </p>
+            {updatePictureError && (
+              <p
+                id="intern-update-picture-error"
+                className="text-red-600 text-sm font-roboto text-center w-full"
+                role="alert"
+              >
+                {updatePictureError}
+              </p>
+            )}
+          </ModalBody>
+          <ModalFooter
+            style={{ gap: 12, paddingTop: 20, paddingBottom: 20, justifyContent: "center" }}
+          >
+            <button
+              type="button"
+              onClick={() => {
+                setUpdatePictureError(null);
+                setUpdatePictureSelectedFileName(null);
+                if (pictureFileInputRef.current) pictureFileInputRef.current.value = "";
+                updatePictureDisclosure.onClose();
+              }}
+              className={modalButtonClass}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              disabled={updatePictureLoading}
+              onClick={handleUpdatePictureClick}
+              className={modalButtonClass + " disabled:opacity-70 disabled:cursor-not-allowed"}
+            >
+              {updatePictureLoading ? "Updating…" : "Update"}
+            </button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
 

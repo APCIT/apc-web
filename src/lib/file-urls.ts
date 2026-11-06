@@ -43,6 +43,7 @@ export function contentTypeForBlobName(blobName: string): string {
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
     ".gif": "image/gif",
+    ".webp": "image/webp",
   };
   return map[ext] ?? "application/octet-stream";
 }

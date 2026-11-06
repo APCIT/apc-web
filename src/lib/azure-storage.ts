@@ -4,6 +4,7 @@ const CONTAINER_PRESENTATIONS = "presentations";
 const CONTAINER_RESUMES = "resumes";
 const CONTAINER_IMPACT_CALC = "checklist-impactcalculator";
 const CONTAINER_CHECKLIST_PRESENTATION = "checklist-presentation";
+export const CONTAINER_HEADSHOTS = "intern-headshots";
 
 /** Containers the app may download from via connection string (after private access). */
 export const ALLOWED_DOWNLOAD_CONTAINERS = [
@@ -15,6 +16,7 @@ export const ALLOWED_DOWNLOAD_CONTAINERS = [
   "handbook",
   "intern-reports",
   "communication-timemangement",
+  "intern-headshots",
 ] as const;
 
 export type AllowedDownloadContainer =
@@ -125,4 +127,22 @@ export async function downloadChecklistPresentationBlob(
   blobName: string
 ): Promise<Buffer> {
   return downloadBlob(CONTAINER_CHECKLIST_PRESENTATION, blobName);
+}
+
+/**
+ * Upload a headshot buffer. Creates the intern-headshots container if missing
+ * (private; no anonymous access). Pass contentType so browsers render the image.
+ */
+export async function uploadHeadshotBlob(
+  blobName: string,
+  data: Buffer,
+  contentType: string
+): Promise<void> {
+  const client = getClient();
+  const container = client.getContainerClient(CONTAINER_HEADSHOTS);
+  await container.createIfNotExists();
+  const blockBlob = container.getBlockBlobClient(blobName);
+  await blockBlob.uploadData(data, {
+    blobHTTPHeaders: { blobContentType: contentType },
+  });
 }

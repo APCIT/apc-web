@@ -6,13 +6,15 @@
 export const RESUME_EXTENSIONS = [".pdf", ".doc", ".docx"] as const;
 export const IMPACT_CALC_EXTENSIONS = [".xlsx", ".xls", ".xlsm"] as const;
 export const PRESENTATION_EXTENSIONS = [".pptx", ".ppt", ".pdf", ".pub"] as const;
+export const HEADSHOT_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp"] as const;
 
 /** Generous caps so normal resumes / Excel / PPTX are unaffected. */
 export const MAX_RESUME_BYTES = 10 * 1024 * 1024; // 10 MB
 export const MAX_IMPACT_CALC_BYTES = 15 * 1024 * 1024; // 15 MB
 export const MAX_PRESENTATION_BYTES = 25 * 1024 * 1024; // 25 MB
+export const MAX_HEADSHOT_BYTES = 10 * 1024 * 1024; // 10 MB
 
-export type UploadKind = "resume" | "impactCalc" | "presentation";
+export type UploadKind = "resume" | "impactCalc" | "presentation" | "headshot";
 
 const KIND_CONFIG: Record<
   UploadKind,
@@ -33,7 +35,26 @@ const KIND_CONFIG: Record<
     maxBytes: MAX_PRESENTATION_BYTES,
     label: "PowerPoint, PDF, or Publisher file (.pptx, .ppt, .pdf, .pub)",
   },
+  headshot: {
+    extensions: HEADSHOT_EXTENSIONS,
+    maxBytes: MAX_HEADSHOT_BYTES,
+    label: "image (.jpg, .jpeg, .png, .webp)",
+  },
 };
+
+/** Content-Type for a validated headshot extension (includes the dot). */
+export function headshotContentType(ext: string): string {
+  switch (ext.toLowerCase()) {
+    case ".png":
+      return "image/png";
+    case ".webp":
+      return "image/webp";
+    case ".jpg":
+    case ".jpeg":
+    default:
+      return "image/jpeg";
+  }
+}
 
 /** Normalized lowercase extension including the dot, or "" if none. */
 export function fileExtension(fileName: string): string {

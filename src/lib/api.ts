@@ -779,6 +779,8 @@ export type InternDetailItem = {
   contactPhone: string | null;
   /** Blob name in resumes container (length > 15 = valid link). */
   resumeId: string | null;
+  /** Blob name in intern-headshots container (opaque UUID). */
+  headshotId: string | null;
   /** Blob name in checklist-impactcalculator container (length > 15 = valid link). */
   impactCalcId: string | null;
   /** Blob name in checklist-presentation container (length > 15 = valid link). */
@@ -1098,6 +1100,35 @@ export async function UPDATE_INTERN_RESUME_API(
     };
   }
   return { ok: true };
+}
+
+/** Upload headshot for intern (admin, IT, staff). POST JSON with base64 file data. */
+export async function UPDATE_INTERN_HEADSHOT_API(
+  id: string,
+  payload: { headshotFileBase64: string; headshotFileName: string },
+  options?: { signal?: AbortSignal }
+): Promise<
+  | { ok: true; headshotId: string }
+  | { ok: false; error: string; status?: number }
+> {
+  const res = await fetch(`${API.interns}/${encodeURIComponent(id)}/headshot`, {
+    ...defaultFetchOptions,
+    method: "POST",
+    body: JSON.stringify(payload),
+    signal: options?.signal,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    return {
+      ok: false,
+      error: (data?.error as string) ?? "Failed to update picture",
+      status: res.status,
+    };
+  }
+  return {
+    ok: true,
+    headshotId: typeof data?.headshotId === "string" ? data.headshotId : "",
+  };
 }
 
 /** Upload impact calc file for intern (admin, IT, staff). POST JSON with base64 file data. */
