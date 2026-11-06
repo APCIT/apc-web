@@ -182,11 +182,12 @@ export default function ServicesPage() {
                 margin: '0 auto',
               }}
             >
-              Advancing economic development in the state of Alabama since 1986, APC works directly
-              with businesses, organizations, and government agencies throughout Alabama to increase
-              their efficiency, provide cost-saving solutions and improve overall productivity. In
-              1996, APC also became part of the National Institute of Standards and Technology for
-              the state of Alabama.
+              We understand that every organization faces unique challenges and opportunities.
+              That&apos;s why we work directly with businesses, organizations, and government agencies
+              throughout Alabama to develop customized solutions that address their specific needs.
+              Through hands-on support, practical strategies, and industry expertise, we help
+              organizations improve efficiency, reduce costs, strengthen operations, and achieve
+              sustainable improvements in productivity and performance.
             </p>
           </div>
 
