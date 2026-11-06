@@ -16,7 +16,7 @@ const internSpotlights: InternSpotlight[] = [
     education:
       "Senior, Advertising and Public Relations with a minor in Communication Studies — University of South Alabama",
     company: "Mazda Toyota Manufacturing",
-    image: "/images/InternHeadshots/8122058136.jpg",
+    image: "/images/InternSpotlights/emma-hostettler.jpg",
     description:
       "In her free time, Emma enjoys spending time with friends and family. During her internship at Mazda Toyota Manufacturing, she hopes to gain a better understanding of social media management and how to support a company’s public reputation through various forms of content creation.",
   },
@@ -25,7 +25,7 @@ const internSpotlights: InternSpotlight[] = [
     education:
       "Fifth-Year Ph.D. Student — The University of Alabama",
     company: "S.T. Bunn",
-    image: "/images/InternHeadshots/2283827821.jpg",
+    image: "/images/InternSpotlights/samuel-campbell.jpg",
     imagePosition: "center 45%",
     description:
       "Originally from Mississippi, Samuel enjoys swimming, reading, and spending time with his fiancé. Through his internship at S.T. Bunn, he hopes to gain real-world experience developing artificial intelligence tools for industry applications.",
@@ -35,7 +35,7 @@ const internSpotlights: InternSpotlight[] = [
     education:
       "Senior, Mechanical Engineering — The University of Alabama in Huntsville",
     company: "Mazda Toyota Manufacturing",
-    image: "/images/InternHeadshots/3347071782.jpg",
+    image: "/images/InternSpotlights/kyler-mitchell.jpg",
     description:
       "Kyler enjoys working on cars in his spare time, including a 1993 Geo Tracker that was passed down to him and has been his project car for the past two years. During his internship at Mazda Toyota Manufacturing, he hopes to learn more about kaizen, or continuous improvement, and how to incorporate it into his everyday life.",
   },
@@ -44,7 +44,7 @@ const internSpotlights: InternSpotlight[] = [
     education:
       "Senior, Operations Management with minors in Supply Chain Management and Communication Studies — The University of Alabama",
     company: "Mercedes-Benz",
-    image: "/images/InternHeadshots/9032932235.jpg",
+    image: "/images/InternSpotlights/emily-holcombe.jpg",
     description:
       "Originally from Texas, Emily enjoys reading outside, line dancing, and finding unique ways to add adventure to her busy lifestyle. Through her internship at Mercedes-Benz, she hopes to gain hands-on experience in process improvement, apply Lean and DMAIC strategies, and work in a fast-paced, quality-focused manufacturing environment.",
   },
@@ -53,7 +53,7 @@ const internSpotlights: InternSpotlight[] = [
     education:
       "Senior, Logistics and Supply Chain Management — Alabama A&M University",
     company: "Mazda Toyota Manufacturing",
-    image: "/images/InternHeadshots/2566521583.jpg",
+    image: "/images/InternSpotlights/camryn-horrison.jpg",
     description:
       "Camryn enjoys working out at the gym, playing basketball, and spending time with family and friends. During his internship at Mazda Toyota Manufacturing, he has gained valuable hands-on experience in supply chain operations, working with real data to solve real-world problems, and collaborating across multiple teams. The experience has strengthened his skills in manufacturing processes, data analytics, and cross-functional communication.",
   },
