@@ -179,7 +179,6 @@ function RefreshIcon() {
 const LEFT_ACTIONS: { label: string; icon?: React.ReactNode }[] = [
   { label: "Export Timesheet", icon: <CloudDownloadIcon /> },
   { label: "Update Resume", icon: <CloudDownloadIcon /> },
-  { label: "Update Picture", icon: <CloudDownloadIcon /> },
   { label: "Update Impact Calc", icon: <CloudDownloadIcon /> },
   { label: "Update Presentation", icon: <CloudDownloadIcon /> },
   { label: "New Semester", icon: <RefreshIcon /> },
@@ -188,6 +187,7 @@ const RIGHT_ACTIONS: { label: string; icon?: React.ReactNode }[] = [
   { label: "View Resume", icon: <DocIcon /> },
   { label: "Impact Calculator", icon: <DocIcon /> },
   { label: "Presentation", icon: <DocIcon /> },
+  { label: "Update Picture", icon: <CloudDownloadIcon /> },
 ];
 
 const RESUME_BLOB_BASE = "/api/files/resumes";
@@ -1740,42 +1740,6 @@ export default function InternDetailsPage() {
                           <span>{label}</span>
                         </button>
                       )
-                    ) : label === "Update Picture" ? (
-                      rolesLoading || !id ? (
-                        <button
-                          type="button"
-                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
-                          disabled
-                          aria-disabled="true"
-                        >
-                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
-                          <span>{label}</span>
-                        </button>
-                      ) : canUpdatePicture ? (
-                        <button
-                          type="button"
-                          className={actionButtonClass}
-                          onClick={() => {
-                            setUpdatePictureError(null);
-                            setUpdatePictureSelectedFileName(null);
-                            if (pictureFileInputRef.current) pictureFileInputRef.current.value = "";
-                            updatePictureDisclosure.onOpen();
-                          }}
-                        >
-                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
-                          <span>{label}</span>
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
-                          disabled
-                          aria-disabled="true"
-                        >
-                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
-                          <span>{label}</span>
-                        </button>
-                      )
                     ) : label === "Update Impact Calc" ? (
                       rolesLoading || !id ? (
                         <button
@@ -2001,7 +1965,43 @@ export default function InternDetailsPage() {
                           <span>Presentation</span>
                         </button>
                       );
-                    })() : (
+                    })() : label === "Update Picture" ? (
+                      rolesLoading || !id ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : canUpdatePicture ? (
+                        <button
+                          type="button"
+                          className={actionButtonClass}
+                          onClick={() => {
+                            setUpdatePictureError(null);
+                            setUpdatePictureSelectedFileName(null);
+                            if (pictureFileInputRef.current) pictureFileInputRef.current.value = "";
+                            updatePictureDisclosure.onOpen();
+                          }}
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className={actionButtonClass + " opacity-60 cursor-not-allowed"}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          {icon && <span className="inline-flex shrink-0">{icon}</span>}
+                          <span>{label}</span>
+                        </button>
+                      )
+                    ) : (
                       <button type="button" className={actionButtonClass}>
                         {icon && <span className="inline-flex shrink-0">{icon}</span>}
                         <span>{label}</span>
