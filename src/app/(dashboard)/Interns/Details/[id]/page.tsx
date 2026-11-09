@@ -2012,27 +2012,13 @@ export default function InternDetailsPage() {
               </div>
               {(() => {
                 const headshotId = intern?.headshotId?.trim() ?? "";
-                const cwid = intern?.cwid?.trim() ?? "";
-                const phone = intern?.phone?.replace(/\D/g, "") ?? "";
-                const hasLegacyHeadshot = !!cwid && !!phone;
-                const legacyCandidates = hasLegacyHeadshot
-                  ? [
-                      `/images/InternHeadshots/${encodeURIComponent(phone)}.jpg`,
-                      `/images/InternHeadshots/${encodeURIComponent(phone)}.JPG`,
-                      `/images/InternHeadshots/${encodeURIComponent(phone)}.jpeg`,
-                    ]
-                  : [];
-                const candidates = [
-                  ...(headshotId
-                    ? [`${HEADSHOT_BLOB_BASE}/${encodeURIComponent(headshotId)}`]
-                    : []),
-                  ...legacyCandidates,
-                  "/images/InternHeadshots/default.jpg",
-                ];
-                const src = candidates[0];
+                const defaultSrc = "/images/default-headshot.jpg";
+                const src = headshotId
+                  ? `${HEADSHOT_BLOB_BASE}/${encodeURIComponent(headshotId)}`
+                  : defaultSrc;
                 return (
                   <img
-                    key={candidates.join("|")}
+                    key={src}
                     src={src}
                     alt={intern ? `${intern.firstName} ${intern.lastName}`.trim() : "Intern headshot"}
                     width={300}
@@ -2041,21 +2027,8 @@ export default function InternDetailsPage() {
                     style={{ width: 300, height: 300 }}
                     onError={(e) => {
                       const img = e.currentTarget;
-                      let currentPath = img.getAttribute("src") ?? "";
-                      try {
-                        currentPath = new URL(img.src).pathname;
-                      } catch {
-                        // Keep relative src when URL parsing is unavailable.
-                      }
-                      const currentIndex = candidates.findIndex((candidate) =>
-                        currentPath.endsWith(candidate) ||
-                        decodeURIComponent(currentPath).endsWith(
-                          decodeURIComponent(candidate)
-                        )
-                      );
-                      const nextIndex = currentIndex >= 0 ? currentIndex + 1 : 1;
-                      if (nextIndex < candidates.length) {
-                        img.src = candidates[nextIndex];
+                      if (!img.src.endsWith(defaultSrc)) {
+                        img.src = defaultSrc;
                       }
                     }}
                   />

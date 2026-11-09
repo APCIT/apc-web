@@ -4,13 +4,12 @@ import { getSession } from "@/lib/auth";
 import { uploadHeadshotBlob } from "@/lib/azure-storage";
 import { headshotContentType, validateUpload } from "@/lib/upload-validation";
 
-/** Update Picture: admin, IT, staff only (same as Update Resume). */
-const ROLES = ["admin", "IT", "staff"];
+/** Staff can update any intern; interns can update their own picture only. */
+const STAFF_ROLES = ["admin", "IT", "staff"];
 
-async function requireAccess(): Promise<
-  | { error: NextResponse }
-  | { ok: true }
-> {
+async function requireAccess(
+  internId: string
+): Promise<{ error: NextResponse } | { ok: true }> {
   const session = await getSession();
   if (!session?.isLoggedIn || !session.userId) {
     return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
@@ -23,7 +22,10 @@ async function requireAccess(): Promise<
     return { error: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
   }
   const roles = user.AspNetUserRoles.map((ur) => ur.AspNetRoles.Name);
-  if (!ROLES.some((r) => roles.includes(r))) {
+  const isStaff = STAFF_ROLES.some((r) => roles.includes(r));
+  const isOwnIntern =
+    roles.includes("intern") && session.userId === internId;
+  if (!isStaff && !isOwnIntern) {
     return { error: NextResponse.json({ error: "Forbidden" }, { status: 403 }) };
   }
   return { ok: true };
@@ -36,13 +38,13 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const access = await requireAccess();
-    if ("error" in access) return access.error;
-
     const id = (await params).id;
     if (!id?.trim()) {
       return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
+
+    const access = await requireAccess(id);
+    if ("error" in access) return access.error;
 
     const body = await _request.json().catch(() => ({}));
     const fileBase64 =

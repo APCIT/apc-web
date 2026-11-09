@@ -7,8 +7,12 @@ import {
   GET_INTERN_DETAIL_API,
   PATCH_INTERN_EDIT_INFO_API,
   UPDATE_INTERN_RESUME_API,
+  UPDATE_INTERN_HEADSHOT_API,
   type InternDetailItem,
 } from "@/lib/api";
+
+const HEADSHOT_BLOB_BASE = "/api/files/intern-headshots";
+const DEFAULT_HEADSHOT = "/images/default-headshot.jpg";
 
 const inputClass =
   "w-[200px] px-3 py-3 border border-[#ccc] rounded-[4px] text-[14px] font-roboto focus:border-[#666] h-[40px]";
@@ -206,6 +210,19 @@ export default function EditInfoPage() {
   const [gradYear, setGradYear] = useState("");
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const resumeInputRef = useRef<HTMLInputElement>(null);
+  const [headshotFile, setHeadshotFile] = useState<File | null>(null);
+  const headshotInputRef = useRef<HTMLInputElement>(null);
+  const [headshotPreviewUrl, setHeadshotPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!headshotFile) {
+      setHeadshotPreviewUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(headshotFile);
+    setHeadshotPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [headshotFile]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -298,6 +315,25 @@ export default function EditInfoPage() {
         setSubmitting(false);
         return;
       }
+      let uploadError: string | null = null;
+      const hadHeadshotUpload = !!headshotFile;
+      const hadResumeUpload = !!resumeFile;
+
+      if (headshotFile) {
+        const base64 = await fileToBase64(headshotFile);
+        const resHeadshot = await UPDATE_INTERN_HEADSHOT_API(intern.id, {
+          headshotFileBase64: base64,
+          headshotFileName: headshotFile.name,
+        });
+        if (!resHeadshot.ok) {
+          uploadError =
+            resHeadshot.error ?? "Profile saved but picture upload failed.";
+        } else {
+          setHeadshotFile(null);
+          if (headshotInputRef.current) headshotInputRef.current.value = "";
+        }
+      }
+
       if (resumeFile) {
         const base64 = await fileToBase64(resumeFile);
         const resResume = await UPDATE_INTERN_RESUME_API(intern.id, {
@@ -305,16 +341,20 @@ export default function EditInfoPage() {
           resumeFileName: resumeFile.name,
         });
         if (!resResume.ok) {
-          setError(resResume.error ?? "Profile saved but resume upload failed.");
+          uploadError =
+            resResume.error ??
+            uploadError ??
+            "Profile saved but resume upload failed.";
         } else {
           setResumeFile(null);
           if (resumeInputRef.current) resumeInputRef.current.value = "";
-          await load();
-          setError(null);
         }
-      } else {
-        setError(null);
       }
+
+      if (hadHeadshotUpload || hadResumeUpload) {
+        await load();
+      }
+      setError(uploadError);
     } catch {
       setError("Failed to update information.");
     }
@@ -709,7 +749,57 @@ export default function EditInfoPage() {
             </div>
           </div>
 
-          {/* 13. Resume */}
+          {/* 13. Picture */}
+          <div className="flex items-start" style={rowStyle}>
+            <label htmlFor="headshotFile" className={labelClass}>Picture</label>
+            <div className="flex-1 flex flex-col gap-2" style={{ marginLeft: "20px" }}>
+              {!loading && (
+                <>
+                  <img
+                    src={
+                      headshotPreviewUrl
+                        ? headshotPreviewUrl
+                        : intern?.headshotId?.trim()
+                          ? `${HEADSHOT_BLOB_BASE}/${encodeURIComponent(intern.headshotId.trim())}`
+                          : DEFAULT_HEADSHOT
+                    }
+                    alt="Your headshot"
+                    width={120}
+                    height={120}
+                    className="rounded-lg object-cover"
+                    style={{ width: 120, height: 120 }}
+                  />
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      className="px-3 py-1 border border-[#767676] bg-white text-[#333] text-sm rounded hover:bg-gray-100"
+                      onClick={() => headshotInputRef.current?.click()}
+                    >
+                      Choose File
+                    </button>
+                    <span className="text-[14px] font-roboto text-[#333]" aria-live="polite">
+                      {headshotFile ? headshotFile.name : "No file chosen"}
+                    </span>
+                    <input
+                      ref={headshotInputRef}
+                      id="headshotFile"
+                      type="file"
+                      name="headshot"
+                      className="hidden"
+                      accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                      aria-describedby="headshot-help"
+                      onChange={(e) => setHeadshotFile(e.target.files?.[0] ?? null)}
+                    />
+                  </div>
+                  <span id="headshot-help" className={helperClass}>
+                    JPG, PNG, or WEBP (max 10 MB). Leave empty to keep your current picture.
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* 14. Resume */}
           <div className="flex items-start" style={rowStyle}>
             <label htmlFor="resumeFile" className={labelClass}>Resume</label>
             <div className="flex-1 flex flex-col gap-2" style={{ marginLeft: "20px" }}>
