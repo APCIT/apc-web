@@ -1,6 +1,7 @@
 import React from 'react';
 
 type ReadyCtaBandProps = {
+  heading?: string;
   subtext: string;
   ctaLabel: string;
   onCtaClick: () => void;
@@ -9,6 +10,7 @@ type ReadyCtaBandProps = {
 const mockFont = 'Georgia, "Times New Roman", Times, serif';
 
 export default function ReadyCtaBand({
+  heading = 'Ready To Get Started?',
   subtext,
   ctaLabel,
   onCtaClick,
@@ -39,7 +41,7 @@ export default function ReadyCtaBand({
             margin: '0 0 0.75rem',
           }}
         >
-          Ready To Get Started?
+          {heading}
         </h2>
         <p
           style={{

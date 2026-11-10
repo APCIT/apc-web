@@ -118,3 +118,15 @@ export function MonitorIcon({ className, title }: IconProps) {
     </svg>
   );
 }
+
+export function AtomIcon({ className, title }: IconProps) {
+  return (
+    <svg className={className} style={defaultIconStyle} viewBox="0 0 48 48" aria-hidden={title ? undefined : true} role={title ? 'img' : undefined}>
+      {title ? <title>{title}</title> : null}
+      <circle cx="24" cy="24" r="3" fill="currentColor" stroke="none" />
+      <ellipse cx="24" cy="24" rx="18" ry="7" transform="rotate(0 24 24)" {...strokeProps} />
+      <ellipse cx="24" cy="24" rx="18" ry="7" transform="rotate(60 24 24)" {...strokeProps} />
+      <ellipse cx="24" cy="24" rx="18" ry="7" transform="rotate(120 24 24)" {...strokeProps} />
+    </svg>
+  );
+}

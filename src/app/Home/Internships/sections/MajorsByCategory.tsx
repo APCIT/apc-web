@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import { BriefcaseIcon, GearIcon, LightbulbIcon, MonitorIcon } from './icons';
+import { AtomIcon, BriefcaseIcon, GearIcon, LightbulbIcon, MonitorIcon } from './icons';
 import './internshipsSections.css';
 
 type MajorCategory = {
@@ -11,34 +11,43 @@ type MajorCategory = {
 const CATEGORIES: MajorCategory[] = [
   {
     title: 'Engineering',
-    icon: <GearIcon className="h-10 w-10" />,
+    icon: <GearIcon />,
     majors: [
       'Mechanical',
       'Aerospace',
       'Electrical',
-      'Industrial & System Engineering',
+      'Industrial & System',
+      'Chemical',
+      'Civil',
+      'Metallurgical',
     ],
   },
   {
     title: 'Business',
-    icon: <BriefcaseIcon className="h-10 w-10" />,
+    icon: <BriefcaseIcon />,
     majors: [
       'Accounting',
       'Finance',
       'Business Management',
       'Marketing',
       'Operations Management',
+      'General',
     ],
   },
   {
-    title: 'Technology',
-    icon: <MonitorIcon className="h-10 w-10" />,
-    majors: ['Computer Science', 'Management Information Systems'],
+    title: 'Science',
+    icon: <AtomIcon />,
+    majors: ['Chemistry', 'Psychology', 'Public Health', 'Environmental'],
   },
   {
-    title: 'Creative & Communications',
-    icon: <LightbulbIcon className="h-10 w-10" />,
+    title: 'Marketing & Communications',
+    icon: <LightbulbIcon />,
     majors: ['Communications', 'Public Relations', 'Advertising', 'Studio Art'],
+  },
+  {
+    title: 'Technology',
+    icon: <MonitorIcon />,
+    majors: ['Computer Science', 'Management Information Systems'],
   },
 ];
 
@@ -49,6 +58,7 @@ type MajorsByCategoryProps = {
 };
 
 const mockFont = 'Georgia, "Times New Roman", Times, serif';
+const bodyFont = 'proxima-nova, Roboto, Arial, sans-serif';
 
 export default function MajorsByCategory({
   heading,
@@ -78,7 +88,7 @@ export default function MajorsByCategory({
           fontFamily: mockFont,
           color: '#000000',
           textAlign: 'center',
-          maxWidth: '48rem',
+          maxWidth: '52rem',
           margin: '0 auto 2.5rem',
           fontSize: '0.95rem',
         }}
@@ -92,15 +102,15 @@ export default function MajorsByCategory({
             style={{
               backgroundColor: '#e4e4e4',
               color: '#000000',
-              minHeight: 280,
-              padding: '2rem 1rem',
-              textAlign: 'center',
+              minHeight: 300,
+              padding: '1.5rem 1.1rem 1.75rem',
+              textAlign: 'left',
             }}
           >
             <div
               style={{
                 color: '#9E1B32',
-                marginBottom: '0.75rem',
+                marginBottom: '0.65rem',
                 display: 'flex',
                 justifyContent: 'center',
               }}
@@ -111,21 +121,24 @@ export default function MajorsByCategory({
               style={{
                 fontFamily: mockFont,
                 color: '#000000',
-                fontWeight: 600,
-                fontSize: '1.2rem',
-                margin: '0 0 1rem',
+                fontWeight: 700,
+                fontSize: '1.15rem',
+                margin: '0 0 0.85rem',
+                textAlign: 'center',
+                lineHeight: 1.25,
               }}
             >
               {category.title}
             </h3>
             <ul
               style={{
-                fontFamily: mockFont,
+                fontFamily: bodyFont,
                 color: '#000000',
-                listStyle: 'none',
-                padding: 0,
+                listStyleType: 'disc',
+                paddingLeft: '1.2rem',
                 margin: 0,
-                fontSize: '0.95rem',
+                fontSize: '0.92rem',
+                lineHeight: 1.45,
               }}
             >
               {category.majors.map((major) => (

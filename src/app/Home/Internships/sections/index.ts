@@ -2,7 +2,7 @@ export { default as WhyFeatureGrid } from './WhyFeatureGrid';
 export type { WhyFeature } from './WhyFeatureGrid';
 export { default as PartnerColleges } from './PartnerColleges';
 export { default as MajorsByCategory } from './MajorsByCategory';
-export { default as HowItWorksSteps, InternshipGuidelines } from './HowItWorksSteps';
+export { default as HowItWorksSteps, InternshipGuidelines, ApplyHereLink } from './HowItWorksSteps';
 export type { HowItWorksStep } from './HowItWorksSteps';
 export { default as TestimonialBand } from './TestimonialBand';
 export { default as StoriesVideoCta } from './StoriesVideoCta';
@@ -18,4 +18,5 @@ export {
   HandshakeIcon,
   GearIcon,
   MonitorIcon,
+  AtomIcon,
 } from './icons';

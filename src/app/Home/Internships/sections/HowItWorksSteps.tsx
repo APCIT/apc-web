@@ -40,14 +40,14 @@ function StepCard({
       <p
         style={{
           fontFamily: mockFont,
-          color: '#000000',
           fontWeight: 600,
           fontSize: '1.05rem',
           lineHeight: 1.25,
           margin: '0 0 0.5rem',
         }}
       >
-        {step.number} {step.title}
+        <span style={{ color: '#9E1B32' }}>{step.number}</span>{' '}
+        <span style={{ color: '#000000' }}>{step.title}</span>
       </p>
       <p
         style={{
@@ -120,7 +120,12 @@ export default function HowItWorksSteps({
   );
 }
 
-export function InternshipGuidelines() {
+export function InternshipGuidelines({
+  variant = 'guidelines',
+}: {
+  variant?: 'guidelines' | 'schedules';
+}) {
+  const isSchedules = variant === 'schedules';
   return (
     <div style={{ color: '#000000' }}>
       <p
@@ -132,7 +137,7 @@ export function InternshipGuidelines() {
           margin: '0 0 0.25rem',
         }}
       >
-        Internship Guidelines:
+        {isSchedules ? 'Internship Schedules:' : 'Internship Guidelines:'}
       </p>
       <ul
         style={{
@@ -145,10 +150,31 @@ export function InternshipGuidelines() {
           lineHeight: 1.35,
         }}
       >
-        <li>Fall &amp; Spring: Up to 20 hours per week</li>
+        <li>
+          Fall &amp; Spring: {isSchedules ? '20 hours per week' : 'Up to 20 hours per week'}
+        </li>
         <li>Summer: 40 hours per week</li>
-        <li>All Internships are paid!</li>
+        {!isSchedules ? <li>All Internships are paid!</li> : null}
       </ul>
+    </div>
+  );
+}
+
+export function ApplyHereLink() {
+  return (
+    <div style={{ textAlign: 'center', width: '100%' }}>
+      <a
+        href="/Apply"
+        style={{
+          fontFamily: mockFont,
+          color: '#9E1B32',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          textDecoration: 'underline',
+        }}
+      >
+        Apply Here
+      </a>
     </div>
   );
 }

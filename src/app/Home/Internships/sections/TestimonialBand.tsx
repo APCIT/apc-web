@@ -7,6 +7,9 @@ type TestimonialBandProps = {
   variant?: 'student' | 'company';
   /** Shown as a text placeholder instead of an image */
   logoPlaceholder?: string;
+  /** Optional portrait for student testimonials */
+  portraitSrc?: string;
+  portraitAlt?: string;
 };
 
 const mockFont = 'Georgia, "Times New Roman", Times, serif';
@@ -17,9 +20,13 @@ export default function TestimonialBand({
   roleLines = [],
   variant = 'student',
   logoPlaceholder,
+  portraitSrc,
+  portraitAlt = '',
 }: TestimonialBandProps) {
   const isStudent = variant === 'student';
   const textColor = isStudent ? '#ffffff' : '#000000';
+  const showPortrait = isStudent;
+  const showLogo = Boolean(logoPlaceholder);
 
   return (
     <section
@@ -41,7 +48,52 @@ export default function TestimonialBand({
           gap: '2rem',
         }}
       >
-        {logoPlaceholder ? (
+        {showPortrait ? (
+          <div
+            style={{
+              flex: '0 1 260px',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            {portraitSrc ? (
+              <img
+                src={portraitSrc}
+                alt={portraitAlt || attribution}
+                style={{
+                  width: 240,
+                  height: 240,
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                  display: 'block',
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: 240,
+                  height: 240,
+                  backgroundColor: '#555555',
+                  border: '1px dashed #9a9a9a',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  padding: '0.75rem',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <span style={{ fontFamily: mockFont, color: '#dddddd', fontSize: '0.85rem' }}>
+                  {attribution}
+                  <br />
+                  photo placeholder
+                </span>
+              </div>
+            )}
+          </div>
+        ) : null}
+
+        {showLogo ? (
           <div
             style={{
               flex: '1 1 220px',

@@ -7,6 +7,7 @@ import {
   ExpandedHero,
   GrowthIcon,
   HandshakeIcon,
+  ApplyHereLink,
   HowItWorksSteps,
   InternshipGuidelines,
   LightbulbIcon,
@@ -81,33 +82,33 @@ const STUDENT_STEPS = [
   {
     number: '01',
     title: 'Apply',
-    description:
-      'Submit your application and resume, including your preferred internship location.',
+    description: 'Submit your application and select your preferred internship location.',
+    extra: <ApplyHereLink />,
   },
   {
     number: '02',
-    title: 'Interview with The APC',
+    title: 'Interview with APC',
     description:
-      'If your resume matches an available opportunity, you will be invited to interview with an APC staff member.',
+      'APC reviews applications and interviews students to identify potential internship matches.',
   },
   {
     number: '03',
-    title: 'Interview with a Company',
+    title: 'Meet with a Company',
     description:
-      'If selected to move forward, you will interview with a representative from the partnering company.',
+      'Qualified candidates may be invited to interview with a participating company.',
   },
   {
     number: '04',
     title: 'Internship Selection',
     description:
-      'Following the interview process, the company will determine whether you are selected for the internship opportunity.',
+      "If selected, you'll complete the necessary onboarding requirements before beginning your internship.",
   },
   {
     number: '05',
     title: "You're Hired!",
     description:
-      'Congratulations! Begin gaining valuable industry experience through your APC internship.',
-    extra: <InternshipGuidelines />,
+      'Gain valuable industry experience while working on real projects with support from APC staff.',
+    extra: <InternshipGuidelines variant="schedules" />,
   },
 ];
 
@@ -335,7 +336,10 @@ export default function InternshipsClient() {
             className="relative z-10"
             style={{ color: '#000000', paddingBottom: '8rem' }}
           >
-            <ExpandedHero tagline="Your Career Starts Here." />
+            <ExpandedHero
+              tagline="Your Career Starts Here."
+              backgroundImage="/images/Internships/group-photo-2.jpg"
+            />
 
             <WhyFeatureGrid
               heading="Why Intern with APC?"
@@ -348,32 +352,40 @@ export default function InternshipsClient() {
 
             <MajorsByCategory
               heading="Find an Opportunity that Fits Your Major"
-              subheading="The APC connects students from a variety of academic backgrounds with valuable industry experience."
+              subheading="Explore internship opportunities across a variety of industries and academic disciplines, connecting your skills with real-world projects."
               footerNote="Don't see your specific major? We are always looking to add more!"
             />
 
             <HowItWorksSteps
-              subheading="The APC connects students and companies through a structured internship program designed for growth and success."
+              subheading="APC connects students with meaningful, paid internship opportunities through a simple application and placement process."
               steps={STUDENT_STEPS}
             />
 
             <TestimonialBand
               variant="student"
-              quote="As a summer intern at Toyota Motor Manufacturing with the Alabama Productivity Center, I was able to gain a better understanding of the career field that I was preparing for. My experience at Toyota also connected me with great people who have played a big role in the start of my career."
-              attribution="Hayden D. Bevil"
-              roleLines={['Former APC Intern', 'PC, PPM Specialist']}
+              portraitSrc="/images/Internships/zaria-kidd.png"
+              portraitAlt="Zaria Kidd"
+              quote="The knowledge, skills, and opportunities I received are all imperative and applicable to my future and the career I'm building for myself. I'm very thankful to APC for the opportunity!"
+              attribution="Zaria Kidd"
+              roleLines={[
+                'Former APC Intern',
+                'Learning and Development Intern | Mazda Toyota Manufacturing',
+              ]}
             />
 
             <StoriesVideoCta
               heading="Hear From Previous Interns"
-              body="Learn more about the APC internship experience directly from former students."
+              body="Hear from former APC interns about their projects, experiences, and professional growth."
               videoTitle="Student Internship Testimonial Video"
-              showBannerPlaceholder
+              videoSrc="https://www.youtube.com/embed/6cxKX2EI3Ps?cc_load_policy=1&cc_lang_pref=en"
+              ctaLabel="View Intern Success Stories"
+              bannerImageSrc="/images/Internships/group-2023.png"
               bannerText="This Could Be You!"
             />
 
             <ReadyCtaBand
-              subtext="Intern with the APC and invest in your future."
+              heading="Ready to Launch Your Career?"
+              subtext="Gain hands-on experience, develop valuable skills, and take the next step toward your future."
               ctaLabel="Apply Now"
               onCtaClick={goToApply}
             />
@@ -456,7 +468,10 @@ export default function InternshipsClient() {
             className="relative z-10"
             style={{ color: '#000000', paddingBottom: '8rem' }}
           >
-            <ExpandedHero tagline="Build Your Future Workforce." />
+            <ExpandedHero
+              tagline="Build Your Future Workforce."
+              backgroundImage="/images/Internships/production-floor.jpg"
+            />
 
             <WhyFeatureGrid
               heading="Why Hire an APC Intern?"
@@ -569,6 +584,8 @@ export default function InternshipsClient() {
               heading="Hear From Previous Company Partnerships"
               body="Learn more about the APC internship experience directly from former students and companies."
               videoTitle="Company Internship Testimonial Video"
+              videoSrc="https://www.youtube.com/embed/nIVTVwzPuJQ?cc_load_policy=1&cc_lang_pref=en"
+              ctaLabel="View Intern Success Stories"
             />
 
             <ReadyCtaBand

@@ -33,6 +33,20 @@
   max-width: 200px;
 }
 
+@media (max-width: 900px) {
+  .apc-intern-logo-slide {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    min-height: 280px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .apc-intern-logo-slide {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    min-height: 320px !important;
+  }
+}
+
 @media (min-width: 640px) {
   .apc-intern-why-grid,
   .apc-intern-majors-grid {
@@ -40,10 +54,19 @@
   }
 }
 
-@media (min-width: 1024px) {
-  .apc-intern-why-grid,
+@media (min-width: 900px) {
   .apc-intern-majors-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .apc-intern-why-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .apc-intern-majors-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 

@@ -3,40 +3,33 @@ import './internshipsSections.css';
 
 type ExpandedHeroProps = {
   tagline: string;
+  backgroundImage: string;
 };
 
 const mockFont = 'Georgia, "Times New Roman", Times, serif';
 
-export default function ExpandedHero({ tagline }: ExpandedHeroProps) {
+export default function ExpandedHero({ tagline, backgroundImage }: ExpandedHeroProps) {
   return (
     <div className="apc-intern-hero" style={{ minHeight: '28vh' }}>
-      <div
+      <img
+        src={backgroundImage}
+        alt=""
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundColor: '#6b2a32',
-          backgroundImage:
-            'repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 12px, transparent 12px 24px)',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center',
         }}
-        aria-hidden
       />
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'rgba(255,255,255,0.35)',
-          fontFamily: mockFont,
-          fontSize: '0.85rem',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          pointerEvents: 'none',
+          backgroundColor: 'rgba(100, 20, 30, 0.4)',
         }}
-      >
-        Hero image placeholder
-      </div>
+      />
       <div style={{ position: 'relative', zIndex: 10, maxWidth: '56rem', padding: '2.5rem 1.5rem' }}>
         <h2
           style={{

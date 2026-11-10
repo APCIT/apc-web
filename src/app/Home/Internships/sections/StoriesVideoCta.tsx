@@ -6,7 +6,9 @@ type StoriesVideoCtaProps = {
   heading: string;
   body: string;
   videoTitle: string;
-  showBannerPlaceholder?: boolean;
+  videoSrc?: string;
+  ctaLabel?: string;
+  bannerImageSrc?: string;
   bannerText?: string;
 };
 
@@ -16,39 +18,34 @@ export default function StoriesVideoCta({
   heading,
   body,
   videoTitle,
-  showBannerPlaceholder = false,
+  videoSrc,
+  ctaLabel = 'View Intern Success Stories',
+  bannerImageSrc,
   bannerText,
 }: StoriesVideoCtaProps) {
   return (
     <>
-      {showBannerPlaceholder && bannerText ? (
-        <section style={{ position: 'relative', width: '100%', minHeight: 180 }}>
-          <div
+      {bannerImageSrc && bannerText ? (
+        <section style={{ position: 'relative', width: '100%', minHeight: 180, overflow: 'hidden' }}>
+          <img
+            src={bannerImageSrc}
+            alt=""
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundColor: '#9E1B32',
-              backgroundImage:
-                'repeating-linear-gradient(135deg, rgba(0,0,0,0.12) 0 16px, transparent 16px 32px)',
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center 25%',
             }}
           />
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'center',
-              paddingBottom: '0.5rem',
-              color: 'rgba(255,255,255,0.45)',
-              fontFamily: mockFont,
-              fontSize: '0.75rem',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
+              backgroundColor: 'rgba(158, 27, 50, 0.55)',
             }}
-          >
-            Banner image placeholder
-          </div>
+          />
           <div
             style={{
               position: 'relative',
@@ -117,31 +114,57 @@ export default function StoriesVideoCta({
                 boxShadow: '0 3px 10px rgba(0,0,0,0.3)',
               }}
             >
-              Success Stories
+              {ctaLabel}
             </Link>
           </div>
           <div style={{ width: '100%' }}>
-            <div
-              style={{
-                position: 'relative',
-                width: '100%',
-                aspectRatio: '16 / 9',
-                backgroundColor: '#d0d0d0',
-                border: '1px dashed #9a9a9a',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                padding: '1rem',
-                boxSizing: 'border-box',
-              }}
-            >
-              <span style={{ fontFamily: mockFont, color: '#666666', fontSize: '0.9rem' }}>
-                Video placeholder
-                <br />
-                {videoTitle}
-              </span>
-            </div>
+            {videoSrc ? (
+              <div
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  aspectRatio: '16 / 9',
+                  backgroundColor: '#000000',
+                }}
+              >
+                <iframe
+                  src={videoSrc}
+                  title={videoTitle}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    border: 0,
+                    display: 'block',
+                  }}
+                />
+              </div>
+            ) : (
+              <div
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  aspectRatio: '16 / 9',
+                  backgroundColor: '#d0d0d0',
+                  border: '1px dashed #9a9a9a',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  padding: '1rem',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <span style={{ fontFamily: mockFont, color: '#666666', fontSize: '0.9rem' }}>
+                  Video placeholder
+                  <br />
+                  {videoTitle}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </section>
