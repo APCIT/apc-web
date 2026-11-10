@@ -77,7 +77,7 @@ export default function HowItWorksSteps({
   return (
     <section
       className="apc-intern-section"
-      style={{ backgroundColor: '#9E1B32', padding: '3rem 1.5rem 0' }}
+      style={{ backgroundColor: '#9E1B32', padding: '3rem 1.5rem 2.25rem' }}
     >
       <h2
         style={{
@@ -154,7 +154,6 @@ export function InternshipGuidelines({
           Fall &amp; Spring: {isSchedules ? '20 hours per week' : 'Up to 20 hours per week'}
         </li>
         <li>Summer: 40 hours per week</li>
-        {!isSchedules ? <li>All Internships are paid!</li> : null}
       </ul>
     </div>
   );

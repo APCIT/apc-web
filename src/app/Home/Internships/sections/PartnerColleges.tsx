@@ -29,7 +29,17 @@ const PARTNER_LOGOS = [
 const LOGOS_PER_SLIDE = 10;
 const mockFont = 'Georgia, "Times New Roman", Times, serif';
 
-export default function PartnerColleges() {
+type PartnerCollegesProps = {
+  heading?: string;
+  body?: string;
+  footnote?: string;
+};
+
+export default function PartnerColleges({
+  heading = 'Partnering Colleges and Universities',
+  body = 'The APC partners with colleges and universities to connect talented students with hands-on industry opportunities.',
+  footnote,
+}: PartnerCollegesProps) {
   const slides = useMemo(() => {
     const pages: (typeof PARTNER_LOGOS)[] = [];
     for (let i = 0; i < PARTNER_LOGOS.length; i += LOGOS_PER_SLIDE) {
@@ -51,7 +61,14 @@ export default function PartnerColleges() {
 
   return (
     <section className="apc-intern-section" style={{ color: '#000000' }}>
-      <div style={{ backgroundColor: '#d9b2b2', padding: '2.5rem 1.5rem' }}>
+      <div
+        style={{
+          backgroundColor: '#d9b2b2',
+          backgroundImage: 'linear-gradient(90deg, #d4a8a8 0%, #e5c8c0 100%)',
+          padding: '2.5rem 1.5rem',
+          textAlign: 'center',
+        }}
+      >
         <h2
           style={{
             fontFamily: mockFont,
@@ -63,7 +80,7 @@ export default function PartnerColleges() {
             lineHeight: 1.2,
           }}
         >
-          Partnering Colleges and Universities
+          {heading}
         </h2>
         <p
           style={{
@@ -75,9 +92,23 @@ export default function PartnerColleges() {
             fontSize: '0.95rem',
           }}
         >
-          The APC partners with colleges and universities to connect talented students with
-          hands-on industry opportunities.
+          {body}
         </p>
+        {footnote ? (
+          <p
+            style={{
+              fontFamily: mockFont,
+              fontStyle: 'italic',
+              color: '#000000',
+              textAlign: 'center',
+              maxWidth: '48rem',
+              margin: '0.85rem auto 0',
+              fontSize: '0.8rem',
+            }}
+          >
+            {footnote}
+          </p>
+        ) : null}
       </div>
 
       <div

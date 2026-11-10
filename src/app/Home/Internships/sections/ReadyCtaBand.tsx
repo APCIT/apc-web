@@ -24,14 +24,14 @@ export default function ReadyCtaBand({
         padding: '4rem 1.5rem 5rem',
         textAlign: 'center',
         backgroundColor: '#9E1B32',
-        backgroundImage:
-          'linear-gradient(135deg, rgba(0,0,0,0.14) 25%, transparent 25%), linear-gradient(225deg, rgba(0,0,0,0.14) 25%, transparent 25%), linear-gradient(45deg, rgba(0,0,0,0.14) 25%, transparent 25%), linear-gradient(315deg, rgba(0,0,0,0.14) 25%, transparent 25%)',
-        backgroundSize: '42px 42px',
-        backgroundPosition: '0 0, 0 21px, 21px -21px, -21px 0',
+        backgroundImage: "url('/images/crimson-lowpoly-facets.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         boxSizing: 'border-box',
       }}
     >
-      <div style={{ maxWidth: '40rem', margin: '0 auto' }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '40rem', margin: '0 auto' }}>
         <h2
           style={{
             fontFamily: mockFont,

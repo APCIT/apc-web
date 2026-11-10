@@ -85,6 +85,7 @@
   margin: 0 auto;
   align-items: flex-end;
   gap: 0.5rem;
+  padding-bottom: 0.25rem;
 }
 
 @media (min-width: 1024px) {
@@ -120,4 +121,10 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+@media (min-width: 900px) {
+  .apc-intern-testimonial-chevron {
+    display: block !important;
+  }
 }

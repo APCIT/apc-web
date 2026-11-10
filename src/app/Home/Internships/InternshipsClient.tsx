@@ -54,26 +54,25 @@ const STUDENT_FEATURES = [
 const COMPANY_FEATURES = [
   {
     title: 'Discover New Talent',
-    description:
-      'Connect with motivated students and identify potential future employees.',
+    description: 'Connect with motivated students and identify future employees.',
     icon: <PeopleIcon />,
   },
   {
     title: 'Increase Productivity',
     description:
-      'Gain additional support for projects and day-to-day operations.',
+      'Advance projects and improve operations with support from a dedicated intern and APC staff.',
     icon: <GrowthIcon />,
   },
   {
     title: 'Fresh Perspectives',
     description:
-      'Bring new ideas, creativity, and problem-solving approaches to your organization.',
+      "Bring new ideas, skills, and innovative solutions to your organization's challenges.",
     icon: <LightbulbIcon />,
   },
   {
     title: 'Build Your Workforce',
     description:
-      'Invest in emerging professionals while developing a stronger talent pipeline.',
+      'Develop a pipeline of emerging professionals with experience in your industry.',
     icon: <HandshakeIcon />,
   },
 ];
@@ -115,32 +114,34 @@ const STUDENT_STEPS = [
 const COMPANY_STEPS = [
   {
     number: '01',
-    title: 'Share Your Needs',
+    title: 'Project Development',
     description:
-      'Tell APC about your project needs and requirements and desired qualifications.',
+      'Work with APC to identify opportunities, define project goals, and establish a scope of work.',
   },
   {
     number: '02',
     title: 'Connect With Candidates',
-    description: "Review prospective interns who align with your company's needs.",
+    description:
+      'APC recruits and screens qualified students whose skills align with your project needs.',
   },
   {
     number: '03',
     title: 'Interview a Student',
     description:
-      'Meet a student who the APC already interviewed and evaluate their skills.',
+      'Meet potential candidates and select the student who best fits your organization.',
   },
   {
     number: '04',
-    title: 'Select Your Intern',
-    description: 'Choose the candidate who best fits your team and project.',
+    title: 'APC Hires Intern',
+    description:
+      "APC handles student employment, payroll, workers' compensation, and ongoing support throughout the internship.",
   },
   {
     number: '05',
     title: 'Get Started!',
     description:
-      'Welcome your intern and begin developing the next generation of talent!',
-    extra: <InternshipGuidelines />,
+      'Your intern begins working on-site with support from APC staff throughout the internship.',
+    extra: <InternshipGuidelines variant="guidelines" />,
   },
 ];
 
@@ -187,6 +188,20 @@ export default function InternshipsClient() {
         document.documentElement.scrollTop = 0;
       }, 200);
     }
+  }, []);
+
+  // Prefetch hero assets so Learn More doesn't hitch on first expand.
+  useEffect(() => {
+    [
+      '/images/Internships/group-photo-2.jpg',
+      '/images/Internships/construction-vests.jpg',
+      '/images/Internships/group-screenshot.jpg',
+      '/images/Internships/zaria-kidd.png',
+      '/images/crimson-lowpoly-facets.jpg',
+    ].forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
   }, []);
 
   useEffect(() => {
@@ -255,13 +270,16 @@ export default function InternshipsClient() {
       <div
         id="studentSide"
         ref={studentPanelRef}
-        className="internships-panel fixed top-0 z-[1] overflow-x-hidden overflow-y-auto transition-[width] duration-[900ms] ease-in-out"
+        className="internships-panel fixed top-0 z-[1] overflow-x-hidden overflow-y-auto"
         style={{
           width: studentWidth,
           left: 0,
           height: '100vh',
           backgroundColor: isStudentExpanded ? '#ffffff' : '#920905',
           color: '#ffffff',
+          transition: 'width 900ms cubic-bezier(0.33, 0.05, 0.2, 1)',
+          willChange: isSplit ? 'auto' : 'width',
+          transform: 'translateZ(0)',
         }}
         role="region"
         aria-label="Student internships"
@@ -339,6 +357,7 @@ export default function InternshipsClient() {
             <ExpandedHero
               tagline="Your Career Starts Here."
               backgroundImage="/images/Internships/group-photo-2.jpg"
+              align="center"
             />
 
             <WhyFeatureGrid
@@ -379,7 +398,8 @@ export default function InternshipsClient() {
               videoTitle="Student Internship Testimonial Video"
               videoSrc="https://www.youtube.com/embed/6cxKX2EI3Ps?cc_load_policy=1&cc_lang_pref=en"
               ctaLabel="View Intern Success Stories"
-              bannerImageSrc="/images/Internships/group-2023.png"
+              bannerImageSrc="/images/Internships/group-screenshot.jpg"
+              bannerObjectPosition="center 40%"
               bannerText="This Could Be You!"
             />
 
@@ -397,13 +417,16 @@ export default function InternshipsClient() {
       <div
         id="companySide"
         ref={companyPanelRef}
-        className="internships-panel fixed top-0 z-[1] overflow-x-hidden overflow-y-auto transition-[width] duration-[900ms] ease-in-out"
+        className="internships-panel fixed top-0 z-[1] overflow-x-hidden overflow-y-auto"
         style={{
           width: companyWidth,
           right: 0,
           height: '100vh',
           backgroundColor: isCompanyExpanded ? '#ffffff' : 'rgb(75,85,99)',
           color: '#ffffff',
+          transition: 'width 900ms cubic-bezier(0.33, 0.05, 0.2, 1)',
+          willChange: isSplit ? 'auto' : 'width',
+          transform: 'translateZ(0)',
         }}
         role="region"
         aria-label="Hiring an intern"
@@ -470,126 +493,139 @@ export default function InternshipsClient() {
           >
             <ExpandedHero
               tagline="Build Your Future Workforce."
-              backgroundImage="/images/Internships/production-floor.jpg"
+              subtitle="Connect with emerging talent. Solve real challenges. Develop your future workforce."
+              backgroundImage="/images/Internships/construction-vests.jpg"
+              objectPosition="center 38%"
+              align="center"
             />
 
             <WhyFeatureGrid
               heading="Why Hire an APC Intern?"
               features={COMPANY_FEATURES}
-              ctaLabel="Request More Information"
+              ctaLabel="Discuss Opportunities"
               onCtaClick={openCompanyContact}
             />
 
             {showContactForm && (
-              <div
-                ref={companyFormRef}
-                id="contactForm"
-                className="w-full px-4 py-8 text-center sm:px-6"
-                style={{ backgroundColor: '#ffffff', color: '#000000' }}
-              >
-                <p className="mb-4 font-roboto" style={{ color: '#000000' }}>
-                  Contact us using this form!
-                </p>
-                <form
-                  className="mx-auto max-w-md space-y-4 text-left"
-                  aria-label="Company contact form"
-                >
-                  <div>
-                    <label
-                      htmlFor="company-contact-name"
-                      className="mb-1 block font-medium"
-                      style={{ color: '#35363B' }}
+                  <div
+                    ref={companyFormRef}
+                    id="contactForm"
+                    className="w-full px-4 py-8 text-center sm:px-6"
+                    style={{ backgroundColor: '#ffffff', color: '#000000' }}
+                  >
+                    <p className="mb-4 font-roboto" style={{ color: '#000000' }}>
+                      Contact us using this form!
+                    </p>
+                    <form
+                      className="mx-auto max-w-md space-y-4 text-left"
+                      aria-label="Company contact form"
                     >
-                      Name
-                    </label>
-                    <input
-                      id="company-contact-name"
-                      name="name"
-                      type="text"
-                      required
-                      autoComplete="name"
-                      className="w-full rounded border border-gray-300 px-3 py-2"
-                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                    />
+                      <div>
+                        <label
+                          htmlFor="company-contact-name"
+                          className="mb-1 block font-medium"
+                          style={{ color: '#35363B' }}
+                        >
+                          Name
+                        </label>
+                        <input
+                          id="company-contact-name"
+                          name="name"
+                          type="text"
+                          required
+                          autoComplete="name"
+                          className="w-full rounded border border-gray-300 px-3 py-2"
+                          style={{ color: '#35363B', backgroundColor: '#ffffff' }}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="company-contact-email"
+                          className="mb-1 block font-medium"
+                          style={{ color: '#35363B' }}
+                        >
+                          Email
+                        </label>
+                        <input
+                          id="company-contact-email"
+                          name="email"
+                          type="email"
+                          required
+                          autoComplete="email"
+                          className="w-full rounded border border-gray-300 px-3 py-2"
+                          style={{ color: '#35363B', backgroundColor: '#ffffff' }}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="company-contact-message"
+                          className="mb-1 block font-medium"
+                          style={{ color: '#35363B' }}
+                        >
+                          Message
+                        </label>
+                        <textarea
+                          id="company-contact-message"
+                          name="message"
+                          required
+                          className="w-full rounded border border-gray-300 px-3 py-2"
+                          style={{ color: '#35363B', backgroundColor: '#ffffff' }}
+                          rows={4}
+                        />
+                      </div>
+                      <div>
+                        <button
+                          type="submit"
+                          className="rounded px-6 py-2"
+                          style={{ backgroundColor: '#9E1B32', color: '#ffffff', border: 'none' }}
+                        >
+                          Send
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                  <div>
-                    <label
-                      htmlFor="company-contact-email"
-                      className="mb-1 block font-medium"
-                      style={{ color: '#35363B' }}
-                    >
-                      Email
-                    </label>
-                    <input
-                      id="company-contact-email"
-                      name="email"
-                      type="email"
-                      required
-                      autoComplete="email"
-                      className="w-full rounded border border-gray-300 px-3 py-2"
-                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="company-contact-message"
-                      className="mb-1 block font-medium"
-                      style={{ color: '#35363B' }}
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="company-contact-message"
-                      name="message"
-                      required
-                      className="w-full rounded border border-gray-300 px-3 py-2"
-                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                      rows={4}
-                    />
-                  </div>
-                  <div>
-                    <button
-                      type="submit"
-                      className="rounded px-6 py-2"
-                      style={{ backgroundColor: '#9E1B32', color: '#ffffff', border: 'none' }}
-                    >
-                      Send
-                    </button>
-                  </div>
-                </form>
-              </div>
-            )}
+                )}
 
-            <PartnerColleges />
+                <PartnerColleges
+                  heading="Connecting Businesses with Talent Across All Universities"
+                  body="The APC partners with colleges and universities to connect businesses with talented students with hands-on industry opportunities."
+                  footnote="*Since 2013, the APC has partnered with 20 colleges and universities."
+                />
 
-            <MajorsByCategory
-              heading="Find a Major that Fits Your Project"
-              subheading="The APC connects students from a variety of academic backgrounds with valuable industry experience."
-              footerNote="Don't see the specific major your project needs? The APC is always looking to add more!"
-            />
+                <MajorsByCategory
+                  heading="Find an Intern that Fits Your Project Needs"
+                  subheading="From engineering and operations to business and technology, APC connects your company with qualified students whose skills align with your project needs."
+                  footerNote="APC helps you identify qualified students whose skills and interests align with your project goals and company culture."
+                  footerItalic={false}
+                />
 
-            <HowItWorksSteps
-              subheading="The APC handles the coordination and support, making it simple for your company to gain an intern."
-              steps={COMPANY_STEPS}
-            />
+                <HowItWorksSteps
+                  subheading="From project development to student placement, APC simplifies the internship process so you can focus on results."
+                  steps={COMPANY_STEPS}
+                />
 
-            <TestimonialBand
-              variant="company"
-              logoPlaceholder="S.T. Bunn Construction"
-              quote="We believe this program has the potential to save our company money on hauling costs by allowing us to analyze trucking performance in ways that were not previously practical. It should help us compare costs, identify inefficiencies, evaluate truck usage and hauling times, and make better-informed operating decisions."
-              attribution="Taylor Davis, Vice President, S.T. Bunn Construction Company."
-            />
+                <TestimonialBand
+                  variant="company"
+                  heading="Real Projects. Measurable Results."
+                  logoSrc="/images/Logos/stbunn.webp"
+                  logoAlt="S.T. Bunn Construction Co., Inc."
+                  quote="We believe this program has the potential to save our company money on hauling costs by allowing us to analyze trucking performance in ways that were not previously practical. It should help us compare costs, identify inefficiencies, evaluate truck usage and hauling times, and make better-informed operating decisions."
+                  attribution="Taylor Davis,"
+                  roleLines={['Vice President,', 'S.T. Bunn Construction Company']}
+                />
 
-            <StoriesVideoCta
-              heading="Hear From Previous Company Partnerships"
-              body="Learn more about the APC internship experience directly from former students and companies."
-              videoTitle="Company Internship Testimonial Video"
-              videoSrc="https://www.youtube.com/embed/nIVTVwzPuJQ?cc_load_policy=1&cc_lang_pref=en"
-              ctaLabel="View Intern Success Stories"
-            />
+                <StoriesVideoCta
+                  heading="Hear From Our Industry Partners"
+                  body="Discover how companies have partnered with APC to complete meaningful projects, improve operations, and develop emerging talent."
+                  videoTitle="The Intern Perspective with Thomas Mercier"
+                  videoSrc="https://www.youtube.com/embed/nIVTVwzPuJQ?cc_load_policy=1&cc_lang_pref=en"
+                  ctaLabel="View Success Stories"
+                  backgroundColor="#e8e8e8"
+                />
 
             <ReadyCtaBand
-              subtext="Partner with APC and invest in the next generation of talent."
+              heading="Ready to Put New Talent to Work?"
+              subtext="Discover how an APC intern can support your next project."
               ctaLabel="Request More Information"
               onCtaClick={openCompanyContact}
             />

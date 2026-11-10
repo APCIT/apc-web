@@ -10,6 +10,8 @@ type StoriesVideoCtaProps = {
   ctaLabel?: string;
   bannerImageSrc?: string;
   bannerText?: string;
+  bannerObjectPosition?: string;
+  backgroundColor?: string;
 };
 
 const mockFont = 'Georgia, "Times New Roman", Times, serif';
@@ -22,6 +24,8 @@ export default function StoriesVideoCta({
   ctaLabel = 'View Intern Success Stories',
   bannerImageSrc,
   bannerText,
+  bannerObjectPosition = 'center 32%',
+  backgroundColor = '#ffffff',
 }: StoriesVideoCtaProps) {
   return (
     <>
@@ -36,7 +40,7 @@ export default function StoriesVideoCta({
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              objectPosition: 'center 25%',
+              objectPosition: bannerObjectPosition,
             }}
           />
           <div
@@ -74,7 +78,7 @@ export default function StoriesVideoCta({
 
       <section
         className="apc-intern-section"
-        style={{ backgroundColor: '#ffffff', color: '#000000', padding: '3rem 1.5rem' }}
+        style={{ backgroundColor, color: '#000000', padding: '3rem 1.5rem' }}
       >
         <div className="apc-intern-stories-grid">
           <div>
