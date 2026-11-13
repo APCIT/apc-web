@@ -51,7 +51,7 @@ const CATEGORIES: MajorCategory[] = [
       'Computer Science',
       'Management Information Systems',
       'Cybersecurity',
-      'Data Science',
+      'Data Sciences',
     ],
   },
 ];

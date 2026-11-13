@@ -145,6 +145,99 @@ const COMPANY_STEPS = [
   },
 ];
 
+const STUDENT_TESTIMONIALS = [
+  {
+    quote:
+      'As a summer intern at Toyota Motor Manufacturing with the Alabama Productivity Center, I was able to gain a better understanding of the career field that I was preparing for. My experience at Toyota also connected me with great people who have played a big role in the start of my career.',
+    attribution: 'Hayden D. Bevil',
+    roleLines: ['PC, PPM Specialist', 'Toyota Motor Manufacturing'],
+  },
+  {
+    quote:
+      'Through the projects I completed at the APC, I was able to learn relevant programming skills that I am still able to apply today at other companies. Working at the APC will teach you more than just how to be a programmer. I believe that the APC offers very rewarding experiences that a lot of students won\'t be able to find anywhere else during the school year.',
+    attribution: 'Jared Waller',
+    roleLines: ['MIS Intern', 'Alabama Productivity Center'],
+  },
+  {
+    quote:
+      'During my internship at Mazda Toyota Manufacturing, I gained valuable hands-on experience in supply chain operations, working with real data to solve real-world problems, and collaborating across multiple teams. The experience strengthened my skills in manufacturing processes, data analytics, and cross-functional communication.',
+    attribution: 'Camryn Horrison',
+    roleLines: [
+      'Logistics and Supply Chain Management Intern',
+      'Mazda Toyota Manufacturing',
+    ],
+  },
+  {
+    quote:
+      'Through my internship at Mercedes-Benz, I hope to gain hands-on experience in process improvement, apply Lean and DMAIC strategies, and work in a fast-paced, quality-focused manufacturing environment.',
+    attribution: 'Emily Holcombe',
+    roleLines: ['Operations Management Intern', 'Mercedes-Benz'],
+  },
+  {
+    quote:
+      "The knowledge, skills, and opportunities I received are all imperative and applicable to my future and the career I'm building for myself. I'm very thankful to APC for the opportunity!",
+    attribution: 'Zaria Kidd',
+    roleLines: [
+      'Former APC Intern',
+      'Learning and Development Intern | Mazda Toyota Manufacturing',
+    ],
+  },
+];
+
+const COMPANY_TESTIMONIALS = [
+  {
+    quote:
+      'We believe this program has the potential to save our company money on hauling costs by allowing us to analyze trucking performance in ways that were not previously practical. It should help us compare costs, identify inefficiencies, evaluate truck usage and hauling times, and make better-informed operating decisions.',
+    attribution: 'Taylor Davis',
+    roleLines: ['Vice President', 'S.T. Bunn Construction Company'],
+    logoSrc: '/images/Logos/stbunn.webp',
+    logoAlt: 'S.T. Bunn Construction Co., Inc.',
+  },
+  {
+    quote:
+      'The University of Alabama ATN Center is a great resource for our business. They are quick to respond and provide the highest level of service. Their internship program has provided great young talent that are able to take on important projects needed to sustain our business. This is a great program for the manufacturing industry in our state.',
+    attribution: 'Chase Fell',
+    roleLines: ['Vice President of Engineering', 'Precision'],
+    logoSrc: '/images/Logos/precision.png',
+    logoAlt: 'Precision',
+  },
+  {
+    quote:
+      "The project that Olivia accomplished in Animal Health will have a lasting impact on our business. There was so much this summer that we needed help with, to take our business to the next level and I feel like we accomplished it. Without her we would not have been able to make such huge strides.",
+    attribution: 'Leigh Oncale',
+    roleLines: ['Director, Lean Operations', 'STERIS'],
+    logoSrc: '/images/Logos/steris.png',
+    logoAlt: 'STERIS',
+  },
+  {
+    quote:
+      'Our intern, Marcus Taylor, has been able to make excellent progress…better than we expected on the project to improve the engineering drawing production process. We are near the original schedule despite being able to expand the capabilities of the program significantly.',
+    attribution: 'Jeremy Wolfe',
+    roleLines: ['Engineering Manager', 'SHECO'],
+    logoSrc: '/images/Logos/sheco.png',
+    logoAlt: 'SHECO',
+  },
+  {
+    quote:
+      'Travis left a vital impact on the Accounting & Finance Department. His analytical skills were critical in creating new processes for improving forecasting metrics on the Treasury side. He also provided vital support in many Treasury activities critical to maintaining proper company standing.',
+    attribution: 'Theodore Kubista',
+    roleLines: [
+      'Financial Reporting, Insurance & Treasury Specialist',
+      'Mazda Toyota Manufacturing',
+    ],
+    logoSrc: '/images/Logos/MTM Logo.jpeg',
+    logoAlt: 'Mazda Toyota Manufacturing',
+  },
+  {
+    quote:
+      "Anabelle has been a vital member to the team. She has been responsible for the plant's change notification process, making sure that responsible parties acknowledge notification and submit documentation in a timely manner. Anabelle has led the team in AI integration for the automation of processes.",
+    attribution: 'Konrad Piepke',
+    roleLines: ['Engineering Change Coordinator', 'Lear'],
+    logoSrc: '/images/Backgrounds/Lear.jpg',
+    logoAlt: 'Lear',
+  },
+];
+
 export default function InternshipsClient() {
   const [viewState, setViewState] = useState<ViewState>('split');
   const [showContactForm, setShowContactForm] = useState(false);
@@ -196,8 +289,11 @@ export default function InternshipsClient() {
       '/images/Internships/group-photo-2.jpg',
       '/images/Internships/construction-vests.jpg',
       '/images/Internships/group-screenshot.jpg',
-      '/images/Internships/zaria-kidd.png',
       '/images/crimson-lowpoly-facets.jpg',
+      '/images/Logos/stbunn.webp',
+      '/images/Logos/precision.png',
+      '/images/Logos/steris.png',
+      '/images/Logos/sheco.png',
     ].forEach((src) => {
       const img = new window.Image();
       img.src = src;
@@ -382,21 +478,15 @@ export default function InternshipsClient() {
 
             <TestimonialBand
               variant="student"
-              portraitSrc="/images/Internships/zaria-kidd.png"
-              portraitAlt="Zaria Kidd"
-              quote="The knowledge, skills, and opportunities I received are all imperative and applicable to my future and the career I'm building for myself. I'm very thankful to APC for the opportunity!"
-              attribution="Zaria Kidd"
-              roleLines={[
-                'Former APC Intern',
-                'Learning and Development Intern | Mazda Toyota Manufacturing',
-              ]}
+              heading="Hear from Former Interns"
+              items={STUDENT_TESTIMONIALS}
             />
 
             <StoriesVideoCta
               heading="Hear From Previous Interns"
               body="Hear from former APC interns about their projects, experiences, and professional growth."
               videoTitle="Student Internship Testimonial Video"
-              videoSrc="https://www.youtube.com/embed/6cxKX2EI3Ps?cc_load_policy=1&cc_lang_pref=en"
+              videoSrc="https://www.youtube.com/embed/bCsP82ju4fM?cc_load_policy=1&cc_lang_pref=en"
               ctaLabel="View Intern Success Stories"
               bannerImageSrc="/images/Internships/group-screenshot.jpg"
               bannerObjectPosition="center 40%"
@@ -507,84 +597,103 @@ export default function InternshipsClient() {
             />
 
             {showContactForm && (
-                  <div
-                    ref={companyFormRef}
-                    id="contactForm"
-                    className="w-full px-4 py-8 text-center sm:px-6"
-                    style={{ backgroundColor: '#ffffff', color: '#000000' }}
-                  >
-                    <p className="mb-4 font-roboto" style={{ color: '#000000' }}>
-                      Contact us using this form!
-                    </p>
-                    <form
-                      className="mx-auto max-w-md space-y-4 text-left"
-                      aria-label="Company contact form"
+              <div
+                ref={companyFormRef}
+                id="contactForm"
+                className="w-full px-4 py-8 text-center sm:px-6"
+                style={{ backgroundColor: '#ffffff', color: '#000000' }}
+              >
+                <p className="mb-4 font-roboto" style={{ color: '#000000' }}>
+                  Contact us using this form!
+                </p>
+                <form
+                  className="mx-auto max-w-md space-y-4 text-left"
+                  aria-label="Company contact form"
+                >
+                  <div>
+                    <label
+                      htmlFor="company-contact-first-name"
+                      className="mb-1 block font-medium"
+                      style={{ color: '#35363B' }}
                     >
-                      <div>
-                        <label
-                          htmlFor="company-contact-name"
-                          className="mb-1 block font-medium"
-                          style={{ color: '#35363B' }}
-                        >
-                          Name
-                        </label>
-                        <input
-                          id="company-contact-name"
-                          name="name"
-                          type="text"
-                          required
-                          autoComplete="name"
-                          className="w-full rounded border border-gray-300 px-3 py-2"
-                          style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="company-contact-email"
-                          className="mb-1 block font-medium"
-                          style={{ color: '#35363B' }}
-                        >
-                          Email
-                        </label>
-                        <input
-                          id="company-contact-email"
-                          name="email"
-                          type="email"
-                          required
-                          autoComplete="email"
-                          className="w-full rounded border border-gray-300 px-3 py-2"
-                          style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                        />
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="company-contact-message"
-                          className="mb-1 block font-medium"
-                          style={{ color: '#35363B' }}
-                        >
-                          Message
-                        </label>
-                        <textarea
-                          id="company-contact-message"
-                          name="message"
-                          required
-                          className="w-full rounded border border-gray-300 px-3 py-2"
-                          style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                          rows={4}
-                        />
-                      </div>
-                      <div>
-                        <button
-                          type="submit"
-                          className="rounded px-6 py-2"
-                          style={{ backgroundColor: '#9E1B32', color: '#ffffff', border: 'none' }}
-                        >
-                          Send
-                        </button>
-                      </div>
-                    </form>
+                      First Name
+                    </label>
+                    <input
+                      id="company-contact-first-name"
+                      name="firstName"
+                      type="text"
+                      required
+                      autoComplete="given-name"
+                      className="w-full rounded border border-gray-300 px-3 py-2"
+                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
+                    />
                   </div>
-                )}
+                  <div>
+                    <label
+                      htmlFor="company-contact-last-name"
+                      className="mb-1 block font-medium"
+                      style={{ color: '#35363B' }}
+                    >
+                      Last Name
+                    </label>
+                    <input
+                      id="company-contact-last-name"
+                      name="lastName"
+                      type="text"
+                      required
+                      autoComplete="family-name"
+                      className="w-full rounded border border-gray-300 px-3 py-2"
+                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="company-contact-company"
+                      className="mb-1 block font-medium"
+                      style={{ color: '#35363B' }}
+                    >
+                      Company Name
+                    </label>
+                    <input
+                      id="company-contact-company"
+                      name="company"
+                      type="text"
+                      required
+                      autoComplete="organization"
+                      className="w-full rounded border border-gray-300 px-3 py-2"
+                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="company-contact-email"
+                      className="mb-1 block font-medium"
+                      style={{ color: '#35363B' }}
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="company-contact-email"
+                      name="email"
+                      type="email"
+                      required
+                      autoComplete="email"
+                      className="w-full rounded border border-gray-300 px-3 py-2"
+                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
+                    />
+                  </div>
+                  <div>
+                    <button
+                      type="submit"
+                      className="rounded px-6 py-2"
+                      style={{ backgroundColor: '#9E1B32', color: '#ffffff', border: 'none' }}
+                    >
+                      Send
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
 
                 <PartnerColleges
                   heading="Connecting Businesses with Talent Across All Universities"
@@ -604,24 +713,20 @@ export default function InternshipsClient() {
                   steps={COMPANY_STEPS}
                 />
 
-                <TestimonialBand
-                  variant="company"
-                  heading="Real Projects. Measurable Results."
-                  logoSrc="/images/Logos/stbunn.webp"
-                  logoAlt="S.T. Bunn Construction Co., Inc."
-                  quote="We believe this program has the potential to save our company money on hauling costs by allowing us to analyze trucking performance in ways that were not previously practical. It should help us compare costs, identify inefficiencies, evaluate truck usage and hauling times, and make better-informed operating decisions."
-                  attribution="Taylor Davis,"
-                  roleLines={['Vice President,', 'S.T. Bunn Construction Company']}
-                />
+            <TestimonialBand
+              variant="company"
+              heading="Real Projects. Measurable Results."
+              items={COMPANY_TESTIMONIALS}
+            />
 
-                <StoriesVideoCta
-                  heading="Hear From Our Industry Partners"
-                  body="Discover how companies have partnered with APC to complete meaningful projects, improve operations, and develop emerging talent."
-                  videoTitle="The Intern Perspective with Thomas Mercier"
-                  videoSrc="https://www.youtube.com/embed/nIVTVwzPuJQ?cc_load_policy=1&cc_lang_pref=en"
-                  ctaLabel="View Success Stories"
-                  backgroundColor="#e8e8e8"
-                />
+            <StoriesVideoCta
+              heading="Hear From Our Industry Partners"
+              body="Discover how companies have partnered with APC to complete meaningful projects, improve operations, and develop emerging talent."
+              videoTitle="Company Internship Testimonial Video"
+              videoSrc="https://www.youtube.com/embed/LZ6OcWki3r0?cc_load_policy=1&cc_lang_pref=en"
+              ctaLabel="View Success Stories"
+              backgroundColor="#e8e8e8"
+            />
 
             <ReadyCtaBand
               heading="Ready to Put New Talent to Work?"

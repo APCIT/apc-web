@@ -5,6 +5,7 @@ export { default as MajorsByCategory } from './MajorsByCategory';
 export { default as HowItWorksSteps, InternshipGuidelines, ApplyHereLink } from './HowItWorksSteps';
 export type { HowItWorksStep } from './HowItWorksSteps';
 export { default as TestimonialBand } from './TestimonialBand';
+export type { TestimonialItem } from './TestimonialBand';
 export { default as StoriesVideoCta } from './StoriesVideoCta';
 export { default as ReadyCtaBand } from './ReadyCtaBand';
 export { default as ExpandedHero } from './ExpandedHero';
