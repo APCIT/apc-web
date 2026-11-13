@@ -21,6 +21,7 @@ import {
   TestimonialBand,
   WhyFeatureGrid,
 } from './sections';
+import './sections/internshipsSections.css';
 
 type ViewState = 'split' | 'studentExpanded' | 'companyExpanded';
 
@@ -251,6 +252,7 @@ export default function InternshipsClient() {
   const isSplit = viewState === 'split';
   const isStudentExpanded = viewState === 'studentExpanded';
   const isCompanyExpanded = viewState === 'companyExpanded';
+  const PANEL_WIDTH_MS = 900;
 
   const goToApply = useCallback(() => {
     window.location.href = '/Apply';
@@ -311,6 +313,9 @@ export default function InternshipsClient() {
       companyPanelRef.current?.focus();
       return;
     }
+    // Collapsing / returning to split — pin both heroes at the top.
+    studentPanelRef.current?.scrollTo(0, 0);
+    companyPanelRef.current?.scrollTo(0, 0);
     if (restoreFocusRef.current === 'student') {
       restoreFocusRef.current = null;
       studentButtonRef.current?.focus();
@@ -362,7 +367,7 @@ export default function InternshipsClient() {
         />
       </div>
 
-      {/* Student Side */}
+      {/* Student Side — hero image stays mounted; only overlay copy / body swap */}
       <div
         id="studentSide"
         ref={studentPanelRef}
@@ -373,7 +378,7 @@ export default function InternshipsClient() {
           height: '100vh',
           backgroundColor: isStudentExpanded ? '#ffffff' : '#920905',
           color: '#ffffff',
-          transition: 'width 900ms cubic-bezier(0.33, 0.05, 0.2, 1)',
+          transition: `width ${PANEL_WIDTH_MS}ms cubic-bezier(0.33, 0.05, 0.2, 1)`,
           willChange: isSplit ? 'auto' : 'width',
           transform: 'translateZ(0)',
         }}
@@ -381,68 +386,34 @@ export default function InternshipsClient() {
         aria-label="Student internships"
         tabIndex={-1}
       >
-        {!isStudentExpanded && (
-          <img
-            id="studentBackgroundImage"
-            src="/images/laptop-stock.jpg"
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-20"
-            style={{ objectPosition: 'center' }}
-          />
-        )}
-
-        {!isStudentExpanded && (
-          <div
-            className="absolute left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 px-4 text-center"
-            style={{ top: '40%', width: '100%' }}
-          >
-            <div id="studentHeader" className="flex w-full flex-col items-center gap-8 text-center">
-              <h4
-                className="mb-2 text-[3.0em] font-normal italic leading-tight"
-                style={{ color: '#ffffff' }}
-              >
-                {`I'm a student`}
-              </h4>
-              <h3
-                id="studentDescription"
-                className={`mb-8 font-semibold leading-none tracking-tight ${
-                  isCompanyExpanded ? 'text-[5.0em]' : 'text-[4.5em]'
-                }`}
-                style={{ color: '#ffffff' }}
-              >
-                {isCompanyExpanded ? (
-                  <>
-                    <span className="block">LOOKING FOR AN</span>
-                    <span className="block">INTERNSHIP</span>
-                  </>
-                ) : (
-                  <>
-                    <span className="block">LOOKING FOR</span>
-                    <span className="block">AN INTERNSHIP</span>
-                  </>
-                )}
-              </h3>
-              <button
-                id="studentButton"
-                ref={studentButtonRef}
-                type="button"
-                onClick={spread_right}
-                aria-expanded={isStudentExpanded}
-                aria-label="Learn more about student internships"
-                style={{
-                  marginTop: '30px',
-                  width: '100%',
-                  maxWidth: '450px',
-                  backgroundColor: '#ffffff',
-                  color: '#9E1B32',
-                }}
-                className="cursor-pointer rounded-full border-[3px] border-[rgba(0,0,0,0.1)] py-[10px] text-center font-roboto text-[17px] leading-normal shadow-[0_3px_10px_rgba(0,0,0,0.5)] transition-all duration-500 ease-in-out hover:border-[rgba(0,0,0,0.5)] hover:text-[20px] hover:shadow-[0_10px_20px_rgba(0,0,0,0.7)]"
-              >
-                Learn More
-              </button>
-            </div>
-          </div>
-        )}
+        <ExpandedHero
+          backgroundImage="/images/Internships/group-photo-2.jpg"
+          align="center"
+          fillPanel={!isStudentExpanded}
+          tagline="Your Career Starts Here."
+          introEyebrow="I'm a student"
+          introLines={['LOOKING FOR', 'AN INTERNSHIP']}
+          cta={
+            <button
+              id="studentButton"
+              ref={studentButtonRef}
+              type="button"
+              onClick={spread_right}
+              aria-expanded={isStudentExpanded}
+              aria-label="Learn more about student internships"
+              style={{
+                marginTop: '30px',
+                width: '100%',
+                maxWidth: '450px',
+                backgroundColor: '#ffffff',
+                color: '#9E1B32',
+              }}
+              className="cursor-pointer rounded-full border-[3px] border-[rgba(0,0,0,0.1)] py-[10px] text-center font-roboto text-[17px] leading-normal shadow-[0_3px_10px_rgba(0,0,0,0.5)] transition-all duration-500 ease-in-out hover:border-[rgba(0,0,0,0.5)] hover:text-[20px] hover:shadow-[0_10px_20px_rgba(0,0,0,0.7)]"
+            >
+              Learn More
+            </button>
+          }
+        />
 
         {isStudentExpanded && (
           <div
@@ -450,12 +421,6 @@ export default function InternshipsClient() {
             className="relative z-10"
             style={{ color: '#000000', paddingBottom: '8rem' }}
           >
-            <ExpandedHero
-              tagline="Your Career Starts Here."
-              backgroundImage="/images/Internships/group-photo-2.jpg"
-              align="center"
-            />
-
             <WhyFeatureGrid
               heading="Why Intern with APC?"
               features={STUDENT_FEATURES}
@@ -503,7 +468,7 @@ export default function InternshipsClient() {
         )}
       </div>
 
-      {/* Company Side */}
+      {/* Company Side — same idea: construction-vests hero stays, copy swaps */}
       <div
         id="companySide"
         ref={companyPanelRef}
@@ -514,7 +479,7 @@ export default function InternshipsClient() {
           height: '100vh',
           backgroundColor: isCompanyExpanded ? '#ffffff' : 'rgb(75,85,99)',
           color: '#ffffff',
-          transition: 'width 900ms cubic-bezier(0.33, 0.05, 0.2, 1)',
+          transition: `width ${PANEL_WIDTH_MS}ms cubic-bezier(0.33, 0.05, 0.2, 1)`,
           willChange: isSplit ? 'auto' : 'width',
           transform: 'translateZ(0)',
         }}
@@ -522,58 +487,37 @@ export default function InternshipsClient() {
         aria-label="Hiring an intern"
         tabIndex={-1}
       >
-        {!isCompanyExpanded && (
-          <img
-            id="companyBackgroundImage"
-            src="/images/companyBgImage.jpg"
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-20"
-            style={{ objectPosition: 'center' }}
-          />
-        )}
-
-        {!isCompanyExpanded && (
-          <div
-            className="absolute left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 px-4 text-center"
-            style={{ top: '40%', width: '100%' }}
-          >
-            <div id="companyHeader" className="flex w-full flex-col items-center gap-8 text-center">
-              <h4
-                className="mb-2 text-[3.0em] font-normal italic leading-tight"
-                style={{ color: '#ffffff' }}
-              >
-                {`I'm a company`}
-              </h4>
-              <h3
-                id="companyDescription"
-                className="mb-8 text-[4.5em] font-semibold leading-none tracking-tight"
-                style={{ color: '#ffffff' }}
-              >
-                <span className="block">LOOKING TO</span>
-                <span className="block">HIRE AN</span>
-                <span className="block">INTERN</span>
-              </h3>
-              <button
-                id="companyButton"
-                ref={companyButtonRef}
-                type="button"
-                onClick={spread_left}
-                aria-expanded={isCompanyExpanded}
-                aria-label="Learn more about hiring an intern"
-                style={{
-                  marginTop: '30px',
-                  width: '100%',
-                  maxWidth: '450px',
-                  backgroundColor: '#ffffff',
-                  color: '#000000',
-                }}
-                className="cursor-pointer rounded-full border-[3px] border-[rgba(0,0,0,0.1)] py-[10px] text-center font-roboto text-[17px] leading-normal shadow-[0_3px_10px_rgba(0,0,0,0.5)] transition-all duration-500 ease-in-out hover:border-[rgba(0,0,0,0.5)] hover:text-[20px] hover:shadow-[0_10px_20px_rgba(0,0,0,0.7)]"
-              >
-                Learn More
-              </button>
-            </div>
-          </div>
-        )}
+        <ExpandedHero
+          backgroundImage="/images/Internships/construction-vests.jpg"
+          objectPosition="center 38%"
+          align="center"
+          fillPanel={!isCompanyExpanded}
+          coverOverlayColor="rgba(75, 85, 99, 0.78)"
+          tagline="Build Your Future Workforce."
+          subtitle="Connect with emerging talent. Solve real challenges. Develop your future workforce."
+          introEyebrow="I'm a company"
+          introLines={['LOOKING TO', 'HIRE AN', 'INTERN']}
+          cta={
+            <button
+              id="companyButton"
+              ref={companyButtonRef}
+              type="button"
+              onClick={spread_left}
+              aria-expanded={isCompanyExpanded}
+              aria-label="Learn more about hiring an intern"
+              style={{
+                marginTop: '30px',
+                width: '100%',
+                maxWidth: '450px',
+                backgroundColor: '#ffffff',
+                color: '#000000',
+              }}
+              className="cursor-pointer rounded-full border-[3px] border-[rgba(0,0,0,0.1)] py-[10px] text-center font-roboto text-[17px] leading-normal shadow-[0_3px_10px_rgba(0,0,0,0.5)] transition-all duration-500 ease-in-out hover:border-[rgba(0,0,0,0.5)] hover:text-[20px] hover:shadow-[0_10px_20px_rgba(0,0,0,0.7)]"
+            >
+              Learn More
+            </button>
+          }
+        />
 
         {isCompanyExpanded && (
           <div
@@ -581,14 +525,6 @@ export default function InternshipsClient() {
             className="relative z-10"
             style={{ color: '#000000', paddingBottom: '8rem' }}
           >
-            <ExpandedHero
-              tagline="Build Your Future Workforce."
-              subtitle="Connect with emerging talent. Solve real challenges. Develop your future workforce."
-              backgroundImage="/images/Internships/construction-vests.jpg"
-              objectPosition="center 38%"
-              align="center"
-            />
-
             <WhyFeatureGrid
               heading="Why Hire an APC Intern?"
               features={COMPANY_FEATURES}
@@ -597,102 +533,84 @@ export default function InternshipsClient() {
             />
 
             {showContactForm && (
-              <div
+              <section
                 ref={companyFormRef}
                 id="contactForm"
-                className="w-full px-4 py-8 text-center sm:px-6"
-                style={{ backgroundColor: '#ffffff', color: '#000000' }}
+                className="contact-section apc-intern-contact"
+                aria-label="Company contact"
               >
-                <p className="mb-4 font-roboto" style={{ color: '#000000' }}>
-                  Contact us using this form!
-                </p>
-                <form
-                  className="mx-auto max-w-md space-y-4 text-left"
-                  aria-label="Company contact form"
-                >
-                  <div>
-                    <label
-                      htmlFor="company-contact-first-name"
-                      className="mb-1 block font-medium"
-                      style={{ color: '#35363B' }}
-                    >
-                      First Name
-                    </label>
-                    <input
-                      id="company-contact-first-name"
-                      name="firstName"
-                      type="text"
-                      required
-                      autoComplete="given-name"
-                      className="w-full rounded border border-gray-300 px-3 py-2"
-                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="company-contact-last-name"
-                      className="mb-1 block font-medium"
-                      style={{ color: '#35363B' }}
-                    >
-                      Last Name
-                    </label>
-                    <input
-                      id="company-contact-last-name"
-                      name="lastName"
-                      type="text"
-                      required
-                      autoComplete="family-name"
-                      className="w-full rounded border border-gray-300 px-3 py-2"
-                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="company-contact-company"
-                      className="mb-1 block font-medium"
-                      style={{ color: '#35363B' }}
-                    >
-                      Company Name
-                    </label>
-                    <input
-                      id="company-contact-company"
-                      name="company"
-                      type="text"
-                      required
-                      autoComplete="organization"
-                      className="w-full rounded border border-gray-300 px-3 py-2"
-                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="company-contact-email"
-                      className="mb-1 block font-medium"
-                      style={{ color: '#35363B' }}
-                    >
-                      Email
-                    </label>
-                    <input
-                      id="company-contact-email"
-                      name="email"
-                      type="email"
-                      required
-                      autoComplete="email"
-                      className="w-full rounded border border-gray-300 px-3 py-2"
-                      style={{ color: '#35363B', backgroundColor: '#ffffff' }}
-                    />
-                  </div>
-                  <div>
-                    <button
-                      type="submit"
-                      className="rounded px-6 py-2"
-                      style={{ backgroundColor: '#9E1B32', color: '#ffffff', border: 'none' }}
-                    >
-                      Send
-                    </button>
-                  </div>
-                </form>
-              </div>
+                <div className="contact-container">
+                  <h2 className="contact-title">Contact Us</h2>
+                  <div className="contact-title-line" />
+                  <form
+                    className="contact-form apc-intern-contact-form"
+                    aria-label="Company contact form"
+                    onSubmit={(event) => event.preventDefault()}
+                  >
+                    <div className="contact-field">
+                      <label htmlFor="company-contact-first-name" className="contact-label">
+                        First Name
+                      </label>
+                      <input
+                        id="company-contact-first-name"
+                        name="firstName"
+                        type="text"
+                        required
+                        aria-required="true"
+                        autoComplete="given-name"
+                        className="contact-input"
+                      />
+                    </div>
+                    <div className="contact-field">
+                      <label htmlFor="company-contact-last-name" className="contact-label">
+                        Last Name
+                      </label>
+                      <input
+                        id="company-contact-last-name"
+                        name="lastName"
+                        type="text"
+                        required
+                        aria-required="true"
+                        autoComplete="family-name"
+                        className="contact-input"
+                      />
+                    </div>
+                    <div className="contact-field">
+                      <label htmlFor="company-contact-company" className="contact-label">
+                        Company Name
+                      </label>
+                      <input
+                        id="company-contact-company"
+                        name="company"
+                        type="text"
+                        required
+                        aria-required="true"
+                        autoComplete="organization"
+                        className="contact-input"
+                      />
+                    </div>
+                    <div className="contact-field">
+                      <label htmlFor="company-contact-email" className="contact-label">
+                        Email
+                      </label>
+                      <input
+                        id="company-contact-email"
+                        name="email"
+                        type="email"
+                        required
+                        aria-required="true"
+                        autoComplete="email"
+                        className="contact-input"
+                      />
+                    </div>
+                    <div className="apc-intern-contact-submit-wrap">
+                      <button type="submit" className="contact-submit">
+                        Send →
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </section>
             )}
 
                 <PartnerColleges

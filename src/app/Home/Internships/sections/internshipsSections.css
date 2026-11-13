@@ -121,10 +121,120 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  container-type: inline-size;
+  container-name: intern-hero;
+}
+
+/* Scale intro type with panel width; never reflow words mid-animation. */
+.apc-intern-cover-eyebrow {
+  color: #ffffff;
+  font-size: clamp(1rem, 7cqw, 3rem);
+  white-space: nowrap;
+}
+
+.apc-intern-cover-headline {
+  color: #ffffff;
+  font-size: clamp(1.15rem, 11cqw, 4.5rem);
+}
+
+.apc-intern-cover-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.apc-intern-hero--cover .apc-intern-cover-copy {
+  max-width: 100%;
+  padding-inline: 0.5rem;
+  box-sizing: border-box;
+}
+
+.apc-intern-hero--cover .apc-intern-cover-copy > button {
+  width: min(100%, 450px);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @media (min-width: 900px) {
   .apc-intern-testimonial-chevron {
     display: block !important;
+  }
+}
+
+/* Compact one-row contact form for company panel */
+.apc-intern-contact.contact-section {
+  padding: 1.75rem 1rem;
+  background-size: 40%;
+}
+
+.apc-intern-contact .contact-container {
+  max-width: 100%;
+  width: 100%;
+}
+
+.apc-intern-contact .contact-title {
+  font-size: 1.1rem;
+  line-height: 1.2;
+}
+
+.apc-intern-contact .contact-title-line {
+  width: 40px;
+  height: 3px;
+  margin: 0.25rem auto 1.75rem;
+}
+
+.apc-intern-contact .apc-intern-contact-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  align-items: end;
+  column-gap: 1.35rem;
+  row-gap: 0.5rem;
+  width: 100%;
+}
+
+.apc-intern-contact .contact-field {
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.apc-intern-contact .contact-label {
+  font-size: 0.75rem;
+}
+
+.apc-intern-contact .contact-input {
+  width: 100%;
+  max-width: 90%;
+  height: 36px;
+  padding: 0 0.6rem;
+  font-size: 0.875rem;
+}
+
+.apc-intern-contact .apc-intern-contact-submit-wrap {
+  display: flex;
+  align-items: flex-end;
+}
+
+.apc-intern-contact .contact-submit {
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .apc-intern-contact .apc-intern-contact-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .apc-intern-contact .apc-intern-contact-submit-wrap {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .apc-intern-contact .apc-intern-contact-form {
+    grid-template-columns: 1fr;
   }
 }
