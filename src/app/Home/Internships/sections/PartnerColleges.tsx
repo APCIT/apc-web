@@ -4,26 +4,106 @@ import React, { useEffect, useMemo, useState } from 'react';
 import './internshipsSections.css';
 
 const PARTNER_LOGOS = [
-  { src: '/images/Logos/Partners/aum.jpg', alt: 'Auburn University at Montgomery' },
-  { src: '/images/Logos/Partners/mississippi-state.png', alt: 'Mississippi State University' },
-  { src: '/images/Logos/Partners/ua.png', alt: 'The University of Alabama' },
-  { src: '/images/Logos/Partners/uab.png', alt: 'The University of Alabama at Birmingham' },
-  { src: '/images/Logos/Partners/south-alabama.jpg', alt: 'University of South Alabama' },
-  { src: '/images/Logos/Partners/alabama-am.png', alt: 'Alabama A&M University' },
-  { src: '/images/Logos/Partners/ole-miss.png', alt: 'University of Mississippi' },
-  { src: '/images/Logos/Partners/spring-hill.png', alt: 'Spring Hill College' },
-  { src: '/images/Logos/Partners/purdue.png', alt: 'Purdue University' },
-  { src: '/images/Logos/Partners/auburn.png', alt: 'Auburn University' },
-  { src: '/images/Logos/Partners/uah.png', alt: 'The University of Alabama in Huntsville' },
-  { src: '/images/Logos/Partners/una.png', alt: 'University of North Alabama' },
-  { src: '/images/Logos/Partners/troy.png', alt: 'Troy University' },
-  { src: '/images/Logos/Partners/athens-state.jpg', alt: 'Athens State University' },
-  { src: '/images/Logos/Partners/jacksonville-state.png', alt: 'Jacksonville State University' },
-  { src: '/images/Logos/Partners/tuskegee.png', alt: 'Tuskegee University' },
-  { src: '/images/Logos/Partners/calhoun.png', alt: 'Calhoun Community College' },
-  { src: '/images/Logos/Partners/shelton-state.jpg', alt: 'Shelton State Community College' },
-  { src: '/images/Logos/Partners/embry-riddle.png', alt: 'Embry-Riddle Aeronautical University' },
-  { src: '/images/Logos/Partners/cochise.png', alt: 'Cochise College' },
+  {
+    src: '/images/Logos/Partners/aum.jpg',
+    alt: 'Auburn University at Montgomery',
+    href: 'https://www.aum.edu',
+  },
+  {
+    src: '/images/Logos/Partners/mississippi-state.png',
+    alt: 'Mississippi State University',
+    href: 'https://www.msstate.edu',
+  },
+  {
+    src: '/images/Logos/Partners/ua.png',
+    alt: 'The University of Alabama',
+    href: 'https://www.ua.edu',
+  },
+  {
+    src: '/images/Logos/Partners/uab.png',
+    alt: 'The University of Alabama at Birmingham',
+    href: 'https://www.uab.edu',
+  },
+  {
+    src: '/images/Logos/Partners/south-alabama.jpg',
+    alt: 'University of South Alabama',
+    href: 'https://www.southalabama.edu',
+  },
+  {
+    src: '/images/Logos/Partners/alabama-am.png',
+    alt: 'Alabama A&M University',
+    href: 'https://www.aamu.edu',
+  },
+  {
+    src: '/images/Logos/Partners/ole-miss.png',
+    alt: 'University of Mississippi',
+    href: 'https://www.olemiss.edu',
+  },
+  {
+    src: '/images/Logos/Partners/spring-hill.png',
+    alt: 'Spring Hill College',
+    href: 'https://www.shc.edu',
+  },
+  {
+    src: '/images/Logos/Partners/purdue.png',
+    alt: 'Purdue University',
+    href: 'https://www.purdue.edu',
+  },
+  {
+    src: '/images/Logos/Partners/auburn.png',
+    alt: 'Auburn University',
+    href: 'https://www.auburn.edu',
+  },
+  {
+    src: '/images/Logos/Partners/uah.png',
+    alt: 'The University of Alabama in Huntsville',
+    href: 'https://www.uah.edu',
+  },
+  {
+    src: '/images/Logos/Partners/una.png',
+    alt: 'University of North Alabama',
+    href: 'https://www.una.edu',
+  },
+  {
+    src: '/images/Logos/Partners/troy.png',
+    alt: 'Troy University',
+    href: 'https://www.troy.edu',
+  },
+  {
+    src: '/images/Logos/Partners/athens-state.jpg',
+    alt: 'Athens State University',
+    href: 'https://www.athens.edu',
+  },
+  {
+    src: '/images/Logos/Partners/jacksonville-state.png',
+    alt: 'Jacksonville State University',
+    href: 'https://www.jsu.edu',
+  },
+  {
+    src: '/images/Logos/Partners/tuskegee.png',
+    alt: 'Tuskegee University',
+    href: 'https://www.tuskegee.edu',
+  },
+  {
+    src: '/images/Logos/Partners/calhoun.png',
+    alt: 'Calhoun Community College',
+    href: 'https://calhoun.edu',
+  },
+  {
+    src: '/images/Logos/Partners/shelton-state.jpg',
+    alt: 'Shelton State Community College',
+    href: 'https://www.sheltonstate.edu',
+  },
+  {
+    src: '/images/Logos/Partners/embry-riddle.png',
+    alt: 'Embry-Riddle Aeronautical University',
+    href: 'https://www.erau.edu',
+  },
+  {
+    src: '/images/Logos/Partners/cochise.png',
+    alt: 'Cochise College',
+    href: 'https://www.cochise.edu',
+  },
 ];
 
 const LOGOS_PER_SLIDE = 10;
@@ -37,8 +117,8 @@ type PartnerCollegesProps = {
 
 export default function PartnerColleges({
   heading = 'Partnering Colleges and Universities',
-  body = 'The APC partners with colleges and universities to connect talented students with hands-on industry opportunities.',
-  footnote,
+  body = 'APC partners with colleges and universities to provide students with hands-on experience through meaningful industry projects.',
+  footnote = '*Since 2013, the APC has partnered with 20 colleges and universities.',
 }: PartnerCollegesProps) {
   const slides = useMemo(() => {
     const pages: (typeof PARTNER_LOGOS)[] = [];
@@ -150,8 +230,12 @@ export default function PartnerColleges({
                   className="apc-intern-logo-slide"
                 >
                   {slide.map((logo) => (
-                    <div
+                    <a
                       key={logo.src}
+                      href={logo.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Visit ${logo.alt} website`}
                       style={{
                         height: 112,
                         width: '100%',
@@ -174,7 +258,7 @@ export default function PartnerColleges({
                           display: 'block',
                         }}
                       />
-                    </div>
+                    </a>
                   ))}
                 </div>
               </div>

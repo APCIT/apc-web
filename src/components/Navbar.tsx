@@ -269,11 +269,11 @@ export default function Navbar({ initialUser = null, initialRoles = [] }: Navbar
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2 pl-2">
             <Image
-              src="/images/APCLogoDark.png"
-              alt="APC Logo"
-              width={135}
-              height={84}
-              className="w-auto h-[65px] object-contain"
+              src="/images/APCLogoNavbar.png"
+              alt="Culverhouse College of Business Alabama Productivity Center"
+              width={360}
+              height={108}
+              className="w-auto h-[88px] object-contain"
               priority
               quality={100}
             />

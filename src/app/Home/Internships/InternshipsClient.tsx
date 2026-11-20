@@ -29,25 +29,25 @@ const STUDENT_FEATURES = [
   {
     title: 'Real-World Experience',
     description:
-      'Apply classroom knowledge to meaningful projects with industry professionals.',
+      'Apply classroom knowledge to meaningful projects while gaining hands-on industry experience.',
     icon: <BriefcaseIcon />,
   },
   {
     title: 'Resume Development',
     description:
-      'Strengthen your resume with valuable experience and marketable skills.',
+      'Strengthen your resume with valuable skills, project experience, and measurable accomplishments.',
     icon: <ResumeIcon />,
   },
   {
     title: 'Industry Connections',
     description:
-      'Build relationships with professionals and expand your career network.',
+      'Build professional relationships and expand your network with industry leaders.',
     icon: <NetworkIcon />,
   },
   {
     title: 'Career Growth',
     description:
-      'Gain skills, confidence, and experience to prepare for your future career.',
+      'Gain confidence, develop new skills, and prepare for your future career.',
     icon: <GrowthIcon />,
   },
 ];
@@ -141,7 +141,7 @@ const COMPANY_STEPS = [
     number: '05',
     title: 'Get Started!',
     description:
-      'Your intern begins working on-site with support from APC staff throughout the internship.',
+      'Your intern begins working on-site with support from APC staff throughout the semester.',
     extra: <InternshipGuidelines variant="guidelines" />,
   },
 ];
@@ -184,6 +184,20 @@ const STUDENT_TESTIMONIALS = [
     ],
   },
 ];
+
+const THIS_COULD_BE_YOU_IMAGES = [
+  { src: '/images/Internships/this-could-be-you/screenshot-2026-09-02-at-9-31-25-am.jpg', objectPosition: 'center 42%' },
+  { src: '/images/Internships/this-could-be-you/img-2625.jpg', objectPosition: 'center 32%' },
+  { src: '/images/Internships/this-could-be-you/c651dd7e-98d9-49e4-815a-b333b8d57092.jpg', objectPosition: 'center 48%' },
+  { src: '/images/Internships/this-could-be-you/student-on-production-floor.jpg', objectPosition: 'center 18%' },
+  { src: '/images/Internships/this-could-be-you/2018.jpg', objectPosition: 'center 35%' },
+  { src: '/images/Internships/this-could-be-you/img-9444.jpg', objectPosition: 'center 28%' },
+  { src: '/images/Internships/this-could-be-you/img-7285.jpg', objectPosition: 'center 36%' },
+  { src: '/images/Internships/this-could-be-you/screen-shot-2023-10-20-at-1-45-07-pm.jpg', objectPosition: 'center 22%' },
+  { src: '/images/Internships/this-could-be-you/screen-shot-2022-10-17-at-3-12-39-pm.jpg', objectPosition: 'center 10%' },
+];
+
+const APC_CONTACT_EMAIL = 'culverhouse-apcstaff@ua.edu';
 
 const COMPANY_TESTIMONIALS = [
   {
@@ -256,6 +270,36 @@ export default function InternshipsClient() {
 
   const goToApply = useCallback(() => {
     window.location.href = '/Apply';
+  }, []);
+
+  const submitCompanyContact = useCallback((event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const firstName = String(data.get('firstName') || '').trim();
+    const lastName = String(data.get('lastName') || '').trim();
+    const company = String(data.get('company') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const message = String(data.get('message') || '').trim();
+
+    const subject = encodeURIComponent(
+      `APC Internship Inquiry${company ? ` — ${company}` : ''}`,
+    );
+    const body = encodeURIComponent(
+      [
+        `Name: ${firstName} ${lastName}`.trim(),
+        `Company: ${company}`,
+        `Email: ${email}`,
+        '',
+        message || 'I would like to learn more about hiring an APC intern.',
+      ].join('\n'),
+    );
+
+    window.open(
+      `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(APC_CONTACT_EMAIL)}&su=${subject}&body=${body}`,
+      '_blank',
+      'noopener,noreferrer',
+    );
   }, []);
 
   const openCompanyContact = useCallback(() => {
@@ -428,7 +472,11 @@ export default function InternshipsClient() {
               onCtaClick={goToApply}
             />
 
-            <PartnerColleges />
+            <PartnerColleges
+              heading="Partnering Colleges and Universities"
+              body="APC partners with colleges and universities to provide students with hands-on experience through meaningful industry projects."
+              footnote="*Since 2013, the APC has partnered with 20 colleges and universities."
+            />
 
             <MajorsByCategory
               heading="Find an Opportunity that Fits Your Major"
@@ -443,7 +491,7 @@ export default function InternshipsClient() {
 
             <TestimonialBand
               variant="student"
-              heading="Hear from Former Interns"
+              heading="Hear From Previous Interns"
               items={STUDENT_TESTIMONIALS}
             />
 
@@ -453,7 +501,7 @@ export default function InternshipsClient() {
               videoTitle="Student Internship Testimonial Video"
               videoSrc="https://www.youtube.com/embed/bCsP82ju4fM?cc_load_policy=1&cc_lang_pref=en"
               ctaLabel="View Intern Success Stories"
-              bannerImageSrc="/images/Internships/group-screenshot.jpg"
+              bannerImages={THIS_COULD_BE_YOU_IMAGES}
               bannerObjectPosition="center 40%"
               bannerText="This Could Be You!"
             />
@@ -545,7 +593,7 @@ export default function InternshipsClient() {
                   <form
                     className="contact-form apc-intern-contact-form"
                     aria-label="Company contact form"
-                    onSubmit={(event) => event.preventDefault()}
+                    onSubmit={submitCompanyContact}
                   >
                     <div className="contact-field">
                       <label htmlFor="company-contact-first-name" className="contact-label">
@@ -603,6 +651,20 @@ export default function InternshipsClient() {
                         className="contact-input"
                       />
                     </div>
+                    <div className="contact-field apc-intern-contact-message">
+                      <label htmlFor="company-contact-message" className="contact-label">
+                        Message
+                      </label>
+                      <textarea
+                        id="company-contact-message"
+                        name="message"
+                        required
+                        aria-required="true"
+                        rows={4}
+                        className="contact-input contact-textarea"
+                        placeholder="Tell us about your project needs, interests, preferred semester, etc."
+                      />
+                    </div>
                     <div className="apc-intern-contact-submit-wrap">
                       <button type="submit" className="contact-submit">
                         Send →
@@ -621,8 +683,8 @@ export default function InternshipsClient() {
 
                 <MajorsByCategory
                   heading="Find an Intern that Fits Your Project Needs"
-                  subheading="From engineering and operations to business and technology, APC connects your company with qualified students whose skills align with your project needs."
-                  footerNote="APC helps you identify qualified students whose skills and interests align with your project goals and company culture."
+                  subheading="APC helps you identify qualified students whose skills and interests align with your project goals and company culture."
+                  footerNote="From engineering and operations to business and technology, APC connects your company with qualified students whose skills align with your project needs."
                   footerItalic={false}
                 />
 

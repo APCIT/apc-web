@@ -14,6 +14,58 @@
   max-width: 72rem;
   margin-left: auto;
   margin-right: auto;
+  align-items: stretch;
+}
+
+.apc-intern-major-card {
+  background-color: #e4e4e4;
+  color: #000000;
+  padding: 1rem 1rem 1.1rem;
+  text-align: left;
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 20rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.apc-intern-major-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+  color: #9e1b32;
+  flex-shrink: 0;
+}
+
+.apc-intern-major-card-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.apc-intern-major-card-list {
+  list-style-type: disc;
+  padding-left: 1.2rem;
+  margin: 0;
+  font-size: 0.95rem;
+  color: #000000;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 0;
+}
+
+.apc-intern-major-card-list > li {
+  margin: 0;
+  line-height: 1.35;
 }
 
 .apc-intern-partners-grid {
@@ -73,10 +125,10 @@
 .apc-intern-steps-mobile {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.6rem;
   max-width: 36rem;
   margin: 0 auto;
-  padding-bottom: 3rem;
+  padding-bottom: 1.5rem;
 }
 
 .apc-intern-steps-desktop {
@@ -84,8 +136,8 @@
   max-width: 72rem;
   margin: 0 auto;
   align-items: flex-end;
-  gap: 0.5rem;
-  padding-bottom: 0.25rem;
+  gap: 0.65rem;
+  padding-bottom: 0;
 }
 
 @media (min-width: 1024px) {
@@ -160,81 +212,98 @@
   }
 }
 
-/* Compact one-row contact form for company panel */
+/* Company contact form — readable 2x2 fields + full-width message */
 .apc-intern-contact.contact-section {
-  padding: 1.75rem 1rem;
-  background-size: 40%;
+  padding: 2.5rem 1.25rem 2.75rem;
+  background-size: 35%;
 }
 
 .apc-intern-contact .contact-container {
-  max-width: 100%;
+  max-width: 52rem;
   width: 100%;
+  margin: 0 auto;
 }
 
 .apc-intern-contact .contact-title {
-  font-size: 1.1rem;
+  font-size: clamp(1.5rem, 3vw, 2rem);
   line-height: 1.2;
 }
 
 .apc-intern-contact .contact-title-line {
-  width: 40px;
-  height: 3px;
-  margin: 0.25rem auto 1.75rem;
+  width: 56px;
+  height: 4px;
+  margin: 0.65rem auto 1.75rem;
 }
 
 .apc-intern-contact .apc-intern-contact-form {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
-  align-items: end;
-  column-gap: 1.35rem;
-  row-gap: 0.5rem;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  column-gap: 1.25rem;
+  row-gap: 1.15rem;
   width: 100%;
 }
 
+.apc-intern-contact .apc-intern-contact-message {
+  grid-column: 1 / -1;
+}
+
 .apc-intern-contact .contact-field {
-  gap: 0.15rem;
+  gap: 0.4rem;
   min-width: 0;
 }
 
 .apc-intern-contact .contact-label {
-  font-size: 0.75rem;
+  font-size: 0.95rem;
 }
 
 .apc-intern-contact .contact-input {
   width: 100%;
-  max-width: 90%;
-  height: 36px;
-  padding: 0 0.6rem;
-  font-size: 0.875rem;
+  max-width: 100%;
+  height: 48px;
+  padding: 0 0.85rem;
+  font-size: 1rem;
+}
+
+.apc-intern-contact .contact-textarea {
+  width: 100%;
+  max-width: 100%;
+  min-height: 140px;
+  padding: 0.85rem 0.9rem;
+  font-size: 1rem;
+  line-height: 1.45;
+  resize: vertical;
+  box-sizing: border-box;
 }
 
 .apc-intern-contact .apc-intern-contact-submit-wrap {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+  margin-top: 0.35rem;
 }
 
 .apc-intern-contact .contact-submit {
   width: auto;
+  min-width: 9rem;
   max-width: none;
   margin: 0;
-  padding: 0.5rem 0.95rem;
-  font-size: 0.85rem;
+  padding: 0.75rem 1.6rem;
+  font-size: 1rem;
   white-space: nowrap;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 560px) {
   .apc-intern-contact .apc-intern-contact-form {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .apc-intern-contact .apc-intern-contact-submit-wrap {
-    grid-column: 1 / -1;
-    justify-content: center;
+    justify-content: stretch;
   }
-}
 
-@media (max-width: 480px) {
-  .apc-intern-contact .apc-intern-contact-form {
-    grid-template-columns: 1fr;
+  .apc-intern-contact .contact-submit {
+    width: 100%;
   }
 }

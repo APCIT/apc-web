@@ -18,50 +18,96 @@ const mockFont = 'Georgia, "Times New Roman", Times, serif';
 
 function StepCard({
   step,
-  height,
+  index,
+  stepped,
 }: {
   step: HowItWorksStep;
-  height?: number;
+  index: number;
+  stepped?: boolean;
 }) {
+  // Explicit staircase; card 04 is the average of cards 03 and 05
+  const stepMinHeightsRem = [10.75, 12.75, 14.75, 16.875, 19];
+  const bottomPad = '0.85rem';
+
   return (
     <article
+      className="apc-intern-step-card"
       style={{
         backgroundColor: '#ffffff',
         color: '#000000',
-        padding: '1.5rem 0.75rem 0',
+        padding: `1.05rem 0.95rem ${step.extra ? '0' : bottomPad}`,
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
         flex: 1,
-        minHeight: height,
-        height,
+        minWidth: 0,
+        boxSizing: 'border-box',
+        minHeight: stepped ? `${stepMinHeightsRem[index]}rem` : undefined,
       }}
     >
-      <p
+      <div style={{ flexShrink: 0, width: '100%' }}>
+        <p
+          style={{
+            fontFamily: mockFont,
+            fontWeight: 700,
+            fontSize: '1.5rem',
+            lineHeight: 1.1,
+            color: '#9E1B32',
+            margin: '0 0 0.3rem',
+          }}
+        >
+          {step.number}
+        </p>
+        <p
+          style={{
+            fontFamily: mockFont,
+            fontWeight: 700,
+            fontSize: '1.12rem',
+            lineHeight: 1.25,
+            color: '#000000',
+            margin: 0,
+          }}
+        >
+          {step.title}
+        </p>
+      </div>
+
+      <div
         style={{
-          fontFamily: mockFont,
-          fontWeight: 600,
-          fontSize: '1.05rem',
-          lineHeight: 1.25,
-          margin: '0 0 0.5rem',
+          flex: '1 1 auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          padding: '0.55rem 0.15rem',
+          boxSizing: 'border-box',
         }}
       >
-        <span style={{ color: '#9E1B32' }}>{step.number}</span>{' '}
-        <span style={{ color: '#000000' }}>{step.title}</span>
-      </p>
-      <p
-        style={{
-          fontFamily: mockFont,
-          color: '#000000',
-          fontSize: '0.85rem',
-          lineHeight: 1.35,
-          margin: 0,
-        }}
-      >
-        {step.description}
-      </p>
+        <p
+          style={{
+            fontFamily: mockFont,
+            color: '#000000',
+            fontSize: '0.98rem',
+            lineHeight: 1.4,
+            margin: 0,
+            maxWidth: '17rem',
+          }}
+        >
+          {step.description}
+        </p>
+      </div>
+
       {step.extra ? (
-        <div style={{ marginTop: 'auto', padding: '0.75rem 0.25rem 1.25rem', textAlign: 'left' }}>
+        <div
+          style={{
+            flexShrink: 0,
+            width: '100%',
+            padding: `0.15rem 0.15rem ${bottomPad}`,
+            textAlign: 'center',
+            boxSizing: 'border-box',
+          }}
+        >
           {step.extra}
         </div>
       ) : null}
@@ -77,7 +123,7 @@ export default function HowItWorksSteps({
   return (
     <section
       className="apc-intern-section"
-      style={{ backgroundColor: '#9E1B32', padding: '3rem 1.5rem 2.25rem' }}
+      style={{ backgroundColor: '#9E1B32', padding: '2.5rem 1.5rem 1.75rem' }}
     >
       <h2
         style={{
@@ -86,7 +132,7 @@ export default function HowItWorksSteps({
           fontWeight: 400,
           textAlign: 'center',
           fontSize: 'clamp(1.75rem, 3vw, 2.25rem)',
-          margin: '0 0 0.75rem',
+          margin: '0 0 0.55rem',
           lineHeight: 1.2,
         }}
       >
@@ -98,7 +144,7 @@ export default function HowItWorksSteps({
           color: '#ffffff',
           textAlign: 'center',
           maxWidth: '48rem',
-          margin: '0 auto 2.5rem',
+          margin: '0 auto 1.75rem',
           fontSize: '0.95rem',
         }}
       >
@@ -106,14 +152,14 @@ export default function HowItWorksSteps({
       </p>
 
       <div className="apc-intern-steps-mobile">
-        {steps.map((step) => (
-          <StepCard key={step.number} step={step} />
+        {steps.map((step, index) => (
+          <StepCard key={step.number} step={step} index={index} />
         ))}
       </div>
 
       <div className="apc-intern-steps-desktop">
         {steps.map((step, index) => (
-          <StepCard key={step.number} step={step} height={240 + index * 64} />
+          <StepCard key={step.number} step={step} index={index} stepped />
         ))}
       </div>
     </section>
@@ -127,13 +173,14 @@ export function InternshipGuidelines({
 }) {
   const isSchedules = variant === 'schedules';
   return (
-    <div style={{ color: '#000000' }}>
+    <div style={{ color: '#000000', textAlign: 'center', fontFamily: mockFont }}>
       <p
         style={{
           fontFamily: mockFont,
           color: '#000000',
-          fontWeight: 600,
-          fontSize: '0.875rem',
+          fontWeight: 400,
+          fontSize: '0.98rem',
+          lineHeight: 1.4,
           margin: '0 0 0.25rem',
         }}
       >
@@ -144,10 +191,12 @@ export function InternshipGuidelines({
           fontFamily: mockFont,
           color: '#000000',
           listStyleType: 'disc',
-          paddingLeft: '1.25rem',
+          listStylePosition: 'inside',
+          paddingLeft: 0,
           margin: 0,
-          fontSize: '0.75rem',
-          lineHeight: 1.35,
+          fontSize: '0.98rem',
+          lineHeight: 1.4,
+          textAlign: 'center',
         }}
       >
         <li>
@@ -167,7 +216,7 @@ export function ApplyHereLink() {
         style={{
           fontFamily: mockFont,
           color: '#9E1B32',
-          fontSize: '0.9rem',
+          fontSize: '0.95rem',
           fontWeight: 600,
           textDecoration: 'underline',
         }}
